@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Git.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">Git.java</span></div><h1>Git.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.domain;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Git implements JsonObject {
+
+    @JsonIgnore
+    private final File baseDir;
+    
+    @JsonProperty(&quot;head&quot;)
+    private final Head head;
+    
+    @JsonProperty(&quot;branch&quot;)
+    private final String branch;
+    
+    @JsonProperty(&quot;remotes&quot;)
+    private final List&lt;Remote&gt; remotes;
+    
+<span class="fc" id="L47">    public Git(final File baseDir, final Head head, final String branch, final List&lt;Remote&gt; remotes) {</span>
+<span class="fc" id="L48">        this.baseDir = baseDir;</span>
+<span class="fc" id="L49">        this.head = head;</span>
+<span class="fc" id="L50">        this.branch = branch;</span>
+<span class="fc" id="L51">        this.remotes = remotes;</span>
+<span class="fc" id="L52">    }</span>
+
+    public File getBaseDir() {
+<span class="fc" id="L55">        return baseDir;</span>
+    }
+
+    public Head getHead() {
+<span class="fc" id="L59">        return head;</span>
+    }
+    
+    public String getBranch() {
+<span class="fc" id="L63">        return branch;</span>
+    }
+    
+    public List&lt;Remote&gt; getRemotes() {
+<span class="fc" id="L67">        return remotes;</span>
+    }
+
+    public static class Head implements Serializable {
+        @JsonProperty(&quot;id&quot;)
+        private final String id;
+        
+        @JsonProperty(&quot;author_name&quot;)
+        private final String authorName;
+        
+        @JsonProperty(&quot;author_email&quot;)
+        private final String authorEmail;
+        
+        @JsonProperty(&quot;committer_name&quot;)
+        private final String committerName;
+        
+        @JsonProperty(&quot;committer_email&quot;)
+        private final String committerEmail;
+        
+        @JsonProperty(&quot;message&quot;)
+        private final String message;
+        
+<span class="fc" id="L89">        public Head(final String id, final String authorName, final String authorEmail, final String committerName, final String committerEmail, final String message) {</span>
+<span class="fc" id="L90">            this.id = id;</span>
+<span class="fc" id="L91">            this.authorName = authorName;</span>
+<span class="fc" id="L92">            this.authorEmail = authorEmail;</span>
+<span class="fc" id="L93">            this.committerName = committerName;</span>
+<span class="fc" id="L94">            this.committerEmail = committerEmail;</span>
+<span class="fc" id="L95">            this.message = message;</span>
+<span class="fc" id="L96">        }</span>
+        
+        public String getId() {
+<span class="fc" id="L99">            return id;</span>
+        }
+        
+        public String getAuthorName() {
+<span class="fc" id="L103">            return authorName;</span>
+        }
+        
+        public String getAuthorEmail() {
+<span class="fc" id="L107">            return authorEmail;</span>
+        }
+        
+        public String getCommitterName() {
+<span class="fc" id="L111">            return committerName;</span>
+        }
+        
+        public String getCommitterEmail() {
+<span class="fc" id="L115">            return committerEmail;</span>
+        }
+        
+        public String getMessage() {
+<span class="fc" id="L119">            return message;</span>
+        }
+    }
+    
+    public static class Remote implements Serializable {
+        @JsonProperty(&quot;name&quot;)
+        private final String name;
+        
+        @JsonProperty(&quot;url&quot;)
+        private final String url;
+        
+<span class="fc" id="L130">        public Remote(final String name, final String url) {</span>
+<span class="fc" id="L131">            this.name = name;</span>
+<span class="fc" id="L132">            this.url = url;</span>
+<span class="fc" id="L133">        }</span>
+
+        public String getName() {
+<span class="fc" id="L136">            return name;</span>
+        }
+        
+        public String getUrl() {
+<span class="fc" id="L140">            return url;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

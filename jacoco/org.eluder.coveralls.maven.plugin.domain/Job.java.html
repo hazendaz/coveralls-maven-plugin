@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Job.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">Job.java</span></div><h1>Job.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.domain;
+
+import java.util.Date;
+import java.util.Properties;
+
+import org.eluder.coveralls.maven.plugin.domain.Git.Remote;
+import org.eluder.coveralls.maven.plugin.validation.JobValidator;
+import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
+
+public class Job {
+
+    private String repoToken;
+    private String serviceName;
+    private String serviceJobId;
+    private String serviceBuildNumber;
+    private String serviceBuildUrl;
+    private boolean parallel;
+    private Properties serviceEnvironment;
+    private Date timestamp;
+    private boolean dryRun;
+    private String branch;
+    private String pullRequest;
+    private Git git;
+    
+<span class="fc" id="L48">    public Job() {</span>
+        // noop
+<span class="fc" id="L50">    }</span>
+
+    public Job withRepoToken(final String repoToken) {
+<span class="fc" id="L53">        this.repoToken = repoToken;</span>
+<span class="fc" id="L54">        return this;</span>
+    }
+    
+    public Job withServiceName(final String serviceName) {
+<span class="fc" id="L58">        this.serviceName = serviceName;</span>
+<span class="fc" id="L59">        return this;</span>
+    }
+    
+    public Job withServiceJobId(final String serviceJobId) {
+<span class="fc" id="L63">        this.serviceJobId = serviceJobId;</span>
+<span class="fc" id="L64">        return this;</span>
+    }
+    
+    public Job withServiceBuildNumber(final String serviceBuildNumber) {
+<span class="fc" id="L68">        this.serviceBuildNumber = serviceBuildNumber;</span>
+<span class="fc" id="L69">        return this;</span>
+    }
+    
+    public Job withServiceBuildUrl(final String serviceBuildUrl) {
+<span class="fc" id="L73">        this.serviceBuildUrl = serviceBuildUrl;</span>
+<span class="fc" id="L74">        return this;</span>
+    }
+
+    public Job withParallel(final boolean parallel) {
+<span class="fc" id="L78">        this.parallel = parallel;</span>
+<span class="fc" id="L79">        return this;</span>
+    }
+    
+    public Job withServiceEnvironment(final Properties serviceEnvironment) {
+<span class="fc" id="L83">        this.serviceEnvironment = serviceEnvironment;</span>
+<span class="fc" id="L84">        return this;</span>
+    }
+    
+    public Job withTimestamp(final Date timestamp) {
+<span class="fc" id="L88">        this.timestamp = timestamp;</span>
+<span class="fc" id="L89">        return this;</span>
+    }
+    
+    public Job withDryRun(final boolean dryRun) {
+<span class="fc" id="L93">        this.dryRun = dryRun;</span>
+<span class="fc" id="L94">        return this;</span>
+    }
+    
+    public Job withBranch(final String branch) {
+<span class="fc" id="L98">        this.branch = branch;</span>
+<span class="fc" id="L99">        return this;</span>
+    }
+    
+    public Job withPullRequest(final String pullRequest) {
+<span class="fc" id="L103">        this.pullRequest = pullRequest;</span>
+<span class="fc" id="L104">        return this;</span>
+    }
+    
+    public Job withGit(final Git git) {
+<span class="fc" id="L108">        this.git = git;</span>
+<span class="fc" id="L109">        return this;</span>
+    }
+    
+    public String getRepoToken() {
+<span class="fc" id="L113">        return repoToken;</span>
+    }
+    
+    public String getServiceName() {
+<span class="fc" id="L117">        return serviceName;</span>
+    }
+    
+    public String getServiceJobId() {
+<span class="fc" id="L121">        return serviceJobId;</span>
+    }
+    
+    public String getServiceBuildNumber() {
+<span class="fc" id="L125">        return serviceBuildNumber;</span>
+    }
+    
+    public String getServiceBuildUrl() {
+<span class="fc" id="L129">        return serviceBuildUrl;</span>
+    }
+    
+    public Properties getServiceEnvironment() {
+<span class="fc" id="L133">        return serviceEnvironment;</span>
+    }
+    
+    public Date getTimestamp() {
+<span class="fc" id="L137">        return timestamp;</span>
+    }
+
+    public boolean isParallel() {
+<span class="fc" id="L141">        return parallel;</span>
+    }
+
+    public boolean isDryRun() {
+<span class="fc" id="L145">        return dryRun;</span>
+    }
+    
+    public String getBranch() {
+<span class="pc bpc" id="L149" title="1 of 6 branches missed.">        if (branch != null &amp;&amp; getGit() != null &amp;&amp; getGit().getRemotes() != null) {</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            for (Remote remote : getGit().getRemotes()) {</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">                if (branch.startsWith(remote.getName() + &quot;/&quot;)) {</span>
+<span class="fc" id="L152">                    return branch.substring(remote.getName().length() + 1);</span>
+                }
+<span class="fc" id="L154">            }</span>
+        }
+<span class="fc" id="L156">        return branch;</span>
+    }
+    
+    public String getPullRequest() {
+<span class="fc" id="L160">        return pullRequest;</span>
+    }
+    
+    public Git getGit() {
+<span class="fc" id="L164">        return git;</span>
+    }
+    
+    public ValidationErrors validate() {
+<span class="fc" id="L168">        JobValidator validator = new JobValidator(this);</span>
+<span class="fc" id="L169">        return validator.validate();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

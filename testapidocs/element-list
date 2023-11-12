@@ -1,0 +1,10 @@
+org.eluder.coveralls.maven.plugin
+org.eluder.coveralls.maven.plugin.domain
+org.eluder.coveralls.maven.plugin.httpclient
+org.eluder.coveralls.maven.plugin.json
+org.eluder.coveralls.maven.plugin.logging
+org.eluder.coveralls.maven.plugin.parser
+org.eluder.coveralls.maven.plugin.service
+org.eluder.coveralls.maven.plugin.source
+org.eluder.coveralls.maven.plugin.util
+org.eluder.coveralls.maven.plugin.validation

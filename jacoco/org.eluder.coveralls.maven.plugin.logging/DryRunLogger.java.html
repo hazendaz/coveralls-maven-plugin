@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DryRunLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.logging</a> &gt; <span class="el_source">DryRunLogger.java</span></div><h1>DryRunLogger.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.logging;
+
+import java.io.File;
+
+import org.apache.maven.plugin.logging.Log;
+
+public class DryRunLogger implements Logger {
+
+    private final boolean dryRun;
+    private final File coverallsFile;
+    
+<span class="fc" id="L35">    public DryRunLogger(final boolean dryRun, final File coverallsFile) {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (coverallsFile == null) {</span>
+<span class="fc" id="L37">            throw new IllegalArgumentException(&quot;coverallsFile must be defined&quot;);</span>
+        }
+<span class="fc" id="L39">        this.dryRun = dryRun;</span>
+<span class="fc" id="L40">        this.coverallsFile = coverallsFile;</span>
+<span class="fc" id="L41">    }</span>
+
+    @Override
+    public Position getPosition() {
+<span class="fc" id="L45">        return Position.AFTER;</span>
+    }
+    
+    @Override
+    public void log(final Log log) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (dryRun) {</span>
+<span class="fc" id="L51">            log.info(&quot;Dry run enabled, Coveralls report will NOT be submitted to API&quot;);</span>
+<span class="fc" id="L52">            log.info(coverallsFile.length() + &quot; bytes of data was recorded in &quot; + coverallsFile.getAbsolutePath());</span>
+        }
+<span class="fc" id="L54">    }</span>
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

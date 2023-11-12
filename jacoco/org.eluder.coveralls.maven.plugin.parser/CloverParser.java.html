@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CloverParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">CloverParser.java</span></div><h1>CloverParser.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.parser;
+
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import java.io.File;
+import java.io.IOException;
+
+public class CloverParser extends AbstractXmlEventParser {
+
+    private Source source;
+    private String packageName;
+
+    public CloverParser(final File coverageFile, final SourceLoader sourceLoader) {
+<span class="nc" id="L42">        super(coverageFile, sourceLoader);</span>
+<span class="nc" id="L43">    }</span>
+
+    @Override
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (isStartElement(xml, &quot;package&quot;)) {</span>
+<span class="nc" id="L48">            this.packageName = xml.getAttributeValue(null, &quot;name&quot;);</span>
+<span class="nc bnc" id="L49" title="All 4 branches missed.">        } else if (isStartElement(xml, &quot;file&quot;) &amp;&amp; packageName != null) {</span>
+<span class="nc" id="L50">            String sourceFile = getSourceFile(xml.getAttributeValue(null, &quot;name&quot;));</span>
+<span class="nc" id="L51">            this.source = loadSource(sourceFile);</span>
+<span class="nc bnc" id="L52" title="All 4 branches missed.">        } else if (isStartElement(xml, &quot;line&quot;) &amp;&amp; this.source != null) {</span>
+            // lines can be &quot;method&quot;, &quot;stmt&quot;, or &quot;cond&quot;
+<span class="nc" id="L54">            String type = xml.getAttributeValue(null, &quot;type&quot;);</span>
+<span class="nc" id="L55">            int coverage = 0;</span>
+<span class="nc bnc" id="L56" title="All 4 branches missed.">            if (&quot;method&quot;.equals(type) || &quot;stmt&quot;.equals(type)) {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">                coverage = (Integer.parseInt(xml.getAttributeValue(null, &quot;count&quot;)) == 0) ? 0 : 1;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            } else if (&quot;cond&quot;.equals(type)) {</span>
+<span class="nc" id="L59">                int falseCount = Integer.parseInt(xml.getAttributeValue(null, &quot;falsecount&quot;));</span>
+<span class="nc" id="L60">                int trueCount = Integer.parseInt(xml.getAttributeValue(null, &quot;truecount&quot;));</span>
+<span class="nc bnc" id="L61" title="All 4 branches missed.">                coverage = (trueCount == 0 || falseCount == 0) ? 0 : 1;</span>
+            }
+<span class="nc" id="L63">            int lineNumber = Integer.parseInt(xml.getAttributeValue(null, &quot;num&quot;));</span>
+<span class="nc" id="L64">            this.source.addCoverage(lineNumber, coverage);</span>
+<span class="nc bnc" id="L65" title="All 4 branches missed.">        } else if (isEndElement(xml, &quot;file&quot;) &amp;&amp; this.source != null) {</span>
+<span class="nc" id="L66">            callback.onSource(this.source);</span>
+<span class="nc" id="L67">            this.source = null;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        } else if (isEndElement(xml, &quot;package&quot;)) {</span>
+<span class="nc" id="L69">            this.packageName = null;</span>
+        }
+<span class="nc" id="L71">    }</span>
+
+    private String getSourceFile(final String fileName) {
+<span class="nc" id="L74">        return this.packageName.replace('.', '/') + &quot;/&quot; + fileName;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

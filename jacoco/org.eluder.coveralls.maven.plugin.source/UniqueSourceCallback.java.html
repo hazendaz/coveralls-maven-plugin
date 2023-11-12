@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UniqueSourceCallback.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.source</a> &gt; <span class="el_source">UniqueSourceCallback.java</span></div><h1>UniqueSourceCallback.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.source;
+
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+/**
+ * Source callback that tracks passed by source files and provides only unique
+ * source files to the delegate. Note that the implementation is not thread
+ * safe so the {@link #onSource(org.eluder.coveralls.maven.plugin.domain.Source)}
+ * can be called only from single thread concurrently.
+ */
+public class UniqueSourceCallback implements SourceCallback {
+
+    private final Map&lt;Source, Source&gt; cache;
+    private final SourceCallback delegate;
+
+<span class="fc" id="L44">    public UniqueSourceCallback(final SourceCallback delegate) {</span>
+<span class="fc" id="L45">        this.cache = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L46">        this.delegate = delegate;</span>
+<span class="fc" id="L47">    }</span>
+
+    @Override
+    public void onBegin() throws ProcessingException, IOException {
+<span class="fc" id="L51">        delegate.onBegin();</span>
+<span class="fc" id="L52">    }</span>
+
+    @Override
+    public void onSource(final Source source) throws ProcessingException, IOException {
+<span class="fc" id="L56">        Source merged = source.merge(cache.get(source));</span>
+<span class="fc" id="L57">        cache.put(merged, merged);</span>
+<span class="fc" id="L58">    }</span>
+
+    @Override
+    public void onComplete() throws ProcessingException, IOException {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        for (Source source : cache.values()) {</span>
+<span class="fc" id="L63">            delegate.onSource(source);</span>
+<span class="fc" id="L64">        }</span>
+<span class="fc" id="L65">        delegate.onComplete();</span>
+<span class="fc" id="L66">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

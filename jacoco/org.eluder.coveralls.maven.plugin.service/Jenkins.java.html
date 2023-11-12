@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Jenkins.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">Jenkins.java</span></div><h1>Jenkins.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.service;
+
+import java.util.Map;
+import java.util.Properties;
+
+/**
+ * Service implementation for Jenkins.
+ * &lt;p&gt;
+ * http://jenkins-ci.org/
+ */
+public class Jenkins extends AbstractServiceSetup {
+
+    public static final String JENKINS_NAME = &quot;jenkins&quot;;
+    public static final String JENKINS_URL = &quot;JENKINS_URL&quot;;
+    public static final String JENKINS_BUILD_NUMBER = &quot;BUILD_NUMBER&quot;;
+    public static final String JENKINS_BUILD_URL = &quot;BUILD_URL&quot;;
+    public static final String JENKINS_BRANCH = &quot;GIT_BRANCH&quot;;
+    public static final String JENKINS_COMMIT = &quot;GIT_COMMIT&quot;;
+    
+    public Jenkins(final Map&lt;String, String&gt; env) {
+<span class="fc" id="L44">        super(env);</span>
+<span class="fc" id="L45">    }</span>
+
+    @Override
+    public boolean isSelected() {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        return (getProperty(JENKINS_URL) != null);</span>
+    }
+    
+    @Override
+    public String getName() {
+<span class="fc" id="L54">        return JENKINS_NAME;</span>
+    }
+    
+    @Override
+    public String getBuildNumber() {
+<span class="fc" id="L59">        return getProperty(JENKINS_BUILD_NUMBER);</span>
+    }
+    
+    @Override
+    public String getBuildUrl() {
+<span class="fc" id="L64">        return getProperty(JENKINS_BUILD_URL);</span>
+    }
+    
+    @Override
+    public String getBranch() {
+<span class="fc" id="L69">        return getProperty(JENKINS_BRANCH);</span>
+    }
+    
+    @Override
+    public Properties getEnvironment() {
+<span class="fc" id="L74">        Properties environment = new Properties();</span>
+<span class="fc" id="L75">        addProperty(environment, &quot;jenkins_build_num&quot;, getProperty(JENKINS_BUILD_NUMBER));</span>
+<span class="fc" id="L76">        addProperty(environment, &quot;jenkins_build_url&quot;, getProperty(JENKINS_BUILD_URL));</span>
+<span class="fc" id="L77">        addProperty(environment, &quot;branch&quot;, getProperty(JENKINS_BRANCH));</span>
+<span class="fc" id="L78">        addProperty(environment, &quot;commit_sha&quot;, getProperty(JENKINS_COMMIT));</span>
+<span class="fc" id="L79">        return environment;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

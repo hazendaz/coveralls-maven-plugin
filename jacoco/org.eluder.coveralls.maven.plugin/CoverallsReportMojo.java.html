@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverallsReportMojo.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin</a> &gt; <span class="el_source">CoverallsReportMojo.java</span></div><h1>CoverallsReportMojo.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin;
+
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
+import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
+import org.eluder.coveralls.maven.plugin.domain.Git;
+import org.eluder.coveralls.maven.plugin.domain.GitRepository;
+import org.eluder.coveralls.maven.plugin.domain.Job;
+import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
+import org.eluder.coveralls.maven.plugin.httpclient.CoverallsProxyClient;
+import org.eluder.coveralls.maven.plugin.json.JsonWriter;
+import org.eluder.coveralls.maven.plugin.logging.CoverageTracingLogger;
+import org.eluder.coveralls.maven.plugin.logging.DryRunLogger;
+import org.eluder.coveralls.maven.plugin.logging.JobLogger;
+import org.eluder.coveralls.maven.plugin.logging.Logger;
+import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
+import org.eluder.coveralls.maven.plugin.service.Appveyor;
+import org.eluder.coveralls.maven.plugin.service.Bamboo;
+import org.eluder.coveralls.maven.plugin.service.Circle;
+import org.eluder.coveralls.maven.plugin.service.General;
+import org.eluder.coveralls.maven.plugin.service.Jenkins;
+import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
+import org.eluder.coveralls.maven.plugin.service.Shippable;
+import org.eluder.coveralls.maven.plugin.service.Travis;
+import org.eluder.coveralls.maven.plugin.service.Wercker;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
+import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
+import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
+import org.eluder.coveralls.maven.plugin.util.TimestampParser;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
+@Mojo(name = &quot;report&quot;, threadSafe = false, aggregator = true)
+<span class="fc" id="L71">public class CoverallsReportMojo extends AbstractMojo {</span>
+
+    /**
+     * File paths to additional JaCoCo coverage report files.
+     */
+    @Parameter(property = &quot;jacocoReports&quot;)
+    protected List&lt;File&gt; jacocoReports;
+
+    /**
+     * File paths to additional Cobertura coverage report files.
+     */
+    @Parameter(property = &quot;coberturaReports&quot;)
+    protected List&lt;File&gt; coberturaReports;
+
+    /**
+     * File paths to additional Saga coverage report files.
+     */
+    @Parameter(property = &quot;sagaReports&quot;)
+    protected List&lt;File&gt; sagaReports;
+
+    /**
+     * Directories for relative per module specific report files.
+     */
+    @Parameter(property = &quot;relativeReportDirs&quot;)
+    protected List&lt;String&gt; relativeReportDirs;
+
+    /**
+     * File path to write and submit Coveralls data.
+     */
+    @Parameter(property = &quot;coverallsFile&quot;, defaultValue = &quot;${project.build.directory}/coveralls.json&quot;)
+    protected File coverallsFile;
+    
+    /**
+     * Url for the Coveralls API.
+     */
+    @Parameter(property = &quot;coverallsUrl&quot;, defaultValue = &quot;https://coveralls.io/api/v1/jobs&quot;)
+    protected String coverallsUrl;
+
+    /**
+     * Source directories.
+     */
+    @Parameter(property = &quot;sourceDirectories&quot;)
+    protected List&lt;File&gt; sourceDirectories;
+    
+    /**
+     * Source file encoding.
+     */
+    @Parameter(property = &quot;sourceEncoding&quot;, defaultValue = &quot;${project.build.sourceEncoding}&quot;)
+    protected String sourceEncoding;
+    
+    /**
+     * CI service name.
+     */
+    @Parameter(property = &quot;serviceName&quot;)
+    protected String serviceName;
+    
+    /**
+     * CI service job id.
+     */
+    @Parameter(property = &quot;serviceJobId&quot;)
+    protected String serviceJobId;
+    
+    /**
+     * CI service build number.
+     */
+    @Parameter(property = &quot;serviceBuildNumber&quot;)
+    protected String serviceBuildNumber;
+    
+    /**
+     * CI service build url.
+     */
+    @Parameter(property = &quot;serviceBuildUrl&quot;)
+    protected String serviceBuildUrl;
+    
+    /**
+     * CI service specific environment properties.
+     */
+    @Parameter(property = &quot;serviceEnvironment&quot;)
+    protected Properties serviceEnvironment;
+    
+    /**
+     * Coveralls repository token.
+     */
+    @Parameter(property = &quot;repoToken&quot;)
+    protected String repoToken;
+    
+    /**
+     * Git branch name.
+     */
+    @Parameter(property = &quot;branch&quot;)
+    protected String branch;
+
+    /**
+     * GitHub pull request identifier.
+     */
+    @Parameter(property = &quot;pullRequest&quot;)
+    protected String pullRequest;
+
+    /**
+     * Coveralls parallel flag.
+     */
+    @Parameter(property = &quot;parallel&quot;)
+    protected boolean parallel;
+
+    /**
+     * Build timestamp format. Must be in format supported by SimpleDateFormat.
+     */
+    @Parameter(property = &quot;timestampFormat&quot;, defaultValue = &quot;${maven.build.timestamp.format}&quot;)
+    protected String timestampFormat;
+
+    /**
+     * Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in
+     * default timestamp format yyyy-MM-dd'T'HH:mm:ss'Z'.
+     */
+    @Parameter(property = &quot;timestamp&quot;, defaultValue = &quot;${maven.build.timestamp}&quot;)
+    protected String timestamp;
+    
+    /**
+     * Dry run Coveralls report without actually sending it.
+     */
+    @Parameter(property = &quot;dryRun&quot;, defaultValue = &quot;false&quot;)
+    protected boolean dryRun;
+
+    /**
+     * Fail build if Coveralls service is not available or submission fails for internal errors.
+     */
+    @Parameter(property = &quot;failOnServiceError&quot;, defaultValue = &quot;true&quot;)
+    protected boolean failOnServiceError;
+
+    /**
+     * Scan subdirectories for source files.
+     */
+    @Parameter(property = &quot;scanForSources&quot;, defaultValue = &quot;false&quot;)
+    protected boolean scanForSources;
+
+    /**
+     * Base directory of the project.
+     */
+    @Parameter(property = &quot;coveralls.basedir&quot;, defaultValue = &quot;${project.basedir}&quot;)
+    protected File basedir;
+
+    /**
+     * Skip the plugin execution.
+     */
+    @Parameter(property = &quot;coveralls.skip&quot;, defaultValue = &quot;false&quot;)
+    protected boolean skip;
+
+
+    /**
+     * Maven settings.
+     */
+    @Parameter(defaultValue = &quot;${settings}&quot;, readonly = true, required = true)
+    protected Settings settings;
+
+    /**
+     * Maven project for runtime value resolution.
+     */
+    @Component
+    protected MavenProject project;
+
+
+    @Override
+    public final void execute() throws MojoExecutionException, MojoFailureException {
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (skip) {</span>
+<span class="fc" id="L235">            getLog().info(&quot;Skip property set, skipping plugin execution&quot;);</span>
+<span class="fc" id="L236">            return;</span>
+        }
+        
+        try {
+<span class="fc" id="L240">            createEnvironment().setup();</span>
+<span class="fc" id="L241">            Job job = createJob();</span>
+<span class="fc" id="L242">            job.validate().throwOrInform(getLog());</span>
+<span class="fc" id="L243">            SourceLoader sourceLoader = createSourceLoader(job);</span>
+<span class="fc" id="L244">            List&lt;CoverageParser&gt; parsers = createCoverageParsers(sourceLoader);</span>
+<span class="fc" id="L245">            JsonWriter writer = createJsonWriter(job);</span>
+<span class="fc" id="L246">            CoverallsClient client = createCoverallsClient();</span>
+<span class="fc" id="L247">            List&lt;Logger&gt; reporters = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L248">            reporters.add(new JobLogger(job));</span>
+<span class="fc" id="L249">            SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);</span>
+<span class="fc" id="L250">            reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));</span>
+            
+<span class="fc" id="L252">            report(reporters, Position.BEFORE);</span>
+<span class="fc" id="L253">            writeCoveralls(writer, sourceCallback, parsers);</span>
+<span class="fc" id="L254">            report(reporters, Position.AFTER);</span>
+            
+<span class="fc bfc" id="L256" title="All 2 branches covered.">            if (!job.isDryRun()) {</span>
+<span class="fc" id="L257">                submitData(client, writer.getCoverallsFile());</span>
+            }
+<span class="fc" id="L259">        } catch (ProcessingException ex) {</span>
+<span class="fc" id="L260">            throw new MojoFailureException(&quot;Processing of input or output data failed&quot;, ex);</span>
+<span class="fc" id="L261">        } catch (IOException ex) {</span>
+<span class="fc" id="L262">            throw new MojoFailureException(&quot;I/O operation failed&quot;, ex);</span>
+<span class="fc" id="L263">        } catch (Exception ex) {</span>
+<span class="fc" id="L264">            throw new MojoExecutionException(&quot;Build error&quot;, ex);</span>
+<span class="fc" id="L265">        }</span>
+<span class="fc" id="L266">    }</span>
+
+    /**
+     * 
+     * @param sourceLoader source loader that extracts source files
+     * @return coverage parsers for all maven modules and additional reports
+     * @throws IOException if parsers cannot be created
+     */
+    protected List&lt;CoverageParser&gt; createCoverageParsers(final SourceLoader sourceLoader) throws IOException {
+<span class="pc" id="L275">        return new CoverageParsersFactory(project, sourceLoader)</span>
+<span class="fc" id="L276">                .withJaCoCoReports(jacocoReports)</span>
+<span class="fc" id="L277">                .withCoberturaReports(coberturaReports)</span>
+<span class="fc" id="L278">                .withSagaReports(sagaReports)</span>
+<span class="fc" id="L279">                .withRelativeReportDirs(relativeReportDirs)</span>
+<span class="nc" id="L280">                .createParsers();</span>
+    }
+    
+    /**
+     * @return source loader that extracts source files
+     * 
+     * @param job the job describing the coveralls report
+     */
+    protected SourceLoader createSourceLoader(final Job job) {
+<span class="fc" id="L289">        return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)</span>
+<span class="fc" id="L290">                .withSourceDirectories(sourceDirectories)</span>
+<span class="fc" id="L291">                .withScanForSources(scanForSources)</span>
+<span class="fc" id="L292">                .createSourceLoader();</span>
+    }
+
+    /**
+     * @return environment to setup mojo and service specific properties
+     */
+    protected Environment createEnvironment() {
+<span class="fc" id="L299">        return new Environment(this, getServices());</span>
+    }
+    
+    /**
+     * @return list of available continuous integration services
+     */
+    protected List&lt;ServiceSetup&gt; getServices() {
+<span class="fc" id="L306">        Map&lt;String, String&gt; env = System.getenv();</span>
+<span class="fc" id="L307">        List&lt;ServiceSetup&gt; services = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L308">        services.add(new Shippable(env));</span>
+<span class="fc" id="L309">        services.add(new Travis(env));</span>
+<span class="fc" id="L310">        services.add(new Circle(env));</span>
+<span class="fc" id="L311">        services.add(new Jenkins(env));</span>
+<span class="fc" id="L312">        services.add(new Bamboo(env));</span>
+<span class="fc" id="L313">        services.add(new Appveyor(env));</span>
+<span class="fc" id="L314">        services.add(new Wercker(env));</span>
+<span class="fc" id="L315">        services.add(new General(env));</span>
+<span class="fc" id="L316">        return services;</span>
+    }
+    
+    /**
+     * @return job that describes the coveralls report
+     * @throws ProcessingException if processing of timestamp fails
+     * @throws IOException if an I/O error occurs
+     */
+    protected Job createJob() throws ProcessingException, IOException {
+<span class="fc" id="L325">        Git git = new GitRepository(basedir).load();</span>
+<span class="fc" id="L326">        Date time = new TimestampParser(timestampFormat).parse(timestamp);</span>
+<span class="fc" id="L327">        return new Job()</span>
+<span class="fc" id="L328">            .withRepoToken(repoToken)</span>
+<span class="fc" id="L329">            .withServiceName(serviceName)</span>
+<span class="fc" id="L330">            .withServiceJobId(serviceJobId)</span>
+<span class="fc" id="L331">            .withServiceBuildNumber(serviceBuildNumber)</span>
+<span class="fc" id="L332">            .withServiceBuildUrl(serviceBuildUrl)</span>
+<span class="fc" id="L333">            .withParallel(parallel)</span>
+<span class="fc" id="L334">            .withServiceEnvironment(serviceEnvironment)</span>
+<span class="fc" id="L335">            .withDryRun(dryRun)</span>
+<span class="fc" id="L336">            .withBranch(branch)</span>
+<span class="fc" id="L337">            .withPullRequest(pullRequest)</span>
+<span class="fc" id="L338">            .withTimestamp(time)</span>
+<span class="fc" id="L339">            .withGit(git);</span>
+    }
+    
+    /**
+     * @param job the job describing the coveralls report
+     * @return JSON writer that writes the coveralls data
+     * @throws IOException if an I/O error occurs
+     */
+    protected JsonWriter createJsonWriter(final Job job) throws IOException {
+<span class="fc" id="L348">        return new JsonWriter(job, coverallsFile);</span>
+    }
+    
+    /**
+     * @return http client that submits the coveralls data
+     */
+    protected CoverallsClient createCoverallsClient() {
+<span class="fc" id="L355">        return new CoverallsProxyClient(coverallsUrl, settings.getActiveProxy());</span>
+    }
+    
+    /**
+     * @param writer the JSON writer
+     * @param reporters the logging reporters
+     * @return source callback chain for different source handlers
+     */
+    protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List&lt;Logger&gt; reporters) {
+<span class="fc" id="L364">        SourceCallback chain = writer;</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">        if (getLog().isInfoEnabled()) {</span>
+<span class="fc" id="L366">            CoverageTracingLogger coverageTracingReporter = new CoverageTracingLogger(chain);</span>
+<span class="fc" id="L367">            chain = coverageTracingReporter;</span>
+<span class="fc" id="L368">            reporters.add(coverageTracingReporter);</span>
+        }
+<span class="fc" id="L370">        chain = new UniqueSourceCallback(chain);</span>
+<span class="fc" id="L371">        return chain;</span>
+    }
+
+    /**
+     * Writes coverage data to JSON file.
+     *
+     * @param writer JSON writer that writes the coveralls data
+     * @param sourceCallback the source callback handler
+     * @param parsers list of coverage parsers
+     * @throws ProcessingException if process to to create JSON file fails
+     * @throws IOException if an I/O error occurs
+     */
+    protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback, final List&lt;CoverageParser&gt; parsers) throws ProcessingException, IOException {
+        try {
+<span class="fc" id="L385">            getLog().info(&quot;Writing Coveralls data to &quot; + writer.getCoverallsFile().getAbsolutePath() + &quot;...&quot;);</span>
+<span class="fc" id="L386">            long now = System.currentTimeMillis();</span>
+<span class="fc" id="L387">            sourceCallback.onBegin();</span>
+<span class="fc bfc" id="L388" title="All 2 branches covered.">            for (CoverageParser parser : parsers) {</span>
+<span class="fc" id="L389">                getLog().info(&quot;Processing coverage report from &quot; + parser.getCoverageFile().getAbsolutePath());</span>
+<span class="fc" id="L390">                parser.parse(sourceCallback);</span>
+<span class="fc" id="L391">            }</span>
+<span class="fc" id="L392">            sourceCallback.onComplete();</span>
+<span class="fc" id="L393">            long duration = System.currentTimeMillis() - now;</span>
+<span class="fc" id="L394">            getLog().info(&quot;Successfully wrote Coveralls data in &quot; + duration + &quot;ms&quot;);</span>
+        } finally {
+<span class="fc" id="L396">            writer.close();</span>
+        }
+<span class="fc" id="L398">    }</span>
+    
+    private void submitData(final CoverallsClient client, final File coverallsFile) throws ProcessingException, IOException {
+<span class="fc" id="L401">        getLog().info(&quot;Submitting Coveralls data to API&quot;);</span>
+<span class="fc" id="L402">        long now = System.currentTimeMillis();</span>
+        try {
+<span class="fc" id="L404">            CoverallsResponse response = client.submit(coverallsFile);</span>
+<span class="fc" id="L405">            long duration = System.currentTimeMillis() - now;</span>
+<span class="fc" id="L406">            getLog().info(&quot;Successfully submitted Coveralls data in &quot; + duration + &quot;ms for &quot; + response.getMessage());</span>
+<span class="fc" id="L407">            getLog().info(response.getUrl());</span>
+<span class="fc" id="L408">            getLog().info(&quot;*** It might take hours for Coveralls to update the actual coverage numbers for a job&quot;);</span>
+<span class="fc" id="L409">            getLog().info(&quot;    If you see question marks in the report, please be patient&quot;);</span>
+<span class="fc" id="L410">        } catch (ProcessingException ex) {</span>
+<span class="fc" id="L411">            long duration = System.currentTimeMillis() - now;</span>
+<span class="fc" id="L412">            String message = &quot;Submission failed in &quot; + duration + &quot;ms while processing data&quot;;</span>
+<span class="nc" id="L413">            handleSubmissionError(ex, message, true);</span>
+<span class="fc" id="L414">        } catch (IOException ex) {</span>
+<span class="fc" id="L415">            long duration = System.currentTimeMillis() - now;</span>
+<span class="fc" id="L416">            String message = &quot;Submission failed in &quot; + duration + &quot;ms while handling I/O operations&quot;;</span>
+<span class="fc" id="L417">            handleSubmissionError(ex, message, failOnServiceError);</span>
+<span class="pc" id="L418">        }</span>
+<span class="fc" id="L419">    }</span>
+
+    private &lt;T extends Exception&gt; void handleSubmissionError(final T ex, final String message, final boolean failOnException) throws T {
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        if (failOnException) {</span>
+<span class="fc" id="L423">            getLog().error(message);</span>
+<span class="fc" id="L424">            throw ex;</span>
+        } else {
+<span class="fc" id="L426">            getLog().warn(message);</span>
+        }
+<span class="fc" id="L428">    }</span>
+    
+    private void report(final List&lt;Logger&gt; reporters, final Position position) {
+<span class="fc bfc" id="L431" title="All 2 branches covered.">        for (Logger reporter : reporters) {</span>
+<span class="fc bfc" id="L432" title="All 2 branches covered.">            if (position.equals(reporter.getPosition())) {</span>
+<span class="fc" id="L433">                reporter.log(getLog());</span>
+            }
+<span class="fc" id="L435">        }</span>
+<span class="fc" id="L436">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverageTracingLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.logging</a> &gt; <span class="el_source">CoverageTracingLogger.java</span></div><h1>CoverageTracingLogger.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.logging;
+
+import org.apache.maven.plugin.logging.Log;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Branch;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+
+import java.io.IOException;
+
+public class CoverageTracingLogger extends ChainingSourceCallback implements Logger {
+
+<span class="fc" id="L37">    private long files = 0;</span>
+<span class="fc" id="L38">    private long lines = 0;</span>
+<span class="fc" id="L39">    private long relevant = 0;</span>
+<span class="fc" id="L40">    private long covered = 0;</span>
+<span class="fc" id="L41">    private long branches = 0;</span>
+<span class="fc" id="L42">    private long coveredBranches = 0;</span>
+    
+    public CoverageTracingLogger(final SourceCallback chained) {
+<span class="fc" id="L45">        super(chained);</span>
+<span class="fc" id="L46">    }</span>
+    
+    public long getFiles() {
+<span class="fc" id="L49">        return files;</span>
+    }
+    
+    public final long getLines() {
+<span class="fc" id="L53">        return lines;</span>
+    }
+    
+    public final long getRelevant() {
+<span class="fc" id="L57">        return relevant;</span>
+    }
+    
+    public final long getCovered() {
+<span class="fc" id="L61">        return covered;</span>
+    }
+    
+    public final long getMissed() {
+<span class="fc" id="L65">        return relevant - covered;</span>
+    }
+    
+    public final long getBranches() {
+<span class="fc" id="L69">        return branches;</span>
+    }
+
+    public final long getCoveredBranches() {
+<span class="fc" id="L73">        return coveredBranches;</span>
+    }
+
+    public final long getMissedBranches() {
+<span class="fc" id="L77">        return branches - coveredBranches;</span>
+    }
+
+    @Override
+    public Position getPosition() {
+<span class="fc" id="L82">        return Position.AFTER;</span>
+    }
+
+    @Override
+    public void log(final Log log) {
+<span class="fc" id="L87">        log.info(&quot;Gathered code coverage metrics for &quot; + getFiles() + &quot; source files with &quot; + getLines() + &quot; lines of code:&quot;);</span>
+<span class="fc" id="L88">        log.info(&quot;- &quot; + getRelevant() + &quot; relevant lines&quot;);</span>
+<span class="fc" id="L89">        log.info(&quot;- &quot; + getCovered() + &quot; covered lines&quot;);</span>
+<span class="fc" id="L90">        log.info(&quot;- &quot; + getMissed() + &quot; missed lines&quot;);</span>
+<span class="fc" id="L91">        log.info(&quot;- &quot; + getBranches() + &quot; branches&quot;);</span>
+<span class="fc" id="L92">        log.info(&quot;- &quot; + getCoveredBranches() + &quot; covered branches&quot;);</span>
+<span class="fc" id="L93">        log.info(&quot;- &quot; + getMissedBranches() + &quot; missed branches&quot;);</span>
+<span class="fc" id="L94">    }</span>
+
+    @Override
+    protected void onSourceInternal(final Source source) throws ProcessingException, IOException {
+<span class="fc" id="L98">        files++;</span>
+<span class="fc" id="L99">        lines += source.getCoverage().length;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (Integer coverage : source.getCoverage()) {</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">            if (coverage != null) {</span>
+<span class="fc" id="L102">                relevant++;</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">                if (coverage &gt; 0) {</span>
+<span class="fc" id="L104">                    covered++;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L109">        this.branches += source.getBranchesList().size();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (final Branch b : source.getBranchesList()) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (b.getHits() &gt; 0) {</span>
+<span class="fc" id="L112">                coveredBranches++;</span>
+            }
+<span class="fc" id="L114">        }</span>
+<span class="fc" id="L115">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

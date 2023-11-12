@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JaCoCoParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">JaCoCoParser.java</span></div><h1>JaCoCoParser.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.parser;
+
+import java.io.File;
+import java.io.IOException;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+
+public class JaCoCoParser extends AbstractXmlEventParser {
+
+    private String packageName;
+    private Source source;
+    private int branchId;
+
+    public JaCoCoParser(final File coverageFile, final SourceLoader sourceLoader) {
+<span class="fc" id="L43">        super(coverageFile, sourceLoader);</span>
+<span class="fc" id="L44">    }</span>
+    
+    @Override
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (isStartElement(xml, &quot;package&quot;)) {</span>
+<span class="fc" id="L49">            this.packageName = xml.getAttributeValue(null, &quot;name&quot;);</span>
+        } else
+        
+<span class="pc bpc" id="L52" title="1 of 4 branches missed.">        if (isStartElement(xml, &quot;sourcefile&quot;) &amp;&amp; packageName != null) {</span>
+<span class="fc" id="L53">            String sourceFile = this.packageName + &quot;/&quot; + xml.getAttributeValue(null, &quot;name&quot;);</span>
+<span class="fc" id="L54">            this.source = loadSource(sourceFile);</span>
+<span class="fc" id="L55">            this.branchId = 0;</span>
+<span class="fc" id="L56">        } else</span>
+        
+<span class="pc bpc" id="L58" title="1 of 4 branches missed.">        if (isStartElement(xml, &quot;line&quot;) &amp;&amp; this.source != null) {</span>
+<span class="fc" id="L59">            int ci = Integer.parseInt(xml.getAttributeValue(null, &quot;ci&quot;));</span>
+<span class="fc" id="L60">            int cb = Integer.parseInt(xml.getAttributeValue(null, &quot;cb&quot;));</span>
+<span class="fc" id="L61">            int mb = Integer.parseInt(xml.getAttributeValue(null, &quot;mb&quot;));</span>
+<span class="fc" id="L62">            int nr = Integer.parseInt(xml.getAttributeValue(null, &quot;nr&quot;));</span>
+
+            // jacoco does not count hits. this is why hits is always 0 or 1
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            this.source.addCoverage(nr, (ci == 0 ? 0 : 1));</span>
+
+            // add branches. unfortunately, there is NO block number and
+            // branch number will NOT be unique between coverage changes.
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            for (int b = 0; b &lt; cb; b++) {</span>
+<span class="fc" id="L70">              this.source.addBranchCoverage(nr, 0, this.branchId++, 1);</span>
+            }
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            for (int b = 0; b &lt; mb; b++) {</span>
+<span class="fc" id="L73">              this.source.addBranchCoverage(nr, 0, this.branchId++, 0);</span>
+            }
+<span class="fc" id="L75">        } else</span>
+        
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">        if (isEndElement(xml, &quot;sourcefile&quot;) &amp;&amp; this.source != null) {</span>
+<span class="fc" id="L78">            callback.onSource(this.source);</span>
+<span class="fc" id="L79">            this.source = null;</span>
+        } else
+        
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (isEndElement(xml, &quot;package&quot;)) {</span>
+<span class="fc" id="L83">            this.packageName = null;</span>
+        }
+<span class="fc" id="L85">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

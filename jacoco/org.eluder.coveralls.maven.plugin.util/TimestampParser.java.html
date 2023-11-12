@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimestampParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">TimestampParser.java</span></div><h1>TimestampParser.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013 - 2023, Tapio Rautonen
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.util;
+
+import org.codehaus.plexus.util.StringUtils;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class TimestampParser {
+
+    public static final String EPOCH_MILLIS = &quot;EpochMillis&quot;;
+
+    public static final String DEFAULT_FORMAT = &quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;;
+
+    private final Parser parser;
+
+<span class="fc" id="L42">    public TimestampParser(final String format) {</span>
+        try {
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (EPOCH_MILLIS.equalsIgnoreCase(format)) {</span>
+<span class="fc" id="L45">                this.parser = new EpochMillisParser();</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            } else if (StringUtils.isNotBlank(format)) {</span>
+<span class="fc" id="L47">                this.parser = new DateFormatParser(format);</span>
+            } else {
+<span class="fc" id="L49">                this.parser = new DateFormatParser(DEFAULT_FORMAT);</span>
+            }
+<span class="fc" id="L51">        } catch (IllegalArgumentException ex) {</span>
+<span class="fc" id="L52">            throw new IllegalArgumentException(&quot;Invalid timestamp format \&quot;&quot; + format + &quot;\&quot;&quot;, ex);</span>
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">    }</span>
+
+    public Date parse(final String timestamp) throws ProcessingException {
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (StringUtils.isBlank(timestamp)) {</span>
+<span class="fc" id="L58">            return null;</span>
+        }
+        try {
+<span class="fc" id="L61">            return parser.parse(timestamp);</span>
+<span class="fc" id="L62">        } catch (Exception ex) {</span>
+<span class="fc" id="L63">            throw new ProcessingException(&quot;Unable to parse timestamp \&quot;&quot; + timestamp + &quot;\&quot;&quot;, ex);</span>
+        }
+    }
+
+    private interface Parser {
+        Date parse(String timestamp) throws Exception;
+    }
+
+    private static class DateFormatParser implements Parser {
+
+        final DateFormat format;
+
+<span class="fc" id="L75">        DateFormatParser(final String format) {</span>
+<span class="fc" id="L76">            this.format = new SimpleDateFormat(format);</span>
+<span class="fc" id="L77">        }</span>
+
+        @Override
+        public synchronized Date parse(final String timestamp) throws ParseException {
+<span class="fc" id="L81">            return format.parse(timestamp);</span>
+        }
+    }
+
+    private static class EpochMillisParser implements Parser {
+
+        @Override
+        public Date parse(final String timestamp) {
+<span class="fc" id="L89">            return new Date(Long.valueOf(timestamp));</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
