@@ -8,20 +8,19 @@ mvn -Pcobertura clean cobertura:cobertura
 ```
 
 
-### JaCoCo
+### JaCoCo (Tested Compliant to java 22)
 
 ```
 mvn -Pjacoco clean verify jacoco:report
 ```
 
-
-### Saga
+### Saga with Jasmine (Tested Compliant to java 22)
 
 ```
 mvn -Psaga clean test saga:coverage
 ```
 
-### Clover
+### Clover (Tested Compliant to java 22)
 
 ```
 mvn -Pclover clean test clover:aggregate clover:clover
