@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class WerckerTest {
+class WerckerTest {
 
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
@@ -44,32 +44,32 @@ public class WerckerTest {
     }
 
     @Test
-    public void testIsSelectedForNothing() {
+    void testIsSelectedForNothing() {
         assertFalse(new Wercker(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    public void testIsSelectedForWercker() {
+    void testIsSelectedForWercker() {
         assertTrue(new Wercker(env()).isSelected());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals("wercker", new Wercker(env()).getName());
     }
 
     @Test
-    public void testGetJobId() {
+    void testGetJobId() {
         assertEquals("123456789", new Wercker(env()).getJobId());
     }
 
     @Test
-    public void testGetBuildUrl() {
+    void testGetBuildUrl() {
         assertEquals("https://app.wercker.com/build/123456789", new Wercker(env()).getBuildUrl());
     }
 
     @Test
-    public void testGetBranch() {
+    void testGetBranch() {
         assertEquals("master", new Wercker(env()).getBranch());
     }
 }

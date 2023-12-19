@@ -23,19 +23,20 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 
-import static org.mockito.Mockito.when;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class MultiSourceLoaderTest {
+@ExtendWith(MockitoExtension.class)
+class MultiSourceLoaderTest {
 
     @Mock
     private SourceLoader sl1;
@@ -47,20 +48,22 @@ public class MultiSourceLoaderTest {
 
     private Source s2 = new Source("source", "{ 2 }", "849409F24F4BCAAC904F3B142447D65D");
 
-    @Test(expected = IOException.class)
-    public void testMissingSource() throws Exception {
-        creaMultiSourceLoader().load("source");
+    @Test
+    void testMissingSource() throws Exception {
+        assertThrows(IOException.class, () -> {
+            creaMultiSourceLoader().load("source");
+        });
     }
 
     @Test
-    public void testPrimarySource() throws Exception {
+    void testPrimarySource() throws Exception {
         when(sl1.load("source")).thenReturn(s1);
         Source source = creaMultiSourceLoader().load("source");
         assertSame(s1, source);
     }
 
     @Test
-    public void testSecondarySource() throws Exception {
+    void testSecondarySource() throws Exception {
         when(sl2.load("source")).thenReturn(s2);
         Source source = creaMultiSourceLoader().load("source");
         assertSame(s2, source);

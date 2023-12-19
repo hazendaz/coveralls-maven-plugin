@@ -24,6 +24,7 @@
 package org.eluder.coveralls.maven.plugin;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,14 +36,14 @@ import java.util.Properties;
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class EnvironmentTest {
+@ExtendWith(MockitoExtension.class)
+class EnvironmentTest {
 
     private CoverallsReportMojo mojo;
 
@@ -55,8 +56,8 @@ public class EnvironmentTest {
     @Mock
     private ServiceSetup serviceMock;
 
-    @Before
-    public void init() throws Exception {
+    @BeforeEach
+    void init() throws Exception {
         mojo = new CoverallsReportMojo() {
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {
@@ -70,33 +71,39 @@ public class EnvironmentTest {
         };
         mojo.serviceName = "service";
         mojo.sourceEncoding = "UTF-8";
-        when(serviceMock.isSelected()).thenReturn(true);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testMissingMojo() {
-        new Environment(null, Arrays.asList(serviceMock));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testMissingServices() {
-        new Environment(mojo, null);
+        lenient().when(serviceMock.isSelected()).thenReturn(true);
     }
 
     @Test
-    public void testSetupWithoutServices() {
+    void testMissingMojo() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Environment(null, Arrays.asList(serviceMock));
+        });
+    }
+
+    @Test
+    void testMissingServices() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Environment(mojo, null);
+        });
+    }
+
+    @Test
+    void testSetupWithoutServices() {
         create(Collections.<ServiceSetup>emptyList()).setup();
         assertEquals("service", mojo.serviceName);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetupWithoutSourceEncoding() {
+    @Test
+    void testSetupWithoutSourceEncoding() {
         mojo.sourceEncoding = null;
-        create(Arrays.asList(serviceMock)).setup();
+        assertThrows(IllegalArgumentException.class, () -> {
+            create(Arrays.asList(serviceMock)).setup();
+        });
     }
 
     @Test
-    public void testSetupWithIncompleteJob() {
+    void testSetupWithIncompleteJob() {
         when(serviceMock.getJobId()).thenReturn("");
         when(serviceMock.getBuildUrl()).thenReturn("  ");
 
@@ -111,7 +118,7 @@ public class EnvironmentTest {
     }
 
     @Test
-    public void testSetupWithCompleteJob() {
+    void testSetupWithCompleteJob() {
         mojo.serviceName = null;
         Properties environment = new Properties();
         environment.setProperty("env", "true");
@@ -134,7 +141,7 @@ public class EnvironmentTest {
     }
 
     @Test
-    public void testSetupWithoutJobOverride() {
+    void testSetupWithoutJobOverride() {
         Properties environment = new Properties();
         environment.setProperty("env", "true");
         Properties serviceEnvironment = new Properties();

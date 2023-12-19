@@ -23,32 +23,37 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UrlUtilsTest {
+class UrlUtilsTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testCreateInvalidUrl() throws Exception {
-        UrlUtils.create("sdfds");
+    @Test
+    void testCreateInvalidUrl() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            UrlUtils.create("sdfds");
+        });
     }
 
     @Test
-    public void testCreateValidUrl() throws Exception {
+    void testCreateValidUrl() throws Exception {
         assertEquals("http://example.org", UrlUtils.create("http://example.org").toURI().toASCIIString());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidUrlToUri() throws Exception {
-        UrlUtils.toUri(new URL("http://google.com?q=s|r"));
+    @Test
+    void testInvalidUrlToUri() throws Exception {
+        assertThrows(IllegalArgumentException.class, () -> {
+            UrlUtils.toUri(new URL("http://google.com?q=s|r"));
+        });
     }
 
     @Test
-    public void testValidUrlToUri() throws Exception {
+    void testValidUrlToUri() throws Exception {
         URI uri = UrlUtils.toUri(new URL("http://google.com"));
         assertEquals(new URI("http://google.com"), uri);
     }

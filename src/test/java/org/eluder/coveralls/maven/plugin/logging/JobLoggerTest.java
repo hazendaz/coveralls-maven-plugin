@@ -24,26 +24,27 @@
 package org.eluder.coveralls.maven.plugin.logging;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Git.Head;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-@RunWith(MockitoJUnitRunner.class)
-public class JobLoggerTest {
+@ExtendWith(MockitoExtension.class)
+class JobLoggerTest {
 
     @Mock
     private Job jobMock;
@@ -54,9 +55,11 @@ public class JobLoggerTest {
     @Mock
     private ObjectMapper jsonMapperMock;
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testMissingJob() {
-        new JobLogger(null);
+    @Test
+    void testMissingJob() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new JobLogger(null);
+        });
     }
 
     @Test
@@ -65,7 +68,7 @@ public class JobLoggerTest {
     }
 
     @Test
-    public void testLogJobWithId() {
+    void testLogJobWithId() {
         Git git = new Git(null, new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceJobId()).thenReturn("666");
@@ -83,7 +86,7 @@ public class JobLoggerTest {
     }
 
     @Test
-    public void testLogWithBuildNumberAndUrl() {
+    void testLogWithBuildNumberAndUrl() {
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceBuildNumber()).thenReturn("10");
         when(jobMock.getServiceBuildUrl()).thenReturn("http://ci.com/build/10");
@@ -96,7 +99,7 @@ public class JobLoggerTest {
     }
 
     @Test
-    public void testLogDryRun() {
+    void testLogDryRun() {
         when(jobMock.isDryRun()).thenReturn(true);
 
         new JobLogger(jobMock).log(logMock);
@@ -107,7 +110,7 @@ public class JobLoggerTest {
     }
 
     @Test
-    public void testLogParallel() {
+    void testLogParallel() {
         when(jobMock.isParallel()).thenReturn(true);
 
         new JobLogger(jobMock).log(logMock);
@@ -119,7 +122,7 @@ public class JobLoggerTest {
     }
 
     @Test
-    public void testLogJobWithDebug() throws Exception {
+    void testLogJobWithDebug() throws Exception {
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jsonMapperMock.writeValueAsString(same(jobMock))).thenReturn("{\"serviceName\":\"service\"}");
@@ -132,13 +135,15 @@ public class JobLoggerTest {
         verifyNoMoreInteractions(logMock);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     @SuppressWarnings("unchecked")
-    public void testLogJobWithErrorInDebug() throws Exception {
+    void testLogJobWithErrorInDebug() throws Exception {
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jsonMapperMock.writeValueAsString(same(jobMock))).thenThrow(JsonProcessingException.class);
 
-        new JobLogger(jobMock, jsonMapperMock).log(logMock);
+        assertThrows(RuntimeException.class, () -> {
+            new JobLogger(jobMock, jsonMapperMock).log(logMock);
+        });
     }
 }

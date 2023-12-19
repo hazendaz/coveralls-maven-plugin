@@ -31,9 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class JenkinsTest {
+class JenkinsTest {
 
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
@@ -46,37 +46,37 @@ public class JenkinsTest {
     }
 
     @Test
-    public void testIsSelectedForNothing() {
+    void testIsSelectedForNothing() {
         assertFalse(new Jenkins(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    public void testIsSelectedForJenkins() {
+    void testIsSelectedForJenkins() {
         assertTrue(new Jenkins(env()).isSelected());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals("jenkins", new Jenkins(env()).getName());
     }
 
     @Test
-    public void testGetBuildNumber() {
+    void testGetBuildNumber() {
         assertEquals("build123", new Jenkins(env()).getBuildNumber());
     }
 
     @Test
-    public void testGetBuildUrl() {
+    void testGetBuildUrl() {
         assertEquals("http://company.com/jenkins/build123", new Jenkins(env()).getBuildUrl());
     }
 
     @Test
-    public void testGetBranch() {
+    void testGetBranch() {
         assertEquals("master", new Jenkins(env()).getBranch());
     }
 
     @Test
-    public void testGetEnvironment() {
+    void testGetEnvironment() {
         Properties properties = new Jenkins(env()).getEnvironment();
         assertEquals(4, properties.size());
         assertEquals("build123", properties.getProperty("jenkins_build_num"));

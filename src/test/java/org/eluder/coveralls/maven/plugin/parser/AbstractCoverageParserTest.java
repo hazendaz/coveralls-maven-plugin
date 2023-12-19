@@ -26,24 +26,9 @@ package org.eluder.coveralls.maven.plugin.parser;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import org.eluder.coveralls.maven.plugin.CoverageFixture;
-import org.eluder.coveralls.maven.plugin.CoverageParser;
-import org.eluder.coveralls.maven.plugin.ProcessingException;
-import org.eluder.coveralls.maven.plugin.domain.Branch;
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
-import org.eluder.coveralls.maven.plugin.source.SourceCallback;
-import org.eluder.coveralls.maven.plugin.source.SourceLoader;
-import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,9 +39,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.mockito.Mockito.*;
+import org.eluder.coveralls.maven.plugin.CoverageFixture;
+import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Branch;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public abstract class AbstractCoverageParserTest {
 
     @Mock
@@ -65,7 +67,7 @@ public abstract class AbstractCoverageParserTest {
     @Mock
     protected SourceCallback sourceCallbackMock;
 
-    @Before
+    @BeforeEach
     public void init() throws IOException {
         for (String[] coverageFile : getCoverageFixture()) {
             final String name = sourceName(coverageFile[0]);
@@ -186,19 +188,19 @@ public abstract class AbstractCoverageParserTest {
             Integer lineNumber = i + 1;
             String message = name + " line " + lineNumber + " coverage";
             if (coveredLines.contains(lineNumber)) {
-                assertTrue(message, tested.getCoverage()[i] > 0);
+                assertTrue(tested.getCoverage()[i] > 0, message);
             } else if (missedLines.contains(lineNumber)) {
-                assertTrue(message, tested.getCoverage()[i] == 0);
+                assertTrue(tested.getCoverage()[i] == 0, message);
             } else {
-                assertNull(message, tested.getCoverage()[i]);
+                assertNull(tested.getCoverage()[i], message);
             }
         }
         for (final Branch b : tested.getBranchesList()) {
             final String message = name + " branch " + b.getBranchNumber() + " coverage in line " + b.getLineNumber();
             if (b.getHits() > 0) {
-                assertTrue(message, coveredBranches.contains(b.getLineNumber()));
+                assertTrue(coveredBranches.contains(b.getLineNumber()), message);
             } else {
-                assertTrue(message, missedBranches.contains(b.getLineNumber()));
+                assertTrue(missedBranches.contains(b.getLineNumber()), message);
             }
         }
     }

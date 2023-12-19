@@ -34,7 +34,7 @@ import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 /**
  * @author Jakub Bednář (25/12/2013 10:17)
  */
-public class SagaParserTest extends AbstractCoverageParserTest {
+class SagaParserTest extends AbstractCoverageParserTest {
 
     @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {

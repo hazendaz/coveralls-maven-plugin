@@ -25,10 +25,10 @@ package org.eluder.coverage.sample;
 
 import org.junit.jupiter.api.Test;
 
-public class SimpleCoverageTest {
+class SimpleCoverageTest {
 
     @Test
-    public void test() {
+    void test() {
         new SimpleCoverage().isTested();
     }
 

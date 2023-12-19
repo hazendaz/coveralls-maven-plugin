@@ -23,12 +23,12 @@
  */
 package org.eluder.coverage.sample;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class PartialCoverageIT {
+class PartialCoverageIT {
 
     @Test
-    public void testSum() {
+    void testSum() {
         new PartialCoverage().partial(false);
     }
 

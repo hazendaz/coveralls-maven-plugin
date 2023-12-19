@@ -23,30 +23,33 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ValidationErrorsTest {
+@ExtendWith(MockitoExtension.class)
+class ValidationErrorsTest {
 
     @Mock
     private Log logMock;
 
-    @Test(expected = ValidationException.class)
-    public void testThrowOrInformWithError() {
-        createValidationErrors(new ValidationError(Level.ERROR, "message")).throwOrInform(logMock);
+    @Test
+    void testThrowOrInformWithError() {
+        assertThrows(ValidationException.class, () -> {
+            createValidationErrors(new ValidationError(Level.ERROR, "message")).throwOrInform(logMock);
+        });
     }
 
     @Test
-    public void testThrowOrInformWithWarnings() {
+    void testThrowOrInformWithWarnings() {
         createValidationErrors(new ValidationError(Level.WARN, "error1"), new ValidationError(Level.WARN, "error2")).throwOrInform(logMock);
         verify(logMock, times(2)).warn(any(CharSequence.class));
     }
