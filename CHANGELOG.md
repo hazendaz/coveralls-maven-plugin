@@ -26,6 +26,10 @@
 - Build with Java 8, 10 and 11.
 - Overall this was PRs 111, 108, 130, 112
 
+## 4.4.1 (was released from https://github.com/jwtk/coveralls-maven-plugin for work from https://github.com/dogeared/coveralls-maven-plugin)
+- Code is pulled into 4.5.0 release
+- Add suppor;t for open clover
+
 ## 4.3.0
 - #99: Added support for Wercker
 - #100: Fixed Wercker environment variables
