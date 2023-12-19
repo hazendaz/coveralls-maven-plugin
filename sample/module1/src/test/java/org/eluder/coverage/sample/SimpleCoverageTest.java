@@ -31,5 +31,5 @@ public class SimpleCoverageTest {
     public void test() {
         new SimpleCoverage().isTested();
     }
-    
+
 }

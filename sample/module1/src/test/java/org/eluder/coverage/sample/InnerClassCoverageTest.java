@@ -31,10 +31,10 @@ public class InnerClassCoverageTest {
     public void testAnonymous() {
         new InnerClassCoverage().anonymous();
     }
-    
+
     @Test
     public void testDelegate() {
         new InnerClassCoverage().delegate();
     }
-    
+
 }
