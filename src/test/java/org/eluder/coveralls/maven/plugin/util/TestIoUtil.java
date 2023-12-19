@@ -31,7 +31,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -39,20 +39,14 @@ import org.codehaus.plexus.util.IOUtil;
 public class TestIoUtil {
 
     public static void writeFileContent(final String content, final File file) throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter(file);
-        try {
+        try (PrintWriter writer = new PrintWriter(file)) {
             writer.write(content);
-        } finally {
-            IOUtil.close(writer);
         }
     }
 
     public static String readFileContent(final File file) throws IOException {
-        InputStreamReader reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
-        try {
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             return IOUtil.toString(reader);
-        } finally {
-            IOUtil.close(reader);
         }
     }
 
