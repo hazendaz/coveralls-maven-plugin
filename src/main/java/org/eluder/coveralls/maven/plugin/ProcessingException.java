@@ -28,6 +28,8 @@ package org.eluder.coveralls.maven.plugin;
  */
 public class ProcessingException extends Exception {
 
+    private static final long serialVersionUID = 1L;
+
     public ProcessingException() {
         super();
     }

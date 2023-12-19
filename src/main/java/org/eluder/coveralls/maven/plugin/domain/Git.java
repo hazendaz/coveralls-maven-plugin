@@ -32,6 +32,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Git implements JsonObject {
 
+    private static final long serialVersionUID = 1L;
+
     @JsonIgnore
     private final File baseDir;
 
@@ -68,6 +70,8 @@ public class Git implements JsonObject {
     }
 
     public static class Head implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         @JsonProperty("id")
         private final String id;
 
@@ -121,6 +125,8 @@ public class Git implements JsonObject {
     }
 
     public static class Remote implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         @JsonProperty("name")
         private final String name;
 

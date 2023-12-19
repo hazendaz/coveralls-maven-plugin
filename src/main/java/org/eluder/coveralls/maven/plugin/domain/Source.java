@@ -35,7 +35,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Source implements JsonObject {
-    
+
+    private static final long serialVersionUID = 1L;
+
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     //private static final String CLASSIFIER_SEPARATOR = "#";
 

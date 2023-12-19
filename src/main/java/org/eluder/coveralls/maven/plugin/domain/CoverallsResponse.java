@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public final class CoverallsResponse implements JsonObject {
 
+    private static final long serialVersionUID = 1L;
     private final String message;
     private final boolean error;
     private final String url;
