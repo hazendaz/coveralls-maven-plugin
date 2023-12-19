@@ -10,6 +10,8 @@ coveralls-maven-plugin
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
 service.
 
+### Offical Repo for coveralls with maven as listed here https://docs.coveralls.io/java ###
+
 ### Requirements
 
 * Java 6 up to 3.x
