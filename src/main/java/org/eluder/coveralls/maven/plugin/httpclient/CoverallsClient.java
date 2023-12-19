@@ -33,7 +33,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
@@ -88,12 +87,12 @@ public class CoverallsClient {
         if (contentType.getCharset() == null) {
             throw new ProcessingException(getResponseErrorMessage(response, "Response doesn't contain Content-Type header"));
         }
-        InputStreamReader reader = null;
-        try {
-            if (response.getStatusLine().getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                throw new IOException("Coveralls API internal error");
-            }
-            reader = new InputStreamReader(entity.getContent(), contentType.getCharset());
+
+        if (response.getStatusLine().getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+            throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
+        }
+
+        try (InputStreamReader reader = new InputStreamReader(entity.getContent(), contentType.getCharset())) {
             CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
             if (cr.isError()) {
                 throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
@@ -101,10 +100,6 @@ public class CoverallsClient {
             return cr;
         } catch (JsonProcessingException ex) {
             throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);
-        } catch (IOException ex) {
-            throw new IOException(getResponseErrorMessage(response, ex.getMessage()), ex);
-        } finally {
-            IOUtil.close(reader);
         }
     }
 
