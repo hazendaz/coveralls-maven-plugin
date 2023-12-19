@@ -23,7 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.util.xml.XmlStreamReader;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
@@ -53,9 +52,9 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
 
     @Override
     public final void parse(final SourceCallback callback) throws ProcessingException, IOException {
-        XmlStreamReader reader = ReaderFactory.newXmlReader(coverageFile);
-        XMLStreamReader xml = createEventReader(reader);
-        try {
+        XMLStreamReader xml = null;
+        try (XmlStreamReader reader = ReaderFactory.newXmlReader(coverageFile)) {
+            xml = createEventReader(reader);
             while (xml.hasNext()) {
                 xml.next();
                 onEvent(xml, callback);
@@ -64,7 +63,6 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
             throw new ProcessingException(ex);
         } finally {
             close(xml);
-            IOUtil.close(reader);
         }
     }
 
