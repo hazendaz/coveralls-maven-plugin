@@ -1,7 +1,7 @@
 Coverage samples
 ================
 
-### Cobertura
+### Cobertura (Tested compliant to java 8)
 
 ```
 mvn -Pcobertura clean cobertura:cobertura
