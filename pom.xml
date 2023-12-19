@@ -328,6 +328,7 @@
             <licenseSet>
               <excludes>
                 <exclude>**/cobertura.xml</exclude>
+                <exclude>**/ComponentsSpec.coffee</exclude>
                 <exclude>**/jacoco1.xml</exclude>
                 <exclude>**/jacoco2.xml</exclude>
                 <exclude>**/SimpleCoverage.java</exclude>
