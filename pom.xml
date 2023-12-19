@@ -98,7 +98,7 @@
     <httpclient.version>4.5.14</httpclient.version>
     <jackson.version>2.16.0</jackson.version>
     <jgit.version>5.13.2.202306221912-r</jgit.version>
-    <maven.version>3.9.5</maven.version>
+    <maven.version>3.9.6</maven.version>
   </properties>
 
   <dependencyManagement>
