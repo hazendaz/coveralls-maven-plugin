@@ -23,6 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.logging;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
@@ -33,7 +34,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

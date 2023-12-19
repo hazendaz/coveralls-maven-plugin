@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Test;

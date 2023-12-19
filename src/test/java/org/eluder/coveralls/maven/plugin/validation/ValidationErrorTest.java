@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 import org.junit.Test;

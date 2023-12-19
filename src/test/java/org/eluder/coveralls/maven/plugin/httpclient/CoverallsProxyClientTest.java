@@ -26,7 +26,7 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 import org.apache.maven.settings.Proxy;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CoverallsProxyClientTest {
 
