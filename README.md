@@ -12,19 +12,24 @@ service.
 
 ### Requirements
 
-* Java 6 up to 3.x and Java 7 for 4.x onwards.
-* Maven 3.0.0 or newer.
+* Java 6 up to 3.x
+* Java 7 for 4.x to 4.3.
+* 4.4 not released but was set to require java 8 from original codeline
+* 4.4.1 was released on a fork still requring java 7 from https://github.com/jwtk/coveralls-maven-plugin which was work to release from https://github.com/dogeared/coveralls-maven-plugin
+* java 8 for 4.5.0 onwards
+* Maven 3.3.9 or newer.
 
 
 ### Features
 
-* Supports [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/),
+* Supports
+  [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/),
   [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html),
   [Saga](http://timurstrekalov.github.io/saga/) coverage tools and
   [Clover](http://openclover.org/)
 * Multi-module report aggregation
 * Built-in support for [Travis CI](https://travis-ci.org/), [Circle](https://circleci.com/),
-  [Codeship](https://www.codeship.io/), [Jenkins](http://jenkins-ci.org/),
+  [Codeship](https://www.codeship.io/), [Github](https://github.com/), [Jenkins](http://jenkins-ci.org/),
   [Bamboo](https://www.atlassian.com/software/bamboo/), [Shippable](https://www.shippable.com/)
   and [Appveyor](http://www.appveyor.com/) continuous integration services
 * Fully streaming implementation for fast report generation and small memory footprint
@@ -39,9 +44,9 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 
 ```xml
 <plugin>
-    <groupId>org.eluder.coveralls</groupId>
+    <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>coveralls-maven-plugin</artifactId>
-    <version>4.3.0</version>
+    <version>4.5.0-M2</version>
     <configuration>
         <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
     </configuration>
