@@ -34,7 +34,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.codehaus.plexus.util.IOUtil;
+import org.apache.commons.io.IOUtils;
 
 public class TestIoUtil {
 
@@ -46,7 +46,7 @@ public class TestIoUtil {
 
     public static String readFileContent(final File file) throws IOException {
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
-            return IOUtil.toString(reader);
+            return IOUtils.toString(reader);
         }
     }
 

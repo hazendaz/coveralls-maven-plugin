@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.codehaus.plexus.util.IOUtil;
+import org.apache.commons.io.IOUtils;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.Sha521DigestInputStream;
 
@@ -50,7 +50,7 @@ public abstract class AbstractSourceLoader implements SourceLoader {
         if (stream != null) {
             try (Sha521DigestInputStream ds = new Sha521DigestInputStream(stream);
                     InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {
-                String source = IOUtil.toString(reader);
+                String source = IOUtils.toString(reader);
                 return new Source(getFileName(sourceFile), source, ds.getDigestHex());
             } catch (NoSuchAlgorithmException ex) {
                 throw new IOException("Sha-512 algorithm not available", ex);

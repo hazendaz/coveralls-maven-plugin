@@ -23,8 +23,8 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
+import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.SelectorUtils;
 
 import java.io.BufferedInputStream;
@@ -73,7 +73,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
     }
 
     protected String getFileName(final String sourceFile) {
-        String extension = FileUtils.extension(sourceFile);
+        String extension = FilenameUtils.getExtension(sourceFile);
         String[] matchingExtensionFiles = scanFor(extension);
 
         for (String matchingExtensionFile : matchingExtensionFiles) {
