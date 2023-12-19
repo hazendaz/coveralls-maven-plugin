@@ -45,8 +45,8 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
 
     private final File coverageFile;
     private final SourceLoader sourceLoader;
-    
     public AbstractXmlEventParser(final File coverageFile, final SourceLoader sourceLoader) {
+
         this.coverageFile = coverageFile;
         this.sourceLoader = sourceLoader;
     }
@@ -67,12 +67,12 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
             IOUtil.close(reader);
         }
     }
-    
+
     @Override
     public final File getCoverageFile() {
         return coverageFile;
     }
-    
+
     protected XMLStreamReader createEventReader(final Reader reader) throws ProcessingException {
         try {
             XMLInputFactory xmlif = XMLInputFactory.newInstance();
@@ -86,7 +86,7 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
             throw new ProcessingException(ex);
         }
     }
-    
+
     private void close(final XMLStreamReader xml) throws ProcessingException {
         if (xml != null) {
             try {
@@ -96,17 +96,17 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
             }
         }
     }
-    
+
     protected abstract void onEvent(final XMLStreamReader xml, SourceCallback callback) throws XMLStreamException, ProcessingException, IOException;
-    
+
     protected final Source loadSource(final String sourceFile) throws IOException {
         return sourceLoader.load(sourceFile);
     }
-    
+
     protected final boolean isStartElement(final XMLStreamReader xml, final String name) {
         return (XMLStreamConstants.START_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name));
     }
-    
+
     protected final boolean isEndElement(final XMLStreamReader xml, final String name) {
         return (XMLStreamConstants.END_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name));
     }

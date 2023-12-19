@@ -31,7 +31,7 @@ public final class CoverallsResponse implements JsonObject {
     private final String message;
     private final boolean error;
     private final String url;
-    
+
     @JsonCreator
     public CoverallsResponse(
             @JsonProperty("message") final String message,
@@ -41,7 +41,7 @@ public final class CoverallsResponse implements JsonObject {
         this.error = error;
         this.url = url;
     }
-    
+
     public String getMessage() {
         return message;
     }
@@ -49,7 +49,7 @@ public final class CoverallsResponse implements JsonObject {
     public boolean isError() {
         return error;
     }
-    
+
     public String getUrl() {
         return url;
     }

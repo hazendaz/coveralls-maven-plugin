@@ -44,11 +44,11 @@ import java.util.Properties;
 public class JsonWriter implements SourceCallback, Closeable {
 
     protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
-    
+
     private final Job job;
     private final File coverallsFile;
     private final JsonGenerator generator;
-    
+
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
         File directory = coverallsFile.getParentFile();
         if (!directory.exists()) {
@@ -58,11 +58,11 @@ public class JsonWriter implements SourceCallback, Closeable {
         this.coverallsFile = coverallsFile;
         this.generator = new MappingJsonFactory().createGenerator(coverallsFile, JsonEncoding.UTF8);
     }
-    
+
     public final Job getJob() {
         return job;
     }
-    
+
     public final File getCoverallsFile() {
         return coverallsFile;
     }
@@ -111,8 +111,8 @@ public class JsonWriter implements SourceCallback, Closeable {
     public void close() throws IOException {
         generator.close();
     }
-    
     private void writeOptionalString(final String field, final String value) throws ProcessingException, IOException {
+
         if (StringUtils.isNotBlank(value)) {
             generator.writeStringField(field, value);
         }
@@ -123,20 +123,20 @@ public class JsonWriter implements SourceCallback, Closeable {
             generator.writeBooleanField(field, value);
         }
     }
-    
     private void writeOptionalObject(final String field, final Object value) throws ProcessingException, IOException {
+
         if (value != null) {
             generator.writeObjectField(field, value);
         }
     }
-    
+
     private void writeOptionalTimestamp(final String field, final Date value) throws ProcessingException, IOException {
         if (value != null) {
             SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
             writeOptionalString(field, format.format(value));
         }
     }
-    
+
     private void writeOptionalEnvironment(final String field, final Properties properties) throws ProcessingException, IOException {
         if (properties != null) {
             generator.writeObjectFieldStart(field);

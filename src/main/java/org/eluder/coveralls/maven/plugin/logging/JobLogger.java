@@ -34,14 +34,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class JobLogger implements Logger {
 
     private static final int ABBREV = 7;
-    
+
     private final Job job;
     private final ObjectMapper jsonMapper;
-    
+
     public JobLogger(final Job job) {
         this(job, null);
     }
-    
+
     public JobLogger(final Job job, final ObjectMapper jsonMapper) {
         if (job == null) {
             throw new IllegalArgumentException("job must be defined");
@@ -54,7 +54,7 @@ public class JobLogger implements Logger {
     public Position getPosition() {
         return Position.BEFORE;
     }
-    
+
     @Override
     public void log(final Log log) {
         StringBuilder starting = new StringBuilder("Starting Coveralls job");
@@ -77,17 +77,17 @@ public class JobLogger implements Logger {
             starting.append(" with parallel option enabled");
         }
         log.info(starting.toString());
-        
+
         if (job.getRepoToken() != null) {
             log.info("Using repository token <secret>");
         }
-        
+
         if (job.getGit() != null) {
             String commit = job.getGit().getHead().getId();
             String branch = (job.getBranch() != null ? job.getBranch() : job.getGit().getBranch());
             log.info("Git commit " + commit.substring(0, ABBREV) + " in " + branch);
         }
-        
+
         if (log.isDebugEnabled()) {
             try {
                 log.debug("Complete Job description:\n" + jsonMapper.writeValueAsString(job));
@@ -96,7 +96,7 @@ public class JobLogger implements Logger {
             }
         }
     }
-    
+
     private ObjectMapper createDefaultJsonMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
@@ -104,5 +104,5 @@ public class JobLogger implements Logger {
         mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
         return mapper;
     }
-    
+
 }

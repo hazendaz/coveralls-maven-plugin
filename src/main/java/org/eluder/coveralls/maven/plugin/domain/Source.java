@@ -38,13 +38,13 @@ public final class Source implements JsonObject {
     
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     //private static final String CLASSIFIER_SEPARATOR = "#";
-    
+
     private final String name;
     private final String digest;
     private final Integer[] coverage;
     private final List<Branch> branches;
     private String classifier;
-    
+
     public Source(final String name, final String source, final String digest) {
         this(name, getLines(source), digest, null);
     }
@@ -56,12 +56,12 @@ public final class Source implements JsonObject {
         this.classifier = classifier;
         this.branches = new ArrayList<>();
     }
-    
+
     @JsonIgnore
     public String getName() {
         return name;
     }
-    
+
     @JsonProperty("name")
     public String getFullName() {
         return name;
@@ -69,17 +69,17 @@ public final class Source implements JsonObject {
         // #45: cannot use identifier due to unfetchable source files
         //return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
-    
+
     @JsonProperty("source_digest")
     public String getDigest() {
         return digest;
     }
-    
+
     @JsonProperty("coverage")
     public Integer[] getCoverage() {
         return coverage;
     }
-    
+
     @JsonProperty("branches")
     public Integer[] getBranches() {
         final List<Integer> branchesRaw = new ArrayList<>(branches.size() * 4);
@@ -100,11 +100,11 @@ public final class Source implements JsonObject {
     public String getClassifier() {
         return classifier;
     }
-    
+
     public void setClassifier(final String classifier) {
         this.classifier = classifier;
     }
-    
+
     private void checkLineRange(final int lineNumber) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
@@ -183,7 +183,7 @@ public final class Source implements JsonObject {
     public int hashCode() {
         return Objects.hash(this.name, this.digest, this.coverage.length);
     }
-    
+
     private static int getLines(final String source) {
         int lines = 1;
         Matcher matcher = NEWLINE.matcher(source);

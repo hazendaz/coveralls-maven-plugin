@@ -53,24 +53,24 @@ public class CoverallsClient {
             }
         }
     }
-    
+
     private static final String FILE_NAME = "coveralls.json";
     private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", "utf-8");
-    
+
     private final String coverallsUrl;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    
+
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
     }
-    
+
     public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
     }
-    
+
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
         HttpEntity entity = MultipartEntityBuilder.create()
                 .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
@@ -81,7 +81,7 @@ public class CoverallsClient {
         HttpResponse response = httpClient.execute(post);
         return parseResponse(response);
     }
-    
+
     private CoverallsResponse parseResponse(final HttpResponse response) throws ProcessingException, IOException {
         HttpEntity entity = response.getEntity();
         ContentType contentType = ContentType.getOrDefault(entity);
@@ -107,7 +107,7 @@ public class CoverallsClient {
             IOUtil.close(reader);
         }
     }
-    
+
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
         int status = response.getStatusLine().getStatusCode();
         String reason = response.getStatusLine().getReasonPhrase();
