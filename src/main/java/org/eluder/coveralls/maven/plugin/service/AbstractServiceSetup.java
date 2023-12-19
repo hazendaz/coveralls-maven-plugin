@@ -26,7 +26,7 @@ package org.eluder.coveralls.maven.plugin.service;
 import java.util.Map;
 import java.util.Properties;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Convenient base class for service setups.

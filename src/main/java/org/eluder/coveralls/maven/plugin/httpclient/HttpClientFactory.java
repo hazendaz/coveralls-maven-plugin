@@ -23,6 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -32,7 +33,6 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.maven.settings.Proxy;
-import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.util.UrlUtils;
 import org.eluder.coveralls.maven.plugin.util.Wildcards;
 

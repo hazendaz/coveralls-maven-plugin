@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 
 import java.text.DateFormat;

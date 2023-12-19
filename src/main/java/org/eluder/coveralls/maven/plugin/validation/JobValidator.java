@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
