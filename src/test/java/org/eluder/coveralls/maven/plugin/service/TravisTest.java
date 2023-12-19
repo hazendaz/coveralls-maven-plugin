@@ -23,17 +23,17 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TravisTest {
+class TravisTest {
 
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
@@ -45,37 +45,37 @@ public class TravisTest {
     }
 
     @Test
-    public void testIsSelectedForNothing() {
+    void testIsSelectedForNothing() {
         assertFalse(new Travis(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    public void testIsSelectedForTravis() {
+    void testIsSelectedForTravis() {
         assertTrue(new Travis(env()).isSelected());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals("travis-ci", new Travis(env()).getName());
     }
 
     @Test
-    public void testGetJobId() {
+    void testGetJobId() {
         assertEquals("job123", new Travis(env()).getJobId());
     }
 
     @Test
-    public void testGetBranch() {
+    void testGetBranch() {
         assertEquals("master", new Travis(env()).getBranch());
     }
 
     @Test
-    public void testGetPullRequest() {
+    void testGetPullRequest() {
         assertEquals("pull10", new Travis(env()).getPullRequest());
     }
 
     @Test
-    public void testGetEnvironment() {
+    void testGetEnvironment() {
         Properties properties = new Travis(env()).getEnvironment();
         assertEquals(2, properties.size());
         assertEquals("job123", properties.getProperty("travis_job_id"));

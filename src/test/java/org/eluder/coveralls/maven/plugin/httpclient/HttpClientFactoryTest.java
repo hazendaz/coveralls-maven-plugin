@@ -28,9 +28,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 import org.apache.maven.settings.Proxy;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
@@ -54,7 +54,7 @@ public class HttpClientFactoryTest {
         HttpClient client = new HttpClientFactory(TARGET_URL).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assert.assertEquals("Hello World!", body);
+        Assertions.assertEquals("Hello World!", body);
     }
 
     @Test
@@ -71,7 +71,7 @@ public class HttpClientFactoryTest {
         HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assert.assertEquals("Hello Proxy!", body);
+        Assertions.assertEquals("Hello Proxy!", body);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class HttpClientFactoryTest {
         HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assert.assertEquals("Hello Proxy!", body);
+        Assertions.assertEquals("Hello Proxy!", body);
     }
 
     @Test
@@ -113,6 +113,6 @@ public class HttpClientFactoryTest {
         HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assert.assertEquals("Hello World!", body);
+        Assertions.assertEquals("Hello World!", body);
     }
 }

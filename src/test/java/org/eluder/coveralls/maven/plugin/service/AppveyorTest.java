@@ -23,14 +23,14 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class AppveyorTest {
+class AppveyorTest {
 
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
@@ -45,42 +45,42 @@ public class AppveyorTest {
     }
 
     @Test
-    public void testIsSelectedForNothing() {
+    void testIsSelectedForNothing() {
         assertFalse(new Appveyor(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    public void testIsSelectedForAppveyor() {
+    void testIsSelectedForAppveyor() {
         assertTrue(new Appveyor(env()).isSelected());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals("Appveyor", new Appveyor(env()).getName());
     }
 
     @Test
-    public void testGetBuildNumber() {
+    void testGetBuildNumber() {
         assertEquals("77", new Appveyor(env()).getBuildNumber());
     }
 
     @Test
-    public void testGetBuildUrl() {
+    void testGetBuildUrl() {
         assertEquals("https://ci.appveyor.com/project/owner/project/build/77", new Appveyor(env()).getBuildUrl());
     }
 
     @Test
-    public void testGetBranch() {
+    void testGetBranch() {
         assertEquals("master", new Appveyor(env()).getBranch());
     }
 
     @Test
-    public void testPullRequest() {
+    void testPullRequest() {
         assertEquals("10", new Appveyor(env()).getPullRequest());
     }
 
     @Test
-    public void testGetJobId() {
+    void testGetJobId() {
         assertEquals("54de3316c44f", new Appveyor(env()).getJobId());
     }
 }

@@ -25,15 +25,15 @@ package org.eluder.coverage.sample;
 
 import org.junit.jupiter.api.Test;
 
-public class InnerClassCoverageTest {
+class InnerClassCoverageTest {
 
     @Test
-    public void testAnonymous() {
+    void testAnonymous() {
         new InnerClassCoverage().anonymous();
     }
 
     @Test
-    public void testDelegate() {
+    void testDelegate() {
         new InnerClassCoverage().delegate();
     }
 

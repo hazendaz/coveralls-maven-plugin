@@ -23,6 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
@@ -61,7 +62,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -231,7 +231,7 @@ public class CoverallsReportMojoTest {
 
         String[][] fixture = CoverageFixture.JAVA_FILES;
         for (String[] coverageFile : fixture) {
-            assertThat(json, containsString(coverageFile[0]));
+            assertTrue(json.contains(coverageFile[0]));
         }
 
         verifySuccessfullSubmit(logMock, fixture);

@@ -23,25 +23,25 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UniqueSourceCallbackTest {
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+class UniqueSourceCallbackTest {
 
     @Mock
     private SourceCallback sourceCallbackMock;
 
     @Test
-    public void testOnSourceWithUniqueFiles() throws Exception {
+    void testOnSourceWithUniqueFiles() throws Exception {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Bar.java", "{\n  bar();\n}\n", 2);
 
@@ -56,7 +56,7 @@ public class UniqueSourceCallbackTest {
     }
 
     @Test
-    public void testOnSourceWithDuplicateSources() throws Exception {
+    void testOnSourceWithDuplicateSources() throws Exception {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Foo.java", "{\n  void();\n}\n", 2);
 
@@ -71,7 +71,7 @@ public class UniqueSourceCallbackTest {
     }
 
     @Test
-    public void testOnSourceWithUniqueSources() throws Exception {
+    void testOnSourceWithUniqueSources() throws Exception {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
 

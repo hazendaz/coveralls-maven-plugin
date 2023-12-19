@@ -24,23 +24,26 @@
 package org.eluder.coveralls.maven.plugin.util;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TimestampParserTest {
+class TimestampParserTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidFormat() {
-        new TimestampParser("scsscdfsd");
+    @Test
+    void testInvalidFormat() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new TimestampParser("scsscdfsd");
+        });
     }
 
     @Test
-    public void testParseEpochMillis() throws Exception {
+    void testParseEpochMillis() throws Exception {
         String format = TimestampParser.EPOCH_MILLIS;
         long time = System.currentTimeMillis();
         Date parsed = new TimestampParser(format).parse(String.valueOf(time));
@@ -49,7 +52,7 @@ public class TimestampParserTest {
     }
 
     @Test
-    public void testParseSimpleFormat() throws Exception {
+    void testParseSimpleFormat() throws Exception {
         String format = "yyyy-MM-dd";
         Date parsed = new TimestampParser(format).parse("2015-08-20");
         String formatted = new SimpleDateFormat(format).format(parsed);
@@ -58,7 +61,7 @@ public class TimestampParserTest {
     }
 
     @Test
-    public void testParseDefaultFormat() throws Exception {
+    void testParseDefaultFormat() throws Exception {
         String format = TimestampParser.DEFAULT_FORMAT;
         Date parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
         String formatted = new SimpleDateFormat(format).format(parsed);
@@ -67,14 +70,16 @@ public class TimestampParserTest {
     }
 
     @Test
-    public void testParseNull() throws Exception {
+    void testParseNull() throws Exception {
         Date parsed = new TimestampParser(null).parse(null);
 
         assertNull(parsed);
     }
 
-    @Test(expected = ProcessingException.class)
-    public void testParseInvalidTimestamp() throws Exception {
-        new TimestampParser(null).parse("2015-08-20");
+    @Test
+    void testParseInvalidTimestamp() throws Exception {
+        assertThrows(ProcessingException.class, () -> {
+            new TimestampParser(null).parse("2015-08-20");
+        });
     }
 }

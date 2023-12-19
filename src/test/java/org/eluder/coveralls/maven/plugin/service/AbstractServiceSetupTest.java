@@ -23,51 +23,54 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AbstractServiceSetupTest {
+class AbstractServiceSetupTest {
 
     @Test
-    public void testGetMissingProperty() {
+    void testGetMissingProperty() {
         AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
         assertNull(serviceSetup.getProperty("property"));
     }
 
     @Test
-    public void testGetProperty() {
+    void testGetProperty() {
         Map<String, String> env = new HashMap<String, String>();
         env.put("CI_NAME", "bamboo");
         assertEquals("bamboo", create(env).getProperty("CI_NAME"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testAddPropertyWithoutName() {
-        create(new HashMap<String, String>()).addProperty(new Properties(), null, "value");
+    @Test
+    void testAddPropertyWithoutName() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            create(new HashMap<String, String>()).addProperty(new Properties(), null, "value");
+        });
     }
 
     @Test
-    public void testAddPropertyWithoutValue() {
+    void testAddPropertyWithoutValue() {
         Properties properties = new Properties();
         create(new HashMap<String, String>()).addProperty(properties, "prop", " ");
         assertNull(properties.getProperty("prop"));
     }
 
     @Test
-    public void testAddPropertyWithValue() {
+    void testAddPropertyWithValue() {
         Properties properties = new Properties();
         create(new HashMap<String, String>()).addProperty(properties, "prop", "value");
         assertEquals("value", properties.getProperty("prop"));
     }
 
     @Test
-    public void testGetDefaultValues() {
+    void testGetDefaultValues() {
         AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
         assertNull(serviceSetup.getName());
         assertNull(serviceSetup.getJobId());

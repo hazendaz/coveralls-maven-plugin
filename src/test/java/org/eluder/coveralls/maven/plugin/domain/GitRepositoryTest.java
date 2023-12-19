@@ -23,18 +23,22 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.io.IOException;
 
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class GitRepositoryTest {
+class GitRepositoryTest {
 
     /**
      * This tests assumes that the project resides in git repository.
+     *
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @Test
-    public void testLoad() throws Exception {
+    void testLoad() throws IOException {
         Git git = new GitRepository(TestIoUtil.getFile("/")).load();
         assertNotNull(git.getHead().getId());
     }

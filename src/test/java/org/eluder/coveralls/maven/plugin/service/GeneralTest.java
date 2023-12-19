@@ -23,16 +23,16 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class GeneralTest {
+class GeneralTest {
 
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
@@ -45,37 +45,37 @@ public class GeneralTest {
     }
 
     @Test
-    public void testIsSelectedForNothing() {
+    void testIsSelectedForNothing() {
         assertFalse(new General(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    public void testIsSelectedForCi() {
+    void testIsSelectedForCi() {
         assertTrue(new General(env()).isSelected());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals("ci_service", new General(env()).getName());
     }
 
     @Test
-    public void testGetBuildNumber() {
+    void testGetBuildNumber() {
         assertEquals("build123", new General(env()).getBuildNumber());
     }
 
     @Test
-    public void testGetBuildUrl() {
+    void testGetBuildUrl() {
         assertEquals("http://ci.com/build123", new General(env()).getBuildUrl());
     }
 
     @Test
-    public void testGetBranch() {
+    void testGetBranch() {
         assertEquals("master", new General(env()).getBranch());
     }
 
     @Test
-    public void testGetPullRequest() {
+    void testGetPullRequest() {
         assertEquals("pull10", new General(env()).getPullRequest());
     }
 }

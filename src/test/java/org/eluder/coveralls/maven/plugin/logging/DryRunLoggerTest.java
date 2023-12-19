@@ -23,7 +23,8 @@
  */
 package org.eluder.coveralls.maven.plugin.logging;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions ;
 import static org.mockito.Mockito.when;
@@ -32,13 +33,13 @@ import java.io.File;
 
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class DryRunLoggerTest {
+@ExtendWith(MockitoExtension.class)
+class DryRunLoggerTest {
 
     @Mock
     private Log logMock;
@@ -46,25 +47,27 @@ public class DryRunLoggerTest {
     @Mock
     private File coverallsFileMock;
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testMissingCoverallsFile() {
-        new DryRunLogger(true, null);
+    @Test
+    void testMissingCoverallsFile() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new DryRunLogger(true, null);
+        });
     }
 
     @Test
-    public void testGetPosition() {
+    void testGetPosition() {
         assertEquals(Position.AFTER, new DryRunLogger(true, coverallsFileMock).getPosition());
     }
 
     @Test
-    public void testLogDryRunDisabled() {
+    void testLogDryRunDisabled() {
         new DryRunLogger(false, coverallsFileMock).log(logMock);
 
         verifyNoInteractions(logMock);
     }
 
     @Test
-    public void testLogDryRunEnabled() {
+    void testLogDryRunEnabled() {
         when(coverallsFileMock.length()).thenReturn(1024l);
         when(coverallsFileMock.getAbsolutePath()).thenReturn("/target/coveralls.json");
 

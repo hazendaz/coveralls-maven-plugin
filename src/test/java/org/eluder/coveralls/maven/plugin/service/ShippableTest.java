@@ -23,15 +23,15 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ShippableTest {
+class ShippableTest {
 
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
@@ -45,49 +45,49 @@ public class ShippableTest {
     }
 
     @Test
-    public void testIsSelectedForNothing() {
+    void testIsSelectedForNothing() {
         assertFalse(new Shippable(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    public void testIsSelectedForShippable() {
+    void testIsSelectedForShippable() {
         assertTrue(new Shippable(env()).isSelected());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals("shippable", new Shippable(env()).getName());
     }
 
     @Test
-    public void testGetBuildNumber() {
+    void testGetBuildNumber() {
         assertEquals("431.1", new Shippable(env()).getBuildNumber());
     }
 
     @Test
-    public void testGetBuildUrl() {
+    void testGetBuildUrl() {
         assertEquals("https://app.shippable.com/builds/54de3316c44f", new Shippable(env()).getBuildUrl());
     }
 
     @Test
-    public void testGetBranch() {
+    void testGetBranch() {
         assertEquals("master", new Shippable(env()).getBranch());
     }
 
     @Test
-    public void testPullRequest() {
+    void testPullRequest() {
         assertEquals("10", new Shippable(env()).getPullRequest());
     }
 
     @Test
-    public void testPullRequestFalse() {
+    void testPullRequestFalse() {
         Map<String, String> env = env();
         env.put(Shippable.SHIPPABLE_PULL_REQUEST, "false");
         assertNull(new Shippable(env).getPullRequest());
     }
 
     @Test
-    public void testGetEnvironment() {
+    void testGetEnvironment() {
         Properties properties = new Shippable(env()).getEnvironment();
         assertEquals(5, properties.size());
         assertEquals("431.1", properties.getProperty("shippable_build_number"));

@@ -23,36 +23,36 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class WildcardsTest {
+class WildcardsTest {
 
     @Test
-    public void testMatchesAgainstNull() throws Exception {
+    void testMatchesAgainstNull() throws Exception {
         assertFalse(Wildcards.matches(null, "*"));
     }
 
     @Test
-    public void testMatchesAgainstJoker() throws Exception {
+    void testMatchesAgainstJoker() throws Exception {
         assertTrue(Wildcards.matches("a", "?"));
     }
 
     @Test
-    public void testMatchesAgainstStar() throws Exception {
+    void testMatchesAgainstStar() throws Exception {
         assertTrue(Wildcards.matches("abc", "*"));
     }
 
     @Test
-    public void testMatchesAgainstWildcards() throws Exception {
+    void testMatchesAgainstWildcards() throws Exception {
         assertTrue(Wildcards.matches("abcdefg", "a*d??g"));
         assertFalse(Wildcards.matches("abcdefg", "a*d?g?"));
     }
 
     @Test
-    public void testMatchesAgainstText() throws Exception {
+    void testMatchesAgainstText() throws Exception {
         assertTrue(Wildcards.matches("abc", "abc"));
         assertFalse(Wildcards.matches("abc", "cba"));
     }

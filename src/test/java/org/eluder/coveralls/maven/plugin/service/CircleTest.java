@@ -23,17 +23,17 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CircleTest {
+class CircleTest {
 
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
@@ -45,32 +45,32 @@ public class CircleTest {
     }
 
     @Test
-    public void testIsSelectedForNothing() {
+    void testIsSelectedForNothing() {
         assertFalse(new Circle(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    public void testIsSelectedForCircle() {
+    void testIsSelectedForCircle() {
         assertTrue(new Circle(env()).isSelected());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals("circleci", new Circle(env()).getName());
     }
 
     @Test
-    public void testGetBuildNumber() {
+    void testGetBuildNumber() {
         assertEquals("build123", new Circle(env()).getBuildNumber());
     }
 
     @Test
-    public void testGetBranch() {
+    void testGetBranch() {
         assertEquals("master", new Circle(env()).getBranch());
     }
 
     @Test
-    public void testGetEnvironment() {
+    void testGetEnvironment() {
         Properties properties = new Circle(env()).getEnvironment();
         assertEquals(3, properties.size());
         assertEquals("build123", properties.getProperty("circleci_build_num"));

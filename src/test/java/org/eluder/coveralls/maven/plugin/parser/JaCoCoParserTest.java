@@ -31,7 +31,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class JaCoCoParserTest extends AbstractCoverageParserTest {
+class JaCoCoParserTest extends AbstractCoverageParserTest {
 
     @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {

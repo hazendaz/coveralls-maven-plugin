@@ -26,15 +26,15 @@ package org.eluder.coveralls.maven.plugin.parser;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 // TODO Needs similar support added to upstream for cobertura, jacoco, and saga
-@Ignore
-public class CloverParserTest extends AbstractCoverageParserTest {
+@Disabled
+class CloverParserTest extends AbstractCoverageParserTest {
 
     @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {

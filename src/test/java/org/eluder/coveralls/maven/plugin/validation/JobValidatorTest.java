@@ -23,76 +23,76 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.assertj.core.api.Assertions;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Git.Head;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class JobValidatorTest {
+class JobValidatorTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testMissingJob() {
-        new JobValidator(null);
+    @Test
+    void testMissingJob() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new JobValidator(null);
+        });
     }
 
     @Test
-    public void testValidateWithoutRepoTokenOrTravis() {
+    void testValidateWithoutRepoTokenOrTravis() {
         ValidationErrors errors = new JobValidator(new Job()).validate();
-        assertThat(errors, hasSize(1));
-        assertThat(errors.get(0).getLevel(), is(Level.ERROR));
+        Assertions.assertThat(errors).hasSize(1);
+        Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
-    public void testValidateWithoutRepoTokenOrTravisForDryRun() {
+    void testValidateWithoutRepoTokenOrTravisForDryRun() {
         ValidationErrors errors = new JobValidator(new Job().withDryRun(true)).validate();
-        assertThat(errors, hasSize(1));
-        assertThat(errors.get(0).getLevel(), is(Level.WARN));
+        Assertions.assertThat(errors).hasSize(1);
+        Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.WARN);
     }
 
     @Test
-    public void testValidateWithInvalidTravis() {
+    void testValidateWithInvalidTravis() {
         ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
-        assertThat(errors, hasSize(1));
-        assertThat(errors.get(0).getLevel(), is(Level.ERROR));
+        Assertions.assertThat(errors).hasSize(1);
+        Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
-    public void testValidateWithRepoToken() {
+    void testValidateWithRepoToken() {
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
-        assertThat(errors, is(empty()));
+        Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
-    public void testValidateWithTravis() {
+    void testValidateWithTravis() {
         ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
-        assertThat(errors, is(empty()));
+        Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
-    public void testValidateWithoutGitCommitId() {
+    void testValidateWithoutGitCommitId() {
         Git git = new Git(null, new Head(null, null, null, null, null, null), null, null);
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
-        assertThat(errors, hasSize(1));
-        assertThat(errors.get(0).getLevel(), is(Level.ERROR));
+        Assertions.assertThat(errors).hasSize(1);
+        Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
-    public void testValidateWithGit() {
+    void testValidateWithGit() {
         Git git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
-        assertThat(errors, is(empty()));
+        Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
-    public void testValidateWithParallel() {
+    void testValidateWithParallel() {
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();
-        assertThat(errors, is(empty()));
+        Assertions.assertThat(errors).isEmpty();
     }
 
 }
