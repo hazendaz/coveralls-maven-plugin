@@ -112,7 +112,7 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.7.6.201602180812</version>
+    <version>0.8.11</version>
     <executions>
         <execution>
             <id>prepare-agent</id>
@@ -194,7 +194,7 @@ Set up the Open Clover Maven plugin in the build section of the project pom.xml:
 <plugin>
   <groupId>org.openclover</groupId>
   <artifactId>clover-maven-plugin</artifactId>
-  <version>4.2.0</version>
+  <version>4.5.1</version>
   <configuration>
     <excludes>
       <exclude>**/*Test*</exclude>
@@ -359,7 +359,8 @@ service environment will not override it.
 
 ### Changelog
 
-See [changelog](CHANGELOG.md) for more details.
+See [changelog](CHANGELOG.md) for more details for legacy releases
+See [releases](https://github.com/hazendaz/coveralls-maven-plugin/releases) for all releases since 4.5.0
 
 
 ### Migration
