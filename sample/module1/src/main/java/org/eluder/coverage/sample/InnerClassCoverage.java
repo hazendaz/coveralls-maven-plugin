@@ -34,20 +34,20 @@ public class InnerClassCoverage {
         };
         i.run();
     }
-    
+
     public boolean delegate() {
         return new InnerClass().isInner();
     }
-    
+
     public static class InnerClass {
-        
+
         public boolean isInner() {
             return true;
         }
-        
+
         public void run() {
             System.out.println("run");
         }
     }
-    
+
 }

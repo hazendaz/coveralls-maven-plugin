@@ -31,5 +31,5 @@ public class PartialCoverageTest {
     public void testPartial() {
         new PartialCoverage().partial(true);
     }
-    
+
 }

@@ -24,7 +24,7 @@
 package org.eluder.coverage.sample;
 
 public class PartialCoverage {
-    
+
     public void partial(boolean test) {
         if (test) {
             System.out.println("test");
@@ -32,5 +32,5 @@ public class PartialCoverage {
             System.out.println("not test");
         }
     }
-    
+
 }
