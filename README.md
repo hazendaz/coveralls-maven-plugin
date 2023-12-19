@@ -1,9 +1,11 @@
 coveralls-maven-plugin
 ======================
 
-[![Build Status](http://img.shields.io/travis/trautonen/coveralls-maven-plugin/master.svg?style=flat-square)](https://travis-ci.org/trautonen/coveralls-maven-plugin)
-[![Coverage Status](http://img.shields.io/coveralls/trautonen/coveralls-maven-plugin/master.svg?style=flat-square)](https://coveralls.io/r/trautonen/coveralls-maven-plugin?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/org.eluder.coveralls/coveralls-maven-plugin/)
+[![Java CI](https://github.com/hazendaz/coveralls-maven-plugin/workflows/Java%20CI/badge.svg)](https://github.com/hazendaz/coveralls-maven-plugin/actions?query=workflow%3A%22Java+CI%22)
+[![Coveralls](https://coveralls.io/repos/github/hazendaz/coveralls-maven-plugin/badge.svg?branch=master)](https://coveralls.io/github/hazendaz/coveralls-maven-plugin?branch=master)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.hazendaz.maven/coveralls-maven-plugin)](https://maven-badges.herokuapp.com/maven-central/com.github.hazendaz.maven/coverall-maven-plugin)
+[![Sonatype Nexus (Snapshots)](https://img.shields.io/nexus/s/https/oss.sonatype.org/com.github.hazendaz.maven/coveralls-maven-plugin.svg)](https://oss.sonatype.org/content/repositories/snapshots/org/hazendaz/coveralls-maven-plugin/)
+[![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Maven plugin for submitting Java code coverage reports to [Coveralls](https://coveralls.io/) web
 service.
