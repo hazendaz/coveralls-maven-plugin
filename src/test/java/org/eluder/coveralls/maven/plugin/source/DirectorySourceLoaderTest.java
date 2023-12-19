@@ -69,7 +69,7 @@ public class DirectorySourceLoaderTest {
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
         Source source = sourceLoader.load(file.getName());
         assertEquals(file.getName(), source.getName());
-        assertEquals("2AC359C9A152FD7CD79C4EB147069224", source.getDigest());
+        assertEquals("27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6", source.getDigest());
         assertEquals(4, source.getCoverage().length);
     }
 }

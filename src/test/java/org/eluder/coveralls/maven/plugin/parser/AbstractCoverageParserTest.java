@@ -80,7 +80,7 @@ public abstract class AbstractCoverageParserTest {
         return new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
-                return new Source(name, content, TestIoUtil.getMd5DigestHex(content));
+                return new Source(name, content, TestIoUtil.getSha512DigestHex(content));
             }
         };
     }

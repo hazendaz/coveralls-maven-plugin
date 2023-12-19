@@ -71,8 +71,8 @@ public class TestIoUtil {
         }
     }
 
-    public static String getMd5DigestHex(final String content) throws NoSuchAlgorithmException {
-        return DigestUtils.md5Hex(content).toUpperCase();
+    public static String getSha512DigestHex(final String content) throws NoSuchAlgorithmException {
+        return DigestUtils.sha512Hex(content).toUpperCase();
     }
 
     private static URL getResourceUrl(final String resource) {

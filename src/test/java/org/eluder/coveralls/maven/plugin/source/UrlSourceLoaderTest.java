@@ -69,7 +69,7 @@ public class UrlSourceLoaderTest {
         Source source = sourceLoader.load(fileName);
 
         assertEquals(fileName, source.getName());
-        assertEquals("9897A4BB0467180D3C6ACD95475DD77D", source.getDigest());
+        assertEquals("259AEA51FD9A0FB9529BDDDECDD3FCAE41BFA7C5C8C79555D61E4FB2910D08363814EC6C02DA1FBF6FF539DCEB7DC180B5043E980651049C24497BDA1CA47DAA", source.getDigest());
         assertEquals(3, source.getCoverage().length);
     }
 

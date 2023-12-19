@@ -29,10 +29,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 
-public class Md5DigestInputStream extends DigestInputStream {
+public class Sha521DigestInputStream extends DigestInputStream {
 
-    public Md5DigestInputStream(final InputStream stream) throws NoSuchAlgorithmException {
-        super(stream, MessageDigest.getInstance("MD5"));
+    public Sha521DigestInputStream(final InputStream stream) throws NoSuchAlgorithmException {
+        super(stream, MessageDigest.getInstance("SHA-512"));
     }
 
     public String getDigestHex() {

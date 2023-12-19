@@ -90,7 +90,7 @@ public class UniqueSourceCallbackTest {
     }
     
     private Source createSource(final String name, final String source, final int... relevant) throws Exception {
-        Source s = new Source(name, source, TestIoUtil.getMd5DigestHex(source));
+        Source s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
         for (int i : relevant) {
             s.addCoverage(i, 1);
         }

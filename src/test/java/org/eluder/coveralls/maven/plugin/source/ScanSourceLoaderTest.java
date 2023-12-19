@@ -72,11 +72,11 @@ public class ScanSourceLoaderTest {
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
         Source sourceA = sourceLoader.load(fileA.getName());
         assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "AFile.java", sourceA.getName());
-        assertEquals("2AC359C9A152FD7CD79C4EB147069224", sourceA.getDigest());
+        assertEquals("27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6", sourceA.getDigest());
         assertEquals(4, sourceA.getCoverage().length);
         Source sourceB = sourceLoader.load(fileB.getName());
         assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "BFile.java", sourceB.getName());
-        assertEquals("2AC359C9A152FD7CD79C4EB147069224", sourceB.getDigest());
+        assertEquals("27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6", sourceB.getDigest());
         assertEquals(4, sourceB.getCoverage().length);
     }
 }
