@@ -409,8 +409,3 @@ plugin to be used.
     </pluginRepository>
   </pluginRepositories>
 ```
-
-
-### License
-
-The project coveralls-maven-plugin is licensed under the MIT license.
