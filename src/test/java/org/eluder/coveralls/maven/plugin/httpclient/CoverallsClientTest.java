@@ -59,29 +59,29 @@ public class CoverallsClientTest {
 
     @Mock
     private HttpClient httpClientMock;
-    
+
     @Mock
     private HttpResponse httpResponseMock;
-    
+
     @Mock
     private HttpEntity httpEntityMock;
-    
+
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    
+
     private File file;
-    
+
     @Before
     public void init() throws IOException {
         file = folder.newFile();
     }
-    
+
     @Test
     public void testConstructors() {
         assertNotNull(new CoverallsClient("http://test.com/coveralls"));
         assertNotNull(new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper()));
     }
-    
+
     @Test
     public void testSubmit() throws Exception {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
@@ -101,7 +101,7 @@ public class CoverallsClientTest {
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
-    
+
     @Test(expected = ProcessingException.class)
     public void testParseInvalidResponse() throws Exception {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
@@ -112,7 +112,7 @@ public class CoverallsClientTest {
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
-    
+
     @Test(expected = ProcessingException.class)
     public void testParseErrorousResponse() throws Exception {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 400, "Bad Request");
@@ -123,7 +123,7 @@ public class CoverallsClientTest {
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
-    
+
     @Test(expected = IOException.class)
     public void testParseFailingEntity() throws Exception {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
@@ -152,10 +152,10 @@ public class CoverallsClientTest {
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
-    
+
     private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws Exception {
         String content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes());
     }
-    
+
 }

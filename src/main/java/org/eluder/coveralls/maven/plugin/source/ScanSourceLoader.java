@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScanSourceLoader extends AbstractSourceLoader {
-    
+
     private final Map<String, String[]> cache = new HashMap<>();
 
     private final File sourceDirectory;

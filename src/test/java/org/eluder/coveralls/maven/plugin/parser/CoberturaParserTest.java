@@ -37,7 +37,7 @@ public class CoberturaParserTest extends AbstractCoverageParserTest {
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {
         return new CoberturaParser(coverageFile, sourceLoader);
     }
-    
+
     @Override
     protected List<String> getCoverageResources() {
         return Arrays.asList("cobertura.xml");

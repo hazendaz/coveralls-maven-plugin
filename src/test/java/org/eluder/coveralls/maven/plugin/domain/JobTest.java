@@ -43,7 +43,7 @@ public class JobTest {
         assertEquals(".", git.getBaseDir().getPath());
         assertEquals("master", job.getBranch());
     }
-    
+
     @Test
     public void testGetBranch() {
         Job job = new Job().withBranch("master");

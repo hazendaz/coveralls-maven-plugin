@@ -32,7 +32,7 @@ import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
  * Constructs and setups the project environment and continuous integration service.
  */
 public final class Environment {
-    
+
     private final CoverallsReportMojo mojo;
     private final Iterable<ServiceSetup> services;
 
@@ -46,18 +46,18 @@ public final class Environment {
         this.mojo = mojo;
         this.services = services;
     }
-    
+
     public void setup() {
         setupService();
         verify();
     }
-    
+
     private void verify() {
         if (mojo.sourceEncoding == null) {
             throw new IllegalArgumentException("Source encoding not set, use <sourceEncoding> configuration option or set project wide property <project.build.sourceEncoding>");
         }
     }
-    
+
     private void setupService() {
         for (ServiceSetup service : services) {
             if (service.isSelected()) {
@@ -66,38 +66,38 @@ public final class Environment {
             }
         }
     }
-    
+
     private void setupEnvironment(final ServiceSetup service) {
         String name = service.getName();
         if (StringUtils.isBlank(mojo.serviceName) && StringUtils.isNotBlank(name)) {
             mojo.serviceName = name;
         }
-        
+
         String jobId = service.getJobId();
         if (StringUtils.isBlank(mojo.serviceJobId) && StringUtils.isNotBlank(jobId)) {
             mojo.serviceJobId = jobId;
         }
-        
+
         String buildNumber = service.getBuildNumber();
         if (StringUtils.isBlank(mojo.serviceBuildNumber) && StringUtils.isNotBlank(buildNumber)) {
             mojo.serviceBuildNumber = buildNumber;
         }
-        
+
         String buildUrl = service.getBuildUrl();
         if (StringUtils.isBlank(mojo.serviceBuildUrl) && StringUtils.isNotBlank(buildUrl)) {
             mojo.serviceBuildUrl = buildUrl;
         }
-        
+
         String branch = service.getBranch();
         if (StringUtils.isBlank(mojo.branch) && StringUtils.isNotBlank(branch)) {
             mojo.branch = branch;
         }
-        
+
         String pullRequest = service.getPullRequest();
         if (StringUtils.isBlank(mojo.pullRequest) && StringUtils.isNotBlank(pullRequest)) {
             mojo.pullRequest = pullRequest;
         }
-        
+
         Properties environment = service.getEnvironment();
         if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty()) &&
                 (environment != null && !environment.isEmpty())) {

@@ -31,7 +31,7 @@ public class DryRunLogger implements Logger {
 
     private final boolean dryRun;
     private final File coverallsFile;
-    
+
     public DryRunLogger(final boolean dryRun, final File coverallsFile) {
         if (coverallsFile == null) {
             throw new IllegalArgumentException("coverallsFile must be defined");
@@ -44,7 +44,7 @@ public class DryRunLogger implements Logger {
     public Position getPosition() {
         return Position.AFTER;
     }
-    
+
     @Override
     public void log(final Log log) {
         if (dryRun) {
@@ -52,5 +52,5 @@ public class DryRunLogger implements Logger {
             log.info(coverallsFile.length() + " bytes of data was recorded in " + coverallsFile.getAbsolutePath());
         }
     }
-    
+
 }

@@ -51,7 +51,7 @@ public class CoverageParsersFactory {
 
     private static final String SAGA_FILE = "/total-coverage.xml";
     private static final String SAGA_PREFIX = "/saga-coverage";
-    
+
     private final MavenProject project;
     private final SourceLoader sourceLoader;
     private List<File> jacocoReports;
@@ -64,17 +64,17 @@ public class CoverageParsersFactory {
         this.project = project;
         this.sourceLoader = sourceLoader;
     }
-    
+
     public CoverageParsersFactory withJaCoCoReports(final List<File> jacocoReports) {
         this.jacocoReports = jacocoReports;
         return this;
     }
-    
+
     public CoverageParsersFactory withCoberturaReports(final List<File> coberturaReports) {
         this.coberturaReports = coberturaReports;
         return this;
     }
-    
+
     public CoverageParsersFactory withSagaReports(final List<File> sagaReports) {
         this.sagaReports = sagaReports;
         return this;
@@ -84,7 +84,7 @@ public class CoverageParsersFactory {
         this.relativeReportDirs = relativeReportDirs;
         return this;
     }
-    
+
     public List<CoverageParser> createParsers() throws IOException {
         List<CoverageParser> parsers = new ArrayList<>();
         List<MavenProject> projects = new MavenProjectCollector(project).collect();
@@ -96,7 +96,7 @@ public class CoverageParsersFactory {
         for (MavenProject p : projects) {
             File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());
             File buildDirectory = new File(p.getBuild().getDirectory());
-            
+
             jacocoFiles.add(new File(reportingDirectory, JACOCO_PREFIX + JACOCO_FILE));
             jacocoFiles.add(new File(reportingDirectory, JACOCO_IT_PREFIX + JACOCO_FILE));
             coberturaFiles.add(new File(reportingDirectory, COBERTURA_PREFIX + COBERTURA_FILE));
@@ -123,7 +123,7 @@ public class CoverageParsersFactory {
                 }
             }
         }
-        
+
         for (File jacocoFile : jacocoFiles) {
             parsers.add(new JaCoCoParser(jacocoFile, sourceLoader));
         }
@@ -136,11 +136,11 @@ public class CoverageParsersFactory {
         for (File cloverFile : cloverFiles) {
             parsers.add(new CloverParser(cloverFile, sourceLoader));
         }
-        
+
         if (parsers.isEmpty()) {
             throw new IOException("No coverage report files found");
         }
-        
+
         return Collections.unmodifiableList(parsers);
     }
 }

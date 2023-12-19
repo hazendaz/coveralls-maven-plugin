@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class ExistingFiles implements Iterable<File> {
-    
+
     private final ArrayList<File> delegate = new ArrayList<>();
 
     public ExistingFiles addAll(final Iterable<File> files) {
@@ -40,7 +40,7 @@ public class ExistingFiles implements Iterable<File> {
         }
         return this;
     }
-    
+
     public ExistingFiles add(final File file) {
         if (file == null) {
             throw new NullPointerException("File must be defined");
@@ -50,12 +50,12 @@ public class ExistingFiles implements Iterable<File> {
         }
         return this;
     }
-    
+
     @Override
     public Iterator<File> iterator() {
         return delegate.iterator();
     }
-    
+
     public static ExistingFiles create(final Iterable<File> files) {
         ExistingFiles existingFiles = new ExistingFiles();
         if (files != null) {

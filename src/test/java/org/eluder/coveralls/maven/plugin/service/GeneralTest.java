@@ -43,37 +43,37 @@ public class GeneralTest {
         env.put("CI_PULL_REQUEST", "pull10");
         return env;
     }
-    
+
     @Test
     public void testIsSelectedForNothing() {
         assertFalse(new General(new HashMap<String, String>()).isSelected());
     }
-    
+
     @Test
     public void testIsSelectedForCi() {
         assertTrue(new General(env()).isSelected());
     }
-    
+
     @Test
     public void testGetName() {
         assertEquals("ci_service", new General(env()).getName());
     }
-    
+
     @Test
     public void testGetBuildNumber() {
         assertEquals("build123", new General(env()).getBuildNumber());
     }
-    
+
     @Test
     public void testGetBuildUrl() {
         assertEquals("http://ci.com/build123", new General(env()).getBuildUrl());
     }
-    
+
     @Test
     public void testGetBranch() {
         assertEquals("master", new General(env()).getBranch());
     }
-    
+
     @Test
     public void testGetPullRequest() {
         assertEquals("pull10", new General(env()).getPullRequest());

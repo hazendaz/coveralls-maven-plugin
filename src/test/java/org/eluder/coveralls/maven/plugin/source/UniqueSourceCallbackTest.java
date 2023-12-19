@@ -39,12 +39,12 @@ public class UniqueSourceCallbackTest {
 
     @Mock
     private SourceCallback sourceCallbackMock;
-    
+
     @Test
     public void testOnSourceWithUniqueFiles() throws Exception {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Bar.java", "{\n  bar();\n}\n", 2);
-        
+
         UniqueSourceCallback cb = createUniqueSourceCallback();
         cb.onBegin();
         cb.onSource(s1);
@@ -88,7 +88,7 @@ public class UniqueSourceCallbackTest {
     private UniqueSourceCallback createUniqueSourceCallback() {
         return new UniqueSourceCallback(sourceCallbackMock);
     }
-    
+
     private Source createSource(final String name, final String source, final int... relevant) throws Exception {
         Source s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
         for (int i : relevant) {

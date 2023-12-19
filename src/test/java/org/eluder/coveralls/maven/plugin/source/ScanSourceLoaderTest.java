@@ -45,10 +45,10 @@ public class ScanSourceLoaderTest {
 
     @Mock
     private File fileMock;
-    
+
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    
+
     @Test
     public void testMissingSourceFileFromDirectory() throws Exception {
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");

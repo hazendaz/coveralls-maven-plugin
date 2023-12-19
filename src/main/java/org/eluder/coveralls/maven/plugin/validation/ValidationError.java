@@ -28,10 +28,10 @@ public final class ValidationError {
     public enum Level {
         WARN, ERROR
     }
-    
+
     private final Level level;
     private final String message;
-    
+
     public ValidationError(final Level level, final String message) {
         if (level == null) {
             throw new IllegalArgumentException("level must be defined");
@@ -46,11 +46,11 @@ public final class ValidationError {
     public Level getLevel() {
         return level;
     }
-    
+
     public String getMessage() {
         return message;
     }
-    
+
     @Override
     public String toString() {
         return level + ": " + message;

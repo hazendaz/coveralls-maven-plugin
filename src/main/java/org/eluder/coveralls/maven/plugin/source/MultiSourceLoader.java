@@ -30,9 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MultiSourceLoader implements SourceLoader {
-    
+
     private final List<SourceLoader> sourceLoaders = new ArrayList<>();
-    
+
     public MultiSourceLoader add(final SourceLoader sourceLoader) {
         this.sourceLoaders.add(sourceLoader);
         return this;

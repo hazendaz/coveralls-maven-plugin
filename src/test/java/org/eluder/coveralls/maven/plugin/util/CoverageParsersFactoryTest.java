@@ -55,26 +55,26 @@ public class CoverageParsersFactoryTest {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    
+
     @Mock
     private MavenProject projectMock;
-    
+
     @Mock
     private SourceLoader sourceLoaderMock;
-    
+
     @Mock
     private Model modelMock;
-    
+
     @Mock
     private Reporting reportingMock;
-    
+
     @Mock
     private Build buildMock;
-    
+
     private File reportingDir;
-    
+
     private File targetDir;
-    
+
     @Before
     public void init() throws Exception{
         reportingDir = folder.newFolder();
@@ -86,12 +86,12 @@ public class CoverageParsersFactoryTest {
         when(reportingMock.getOutputDirectory()).thenReturn(reportingDir.getAbsolutePath());
         when(buildMock.getDirectory()).thenReturn(targetDir.getAbsolutePath());
     }
-    
+
     @Test(expected = IOException.class)
     public void testCreateEmptyParsers() throws Exception {
         createCoverageParsersFactory().createParsers();
     }
-    
+
     @Test
     public void testCreateJaCoCoParser() throws Exception {
         File jacocoDir = new File(reportingDir, "jacoco");
@@ -100,7 +100,7 @@ public class CoverageParsersFactoryTest {
         assertEquals(1, parsers.size());
         assertTrue(JaCoCoParser.class.equals(parsers.get(0).getClass()));
     }
-    
+
     @Test
     public void testCreateCoberturaParser() throws Exception {
         File coberturaDir = new File(reportingDir, "cobertura");
@@ -109,7 +109,7 @@ public class CoverageParsersFactoryTest {
         assertEquals(1, parsers.size());
         assertTrue(CoberturaParser.class.equals(parsers.get(0).getClass()));
     }
-    
+
     @Test
     public void testCreateSagaParser() throws Exception {
         File sagaDir = new File(targetDir, "saga-coverage");
@@ -118,7 +118,7 @@ public class CoverageParsersFactoryTest {
         assertEquals(1, parsers.size());
         assertTrue(SagaParser.class.equals(parsers.get(0).getClass()));
     }
-    
+
     @Test
     public void testWithJaCoCoReport() throws Exception {
         File jacocoFile = new File(reportingDir, "jacoco-report.xml");
@@ -128,7 +128,7 @@ public class CoverageParsersFactoryTest {
         assertEquals(1, parsers.size());
         assertTrue(JaCoCoParser.class.equals(parsers.get(0).getClass()));
     }
-    
+
     @Test
     public void testWithCoberturaReport() throws Exception {
         File coberturaFile = new File(reportingDir, "cobertura-report.xml");
@@ -138,7 +138,7 @@ public class CoverageParsersFactoryTest {
         assertEquals(1, parsers.size());
         assertTrue(CoberturaParser.class.equals(parsers.get(0).getClass()));
     }
-    
+
     @Test
     public void testWithSagaReport() throws Exception {
         File sagaFile = new File(reportingDir, "saga-report.xml");

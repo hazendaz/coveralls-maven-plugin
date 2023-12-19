@@ -51,7 +51,7 @@ public final class CoverageFixture {
             { "Localization.js",    "18",   "1,2,4,5,9,13", "6,10",      "",              "" },
             { "Components.js",      "5",    "1,2",          "",          "",              "" }
     };
-    
+
     public static int getTotalLines(String[][] fixture) {
         int lines = 0;
         for (String[] file : fixture) {
@@ -59,11 +59,11 @@ public final class CoverageFixture {
         }
         return lines;
     }
-    
+
     public static int getTotalFiles(String[][] fixture) {
         return fixture.length;
     }
-    
+
     private CoverageFixture() {
         // hide constructor
     }

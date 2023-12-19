@@ -45,20 +45,20 @@ public class SourceLoaderFactoryTest {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    
+
     @Mock
     private MavenProject root;
-    
+
     @Mock
     private MavenProject m1;
-    
+
     @Mock
     private MavenProject m2;
-    
+
     private File rootSources;
     private File m1Sources;
     private File m2Sources;
-    
+
     @Before
     public void init() throws Exception {
         rootSources = new File(folder.getRoot(), "src");
@@ -71,13 +71,13 @@ public class SourceLoaderFactoryTest {
         when(m1.getCompileSourceRoots()).thenReturn(Arrays.asList(m1Sources.getAbsolutePath()));
         when(m2.getCompileSourceRoots()).thenReturn(Arrays.asList(m2Sources.getAbsolutePath()));
     }
-    
+
     @Test
     public void testCreateSourceLoader() throws Exception {
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").createSourceLoader();
         assertNotNull(sourceLoader);
     }
-    
+
     @Test
     public void testCreateSourceLoaderWithAdditionalSourceDirectories() throws Exception {
         File s1 = new File(folder.getRoot(), "s1");

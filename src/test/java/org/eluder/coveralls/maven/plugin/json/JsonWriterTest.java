@@ -52,12 +52,12 @@ import static org.junit.Assert.assertTrue;
 public class JsonWriterTest {
 
     private static final long TEST_TIME = 1357009200000l;
-    
+
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    
+
     private File file;
-    
+
     @Before
     public void init() throws IOException {
         file = folder.newFile();
@@ -76,15 +76,15 @@ public class JsonWriterTest {
         Job job = job();
         assertSame(job, new JsonWriter(job, file).getJob());
     }
-    
+
     @Test
     @SuppressWarnings("resource")
     public void testGetCoverallsFile() throws Exception {
         Job job = job();
         assertSame(file, new JsonWriter(job, file).getCoverallsFile());
-        
+
     }
-    
+
     @SuppressWarnings("rawtypes")
     @Test
     public void testWriteStartAndEnd() throws Exception {
@@ -109,7 +109,7 @@ public class JsonWriterTest {
         assertEquals("aefg837fge", ((Map) ((Map) jsonMap.get("git")).get("head")).get("id"));
         assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
     }
-    
+
     @Test
     public void testOnSource() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
@@ -127,7 +127,7 @@ public class JsonWriterTest {
         assertEquals("6E0F89B516198DC6AB743EA5FBFB3108", jsonMap.get("source_digest"));
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
     }
-    
+
     private Job job() {
         Git.Head head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
         Git.Remote remote = new Git.Remote("origin", "git@git.com:foo.git");
@@ -144,11 +144,11 @@ public class JsonWriterTest {
             .withTimestamp(new Date(TEST_TIME))
             .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
-    
+
     private Source source() {
         return new Source("Foo.java", "public class Foo { }", "6E0F89B516198DC6AB743EA5FBFB3108");
     }
-    
+
     private Map<String, Object> stringToJsonMap(final String content) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         MapType type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);

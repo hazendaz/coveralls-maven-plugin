@@ -43,18 +43,18 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EnvironmentTest {
-    
+
     private CoverallsReportMojo mojo;
-    
+
     @Mock
     private CoverageParser coverageParserMock;
-    
+
     @Mock
     private Log logMock;
-    
+
     @Mock
     private ServiceSetup serviceMock;
-    
+
     @Before
     public void init() throws Exception {
         mojo = new CoverallsReportMojo() {
@@ -72,34 +72,34 @@ public class EnvironmentTest {
         mojo.sourceEncoding = "UTF-8";
         when(serviceMock.isSelected()).thenReturn(true);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testMissingMojo() {
         new Environment(null, Arrays.asList(serviceMock));
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testMissingServices() {
         new Environment(mojo, null);
     }
-    
+
     @Test
     public void testSetupWithoutServices() {
         create(Collections.<ServiceSetup>emptyList()).setup();
         assertEquals("service", mojo.serviceName);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testSetupWithoutSourceEncoding() {
         mojo.sourceEncoding = null;
         create(Arrays.asList(serviceMock)).setup();
     }
-    
+
     @Test
     public void testSetupWithIncompleteJob() {
         when(serviceMock.getJobId()).thenReturn("");
         when(serviceMock.getBuildUrl()).thenReturn("  ");
-        
+
         create(Arrays.asList(serviceMock)).setup();
         assertEquals("service", mojo.serviceName);
         assertNull(mojo.serviceJobId);
@@ -109,7 +109,7 @@ public class EnvironmentTest {
         assertNull(mojo.pullRequest);
         assertNull(mojo.serviceEnvironment);
     }
-    
+
     @Test
     public void testSetupWithCompleteJob() {
         mojo.serviceName = null;
@@ -122,7 +122,7 @@ public class EnvironmentTest {
         when(serviceMock.getBranch()).thenReturn("master");
         when(serviceMock.getPullRequest()).thenReturn("111");
         when(serviceMock.getEnvironment()).thenReturn(environment);
-        
+
         create(Arrays.asList(mock(ServiceSetup.class), serviceMock)).setup();
         assertEquals("defined service", mojo.serviceName);
         assertEquals("123", mojo.serviceJobId);
@@ -132,7 +132,7 @@ public class EnvironmentTest {
         assertEquals("111", mojo.pullRequest);
         assertEquals("true", mojo.serviceEnvironment.get("env"));
     }
-    
+
     @Test
     public void testSetupWithoutJobOverride() {
         Properties environment = new Properties();
@@ -152,18 +152,18 @@ public class EnvironmentTest {
         mojo.serviceEnvironment = serviceEnvironment;
         mojo.branch = "setBranch";
         mojo.pullRequest = "setPullRequest";
-        
+
         create(Arrays.asList(serviceMock)).setup();
-        
+
         assertEquals("service", mojo.serviceName);
         assertEquals("setJobId", mojo.serviceJobId);
         assertEquals("setBuildNumber", mojo.serviceBuildNumber);
         assertEquals("setBuildUrl", mojo.serviceBuildUrl);
         assertEquals("setBranch", mojo.branch);
         assertEquals("setPullRequest", mojo.pullRequest);
-        assertEquals("setProperty", mojo.serviceEnvironment.get("env"));        
+        assertEquals("setProperty", mojo.serviceEnvironment.get("env"));
     }
-    
+
     private Environment create(final Iterable<ServiceSetup> services) {
         return new Environment(mojo, services);
     }

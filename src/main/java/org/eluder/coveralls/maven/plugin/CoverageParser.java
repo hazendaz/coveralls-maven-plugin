@@ -39,13 +39,13 @@ public interface CoverageParser {
     /**
      * Parses a coverage report. Parsed source files are passed to the callback handler. This
      * method should be called only once per instance.
-     * 
+     *
      * @param callback the source callback handler
      * @throws ProcessingException if processing of the coverage report fails
      * @throws IOException if an I/O error occurs
      */
     void parse(SourceCallback callback) throws ProcessingException, IOException;
-    
+
     /**
      * @return the coverage report file under processing
      */

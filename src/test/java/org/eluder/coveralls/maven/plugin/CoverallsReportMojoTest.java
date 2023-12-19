@@ -68,19 +68,19 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CoverallsReportMojoTest {
-    
+
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
     public File coverallsFile;
-    
+
     private CoverallsReportMojo mojo;
-    
+
     @Mock
     private CoverallsClient coverallsClientMock;
-    
+
     @Mock
     private SourceLoader sourceLoaderMock;
-    
+
     @Mock
     private Job jobMock;
 
@@ -92,23 +92,23 @@ public class CoverallsReportMojoTest {
 
     @Mock
     private MavenProject collectedProjectMock;
-    
+
     @Mock
     private Model modelMock;
-    
+
     @Mock
     private Reporting reportingMock;
-    
+
     @Mock
     private Build buildMock;
 
     @Mock
     private Settings settingsMock;
-    
+
     @Before
     public void init() throws Exception {
         coverallsFile = folder.newFile();
-        
+
         when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
@@ -120,7 +120,7 @@ public class CoverallsReportMojoTest {
         when(logMock.isInfoEnabled()).thenReturn(true);
         when(jobMock.validate()).thenReturn(new ValidationErrors());
 
-        
+
         mojo = new CoverallsReportMojo() {
             @Override
             protected SourceLoader createSourceLoader(final Job job) {
@@ -157,11 +157,11 @@ public class CoverallsReportMojoTest {
         mojo.project = projectMock;
         mojo.sourceEncoding = "UTF-8";
         mojo.failOnServiceError = true;
-        
+
         when(modelMock.getReporting()).thenReturn(reportingMock);
         when(reportingMock.getOutputDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
         when(buildMock.getDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
-        
+
         List<MavenProject> projects = new ArrayList<MavenProject>();
         projects.add(collectedProjectMock);
         when(projectMock.getCollectedProjects()).thenReturn(projects);
@@ -218,17 +218,17 @@ public class CoverallsReportMojoTest {
         mojo.dryRun = true;
         mojo.skip = false;
         mojo.basedir = TestIoUtil.getFile("/");
-        
+
         mojo.execute();
     }
-    
+
     @Test
     public void testSuccesfullSubmission() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         String json = TestIoUtil.readFileContent(coverallsFile);
         assertNotNull(json);
-        
+
         String[][] fixture = CoverageFixture.JAVA_FILES;
         for (String[] coverageFile : fixture) {
             assertThat(json, containsString(coverageFile[0]));
@@ -236,7 +236,7 @@ public class CoverallsReportMojoTest {
 
         verifySuccessfullSubmit(logMock, fixture);
     }
-    
+
     @Test
     public void testFailWithProcessingException() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
@@ -259,7 +259,7 @@ public class CoverallsReportMojoTest {
             assertEquals(ex.getCause().getClass(), ProcessingException.class);
         }
     }
-    
+
     @Test
     public void testFailWithIOException() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
@@ -278,7 +278,7 @@ public class CoverallsReportMojoTest {
         mojo.execute();
         verify(logMock).warn(anyString());
     }
-    
+
     @Test
     public void testFailWithNullPointerException() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new NullPointerException());
@@ -289,15 +289,15 @@ public class CoverallsReportMojoTest {
             assertEquals(ex.getCause().getClass(), NullPointerException.class);
         }
     }
-    
+
     @Test
     public void testSkipExecution() throws Exception {
         mojo.skip = true;
         mojo.execute();
-        
+
         verifyNoInteractions(jobMock);
     }
-    
+
     public static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
         verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture) + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");

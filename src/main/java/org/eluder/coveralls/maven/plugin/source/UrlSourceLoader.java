@@ -37,7 +37,7 @@ public class UrlSourceLoader extends AbstractSourceLoader {
         super(UrlUtils.toUri(base), UrlUtils.toUri(sourceUrl), sourceEncoding);
         this.sourceUrl = sourceUrl;
     }
-    
+
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
         URL url = new URL(sourceUrl, sourceFile);

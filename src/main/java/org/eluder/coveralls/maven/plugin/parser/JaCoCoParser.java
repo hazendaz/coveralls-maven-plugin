@@ -42,19 +42,19 @@ public class JaCoCoParser extends AbstractXmlEventParser {
     public JaCoCoParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }
-    
+
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "package")) {
             this.packageName = xml.getAttributeValue(null, "name");
         } else
-        
+
         if (isStartElement(xml, "sourcefile") && packageName != null) {
             String sourceFile = this.packageName + "/" + xml.getAttributeValue(null, "name");
             this.source = loadSource(sourceFile);
             this.branchId = 0;
         } else
-        
+
         if (isStartElement(xml, "line") && this.source != null) {
             int ci = Integer.parseInt(xml.getAttributeValue(null, "ci"));
             int cb = Integer.parseInt(xml.getAttributeValue(null, "cb"));
@@ -73,12 +73,12 @@ public class JaCoCoParser extends AbstractXmlEventParser {
               this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
             }
         } else
-        
+
         if (isEndElement(xml, "sourcefile") && this.source != null) {
             callback.onSource(this.source);
             this.source = null;
         } else
-        
+
         if (isEndElement(xml, "package")) {
             this.packageName = null;
         }

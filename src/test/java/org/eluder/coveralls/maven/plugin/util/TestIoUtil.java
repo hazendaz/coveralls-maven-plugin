@@ -46,7 +46,7 @@ public class TestIoUtil {
             IOUtil.close(writer);
         }
     }
-    
+
     public static String readFileContent(final File file) throws IOException {
         InputStreamReader reader = new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8"));
         try {
@@ -55,7 +55,7 @@ public class TestIoUtil {
             IOUtil.close(reader);
         }
     }
-    
+
     public static File getFile(final String resource) {
         try {
             String local = resource;

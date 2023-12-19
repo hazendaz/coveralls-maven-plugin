@@ -32,12 +32,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class JaCoCoParserTest extends AbstractCoverageParserTest {
-    
+
     @Override
     protected CoverageParser createCoverageParser(final File coverageFile, final SourceLoader sourceLoader) {
         return new JaCoCoParser(coverageFile, sourceLoader);
     }
-    
+
     @Override
     protected List<String> getCoverageResources() {
         return Arrays.asList("jacoco1.xml", "jacoco2.xml", "jacoco2-it.xml");

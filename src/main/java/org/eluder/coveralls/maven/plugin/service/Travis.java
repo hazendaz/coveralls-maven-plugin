@@ -38,7 +38,7 @@ public class Travis extends AbstractServiceSetup {
     public static final String TRAVIS_JOB_ID = "TRAVIS_JOB_ID";
     public static final String TRAVIS_BRANCH = "TRAVIS_BRANCH";
     public static final String TRAVIS_PULL_REQUEST = "TRAVIS_PULL_REQUEST";
-    
+
     public Travis(final Map<String, String> env) {
         super(env);
     }
@@ -52,7 +52,7 @@ public class Travis extends AbstractServiceSetup {
     public String getName() {
         return TRAVIS_NAME;
     }
-    
+
     @Override
     public String getJobId() {
         return getProperty(TRAVIS_JOB_ID);
@@ -62,12 +62,12 @@ public class Travis extends AbstractServiceSetup {
     public String getBranch() {
         return getProperty(TRAVIS_BRANCH);
     }
-    
+
     @Override
     public String getPullRequest() {
         return getProperty(TRAVIS_PULL_REQUEST);
     }
-    
+
     @Override
     public Properties getEnvironment() {
         Properties environment = new Properties();

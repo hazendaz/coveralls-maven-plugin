@@ -48,14 +48,14 @@ public class ExistingFilesTest {
     public void testAddForNull() throws Exception {
         new ExistingFiles().add(null);
     }
-    
+
     @Test
     public void testAddForExisting() throws Exception {
         File f = folder.newFile();
         Iterator<File> iter = new ExistingFiles().add(f).add(f).iterator();
         assertSize(iter, 1);
     }
-    
+
     @Test
     public void testAddForDirectory() throws Exception {
         File d = folder.newFolder();
@@ -68,7 +68,7 @@ public class ExistingFilesTest {
         Iterator<File> iter = ExistingFiles.create(null).iterator();
         assertSize(iter, 0);
     }
-    
+
     @Test
     public void testCreateForMultipleFiles() throws Exception {
         File f1 = folder.newFile();
@@ -76,7 +76,7 @@ public class ExistingFilesTest {
         Iterator<File> iter = ExistingFiles.create(Arrays.asList(f1, f2)).iterator();
         assertSize(iter, 2);
     }
-    
+
     private static void assertSize(Iterator<?> iter, int size) {
         for (int i = 0; i < size; i++) {
             iter.next();

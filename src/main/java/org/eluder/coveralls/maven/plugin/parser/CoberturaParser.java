@@ -42,7 +42,7 @@ public class CoberturaParser extends AbstractXmlEventParser {
     public CoberturaParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }
-    
+
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "class")) {
@@ -54,15 +54,15 @@ public class CoberturaParser extends AbstractXmlEventParser {
             }
             this.branchId = 0;
         } else
-        
+
         if (isStartElement(xml, "methods") && source != null) {
             inMethods = true;
         } else
-        
+
         if (isEndElement(xml, "methods") && source != null) {
             inMethods = false;
         } else
-        
+
         if (isStartElement(xml, "line") && !inMethods && source != null) {
             final int nr = Integer.parseInt(xml.getAttributeValue(null, "number"));
             source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, "hits")));
@@ -96,7 +96,7 @@ public class CoberturaParser extends AbstractXmlEventParser {
                 }
             }
         } else
-        
+
         if (isEndElement(xml, "class") && source != null) {
             callback.onSource(source);
             source = null;

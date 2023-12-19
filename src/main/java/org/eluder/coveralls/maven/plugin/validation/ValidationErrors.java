@@ -40,7 +40,7 @@ public class ValidationErrors extends ArrayList<ValidationError> {
             log.warn(error.getMessage());
         }
     }
-    
+
     private List<ValidationError> filter(final Level level) {
         List<ValidationError> filtered = new ArrayList<>();
         for (ValidationError error : this) {

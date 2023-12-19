@@ -44,37 +44,37 @@ public class JenkinsTest {
         env.put("GIT_COMMIT", "a3562fgcd2");
         return env;
     }
-    
+
     @Test
     public void testIsSelectedForNothing() {
         assertFalse(new Jenkins(new HashMap<String, String>()).isSelected());
     }
-    
+
     @Test
     public void testIsSelectedForJenkins() {
         assertTrue(new Jenkins(env()).isSelected());
     }
-    
+
     @Test
     public void testGetName() {
         assertEquals("jenkins", new Jenkins(env()).getName());
     }
-    
+
     @Test
     public void testGetBuildNumber() {
         assertEquals("build123", new Jenkins(env()).getBuildNumber());
     }
-    
+
     @Test
     public void testGetBuildUrl() {
         assertEquals("http://company.com/jenkins/build123", new Jenkins(env()).getBuildUrl());
     }
-    
+
     @Test
     public void testGetBranch() {
         assertEquals("master", new Jenkins(env()).getBranch());
     }
-    
+
     @Test
     public void testGetEnvironment() {
         Properties properties = new Jenkins(env()).getEnvironment();

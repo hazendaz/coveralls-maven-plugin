@@ -43,20 +43,20 @@ public class CoverageTracingLoggerTest {
 
     @Mock
     private Log logMock;
-    
+
     @Mock
     private SourceCallback sourceCallbackMock;
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithNull() {
         new CoverageTracingLogger(null);
     }
-    
+
     @Test
     public void testGetPosition() {
         assertEquals(Position.AFTER, new CoverageTracingLogger(sourceCallbackMock).getPosition());
     }
-    
+
     @Test
     public void testLogForSources() throws Exception {
         Source source1 = new Source("Source1.java", "public class Source1 {\n  if(true) { }\n}\n", "FE0538639E8CE73733E77659C1043B5C");
@@ -71,7 +71,7 @@ public class CoverageTracingLoggerTest {
         Source source2inner = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "34BD6501A6D1CE5181AECEA688C7D382");
         source2inner.setClassifier("$1");
         source2inner.addCoverage(2, 1);
-        
+
         CoverageTracingLogger coverageTracingLogger = new CoverageTracingLogger(sourceCallbackMock);
         UniqueSourceCallback uniqueSourceCallback = new UniqueSourceCallback(coverageTracingLogger);
         uniqueSourceCallback.onSource(source1);
@@ -79,7 +79,7 @@ public class CoverageTracingLoggerTest {
         uniqueSourceCallback.onSource(source2inner);
         uniqueSourceCallback.onComplete();
         coverageTracingLogger.log(logMock);
-        
+
         assertEquals(8, coverageTracingLogger.getLines());
         assertEquals(6, coverageTracingLogger.getRelevant());
         assertEquals(3, coverageTracingLogger.getCovered());
@@ -97,5 +97,5 @@ public class CoverageTracingLoggerTest {
         verify(logMock).info("- 1 covered branches");
         verify(logMock).info("- 1 missed branches");
     }
-    
+
 }

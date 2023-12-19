@@ -49,7 +49,7 @@ public class UrlSourceLoaderTest {
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
-    
+
     @Test
     public void testMissingSourceFileFromUrl() throws Exception {
         UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.getRoot().toURI().toURL(), new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");

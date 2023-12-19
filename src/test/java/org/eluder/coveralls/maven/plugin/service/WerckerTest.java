@@ -33,7 +33,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class WerckerTest {
-    
+
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
         env.put("WERCKER", "true");
@@ -42,22 +42,22 @@ public class WerckerTest {
         env.put("WERCKER_GIT_BRANCH", "master");
         return env;
     }
-    
+
     @Test
     public void testIsSelectedForNothing() {
         assertFalse(new Wercker(new HashMap<String, String>()).isSelected());
     }
-    
+
     @Test
     public void testIsSelectedForWercker() {
         assertTrue(new Wercker(env()).isSelected());
     }
-    
+
     @Test
     public void testGetName() {
         assertEquals("wercker", new Wercker(env()).getName());
     }
-    
+
     @Test
     public void testGetJobId() {
         assertEquals("123456789", new Wercker(env()).getJobId());

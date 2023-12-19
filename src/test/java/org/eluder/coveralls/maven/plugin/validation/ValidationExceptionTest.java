@@ -30,17 +30,17 @@ import static org.junit.Assert.assertSame;
 import org.junit.Test;
 
 public class ValidationExceptionTest {
-    
+
     private static final String MESSAGE = "message";
     private static final RuntimeException CAUSE = new RuntimeException();
-    
+
     @Test
     public void testException() {
         ValidationException exception = new ValidationException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
-    
+
     @Test
     public void testExceptionWithMessage() {
         ValidationException exception = new ValidationException(MESSAGE);
@@ -54,7 +54,7 @@ public class ValidationExceptionTest {
         assertEquals(CAUSE.toString(), exception.getMessage());
         assertSame(CAUSE, exception.getCause());
     }
-    
+
     @Test
     public void testExceptionWithMessageAndCause() {
         ValidationException exception = new ValidationException(MESSAGE, CAUSE);

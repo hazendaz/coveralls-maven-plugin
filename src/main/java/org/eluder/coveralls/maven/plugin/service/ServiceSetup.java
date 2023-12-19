@@ -34,37 +34,37 @@ public interface ServiceSetup {
      * @return <code>true</code> if this service is selected, otherwise <code>false</code>
      */
     boolean isSelected();
-    
+
     /**
      * @return service name
      */
     String getName();
-    
+
     /**
      * @return service job id, or <code>null</code> if not defined
      */
     String getJobId();
-    
+
     /**
      * @return service build number, or <code>null</code> if not defined
      */
     String getBuildNumber();
-    
+
     /**
      * @return service build url, or <code>null</code> if not defined
      */
     String getBuildUrl();
-    
+
     /**
      * @return git branch name, or <code>null</code> if not defined
      */
     String getBranch();
-    
+
     /**
      * @return pull request identifier, or <code>null</code> if not defined
      */
     String getPullRequest();
-    
+
     /**
      * @return environment related to service, or <code>null</code> if not defined
      */

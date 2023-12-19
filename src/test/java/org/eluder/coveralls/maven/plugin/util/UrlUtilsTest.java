@@ -46,7 +46,7 @@ public class UrlUtilsTest {
     public void testInvalidUrlToUri() throws Exception {
         UrlUtils.toUri(new URL("http://google.com?q=s|r"));
     }
-    
+
     @Test
     public void testValidUrlToUri() throws Exception {
         URI uri = UrlUtils.toUri(new URL("http://google.com"));

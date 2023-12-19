@@ -34,7 +34,7 @@ import java.util.Properties;
 import org.junit.Test;
 
 public class TravisTest {
-    
+
     private Map<String, String> env() {
         Map<String, String> env = new HashMap<String, String>();
         env.put("TRAVIS", "true");
@@ -43,22 +43,22 @@ public class TravisTest {
         env.put("TRAVIS_PULL_REQUEST", "pull10");
         return env;
     }
-    
+
     @Test
     public void testIsSelectedForNothing() {
         assertFalse(new Travis(new HashMap<String, String>()).isSelected());
     }
-    
+
     @Test
     public void testIsSelectedForTravis() {
         assertTrue(new Travis(env()).isSelected());
     }
-    
+
     @Test
     public void testGetName() {
         assertEquals("travis-ci", new Travis(env()).getName());
     }
-    
+
     @Test
     public void testGetJobId() {
         assertEquals("job123", new Travis(env()).getJobId());
@@ -68,12 +68,12 @@ public class TravisTest {
     public void testGetBranch() {
         assertEquals("master", new Travis(env()).getBranch());
     }
-    
+
     @Test
     public void testGetPullRequest() {
         assertEquals("pull10", new Travis(env()).getPullRequest());
     }
-    
+
     @Test
     public void testGetEnvironment() {
         Properties properties = new Travis(env()).getEnvironment();

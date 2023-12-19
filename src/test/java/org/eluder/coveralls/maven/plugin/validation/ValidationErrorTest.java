@@ -34,12 +34,12 @@ public class ValidationErrorTest {
     public void testMissingLevel() {
         new ValidationError(null, "message");
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testMissingMessage() {
         new ValidationError(Level.ERROR, null);
     }
-    
+
     @Test
     public void testToString() {
         ValidationError error = new ValidationError(Level.WARN, "message");

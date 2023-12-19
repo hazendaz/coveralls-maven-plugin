@@ -45,7 +45,7 @@ public final class UrlUtils {
             throw new IllegalArgumentException(ex);
         }
     }
-    
+
     private UrlUtils() {
         // hide constructor
     }

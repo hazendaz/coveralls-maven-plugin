@@ -40,14 +40,14 @@ public class JobValidator {
         }
         this.job = job;
     }
-    
+
     public ValidationErrors validate() {
         ValidationErrors errors = new ValidationErrors();
         errors.addAll(repoTokenOrTravis());
         errors.addAll(git());
         return errors;
     }
-    
+
     private List<ValidationError> repoTokenOrTravis() {
         if (hasValue(job.getRepoToken())) {
             return Collections.emptyList();
@@ -59,7 +59,7 @@ public class JobValidator {
         String message = "Either repository token or service with job id must be defined";
         return Collections.singletonList(new ValidationError(level, message));
     }
-    
+
     private List<ValidationError> git() {
         if (job.getGit() == null) {
             return Collections.emptyList();
@@ -69,7 +69,7 @@ public class JobValidator {
         }
         return Collections.singletonList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));
     }
-    
+
     private boolean hasValue(final String value) {
         return StringUtils.isNotBlank(value);
     }

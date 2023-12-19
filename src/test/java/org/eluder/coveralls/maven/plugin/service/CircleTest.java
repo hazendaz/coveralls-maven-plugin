@@ -43,32 +43,32 @@ public class CircleTest {
         env.put("CIRCLE_SHA1", "a3562fgcd2");
         return env;
     }
-    
+
     @Test
     public void testIsSelectedForNothing() {
         assertFalse(new Circle(new HashMap<String, String>()).isSelected());
     }
-    
+
     @Test
     public void testIsSelectedForCircle() {
         assertTrue(new Circle(env()).isSelected());
     }
-    
+
     @Test
     public void testGetName() {
         assertEquals("circleci", new Circle(env()).getName());
     }
-    
+
     @Test
     public void testGetBuildNumber() {
         assertEquals("build123", new Circle(env()).getBuildNumber());
     }
-    
+
     @Test
     public void testGetBranch() {
         assertEquals("master", new Circle(env()).getBranch());
     }
-    
+
     @Test
     public void testGetEnvironment() {
         Properties properties = new Circle(env()).getEnvironment();

@@ -33,14 +33,14 @@ public class ProcessingExceptionTest {
 
     private static final String MESSAGE = "message";
     private static final RuntimeException CAUSE = new RuntimeException();
-    
+
     @Test
     public void testException() {
         ProcessingException exception = new ProcessingException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
-    
+
     @Test
     public void testExceptionWithMessage() {
         ProcessingException exception = new ProcessingException(MESSAGE);
@@ -54,7 +54,7 @@ public class ProcessingExceptionTest {
         assertEquals(CAUSE.toString(), exception.getMessage());
         assertSame(CAUSE, exception.getCause());
     }
-    
+
     @Test
     public void testExceptionWithMessageAndCause() {
         ProcessingException exception = new ProcessingException(MESSAGE, CAUSE);
@@ -62,5 +62,5 @@ public class ProcessingExceptionTest {
         assertSame(CAUSE, exception.getCause());
 
     }
-    
+
 }

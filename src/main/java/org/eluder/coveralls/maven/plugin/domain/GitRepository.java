@@ -37,13 +37,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GitRepository {
-    
+
     private final File sourceDirectory;
-    
+
     public GitRepository(final File sourceDirectory) {
         this.sourceDirectory = sourceDirectory;
     }
-    
+
     public Git load() throws IOException {
         try (Repository repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {
             Git.Head head = getHead(repository);
@@ -66,11 +66,11 @@ public class GitRepository {
         );
         return head;
     }
-    
+
     private String getBranch(final Repository repository) throws IOException {
         return repository.getBranch();
     }
-    
+
     private List<Git.Remote> getRemotes(final Repository repository) {
         Config config = repository.getConfig();
         List<Git.Remote> remotes = new ArrayList<>();

@@ -42,34 +42,34 @@ public class DryRunLoggerTest {
 
     @Mock
     private Log logMock;
-    
+
     @Mock
     private File coverallsFileMock;
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testMissingCoverallsFile() {
         new DryRunLogger(true, null);
     }
-    
+
     @Test
     public void testGetPosition() {
         assertEquals(Position.AFTER, new DryRunLogger(true, coverallsFileMock).getPosition());
     }
-    
+
     @Test
     public void testLogDryRunDisabled() {
         new DryRunLogger(false, coverallsFileMock).log(logMock);
-        
+
         verifyNoInteractions(logMock);
     }
-    
+
     @Test
     public void testLogDryRunEnabled() {
         when(coverallsFileMock.length()).thenReturn(1024l);
         when(coverallsFileMock.getAbsolutePath()).thenReturn("/target/coveralls.json");
-        
+
         new DryRunLogger(true, coverallsFileMock).log(logMock);
-        
+
         verify(logMock).info("Dry run enabled, Coveralls report will NOT be submitted to API");
         verify(logMock).info("1024 bytes of data was recorded in /target/coveralls.json");
     }

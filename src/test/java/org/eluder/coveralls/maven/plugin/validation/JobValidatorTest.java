@@ -40,40 +40,40 @@ public class JobValidatorTest {
     public void testMissingJob() {
         new JobValidator(null);
     }
-    
+
     @Test
     public void testValidateWithoutRepoTokenOrTravis() {
         ValidationErrors errors = new JobValidator(new Job()).validate();
         assertThat(errors, hasSize(1));
         assertThat(errors.get(0).getLevel(), is(Level.ERROR));
     }
-    
+
     @Test
     public void testValidateWithoutRepoTokenOrTravisForDryRun() {
         ValidationErrors errors = new JobValidator(new Job().withDryRun(true)).validate();
         assertThat(errors, hasSize(1));
         assertThat(errors.get(0).getLevel(), is(Level.WARN));
     }
-    
+
     @Test
     public void testValidateWithInvalidTravis() {
         ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
         assertThat(errors, hasSize(1));
         assertThat(errors.get(0).getLevel(), is(Level.ERROR));
     }
-    
+
     @Test
     public void testValidateWithRepoToken() {
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
         assertThat(errors, is(empty()));
     }
-    
+
     @Test
     public void testValidateWithTravis() {
         ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
         assertThat(errors, is(empty()));
     }
-    
+
     @Test
     public void testValidateWithoutGitCommitId() {
         Git git = new Git(null, new Head(null, null, null, null, null, null), null, null);
@@ -81,7 +81,7 @@ public class JobValidatorTest {
         assertThat(errors, hasSize(1));
         assertThat(errors.get(0).getLevel(), is(Level.ERROR));
     }
-    
+
     @Test
     public void testValidateWithGit() {
         Git git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);

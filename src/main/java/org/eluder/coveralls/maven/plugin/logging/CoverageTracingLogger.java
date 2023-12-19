@@ -40,31 +40,31 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
     private long covered = 0;
     private long branches = 0;
     private long coveredBranches = 0;
-    
+
     public CoverageTracingLogger(final SourceCallback chained) {
         super(chained);
     }
-    
+
     public long getFiles() {
         return files;
     }
-    
+
     public final long getLines() {
         return lines;
     }
-    
+
     public final long getRelevant() {
         return relevant;
     }
-    
+
     public final long getCovered() {
         return covered;
     }
-    
+
     public final long getMissed() {
         return relevant - covered;
     }
-    
+
     public final long getBranches() {
         return branches;
     }

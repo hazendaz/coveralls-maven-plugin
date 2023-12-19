@@ -56,13 +56,13 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractCoverageParserTest {
-    
+
     @Mock
     protected SourceLoader sourceLoaderMock;
-    
+
     @Mock
     protected SourceCallback sourceCallbackMock;
-    
+
     @Before
     public void init() throws IOException {
         for (String[] coverageFile : getCoverageFixture()) {
@@ -71,11 +71,11 @@ public abstract class AbstractCoverageParserTest {
             when(sourceLoaderMock.load(name)).then(sourceAnswer(name, content));
         }
     }
-    
+
     protected String sourceName(final String coverageFile) {
         return coverageFile;
     }
-    
+
     protected Answer<Source> sourceAnswer(final String name, final String content) {
         return new Answer<Source>() {
             @Override
@@ -91,9 +91,9 @@ public abstract class AbstractCoverageParserTest {
             CoverageParser parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
             parser.parse(sourceCallbackMock);
         }
-        
+
         String[][] fixture = getCoverageFixture();
-        
+
         ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
         verify(sourceCallbackMock, atLeast(CoverageFixture.getTotalFiles(fixture))).onSource(captor.capture());
 
@@ -112,13 +112,13 @@ public abstract class AbstractCoverageParserTest {
                     toIntegerSet(coverageFile[4]), toIntegerSet(coverageFile[5]));
         }
     }
-    
+
     protected abstract CoverageParser createCoverageParser(File coverageFile, SourceLoader sourceLoader);
-    
+
     protected abstract List<String> getCoverageResources();
 
     protected abstract String[][] getCoverageFixture();
-    
+
     private Set<Integer> toIntegerSet(final String commaSeparated) {
         if (commaSeparated.isEmpty()) {
             return Collections.emptySet();

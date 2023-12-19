@@ -68,7 +68,7 @@ public class SourceTest {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         source.addCoverage(5, 1);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testAddBranchCoverageForSourceOutOfBounds() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");

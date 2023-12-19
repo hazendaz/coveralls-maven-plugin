@@ -43,7 +43,7 @@ public interface SourceCallback {
 
     /**
      * Handles a parsed source file.
-     * 
+     *
      * @param source the source file
      * @throws ProcessingException if further processing of the source fails
      * @throws IOException if an I/O error occurs
@@ -57,5 +57,5 @@ public interface SourceCallback {
      * @throws IOException if an I/O error occurs
      */
     void onComplete() throws ProcessingException, IOException;
-    
+
 }

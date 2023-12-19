@@ -39,18 +39,18 @@ public class ValidationErrorsTest {
 
     @Mock
     private Log logMock;
-    
+
     @Test(expected = ValidationException.class)
     public void testThrowOrInformWithError() {
         createValidationErrors(new ValidationError(Level.ERROR, "message")).throwOrInform(logMock);
     }
-    
+
     @Test
     public void testThrowOrInformWithWarnings() {
         createValidationErrors(new ValidationError(Level.WARN, "error1"), new ValidationError(Level.WARN, "error2")).throwOrInform(logMock);
         verify(logMock, times(2)).warn(any(CharSequence.class));
     }
-    
+
     private ValidationErrors createValidationErrors(final ValidationError... errors) {
         ValidationErrors validationErrors = new ValidationErrors();
         for (ValidationError error : errors) {

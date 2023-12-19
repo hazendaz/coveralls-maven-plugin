@@ -39,33 +39,33 @@ public class MultiSourceLoaderTest {
 
     @Mock
     private SourceLoader sl1;
-    
+
     @Mock
     private SourceLoader sl2;
-    
+
     private Source s1 = new Source("source", "{ 1 }", "9A0174D3A5B8D202C6E404601FC260D1");
-    
+
     private Source s2 = new Source("source", "{ 2 }", "849409F24F4BCAAC904F3B142447D65D");
-    
+
     @Test(expected = IOException.class)
     public void testMissingSource() throws Exception {
         creaMultiSourceLoader().load("source");
     }
-    
+
     @Test
     public void testPrimarySource() throws Exception {
         when(sl1.load("source")).thenReturn(s1);
         Source source = creaMultiSourceLoader().load("source");
         assertSame(s1, source);
     }
-    
+
     @Test
     public void testSecondarySource() throws Exception {
         when(sl2.load("source")).thenReturn(s2);
         Source source = creaMultiSourceLoader().load("source");
         assertSame(s2, source);
     }
-    
+
     private MultiSourceLoader creaMultiSourceLoader() {
         return new MultiSourceLoader().add(sl1).add(sl2);
     }

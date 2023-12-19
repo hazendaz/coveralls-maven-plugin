@@ -36,7 +36,7 @@ public class Bamboo extends AbstractServiceSetup {
     public static final String BAMBOO_BUILD_NUMBER = "bamboo.buildNumber";
     public static final String BAMBOO_BUILD_URL = "bamboo.buildResultsUrl";
     public static final String BAMBOO_BRANCH = "bamboo.repository.git.branch";
-    
+
     public Bamboo(final Map<String, String> env) {
         super(env);
     }
@@ -45,22 +45,22 @@ public class Bamboo extends AbstractServiceSetup {
     public boolean isSelected() {
         return (getProperty(BAMBOO_BUILD_NUMBER) != null);
     }
-    
+
     @Override
     public String getName() {
         return BAMBOO_NAME;
     }
-    
+
     @Override
     public String getBuildNumber() {
         return getProperty(BAMBOO_BUILD_NUMBER);
     }
-    
+
     @Override
     public String getBuildUrl() {
         return getProperty(BAMBOO_BUILD_URL);
     }
-    
+
     @Override
     public String getBranch() {
         return getProperty(BAMBOO_BRANCH);
