@@ -95,13 +95,49 @@
   <profiles>
     <profile>
       <id>cobertura</id>
+      <properties>
+        <!-- Allow jdk 8 as cobertura won't work otherwise -->
+        <allowed.build.jdks>[8,9),[11,12),[17,18),[21,22),[22,23)</allowed.build.jdks>
+        <!-- Disable release flags for java 8 -->
+        <maven.compiler.release />
+        <maven.compiler.testRelease />
+        <!-- Force error prone to java 8 copy -->
+        <error-prone.version>2.10.0</error-prone.version>
+        <javac.version>9+181-r4173-1</javac.version>
+      </properties>
       <build>
         <plugins>
+          <!-- Skip git commit id plugin as it requires jdk 11 or higher -->
+          <plugin>
+            <groupId>io.github.git-commit-id</groupId>
+            <artifactId>git-commit-id-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>git-commit-id</id>
+                <goals>
+                   <goal>revision</goal>
+                </goals>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- Making error prone work again with java 8 -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <fork>true</fork>
+              <compilerArgs combine.children="append">
+                <arg>-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar</arg>
+              </compilerArgs>
+            </configuration>
+          </plugin>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>cobertura-maven-plugin</artifactId>
             <version>${maven.cobertura.version}</version>
             <dependencies>
+              <!-- Attempted hack to get over tools issue did not work out -->
               <dependency>
                 <groupId>com.sun</groupId>
                 <artifactId>tools</artifactId>
@@ -109,6 +145,7 @@
                 <scope>system</scope>
                 <systemPath>${project.basedir}/pom.xml</systemPath>
               </dependency>
+              <!-- Trying to force at least somewhat newer asm (code is stuck on 5 and gets errors regardless) -->
               <dependency>
                 <groupId>org.ow2.asm</groupId>
                 <artifactId>asm</artifactId>
