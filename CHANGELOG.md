@@ -1,5 +1,37 @@
 # Changelog
 
+## Change from this point will be published on github releases with this file remaining for historical reasons
+
+## 4.4.0 (not released - support forked to github.com/hazendaz before release and starts at 4.5.0)
+- Adding Coveralls branching coverage support for jacoco
+- Added tests for source.addBranchCoverage
+- Introducing Branch domain model
+- Replace a branch if already exists
+- Fix method Source.merge(Source)
+- Fix 'duplicate' branches are replaced (see: 534e14d)
+- Unnecessary changes
+- Adding Coveralls branching coverage support for Cobertura
+- Changed test of CoverageTracingLogger for cover branches
+- Updated parser tests for JaCoCo branch support
+- Updated parser tests for Cobertura branch support
+- Unique branchId per class file
+- Unique branchId per source file
+- Add dependency on Apache Commons Codec for hex util
+- Add support for coveralls parallel flag
+- Travis doesn't support oracle JDK anymore. See travis-ci/travis-ci#7884
+- Update readme
+- Updated to latest etc.
+- Updated Travis configuration.
+- Updated dependencies and minimum Java version to 8.
+- Build with Java 8, 10 and 11.
+- Overall this was PRs 111, 108, 130, 112
+
+## 4.3.0
+- #99: Added support for Wercker
+- #100: Fixed Wercker environment variables
+- Library updates for Jakcson, jgit, and wiremock
+- Document snapshot repositories
+
 ## 4.2.0
 
 - #95, #96: Improved error message for misbehaving Coveralls API
