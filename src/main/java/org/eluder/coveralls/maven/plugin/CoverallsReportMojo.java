@@ -225,7 +225,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     /**
      * Maven project for runtime value resolution.
      */
-    @Component
+    @Parameter(defaultValue = "${project}", readonly = true)
     protected MavenProject project;
 
 
@@ -282,7 +282,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
-     * @return source loader that extracts source files
+     * Creates the source loader.
      *
      * @param job the job describing the coveralls report
      * @return source loader that extracts source files
