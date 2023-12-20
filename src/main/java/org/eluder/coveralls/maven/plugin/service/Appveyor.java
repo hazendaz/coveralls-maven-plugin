@@ -47,7 +47,7 @@ public class Appveyor extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return ("true".equalsIgnoreCase(getProperty(APPVEYOR)));
+        return Boolean.parseBoolean(getProperty(APPVEYOR));
     }
 
     @Override

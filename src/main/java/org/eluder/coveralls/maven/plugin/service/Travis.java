@@ -45,7 +45,7 @@ public class Travis extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return ("true".equalsIgnoreCase(getProperty(TRAVIS)));
+        return Boolean.parseBoolean(getProperty(TRAVIS));
     }
 
     @Override

@@ -47,7 +47,7 @@ public class Shippable extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return ("true".equalsIgnoreCase(getProperty(SHIPPABLE)));
+        return Boolean.parseBoolean(getProperty(SHIPPABLE));
     }
 
     @Override

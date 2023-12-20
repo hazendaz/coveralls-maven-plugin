@@ -44,7 +44,7 @@ public class Wercker extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return "true".equalsIgnoreCase(getProperty(WERCKER));
+        return Boolean.parseBoolean(getProperty(WERCKER));
     }
 
     @Override
