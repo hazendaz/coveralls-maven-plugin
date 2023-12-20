@@ -112,20 +112,20 @@ public class JsonWriter implements SourceCallback, Closeable {
     public void close() throws IOException {
         generator.close();
     }
-    private void writeOptionalString(final String field, final String value) throws ProcessingException, IOException {
 
+    private void writeOptionalString(final String field, final String value) throws IOException {
         if (StringUtils.isNotBlank(value)) {
             generator.writeStringField(field, value);
         }
     }
 
-    private void writeOptionalBoolean(final String field, final boolean value) throws ProcessingException, IOException {
+    private void writeOptionalBoolean(final String field, final boolean value) throws IOException {
         if (value) {
             generator.writeBooleanField(field, value);
         }
     }
-    private void writeOptionalObject(final String field, final Object value) throws ProcessingException, IOException {
 
+    private void writeOptionalObject(final String field, final Object value) throws IOException {
         if (value != null) {
             generator.writeObjectField(field, value);
         }

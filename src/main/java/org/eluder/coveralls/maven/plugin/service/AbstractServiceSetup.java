@@ -34,8 +34,8 @@ import org.apache.commons.lang3.StringUtils;
 public abstract class AbstractServiceSetup implements ServiceSetup {
 
     private final Map<String, String> env;
-    public AbstractServiceSetup(final Map<String, String> env) {
 
+    protected AbstractServiceSetup(final Map<String, String> env) {
         this.env = env;
     }
 

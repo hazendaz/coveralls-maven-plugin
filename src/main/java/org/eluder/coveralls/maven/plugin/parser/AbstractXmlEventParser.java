@@ -44,8 +44,8 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
 
     private final File coverageFile;
     private final SourceLoader sourceLoader;
-    public AbstractXmlEventParser(final File coverageFile, final SourceLoader sourceLoader) {
 
+    protected AbstractXmlEventParser(final File coverageFile, final SourceLoader sourceLoader) {
         this.coverageFile = coverageFile;
         this.sourceLoader = sourceLoader;
     }

@@ -30,6 +30,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 
 public class JobLogger implements Logger {
 
@@ -98,11 +99,9 @@ public class JobLogger implements Logger {
     }
 
     private ObjectMapper createDefaultJsonMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-        mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
-        mapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
-        return mapper;
+        return JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).
+        configure(SerializationFeature.INDENT_OUTPUT, true).
+        configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).build();
     }
 
 }

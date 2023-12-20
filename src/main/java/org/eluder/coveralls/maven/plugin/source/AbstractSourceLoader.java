@@ -38,8 +38,8 @@ public abstract class AbstractSourceLoader implements SourceLoader {
 
     private final Charset sourceEncoding;
     private final String directoryPrefix;
-    public AbstractSourceLoader(final URI base, final URI sourceBase, final String sourceEncoding) {
 
+    protected AbstractSourceLoader(final URI base, final URI sourceBase, final String sourceEncoding) {
         this.sourceEncoding = Charset.forName(sourceEncoding);
         this.directoryPrefix = base.relativize(sourceBase).toString();
     }
