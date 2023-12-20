@@ -178,7 +178,7 @@ public final class Source implements JsonObject {
         Source other = (Source) obj;
         return (Objects.equals(this.name, other.name) &&
                 Objects.equals(this.digest, other.digest) &&
-                Objects.equals(this.coverage.length, other.coverage.length));
+               this.coverage.length == other.coverage.length);
     }
 
     @Override
