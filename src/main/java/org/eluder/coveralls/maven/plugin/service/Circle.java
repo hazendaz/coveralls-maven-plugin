@@ -45,7 +45,7 @@ public class Circle extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return (getProperty(CIRCLE) != null);
+        return getProperty(CIRCLE) != null;
     }
 
     @Override

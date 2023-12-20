@@ -43,7 +43,7 @@ public class General extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return (getProperty(CI_NAME) != null);
+        return getProperty(CI_NAME) != null;
     }
 
     @Override

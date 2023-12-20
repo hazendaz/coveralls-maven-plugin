@@ -43,7 +43,7 @@ public class Bamboo extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return (getProperty(BAMBOO_BUILD_NUMBER) != null);
+        return getProperty(BAMBOO_BUILD_NUMBER) != null;
     }
 
     @Override

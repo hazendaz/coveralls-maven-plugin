@@ -46,7 +46,7 @@ public class Jenkins extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return (getProperty(JENKINS_URL) != null);
+        return getProperty(JENKINS_URL) != null;
     }
 
     @Override
