@@ -33,6 +33,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -66,7 +68,7 @@ public class TestIoUtil {
     }
 
     public static String getSha512DigestHex(final String content) throws NoSuchAlgorithmException {
-        return DigestUtils.sha512Hex(content).toUpperCase();
+        return DigestUtils.sha512Hex(content).toUpperCase(Locale.ENGLISH);
     }
 
     private static URL getResourceUrl(final String resource) {
