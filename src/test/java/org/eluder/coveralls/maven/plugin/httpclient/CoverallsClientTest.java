@@ -25,6 +25,7 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.Charset;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -108,7 +109,7 @@ public class CoverallsClientTest {
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        when(httpEntityMock.getContent()).thenReturn(new ByteArrayInputStream("{bogus}".getBytes()));
+        when(httpEntityMock.getContent()).thenReturn(new ByteArrayInputStream("{bogus}".getBytes(Charset.defaultCharset())));
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
