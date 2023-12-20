@@ -32,19 +32,18 @@ import java.util.Collections;
 
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SourceLoaderFactoryTest {
+@ExtendWith(MockitoExtension.class)
+class SourceLoaderFactoryTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir
+    public File folder;
 
     @Mock
     private MavenProject root;
@@ -59,11 +58,11 @@ public class SourceLoaderFactoryTest {
     private File m1Sources;
     private File m2Sources;
 
-    @Before
-    public void init() throws Exception {
-        rootSources = new File(folder.getRoot(), "src");
-        m1Sources = folder.newFolder("m1", "src");
-        m2Sources = folder.newFolder("m2", "src");
+    @BeforeEach
+    void init() throws Exception {
+        rootSources = new File(folder, "src");
+        m1Sources = new File("src", "m1");
+        m2Sources = new File("src", "m2");
         when(root.getCollectedProjects()).thenReturn(Arrays.asList(m1, m2));
         when(m1.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
         when(m2.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
@@ -73,15 +72,15 @@ public class SourceLoaderFactoryTest {
     }
 
     @Test
-    public void testCreateSourceLoader() throws Exception {
+    void testCreateSourceLoader() throws Exception {
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
     @Test
-    public void testCreateSourceLoaderWithAdditionalSourceDirectories() throws Exception {
-        File s1 = new File(folder.getRoot(), "s1");
-        File s2 = folder.newFolder("s2");
+    void testCreateSourceLoaderWithAdditionalSourceDirectories() throws Exception {
+        File s1 = new File(folder, "s1");
+        File s2 = new File(folder, "s2");
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withSourceDirectories(Arrays.asList(s1, s2))
                 .createSourceLoader();
@@ -89,7 +88,7 @@ public class SourceLoaderFactoryTest {
     }
 
     @Test
-    public void testCreateSourceLoaderWithScanForSources() throws Exception {
+    void testCreateSourceLoaderWithScanForSources() throws Exception {
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withScanForSources( true )
                 .createSourceLoader();
@@ -97,8 +96,8 @@ public class SourceLoaderFactoryTest {
     }
 
     @Test
-    public void testCreateSourceLoaderInvalidDirectory() throws Exception {
-        File file = new File(folder.getRoot(), "aFile");
+    void testCreateSourceLoaderInvalidDirectory() throws Exception {
+        File file = new File(folder, "aFile");
         file.createNewFile();
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withSourceDirectories(Arrays.asList(file))
@@ -108,6 +107,6 @@ public class SourceLoaderFactoryTest {
     }
 
     private SourceLoaderFactory createSourceLoaderFactory(String sourceEncoding) {
-        return new SourceLoaderFactory(folder.getRoot(), root, sourceEncoding);
+        return new SourceLoaderFactory(folder, root, sourceEncoding);
     }
 }
