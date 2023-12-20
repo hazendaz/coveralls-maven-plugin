@@ -36,6 +36,8 @@ public interface Logger {
 
 
     /**
+     * Gets the position.
+     *
      * @return the position for log output, before or after the Coveralls data writing
      */
     Position getPosition();

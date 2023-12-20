@@ -266,6 +266,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
+     * Creates the coverage parsers.
      *
      * @param sourceLoader source loader that extracts source files
      * @return coverage parsers for all maven modules and additional reports
@@ -284,6 +285,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return source loader that extracts source files
      *
      * @param job the job describing the coveralls report
+     * @return source loader that extracts source files
      */
     protected SourceLoader createSourceLoader(final Job job) {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
@@ -293,6 +295,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
+     * Creates the environment.
+     *
      * @return environment to setup mojo and service specific properties
      */
     protected Environment createEnvironment() {
@@ -300,6 +304,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
+     * Gets the services.
+     *
      * @return list of available continuous integration services
      */
     protected List<ServiceSetup> getServices() {
@@ -317,6 +323,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
+     * Creates the job.
+     *
      * @return job that describes the coveralls report
      * @throws ProcessingException if processing of timestamp fails
      * @throws IOException if an I/O error occurs
@@ -340,6 +348,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
+     * Creates the json writer.
+     *
      * @param job the job describing the coveralls report
      * @return JSON writer that writes the coveralls data
      * @throws IOException if an I/O error occurs
@@ -349,6 +359,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
+     * Creates the coveralls client.
+     *
      * @return http client that submits the coveralls data
      */
     protected CoverallsClient createCoverallsClient() {
@@ -356,6 +368,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     }
 
     /**
+     * Creates the source callback chain.
+     *
      * @param writer the JSON writer
      * @param reporters the logging reporters
      * @return source callback chain for different source handlers

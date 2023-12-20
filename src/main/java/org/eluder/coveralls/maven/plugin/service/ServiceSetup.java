@@ -31,42 +31,59 @@ import java.util.Properties;
 public interface ServiceSetup {
 
     /**
+     * Checks if is selected.
+     *
      * @return <code>true</code> if this service is selected, otherwise <code>false</code>
      */
     boolean isSelected();
 
     /**
+     * Gets the name.
+     *
      * @return service name
      */
     String getName();
 
     /**
+     * Gets the job id.
+     *
      * @return service job id, or <code>null</code> if not defined
      */
     String getJobId();
 
     /**
+     * Gets the builds the number.
+     *
      * @return service build number, or <code>null</code> if not defined
      */
     String getBuildNumber();
 
     /**
+     * Gets the builds the url.
+     *
      * @return service build url, or <code>null</code> if not defined
      */
     String getBuildUrl();
 
     /**
+     * Gets the branch.
+     *
      * @return git branch name, or <code>null</code> if not defined
      */
     String getBranch();
 
     /**
+     * Gets the pull request.
+     *
      * @return pull request identifier, or <code>null</code> if not defined
      */
     String getPullRequest();
 
     /**
+     * Gets the environment.
+     *
      * @return environment related to service, or <code>null</code> if not defined
      */
     Properties getEnvironment();
+
 }

@@ -47,6 +47,8 @@ public interface CoverageParser {
     void parse(SourceCallback callback) throws ProcessingException, IOException;
 
     /**
+     * Gets the coverage file.
+     *
      * @return the coverage report file under processing
      */
     File getCoverageFile();
