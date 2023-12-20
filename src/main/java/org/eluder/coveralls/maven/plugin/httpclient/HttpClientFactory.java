@@ -74,7 +74,7 @@ class HttpClientFactory {
     private boolean isProxied(final String url, final Proxy proxy) {
         if (StringUtils.isNotBlank(proxy.getNonProxyHosts())) {
             String host = UrlUtils.create(url).getHost();
-            String[] excludes = proxy.getNonProxyHosts().split("\\|");
+            String[] excludes = proxy.getNonProxyHosts().split("\\|", -1);
             for (String exclude : excludes) {
                 if (StringUtils.isNotBlank(exclude) && Wildcards.matches(host, exclude.trim())) {
                     return false;

@@ -127,7 +127,7 @@ public abstract class AbstractCoverageParserTest {
         if (commaSeparated.isEmpty()) {
             return Collections.emptySet();
         }
-        String[] split = commaSeparated.split(",");
+        String[] split = commaSeparated.split(",", -1);
         Set<Integer> values = new HashSet<>();
         for (String value : split) {
             values.add(Integer.valueOf(value));

@@ -80,7 +80,7 @@ public class CoberturaParser extends AbstractXmlEventParser {
                         .replace("%", "/")    // 50/(2/4)
                         .replace("(", "")     // 50/2/4)
                         .replace(")", "")     // 50/2/4
-                        .split("/");
+                        .split("/", -1);
 
                 final int cb = Integer.parseInt(values[1]);
                 final int tb = Integer.parseInt(values[2]);
