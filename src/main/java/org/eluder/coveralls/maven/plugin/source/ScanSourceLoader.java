@@ -72,6 +72,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
         return cache.get(extension);
     }
 
+    @Override
     protected String getFileName(final String sourceFile) {
         String extension = FilenameUtils.getExtension(sourceFile);
         String[] matchingExtensionFiles = scanFor(extension);
