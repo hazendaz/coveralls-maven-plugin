@@ -26,6 +26,13 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.Provider;
+import java.security.Security;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -37,12 +44,6 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.Provider;
-import java.security.Security;
 
 public class CoverallsClient {
 
@@ -93,7 +94,7 @@ public class CoverallsClient {
             throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
         }
 
-        try (InputStreamReader reader = new InputStreamReader(entity.getContent(), contentType.getCharset())) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), contentType.getCharset()))) {
             CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
             if (cr.isError()) {
                 throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
