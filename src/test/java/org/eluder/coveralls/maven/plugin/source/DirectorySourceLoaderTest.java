@@ -28,23 +28,13 @@ import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 
 
-@RunWith(MockitoJUnitRunner.class)
 public class DirectorySourceLoaderTest {
-
-    @Mock
-    private File dirMock;
-
-    @Mock
-    private File fileMock;
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();

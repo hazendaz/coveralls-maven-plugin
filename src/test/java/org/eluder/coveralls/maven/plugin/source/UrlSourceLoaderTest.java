@@ -28,9 +28,6 @@ import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -38,14 +35,7 @@ import java.io.File;
 import java.net.URL;
 
 
-@RunWith(MockitoJUnitRunner.class)
 public class UrlSourceLoaderTest {
-
-    @Mock
-    private File dirMock;
-
-    @Mock
-    private File fileMock;
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
