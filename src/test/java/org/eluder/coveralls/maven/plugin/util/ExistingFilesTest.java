@@ -26,6 +26,7 @@ package org.eluder.coveralls.maven.plugin.util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -42,41 +43,43 @@ class ExistingFilesTest {
 
 
     @Test
-    void testAddAllForNull() throws Exception {
+    void testAddAllForNull() {
+        ExistingFiles existingFiles = new ExistingFiles();
         assertThrows(NullPointerException.class, () -> {
-            new ExistingFiles().addAll(null);
+            existingFiles.addAll(null);
         });
     }
 
     @Test
-    void testAddForNull() throws Exception {
+    void testAddForNull() {
+        ExistingFiles existingFiles = new ExistingFiles();
         assertThrows(NullPointerException.class, () -> {
-            new ExistingFiles().add(null);
+            existingFiles.add(null);
         });
     }
 
     @Test
-    void testAddForExisting() throws Exception {
+    void testAddForExisting() throws IOException {
         File f = Files.createFile(folder.resolve("f")).toFile(); 
         Iterator<File> iter = new ExistingFiles().add(f).add(f).iterator();
         assertSize(iter, 1);
     }
 
     @Test
-    void testAddForDirectory() throws Exception {
+    void testAddForDirectory() throws IOException {
         File d = Files.createDirectory(folder.resolve("d")).toFile(); 
         Iterator<File> iter = new ExistingFiles().add(d).iterator();
         assertSize(iter, 0);
     }
 
     @Test
-    void testCreateForNull() throws Exception {
+    void testCreateForNull() {
         Iterator<File> iter = ExistingFiles.create(null).iterator();
         assertSize(iter, 0);
     }
 
     @Test
-    void testCreateForMultipleFiles() throws Exception {
+    void testCreateForMultipleFiles() throws IOException {
         File f1 = Files.createFile(folder.resolve("f1")).toFile(); 
         File f2 = Files.createFile(folder.resolve("f2")).toFile(); 
         Iterator<File> iter = ExistingFiles.create(Arrays.asList(f1, f2)).iterator();

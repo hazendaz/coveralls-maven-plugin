@@ -57,7 +57,7 @@ class EnvironmentTest {
     private ServiceSetup serviceMock;
 
     @BeforeEach
-    void init() throws Exception {
+    void init() {
         mojo = new CoverallsReportMojo() {
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {

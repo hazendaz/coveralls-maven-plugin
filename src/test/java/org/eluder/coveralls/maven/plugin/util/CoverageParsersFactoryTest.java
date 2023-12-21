@@ -78,7 +78,7 @@ class CoverageParsersFactoryTest {
     private Path targetDir;
 
     @BeforeEach
-    void init() throws Exception{
+    void init() throws IOException {
         reportingDir = Files.createDirectory(folder.resolve("reportingDir"));  
         targetDir = Files.createDirectory(folder.resolve("targetDir"));
         lenient().when(projectMock.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
@@ -90,14 +90,14 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testCreateEmptyParsers() throws Exception {
+    void testCreateEmptyParsers() {
         assertThrows(IOException.class, () -> {
             createCoverageParsersFactory().createParsers();
         });
     }
 
     @Test
-    void testCreateJaCoCoParser() throws Exception {
+    void testCreateJaCoCoParser() throws IOException {
         Path jacocoDir = Files.createDirectory(reportingDir.resolve("jacoco")); 
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
         List<CoverageParser> parsers = createCoverageParsersFactory().createParsers();
@@ -106,7 +106,7 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testCreateCoberturaParser() throws Exception {
+    void testCreateCoberturaParser() throws IOException {
         Path coberturaDir = Files.createDirectory(reportingDir.resolve("cobertura"));
         Files.createFile(coberturaDir.resolve("coverage.xml"));
         List<CoverageParser> parsers = createCoverageParsersFactory().createParsers();
@@ -115,7 +115,7 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testCreateSagaParser() throws Exception {
+    void testCreateSagaParser() throws IOException {
         Path sagaDir = Files.createDirectory(targetDir.resolve("saga-coverage"));
         Files.createFile(sagaDir.resolve("total-coverage.xml"));
         List<CoverageParser> parsers = createCoverageParsersFactory().createParsers();
@@ -124,7 +124,7 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testWithJaCoCoReport() throws Exception {
+    void testWithJaCoCoReport() throws IOException {
         File jacocoFile = Files.createFile(reportingDir.resolve("jacoco-report.xml")).toFile();
         jacocoFile.createNewFile();
         CoverageParsersFactory factory = createCoverageParsersFactory().withJaCoCoReports(Arrays.asList(jacocoFile));
@@ -134,7 +134,7 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testWithCoberturaReport() throws Exception {
+    void testWithCoberturaReport() throws IOException {
         File coberturaFile = Files.createFile(reportingDir.resolve("cobertura-report.xml")).toFile();
         coberturaFile.createNewFile();
         CoverageParsersFactory factory = createCoverageParsersFactory().withCoberturaReports(Arrays.asList(coberturaFile));
@@ -144,7 +144,7 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testWithSagaReport() throws Exception {
+    void testWithSagaReport() throws IOException {
         File sagaFile = Files.createFile(reportingDir.resolve("saga-report.xml")).toFile();
         sagaFile.createNewFile();
         CoverageParsersFactory factory = createCoverageParsersFactory().withSagaReports(Arrays.asList(sagaFile));
@@ -154,7 +154,7 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testWithRelativeReportDirectory() throws Exception {
+    void testWithRelativeReportDirectory() throws IOException {
         Path coberturaDir = Files.createDirectory(reportingDir.resolve("customdir"));
         Files.createFile(coberturaDir.resolve("coverage.xml"));
         CoverageParsersFactory factory = createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList("customdir"));
@@ -164,7 +164,7 @@ class CoverageParsersFactoryTest {
     }
 
     @Test
-    void testWithRootRelativeReportDirectory() throws Exception {
+    void testWithRootRelativeReportDirectory() throws IOException {
         Files.createFile(reportingDir.resolve("coverage.xml")).toFile();
         CoverageParsersFactory factory = createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList(File.separator));
         List<CoverageParser> parsers = factory.createParsers();

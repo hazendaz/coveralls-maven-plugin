@@ -63,7 +63,7 @@ class JobLoggerTest {
     }
 
     @Test
-    public void testGetPosition() {
+    void testGetPosition() {
         assertEquals(Position.BEFORE, new JobLogger(jobMock).getPosition());
     }
 
@@ -122,7 +122,7 @@ class JobLoggerTest {
     }
 
     @Test
-    void testLogJobWithDebug() throws Exception {
+    void testLogJobWithDebug() throws JsonProcessingException {
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jsonMapperMock.writeValueAsString(same(jobMock))).thenReturn("{\"serviceName\":\"service\"}");
@@ -136,14 +136,14 @@ class JobLoggerTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
-    void testLogJobWithErrorInDebug() throws Exception {
+    void testLogJobWithErrorInDebug() throws JsonProcessingException {
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jsonMapperMock.writeValueAsString(same(jobMock))).thenThrow(JsonProcessingException.class);
 
+        JobLogger jobLogger = new JobLogger(jobMock, jsonMapperMock);
         assertThrows(RuntimeException.class, () -> {
-            new JobLogger(jobMock, jsonMapperMock).log(logMock);
+            jobLogger.log(logMock);
         });
     }
 }

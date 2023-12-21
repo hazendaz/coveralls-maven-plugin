@@ -82,7 +82,7 @@ class SourceTest {
 
     @Test
     @Disabled("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
-    void testGetNameWithClassifier() throws Exception {
+    void testGetNameWithClassifier() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         source.setClassifier("Inner");
         assertEquals("src/main/java/Hello.java", source.getName());
@@ -140,7 +140,7 @@ class SourceTest {
     }
 
     @Test
-    void testEqualsForDifferentSources() throws Exception {
+    void testEqualsForDifferentSources() {
         Source source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         Source source2 = new Source("src/main/java/Hello.java", "public class Hello {\n  void();\n}\n", "CBA7831606B51D1499349451B70758E3");
         assertNotEquals(source1, source2);

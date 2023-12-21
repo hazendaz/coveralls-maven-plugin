@@ -29,6 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.ByteArrayInputStream;
@@ -46,6 +47,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicStatusLine;
@@ -88,7 +90,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testSubmit() throws Exception {
+    void testSubmit() throws UnsupportedOperationException, Exception  {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
@@ -99,7 +101,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testFailOnServiceError() throws Exception {
+    void testFailOnServiceError() throws ClientProtocolException, IOException  {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 500, "Internal Error");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -110,7 +112,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseInvalidResponse() throws Exception {
+    void testParseInvalidResponse() throws ClientProtocolException, IOException {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -123,7 +125,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseErrorousResponse() throws Exception {
+    void testParseErrorousResponse() throws UnsupportedOperationException, Exception {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 400, "Bad Request");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -136,7 +138,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseFailingEntity() throws Exception {
+    void testParseFailingEntity() throws ClientProtocolException, IOException {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -149,7 +151,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseEntityWithoutContentType() throws Exception {
+    void testParseEntityWithoutContentType() throws ClientProtocolException, IOException {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 400, "Bad Request");
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
@@ -168,7 +170,7 @@ class CoverallsClientTest {
         });
     }
 
-    private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws Exception {
+    private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
         String content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }

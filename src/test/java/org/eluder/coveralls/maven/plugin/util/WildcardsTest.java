@@ -31,28 +31,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class WildcardsTest {
 
     @Test
-    void testMatchesAgainstNull() throws Exception {
+    void testMatchesAgainstNull() {
         assertFalse(Wildcards.matches(null, "*"));
     }
 
     @Test
-    void testMatchesAgainstJoker() throws Exception {
+    void testMatchesAgainstJoker() {
         assertTrue(Wildcards.matches("a", "?"));
     }
 
     @Test
-    void testMatchesAgainstStar() throws Exception {
+    void testMatchesAgainstStar() {
         assertTrue(Wildcards.matches("abc", "*"));
     }
 
     @Test
-    void testMatchesAgainstWildcards() throws Exception {
+    void testMatchesAgainstWildcards() {
         assertTrue(Wildcards.matches("abcdefg", "a*d??g"));
         assertFalse(Wildcards.matches("abcdefg", "a*d?g?"));
     }
 
     @Test
-    void testMatchesAgainstText() throws Exception {
+    void testMatchesAgainstText() {
         assertTrue(Wildcards.matches("abc", "abc"));
         assertFalse(Wildcards.matches("abc", "cba"));
     }

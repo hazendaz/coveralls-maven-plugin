@@ -26,6 +26,10 @@ package org.eluder.coveralls.maven.plugin.source;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+
+import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.jupiter.api.Test;
@@ -41,7 +45,7 @@ class UniqueSourceCallbackTest {
     private SourceCallback sourceCallbackMock;
 
     @Test
-    void testOnSourceWithUniqueFiles() throws Exception {
+    void testOnSourceWithUniqueFiles() throws NoSuchAlgorithmException, ProcessingException, IOException {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Bar.java", "{\n  bar();\n}\n", 2);
 
@@ -56,7 +60,7 @@ class UniqueSourceCallbackTest {
     }
 
     @Test
-    void testOnSourceWithDuplicateSources() throws Exception {
+    void testOnSourceWithDuplicateSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Foo.java", "{\n  void();\n}\n", 2);
 
@@ -71,7 +75,7 @@ class UniqueSourceCallbackTest {
     }
 
     @Test
-    void testOnSourceWithUniqueSources() throws Exception {
+    void testOnSourceWithUniqueSources() throws NoSuchAlgorithmException, ProcessingException, IOException  {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
 
@@ -89,7 +93,7 @@ class UniqueSourceCallbackTest {
         return new UniqueSourceCallback(sourceCallbackMock);
     }
 
-    private Source createSource(final String name, final String source, final int... relevant) throws Exception {
+    private Source createSource(final String name, final String source, final int... relevant) throws NoSuchAlgorithmException  {
         Source s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
         for (int i : relevant) {
             s.addCoverage(i, 1);

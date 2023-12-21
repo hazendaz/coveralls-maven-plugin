@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -43,13 +44,13 @@ class ScanSourceLoaderTest {
     public Path folder;
 
     @Test
-    void testMissingSourceFileFromDirectory() throws Exception {
+    void testMissingSourceFileFromDirectory() throws IOException {
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
-    void testInvalidSourceFile() throws Exception {
+    void testInvalidSourceFile() throws IOException {
         File subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile(); 
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertThrows(IllegalArgumentException.class, () -> {
@@ -58,7 +59,7 @@ class ScanSourceLoaderTest {
     }
 
     @Test
-    void testLoadSource() throws Exception {
+    void testLoadSource() throws IOException {
         Path level1 = Files.createDirectory(folder.resolve("level1"));
         Path level2 = Files.createDirectory(level1.resolve("level2"));
         Path level3 = Files.createDirectory(level2.resolve("level3"));

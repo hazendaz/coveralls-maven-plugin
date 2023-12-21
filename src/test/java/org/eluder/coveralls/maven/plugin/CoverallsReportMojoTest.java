@@ -36,6 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -115,12 +116,12 @@ public class CoverallsReportMojoTest {
     private Settings settingsMock;
 
     @BeforeEach
-    void init() throws Exception {
+    void init() throws IOException  {
         coverallsFile = Files.createFile(folder.resolve("coverallsFile.json")).toFile();
 
         lenient().when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
             @Override
-            public Source answer(final InvocationOnMock invocation) throws Throwable {
+            public Source answer(final InvocationOnMock invocation) throws IOException {
                 String sourceFile = invocation.getArguments()[0].toString();
                 String content = readFileContent(sourceFile);
                 return new Source(sourceFile, content, TestIoUtil.getSha512DigestHex(content));
@@ -136,7 +137,7 @@ public class CoverallsReportMojoTest {
                 return sourceLoaderMock;
             }
             @Override
-            protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) throws IOException {
+            protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {
                 List<CoverageParser> parsers = new ArrayList<CoverageParser>();
                 parsers.add(new CoberturaParser(TestIoUtil.getFile("cobertura.xml"), sourceLoader));
                 return parsers;
@@ -146,7 +147,7 @@ public class CoverallsReportMojoTest {
                 return new Environment(this, Collections.<ServiceSetup>emptyList());
             }
             @Override
-            protected Job createJob() throws IOException {
+            protected Job createJob() {
                 return jobMock;
             }
             @Override
@@ -184,7 +185,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testCreateCoverageParsersWithoutCoverageReports() throws Exception {
+    void testCreateCoverageParsersWithoutCoverageReports() {
         mojo = new CoverallsReportMojo();
         mojo.settings = settingsMock;
         mojo.project = projectMock;
@@ -194,7 +195,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testCreateSourceLoader() throws Exception {
+    void testCreateSourceLoader() throws IOException {
         Git gitMock = Mockito.mock(Git.class);
         Path git = Files.createDirectory(folder.resolve("git"));
         when(gitMock.getBaseDir()).thenReturn(git.toFile());
@@ -210,7 +211,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testDefaultBehavior() throws Exception {
+    void testDefaultBehavior() throws IOException, MojoExecutionException, MojoFailureException {
         mojo = new CoverallsReportMojo() {
             @Override
             protected SourceLoader createSourceLoader(final Job job) {
@@ -235,7 +236,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testSuccessfullSubmission() throws Exception {
+    void testSuccessfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         String json = TestIoUtil.readFileContent(coverallsFile);
@@ -250,7 +251,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testFailWithProcessingException() throws Exception {
+    void testFailWithProcessingException() throws ProcessingException, IOException, MojoExecutionException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             mojo.execute();
@@ -261,7 +262,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testProcessingExceptionWithAllowedServiceFailure() throws Exception {
+    void testProcessingExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
@@ -273,7 +274,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testFailWithIOException() throws Exception {
+    void testFailWithIOException() throws ProcessingException, IOException, MojoExecutionException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         try {
             mojo.execute();
@@ -284,7 +285,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testIOExceptionWithAllowedServiceFailure() throws Exception {
+    void testIOExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         mojo.execute();
@@ -292,7 +293,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testFailWithNullPointerException() throws Exception {
+    void testFailWithNullPointerException() throws ProcessingException, IOException, MojoFailureException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new NullPointerException());
         try {
             mojo.execute();
@@ -303,7 +304,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testSkipExecution() throws Exception {
+    void testSkipExecution() throws MojoExecutionException, MojoFailureException {
         mojo.skip = true;
         mojo.execute();
 
@@ -315,7 +316,7 @@ public class CoverallsReportMojoTest {
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 
-    protected String readFileContent(final String sourceFile) throws IOException {
+    protected String readFileContent(final String sourceFile) throws FileNotFoundException, IOException  {
         return TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
     }
 }

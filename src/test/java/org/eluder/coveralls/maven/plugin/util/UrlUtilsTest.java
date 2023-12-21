@@ -25,7 +25,9 @@ package org.eluder.coveralls.maven.plugin.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,26 +36,26 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class UrlUtilsTest {
 
     @Test
-    void testCreateInvalidUrl() throws Exception {
+    void testCreateInvalidUrl() {
         assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.create("sdfds");
         });
     }
 
     @Test
-    void testCreateValidUrl() throws Exception {
+    void testCreateValidUrl() throws URISyntaxException {
         assertEquals("http://example.org", UrlUtils.create("http://example.org").toURI().toASCIIString());
     }
 
     @Test
-    void testInvalidUrlToUri() throws Exception {
+    void testInvalidUrlToUri() {
         assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.toUri(new URL("http://google.com?q=s|r"));
         });
     }
 
     @Test
-    void testValidUrlToUri() throws Exception {
+    void testValidUrlToUri() throws MalformedURLException, URISyntaxException {
         URI uri = UrlUtils.toUri(new URL("http://google.com"));
         assertEquals(new URI("http://google.com"), uri);
     }

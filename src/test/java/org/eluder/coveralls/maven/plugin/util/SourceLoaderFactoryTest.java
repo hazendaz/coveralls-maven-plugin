@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.lenient;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -62,7 +63,7 @@ class SourceLoaderFactoryTest {
     private Path m2Sources;
 
     @BeforeEach
-    void init() throws Exception {
+    void init() throws IOException {
         rootSources = Files.createDirectory(folder.resolve("src")); 
         m1Sources = Files.createDirectory(rootSources.resolve("m1"));
         m2Sources = Files.createDirectory(m1Sources.resolve("m2"));
@@ -75,13 +76,13 @@ class SourceLoaderFactoryTest {
     }
 
     @Test
-    void testCreateSourceLoader() throws Exception {
+    void testCreateSourceLoader() {
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
     @Test
-    void testCreateSourceLoaderWithAdditionalSourceDirectories() throws Exception {
+    void testCreateSourceLoaderWithAdditionalSourceDirectories() throws IOException {
         Path s1 = Files.createDirectory(folder.resolve("s1"));
         Path s2 = Files.createDirectory(folder.resolve("s2"));
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
@@ -91,7 +92,7 @@ class SourceLoaderFactoryTest {
     }
 
     @Test
-    void testCreateSourceLoaderWithScanForSources() throws Exception {
+    void testCreateSourceLoaderWithScanForSources() {
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withScanForSources( true )
                 .createSourceLoader();
@@ -99,7 +100,7 @@ class SourceLoaderFactoryTest {
     }
 
     @Test
-    void testCreateSourceLoaderInvalidDirectory() throws Exception {
+    void testCreateSourceLoaderInvalidDirectory() throws IOException {
         File file = Files.createDirectory(folder.resolve("aFile")).toFile();
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withSourceDirectories(Arrays.asList(file))

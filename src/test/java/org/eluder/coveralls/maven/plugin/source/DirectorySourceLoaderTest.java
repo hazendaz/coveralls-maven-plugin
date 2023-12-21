@@ -44,7 +44,7 @@ class DirectorySourceLoaderTest {
     public Path folder;
 
     @Test
-    void testMissingSourceFileFromDirectory() throws Exception {
+    void testMissingSourceFileFromDirectory() throws IOException {
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
@@ -59,7 +59,7 @@ class DirectorySourceLoaderTest {
     }
 
     @Test
-    void testLoadSource() throws Exception {
+    void testLoadSource() throws IOException {
         File file = Files.createFile(folder.resolve("newFile")).toFile(); 
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");

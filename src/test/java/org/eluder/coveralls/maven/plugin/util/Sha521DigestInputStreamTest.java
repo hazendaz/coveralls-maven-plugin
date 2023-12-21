@@ -26,13 +26,15 @@ package org.eluder.coveralls.maven.plugin.util;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Sha521DigestInputStreamTest {
 
     @Test
-    void testRead() throws Exception {
+    void testRead() throws NoSuchAlgorithmException, IOException {
         byte[] data = new byte[] { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
         try (Sha521DigestInputStream is = new Sha521DigestInputStream(new ByteArrayInputStream(data))) {
             assertEquals(0xAA, is.read());
@@ -45,7 +47,7 @@ class Sha521DigestInputStreamTest {
     }
 
     @Test
-    void testReadArray() throws Exception {
+    void testReadArray() throws NoSuchAlgorithmException, IOException {
         byte[] data = new byte[] { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
         try (Sha521DigestInputStream is = new Sha521DigestInputStream(new ByteArrayInputStream(data))) {
             byte[] buff = new byte[5];

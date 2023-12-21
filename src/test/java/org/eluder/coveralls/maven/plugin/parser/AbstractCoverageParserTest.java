@@ -32,6 +32,7 @@ import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -68,7 +69,7 @@ public abstract class AbstractCoverageParserTest {
     protected SourceCallback sourceCallbackMock;
 
     @BeforeEach
-    public void init() throws IOException {
+    public void init() throws IOException  {
         for (String[] coverageFile : getCoverageFixture()) {
             final String name = sourceName(coverageFile[0]);
             final String content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
@@ -83,14 +84,14 @@ public abstract class AbstractCoverageParserTest {
     protected Answer<Source> sourceAnswer(final String name, final String content) {
         return new Answer<Source>() {
             @Override
-            public Source answer(final InvocationOnMock invocation) throws Throwable {
+            public Source answer(final InvocationOnMock invocation) throws NoSuchAlgorithmException  {
                 return new Source(name, content, TestIoUtil.getSha512DigestHex(content));
             }
         };
     }
 
     @Test
-    public void testParseCoverage() throws Exception {
+    public void testParseCoverage() throws ProcessingException, IOException  {
         for (String coverageResource : getCoverageResources()) {
             CoverageParser parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
             parser.parse(sourceCallbackMock);
@@ -140,18 +141,18 @@ public abstract class AbstractCoverageParserTest {
         private List<Source> sources = new ArrayList<>();
 
         @Override
-        public void onBegin() throws ProcessingException, IOException {
-
+        public void onBegin() {
+            // Does nothing
         }
 
         @Override
-        public void onSource(Source source) throws ProcessingException, IOException {
+        public void onSource(Source source) {
             sources.add(source);
         }
 
         @Override
-        public void onComplete() throws ProcessingException, IOException {
-
+        public void onComplete() {
+            // Does Nothing
         }
     }
 
@@ -162,7 +163,7 @@ public abstract class AbstractCoverageParserTest {
         }
 
         @Override
-        protected void onSourceInternal(Source source) throws ProcessingException, IOException {
+        protected void onSourceInternal(Source source) {
             source.setClassifier(null);
         }
     }

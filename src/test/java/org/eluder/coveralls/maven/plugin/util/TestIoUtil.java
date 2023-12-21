@@ -32,7 +32,6 @@ import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -46,7 +45,7 @@ public class TestIoUtil {
         }
     }
 
-    public static String readFileContent(final File file) throws IOException {
+    public static String readFileContent(final File file) throws FileNotFoundException, IOException {
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             return IOUtils.toString(reader);
         }
@@ -67,7 +66,7 @@ public class TestIoUtil {
         }
     }
 
-    public static String getSha512DigestHex(final String content) throws NoSuchAlgorithmException {
+    public static String getSha512DigestHex(final String content) {
         return DigestUtils.sha512Hex(content).toUpperCase(Locale.ENGLISH);
     }
 

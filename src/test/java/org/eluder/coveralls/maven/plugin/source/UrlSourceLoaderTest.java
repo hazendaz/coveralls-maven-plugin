@@ -27,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,13 +44,13 @@ class UrlSourceLoaderTest {
     public Path folder;
 
     @Test
-    void testMissingSourceFileFromUrl() throws Exception {
+    void testMissingSourceFileFromUrl() throws IOException  {
         UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
-    void testLoadSourceFromUrl() throws Exception {
+    void testLoadSourceFromUrl() throws IOException {
         Path scripts = Files.createDirectory(folder.resolve("scripts"));
         File file = Files.createFile(scripts.resolve("file.coffee")).toFile();
 
