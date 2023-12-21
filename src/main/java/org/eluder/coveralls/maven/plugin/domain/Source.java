@@ -41,17 +41,17 @@ public final class Source implements JsonObject {
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     //private static final String CLASSIFIER_SEPARATOR = "#";
 
-    private final String name;
-    private final String digest;
-    private final Integer[] coverage;
-    private final List<Branch> branches;
-    private String classifier;
+    String name;
+    String digest;
+    Integer[] coverage;
+    List<Branch> branches;
+    String classifier;
 
     public Source(final String name, final String source, final String digest) {
         this(name, getLines(source), digest, null);
     }
 
-    protected Source(final String name, final int lines, final String digest, final String classifier) {
+    public Source(final String name, final int lines, final String digest, final String classifier) {
         this.name = name;
         this.digest = digest;
         this.coverage = new Integer[lines];
