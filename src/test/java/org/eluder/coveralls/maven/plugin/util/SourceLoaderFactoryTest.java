@@ -24,9 +24,11 @@
 package org.eluder.coveralls.maven.plugin.util;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -35,6 +37,7 @@ import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -42,8 +45,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class SourceLoaderFactoryTest {
 
-    @TempDir
-    public File folder;
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
+    public Path folder;
 
     @Mock
     private MavenProject root;
@@ -54,21 +57,21 @@ class SourceLoaderFactoryTest {
     @Mock
     private MavenProject m2;
 
-    private File rootSources;
-    private File m1Sources;
-    private File m2Sources;
+    private Path rootSources;
+    private Path m1Sources;
+    private Path m2Sources;
 
     @BeforeEach
     void init() throws Exception {
-        rootSources = new File(folder, "src");
-        m1Sources = new File("src", "m1");
-        m2Sources = new File("src", "m2");
-        when(root.getCollectedProjects()).thenReturn(Arrays.asList(m1, m2));
-        when(m1.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
-        when(m2.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
-        when(root.getCompileSourceRoots()).thenReturn(Arrays.asList(rootSources.getAbsolutePath()));
-        when(m1.getCompileSourceRoots()).thenReturn(Arrays.asList(m1Sources.getAbsolutePath()));
-        when(m2.getCompileSourceRoots()).thenReturn(Arrays.asList(m2Sources.getAbsolutePath()));
+        rootSources = Files.createDirectory(folder.resolve("src")); 
+        m1Sources = Files.createDirectory(rootSources.resolve("m1"));
+        m2Sources = Files.createDirectory(m1Sources.resolve("m2"));
+        lenient().when(root.getCollectedProjects()).thenReturn(Arrays.asList(m1, m2));
+        lenient().when(m1.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
+        lenient().when(m2.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
+        lenient().when(root.getCompileSourceRoots()).thenReturn(Arrays.asList(rootSources.toFile().getAbsolutePath()));
+        lenient().when(m1.getCompileSourceRoots()).thenReturn(Arrays.asList(m1Sources.toFile().getAbsolutePath()));
+        lenient().when(m2.getCompileSourceRoots()).thenReturn(Arrays.asList(m2Sources.toFile().getAbsolutePath()));
     }
 
     @Test
@@ -79,10 +82,10 @@ class SourceLoaderFactoryTest {
 
     @Test
     void testCreateSourceLoaderWithAdditionalSourceDirectories() throws Exception {
-        File s1 = new File(folder, "s1");
-        File s2 = new File(folder, "s2");
+        Path s1 = Files.createDirectory(folder.resolve("s1"));
+        Path s2 = Files.createDirectory(folder.resolve("s2"));
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
-                .withSourceDirectories(Arrays.asList(s1, s2))
+                .withSourceDirectories(Arrays.asList(s1.toFile(), s2.toFile()))
                 .createSourceLoader();
         assertNotNull(sourceLoader);
     }
@@ -97,8 +100,7 @@ class SourceLoaderFactoryTest {
 
     @Test
     void testCreateSourceLoaderInvalidDirectory() throws Exception {
-        File file = new File(folder, "aFile");
-        file.createNewFile();
+        File file = Files.createDirectory(folder.resolve("aFile")).toFile();
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withSourceDirectories(Arrays.asList(file))
                 .withScanForSources(true)
@@ -107,6 +109,6 @@ class SourceLoaderFactoryTest {
     }
 
     private SourceLoaderFactory createSourceLoaderFactory(String sourceEncoding) {
-        return new SourceLoaderFactory(folder, root, sourceEncoding);
+        return new SourceLoaderFactory(folder.toFile(), root, sourceEncoding);
     }
 }

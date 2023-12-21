@@ -27,8 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public abstract class AbstractCoverageParserTest {
         for (String[] coverageFile : getCoverageFixture()) {
             final String name = sourceName(coverageFile[0]);
             final String content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
-            when(sourceLoaderMock.load(name)).then(sourceAnswer(name, content));
+            lenient().when(sourceLoaderMock.load(name)).then(sourceAnswer(name, content));
         }
     }
 

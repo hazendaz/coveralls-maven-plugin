@@ -23,40 +23,46 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
-public class DirectorySourceLoaderTest {
+class DirectorySourceLoaderTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
+    public Path folder;
 
     @Test
-    public void testMissingSourceFileFromDirectory() throws Exception {
-        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
+    void testMissingSourceFileFromDirectory() throws Exception {
+        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidSourceFile() throws Exception {
-        File subFolder = folder.newFolder();
-        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
-        sourceLoader.load(subFolder.getName());
+    @Test
+    void testInvalidSourceFile() throws IOException {
+        String subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile().getName();
+        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        assertThrows(IllegalArgumentException.class, () -> {
+            sourceLoader.load(subFolder);
+        });
     }
 
     @Test
-    public void testLoadSource() throws Exception {
-        File file = folder.newFile();
+    void testLoadSource() throws Exception {
+        File file = Files.createFile(folder.resolve("newFile")).toFile(); 
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
-        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
+        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         Source source = sourceLoader.load(file.getName());
         assertEquals(file.getName(), source.getName());
         assertEquals("27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6", source.getDigest());

@@ -26,53 +26,59 @@ package org.eluder.coveralls.maven.plugin.util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
-public class ExistingFilesTest {
+class ExistingFilesTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
+    public Path folder;
 
 
-    @Test(expected = NullPointerException.class)
-    public void testAddAllForNull() throws Exception {
-        new ExistingFiles().addAll(null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testAddForNull() throws Exception {
-        new ExistingFiles().add(null);
+    @Test
+    void testAddAllForNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new ExistingFiles().addAll(null);
+        });
     }
 
     @Test
-    public void testAddForExisting() throws Exception {
-        File f = folder.newFile();
+    void testAddForNull() throws Exception {
+        assertThrows(NullPointerException.class, () -> {
+            new ExistingFiles().add(null);
+        });
+    }
+
+    @Test
+    void testAddForExisting() throws Exception {
+        File f = Files.createFile(folder.resolve("f")).toFile(); 
         Iterator<File> iter = new ExistingFiles().add(f).add(f).iterator();
         assertSize(iter, 1);
     }
 
     @Test
-    public void testAddForDirectory() throws Exception {
-        File d = folder.newFolder();
+    void testAddForDirectory() throws Exception {
+        File d = Files.createDirectory(folder.resolve("d")).toFile(); 
         Iterator<File> iter = new ExistingFiles().add(d).iterator();
         assertSize(iter, 0);
     }
 
     @Test
-    public void testCreateForNull() throws Exception {
+    void testCreateForNull() throws Exception {
         Iterator<File> iter = ExistingFiles.create(null).iterator();
         assertSize(iter, 0);
     }
 
     @Test
-    public void testCreateForMultipleFiles() throws Exception {
-        File f1 = folder.newFile();
-        File f2 = folder.newFile();
+    void testCreateForMultipleFiles() throws Exception {
+        File f1 = Files.createFile(folder.resolve("f1")).toFile(); 
+        File f2 = Files.createFile(folder.resolve("f2")).toFile(); 
         Iterator<File> iter = ExistingFiles.create(Arrays.asList(f1, f2)).iterator();
         assertSize(iter, 2);
     }

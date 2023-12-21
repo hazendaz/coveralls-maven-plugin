@@ -23,39 +23,41 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
-public class UrlSourceLoaderTest {
+class UrlSourceLoaderTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
+    public Path folder;
 
     @Test
-    public void testMissingSourceFileFromUrl() throws Exception {
-        UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.getRoot().toURI().toURL(), new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
+    void testMissingSourceFileFromUrl() throws Exception {
+        UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
-    public void testLoadSourceFromUrl() throws Exception {
-        String fileName = "scripts/file.coffee";
-        URL sourceUrl  = folder.getRoot().toURI().toURL();
+    void testLoadSourceFromUrl() throws Exception {
+        Path scripts = Files.createDirectory(folder.resolve("scripts"));
+        File file = Files.createFile(scripts.resolve("file.coffee")).toFile();
 
-        folder.newFolder("scripts");
-        File file = folder.newFile(fileName);
         TestIoUtil.writeFileContent("math =\n  root:   Math.sqrt\n  square: square", file);
 
-        UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.getRoot().toURI().toURL(), sourceUrl, "UTF-8");
+        String fileName = "scripts/file.coffee";
+        URL sourceUrl  = folder.toUri().toURL();
+        UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), sourceUrl, "UTF-8");
         Source source = sourceLoader.load(fileName);
 
         assertEquals(fileName, source.getName());

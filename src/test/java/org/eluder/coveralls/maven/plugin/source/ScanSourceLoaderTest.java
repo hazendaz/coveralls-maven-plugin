@@ -23,43 +23,50 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
-public class ScanSourceLoaderTest {
+class ScanSourceLoaderTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
+    public Path folder;
 
     @Test
-    public void testMissingSourceFileFromDirectory() throws Exception {
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
+    void testMissingSourceFileFromDirectory() throws Exception {
+        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInvalidSourceFile() throws Exception {
-        File subFolder = folder.newFolder();
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
-        sourceLoader.load(subFolder.getName());
+    @Test
+    void testInvalidSourceFile() throws Exception {
+        File subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile(); 
+        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        assertThrows(IllegalArgumentException.class, () -> {
+            sourceLoader.load(subFolder.getName());
+        });
     }
 
     @Test
-    public void testLoadSource() throws Exception {
-        File dir = folder.newFolder("level1", "level2", "level3");
-        File fileA = new File(dir, "AFile.java");
-        File fileB = new File(dir, "BFile.java");
+    void testLoadSource() throws Exception {
+        Path level1 = Files.createDirectory(folder.resolve("level1"));
+        Path level2 = Files.createDirectory(level1.resolve("level2"));
+        Path level3 = Files.createDirectory(level2.resolve("level3"));
+        File fileA = Files.createFile(level3.resolve("AFile.java")).toFile(); 
+        File fileB = Files.createFile(level3.resolve("BFile.java")).toFile(); 
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileA);
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileB);
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.getRoot(), folder.getRoot(), "UTF-8");
+        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         Source sourceA = sourceLoader.load(fileA.getName());
         assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "AFile.java", sourceA.getName());
         assertEquals("27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6", sourceA.getDigest());

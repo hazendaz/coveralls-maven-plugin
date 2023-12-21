@@ -23,7 +23,27 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
@@ -43,34 +63,23 @@ import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.eluder.coveralls.maven.plugin.validation.ValidationErrors;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CoverallsReportMojoTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
+    public Path folder;
+
     public File coverallsFile;
 
     private CoverallsReportMojo mojo;
@@ -105,11 +114,11 @@ public class CoverallsReportMojoTest {
     @Mock
     private Settings settingsMock;
 
-    @Before
-    public void init() throws Exception {
-        coverallsFile = folder.newFile();
+    @BeforeEach
+    void init() throws Exception {
+        coverallsFile = Files.createFile(folder.resolve("coverallsFile.json")).toFile();
 
-        when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
+        lenient().when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
             @Override
             public Source answer(final InvocationOnMock invocation) throws Throwable {
                 String sourceFile = invocation.getArguments()[0].toString();
@@ -117,8 +126,8 @@ public class CoverallsReportMojoTest {
                 return new Source(sourceFile, content, TestIoUtil.getSha512DigestHex(content));
             }
         });
-        when(logMock.isInfoEnabled()).thenReturn(true);
-        when(jobMock.validate()).thenReturn(new ValidationErrors());
+        lenient().when(logMock.isInfoEnabled()).thenReturn(true);
+        lenient().when(jobMock.validate()).thenReturn(new ValidationErrors());
 
 
         mojo = new CoverallsReportMojo() {
@@ -158,47 +167,50 @@ public class CoverallsReportMojoTest {
         mojo.sourceEncoding = "UTF-8";
         mojo.failOnServiceError = true;
 
-        when(modelMock.getReporting()).thenReturn(reportingMock);
-        when(reportingMock.getOutputDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
-        when(buildMock.getDirectory()).thenReturn(folder.getRoot().getAbsolutePath());
+        lenient().when(modelMock.getReporting()).thenReturn(reportingMock);
+        lenient().when(reportingMock.getOutputDirectory()).thenReturn(folder.toFile().getAbsolutePath());
+        lenient().when(buildMock.getDirectory()).thenReturn(folder.toFile().getAbsolutePath());
 
         List<MavenProject> projects = new ArrayList<MavenProject>();
         projects.add(collectedProjectMock);
-        when(projectMock.getCollectedProjects()).thenReturn(projects);
-        when(projectMock.getBuild()).thenReturn(buildMock);
-        when(projectMock.getModel()).thenReturn(modelMock);
+        lenient().when(projectMock.getCollectedProjects()).thenReturn(projects);
+        lenient().when(projectMock.getBuild()).thenReturn(buildMock);
+        lenient().when(projectMock.getModel()).thenReturn(modelMock);
         List<String> sourceRoots = new ArrayList<String>();
-        sourceRoots.add(folder.getRoot().getAbsolutePath());
-        when(collectedProjectMock.getCompileSourceRoots()).thenReturn(sourceRoots);
-        when(collectedProjectMock.getBuild()).thenReturn(buildMock);
-        when(collectedProjectMock.getModel()).thenReturn(modelMock);
-    }
-
-    @Test(expected = IOException.class)
-    public void testCreateCoverageParsersWithoutCoverageReports() throws Exception {
-        mojo = new CoverallsReportMojo();
-        mojo.settings = settingsMock;
-        mojo.project = projectMock;
-        mojo.createCoverageParsers(sourceLoaderMock);
+        sourceRoots.add(folder.toFile().getAbsolutePath());
+        lenient().when(collectedProjectMock.getCompileSourceRoots()).thenReturn(sourceRoots);
+        lenient().when(collectedProjectMock.getBuild()).thenReturn(buildMock);
+        lenient().when(collectedProjectMock.getModel()).thenReturn(modelMock);
     }
 
     @Test
-    public void testCreateSourceLoader() throws Exception {
+    void testCreateCoverageParsersWithoutCoverageReports() throws Exception {
+        mojo = new CoverallsReportMojo();
+        mojo.settings = settingsMock;
+        mojo.project = projectMock;
+        assertThrows(IOException.class, () -> {
+            mojo.createCoverageParsers(sourceLoaderMock);
+        });
+    }
+
+    @Test
+    void testCreateSourceLoader() throws Exception {
         Git gitMock = Mockito.mock(Git.class);
-        when(gitMock.getBaseDir()).thenReturn(folder.newFolder("git"));
+        Path git = Files.createDirectory(folder.resolve("git"));
+        when(gitMock.getBaseDir()).thenReturn(git.toFile());
         when(jobMock.getGit()).thenReturn(gitMock);
-        TestIoUtil.writeFileContent("public interface Test { }", folder.newFile("source.java"));
+        TestIoUtil.writeFileContent("public interface Test { }", Files.createFile(git.resolve("source.java")).toFile()); 
         mojo = new CoverallsReportMojo();
         mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.sourceEncoding = "UTF-8";
         SourceLoader sourceLoader = mojo.createSourceLoader(jobMock);
-        Source source = sourceLoader.load("source.java");
+        Source source = sourceLoader.load("git/source.java");
         assertNotNull(source);
     }
 
     @Test
-    public void testDefaultBehavior() throws Exception {
+    void testDefaultBehavior() throws Exception {
         mojo = new CoverallsReportMojo() {
             @Override
             protected SourceLoader createSourceLoader(final Job job) {
@@ -214,7 +226,7 @@ public class CoverallsReportMojoTest {
         mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.repoToken = "asdfg";
-        mojo.coverallsFile = folder.newFile();
+        mojo.coverallsFile = Files.createFile(folder.resolve("mojoCoverallsFile")).toFile(); 
         mojo.dryRun = true;
         mojo.skip = false;
         mojo.basedir = TestIoUtil.getFile("/");
@@ -223,7 +235,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    public void testSuccesfullSubmission() throws Exception {
+    void testSuccessfullSubmission() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         String json = TestIoUtil.readFileContent(coverallsFile);
@@ -238,7 +250,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    public void testFailWithProcessingException() throws Exception {
+    void testFailWithProcessingException() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             mojo.execute();
@@ -249,7 +261,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    public void testProcessingExceptionWithAllowedServiceFailure() throws Exception {
+    void testProcessingExceptionWithAllowedServiceFailure() throws Exception {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
@@ -261,7 +273,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    public void testFailWithIOException() throws Exception {
+    void testFailWithIOException() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         try {
             mojo.execute();
@@ -272,7 +284,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    public void testIOExceptionWithAllowedServiceFailure() throws Exception {
+    void testIOExceptionWithAllowedServiceFailure() throws Exception {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         mojo.execute();
@@ -280,7 +292,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    public void testFailWithNullPointerException() throws Exception {
+    void testFailWithNullPointerException() throws Exception {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new NullPointerException());
         try {
             mojo.execute();
@@ -291,7 +303,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    public void testSkipExecution() throws Exception {
+    void testSkipExecution() throws Exception {
         mojo.skip = true;
         mojo.execute();
 
