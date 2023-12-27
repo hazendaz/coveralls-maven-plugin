@@ -23,19 +23,21 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+
 import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class TimestampParser {
 
     public static final String EPOCH_MILLIS = "EpochMillis";
 
-    public static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String DEFAULT_FORMAT = "uuuu-MM-dd HH:mm:ss Z";
 
     private final Parser parser;
 
@@ -53,7 +55,7 @@ public class TimestampParser {
         }
     }
 
-    public Date parse(final String timestamp) throws ProcessingException {
+    public LocalDateTime parse(final String timestamp) throws ProcessingException {
         if (StringUtils.isBlank(timestamp)) {
             return null;
         }
@@ -65,28 +67,34 @@ public class TimestampParser {
     }
 
     private interface Parser {
-        Date parse(String timestamp) throws Exception;
+        LocalDateTime parse(String timestamp);
     }
 
     private static class DateFormatParser implements Parser {
 
-        final DateFormat format;
+        final DateTimeFormatter format;
 
         DateFormatParser(final String format) {
-            this.format = new SimpleDateFormat(format);
+            if (DEFAULT_FORMAT.equals(format)) {
+                this.format = DateTimeFormatter.ISO_INSTANT;
+            } else {
+                this.format = new DateTimeFormatterBuilder().appendPattern(format).parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                        .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                        .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0).toFormatter();
+            }
         }
 
         @Override
-        public synchronized Date parse(final String timestamp) throws ParseException {
-            return format.parse(timestamp);
+        public synchronized LocalDateTime parse(final String timestamp) {
+            return LocalDateTime.parse(timestamp, format);
         }
     }
 
     private static class EpochMillisParser implements Parser {
 
         @Override
-        public Date parse(final String timestamp) {
-            return new Date(Long.valueOf(timestamp));
+        public LocalDateTime parse(final String timestamp) {
+            return Instant.ofEpochMilli(Long.valueOf(timestamp)).atZone(ZoneId.systemDefault()).toLocalDateTime();
         }
     }
 }

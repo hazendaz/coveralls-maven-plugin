@@ -28,19 +28,19 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map.Entry;
+import java.util.Properties;
+
 import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
-
-import java.io.Closeable;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map.Entry;
-import java.util.Properties;
 
 public class JsonWriter implements SourceCallback, Closeable {
 
@@ -131,9 +131,9 @@ public class JsonWriter implements SourceCallback, Closeable {
         }
     }
 
-    private void writeOptionalTimestamp(final String field, final Date value) throws ProcessingException, IOException {
+    private void writeOptionalTimestamp(final String field, final LocalDateTime value) throws ProcessingException, IOException {
         if (value != null) {
-            SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
+            DateTimeFormatter format = DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
             writeOptionalString(field, format.format(value));
         }
     }

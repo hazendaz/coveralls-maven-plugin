@@ -96,7 +96,7 @@
     <project.build.outputTimestamp>1699830104</project.build.outputTimestamp>
 
     <!-- Artifacts -->
-    <httpclient.version>4.5.14</httpclient.version>
+    <httpclient.version>5.3</httpclient.version>
     <jackson.version>2.16.1</jackson.version>
     <jgit.version>5.13.3.202401111512-r</jgit.version>
     <maven.version>3.9.6</maven.version>
@@ -105,13 +105,8 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>${httpclient.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpmime</artifactId>
+        <groupId>org.apache.httpcomponents.client5</groupId>
+        <artifactId>httpclient5</artifactId>
         <version>${httpclient.version}</version>
       </dependency>
       <dependency>
@@ -181,18 +176,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpmime</artifactId>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-codec</groupId>
@@ -265,12 +250,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.junit.vintage</groupId>
-      <artifactId>junit-vintage-engine</artifactId>
-      <version>5.10.1</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.10.1</version>
@@ -304,12 +283,6 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
       <version>5.9.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest</artifactId>
-      <version>2.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>

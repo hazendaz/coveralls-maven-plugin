@@ -27,21 +27,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
-import org.eluder.coveralls.maven.plugin.domain.Git;
-import org.eluder.coveralls.maven.plugin.domain.Job;
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -49,52 +46,60 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.eluder.coveralls.maven.plugin.domain.Git;
+import org.eluder.coveralls.maven.plugin.domain.Job;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
-public class JsonWriterTest {
+class JsonWriterTest {
 
     private static final long TEST_TIME = 1357009200000l;
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir(cleanup = CleanupMode.ON_SUCCESS)
+    public Path folder;
 
     private File file;
 
-    @Before
+    @BeforeEach
     public void init() throws IOException {
-        file = folder.newFile();
+        file = Files.createFile(folder.resolve("jsonWriterTest.tmp")).toFile();
     }
 
     @Test
-    public void testSubDirectoryCreation() throws Exception {
-        File f = new File(new File(folder.getRoot(), "sub1"), "sub2");
+    void testSubDirectoryCreation() throws IOException {
+        Path sub1 = Files.createDirectory(folder.resolve("sub1"));
+        Path sub2 =  Files.createDirectory(sub1.resolve("sub2"));
+        File file = Files.createFile(sub2.resolve("testSubDirectoryCreation")).toFile();
         Job job = job();
-        assertTrue(new JsonWriter(job, f).getCoverallsFile().getParentFile().isDirectory());
+        try (JsonWriter writer = new JsonWriter(job, file)) {
+            assertTrue(writer.getCoverallsFile().getParentFile().isDirectory());
+        }
     }
 
     @Test
     @SuppressWarnings("resource")
-    public void testGetJob() throws Exception {
+    void testGetJob() throws IOException {
         Job job = job();
         assertSame(job, new JsonWriter(job, file).getJob());
     }
 
     @Test
     @SuppressWarnings("resource")
-    public void testGetCoverallsFile() throws Exception {
+    void testGetCoverallsFile() throws IOException {
         Job job = job();
         assertSame(file, new JsonWriter(job, file).getCoverallsFile());
-
     }
 
     @SuppressWarnings("rawtypes")
     @Test
-    public void testWriteStartAndEnd() throws Exception {
-        JsonWriter writer = new JsonWriter(job(), file);
-        try {
+    void testWriteStartAndEnd() throws Exception {
+        try (JsonWriter writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onComplete();
-        } finally {
-            writer.close();
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
@@ -105,21 +110,18 @@ public class JsonWriterTest {
         assertEquals("foobar", ((Map) jsonMap.get("environment")).get("custom_property"));
         assertEquals("master", jsonMap.get("service_branch"));
         assertEquals("pull10", jsonMap.get("service_pull_request"));
-        assertEquals(new SimpleDateFormat(JsonWriter.TIMESTAMP_FORMAT).format(new Date(TEST_TIME)), jsonMap.get("run_at"));
+        assertEquals(DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT).format(Instant.ofEpochMilli(Long.valueOf(TEST_TIME)).atZone(ZoneId.systemDefault()).toLocalDateTime()), jsonMap.get("run_at"));
         assertEquals("af456fge34acd", ((Map) jsonMap.get("git")).get("branch"));
         assertEquals("aefg837fge", ((Map) ((Map) jsonMap.get("git")).get("head")).get("id"));
         assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
     }
 
     @Test
-    public void testOnSource() throws Exception {
-        JsonWriter writer = new JsonWriter(job(), file);
-        try {
+    void testOnSource() throws Exception  {
+        try (JsonWriter writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onSource(source());
             writer.onComplete();
-        } finally {
-            writer.close();
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
@@ -142,7 +144,7 @@ public class JsonWriterTest {
             .withServiceEnvironment(environment)
             .withBranch("master")
             .withPullRequest("pull10")
-            .withTimestamp(new Date(TEST_TIME))
+            .withTimestamp(Instant.ofEpochMilli(TEST_TIME).atZone(ZoneId.systemDefault()).toLocalDateTime())
             .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
 
@@ -150,7 +152,7 @@ public class JsonWriterTest {
         return new Source("Foo.java", "public class Foo { }", "6E0F89B516198DC6AB743EA5FBFB3108");
     }
 
-    private Map<String, Object> stringToJsonMap(final String content) throws Exception {
+    private Map<String, Object> stringToJsonMap(final String content) throws JsonMappingException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         MapType type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
         return mapper.readValue(content, type);

@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
 import org.eluder.coveralls.maven.plugin.domain.Git.Remote;
@@ -39,7 +39,7 @@ public class Job {
     private String serviceBuildUrl;
     private boolean parallel;
     private Properties serviceEnvironment;
-    private Date timestamp;
+    private LocalDateTime timestamp;
     private boolean dryRun;
     private String branch;
     private String pullRequest;
@@ -84,7 +84,7 @@ public class Job {
         return this;
     }
 
-    public Job withTimestamp(final Date timestamp) {
+    public Job withTimestamp(final LocalDateTime timestamp) {
         this.timestamp = timestamp;
         return this;
     }
@@ -133,7 +133,7 @@ public class Job {
         return serviceEnvironment;
     }
 
-    public Date getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 

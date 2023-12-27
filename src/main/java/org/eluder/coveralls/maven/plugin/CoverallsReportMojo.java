@@ -60,8 +60,8 @@ import org.eluder.coveralls.maven.plugin.util.TimestampParser;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -330,7 +330,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected Job createJob() throws ProcessingException, IOException {
         Git git = new GitRepository(basedir).load();
-        Date time = new TimestampParser(timestampFormat).parse(timestamp);
+        LocalDateTime time = new TimestampParser(timestampFormat).parse(timestamp);
         return new Job()
             .withRepoToken(repoToken)
             .withServiceName(serviceName)

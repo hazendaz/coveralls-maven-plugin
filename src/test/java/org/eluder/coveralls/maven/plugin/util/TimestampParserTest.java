@@ -26,8 +26,9 @@ package org.eluder.coveralls.maven.plugin.util;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.junit.jupiter.api.Test;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -43,41 +44,41 @@ class TimestampParserTest {
     }
 
     @Test
-    void testParseEpochMillis() throws Exception {
+    void testParseEpochMillis() throws ProcessingException {
         String format = TimestampParser.EPOCH_MILLIS;
         long time = System.currentTimeMillis();
-        Date parsed = new TimestampParser(format).parse(String.valueOf(time));
+        LocalDateTime parsed = new TimestampParser(format).parse(String.valueOf(time));
 
-        assertEquals(time, parsed.getTime());
+        assertEquals(time, parsed.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
     }
 
     @Test
-    void testParseSimpleFormat() throws Exception {
+    void testParseSimpleFormat() throws ProcessingException {
         String format = "yyyy-MM-dd";
-        Date parsed = new TimestampParser(format).parse("2015-08-20");
-        String formatted = new SimpleDateFormat(format).format(parsed);
+        LocalDateTime parsed = new TimestampParser(format).parse("2015-08-20");
+        String formatted = DateTimeFormatter.ofPattern(format).format(parsed);
 
         assertEquals("2015-08-20", formatted);
     }
 
     @Test
-    void testParseDefaultFormat() throws Exception {
+    void testParseDefaultFormat() throws ProcessingException {
         String format = TimestampParser.DEFAULT_FORMAT;
-        Date parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
-        String formatted = new SimpleDateFormat(format).format(parsed);
+        LocalDateTime parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
+        String formatted = DateTimeFormatter.ofPattern(format).format(parsed);
 
         assertEquals("2015-08-20T20:10:00Z", formatted);
     }
 
     @Test
-    void testParseNull() throws Exception {
-        Date parsed = new TimestampParser(null).parse(null);
+    void testParseNull() throws ProcessingException {
+        LocalDateTime parsed = new TimestampParser(null).parse(null);
 
         assertNull(parsed);
     }
 
     @Test
-    void testParseInvalidTimestamp() throws Exception {
+    void testParseInvalidTimestamp() {
         assertThrows(ProcessingException.class, () -> {
             new TimestampParser(null).parse("2015-08-20");
         });
