@@ -98,7 +98,7 @@
     <!-- Artifacts -->
     <httpclient.version>4.5.14</httpclient.version>
     <jackson.version>2.16.1</jackson.version>
-    <jgit.version>5.13.2.202306221912-r</jgit.version>
+    <jgit.version>5.13.3.202401111512-r</jgit.version>
     <maven.version>3.9.6</maven.version>
   </properties>
 
