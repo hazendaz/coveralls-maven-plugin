@@ -105,6 +105,9 @@
     <maven-plugin.version>3.11.0</maven-plugin.version>
     <mockito.version>5.9.0</mockito.version>
     <slf4j.version>2.0.11</slf4j.version>
+
+    <!-- Surefire Setup -->
+    <argLine>-javaagent:${settings.localRepository}/net/bytebuddy/byte-buddy-agent/${byte-buddy.version}/byte-buddy-agent-${byte-buddy.version}.jar</argLine>
   </properties>
 
   <dependencyManagement>
