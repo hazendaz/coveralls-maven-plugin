@@ -28,12 +28,12 @@
 
 ## 4.4.1 (was released from https://github.com/jwtk/coveralls-maven-plugin for work from https://github.com/dogeared/coveralls-maven-plugin)
 - Code is pulled into 4.5.0 release
-- Add suppor;t for open clover
+- Add support for open clover
 
 ## 4.3.0
 - #99: Added support for Wercker
 - #100: Fixed Wercker environment variables
-- Library updates for Jakcson, jgit, and wiremock
+- Library updates for Jackson, jgit, and wiremock
 - Document snapshot repositories
 
 ## 4.2.0
