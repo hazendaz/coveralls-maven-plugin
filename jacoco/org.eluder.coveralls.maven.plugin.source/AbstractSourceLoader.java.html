@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractSourceLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.source</a> &gt; <span class="el_source">AbstractSourceLoader.java</span></div><h1>AbstractSourceLoader.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractSourceLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.source</a> &gt; <span class="el_source">AbstractSourceLoader.java</span></div><h1>AbstractSourceLoader.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -23,9 +23,9 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.codehaus.plexus.util.IOUtil;
+import org.apache.commons.io.IOUtils;
 import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.Md5DigestInputStream;
+import org.eluder.coveralls.maven.plugin.util.Sha521DigestInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,36 +38,36 @@ public abstract class AbstractSourceLoader implements SourceLoader {
 
     private final Charset sourceEncoding;
     private final String directoryPrefix;
-    
-<span class="fc" id="L42">    public AbstractSourceLoader(final URI base, final URI sourceBase, final String sourceEncoding) {</span>
+
+<span class="fc" id="L42">    protected AbstractSourceLoader(final URI base, final URI sourceBase, final String sourceEncoding) {</span>
 <span class="fc" id="L43">        this.sourceEncoding = Charset.forName(sourceEncoding);</span>
 <span class="fc" id="L44">        this.directoryPrefix = base.relativize(sourceBase).toString();</span>
 <span class="fc" id="L45">    }</span>
-    
+
     @Override
     public Source load(final String sourceFile) throws IOException {
 <span class="fc" id="L49">        InputStream stream = locate(sourceFile);</span>
 <span class="fc bfc" id="L50" title="All 2 branches covered.">        if (stream != null) {</span>
-<span class="fc" id="L51">            try (Md5DigestInputStream ds = new Md5DigestInputStream(stream);</span>
+<span class="fc" id="L51">            try (Sha521DigestInputStream ds = new Sha521DigestInputStream(stream);</span>
 <span class="fc" id="L52">                    InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {</span>
-<span class="fc" id="L53">                String source = IOUtil.toString(reader);</span>
+<span class="fc" id="L53">                String source = IOUtils.toString(reader);</span>
 <span class="fc" id="L54">                return new Source(getFileName(sourceFile), source, ds.getDigestHex());</span>
 <span class="nc" id="L55">            } catch (NoSuchAlgorithmException ex) {</span>
-<span class="nc" id="L56">                throw new IOException(&quot;MD5 algorithm not available&quot;, ex);</span>
+<span class="nc" id="L56">                throw new IOException(&quot;Sha-512 algorithm not available&quot;, ex);</span>
             }
         } else {
 <span class="fc" id="L59">            return null;</span>
         }
     }
-    
+
     protected Charset getSourceEncoding() {
 <span class="fc" id="L64">        return sourceEncoding;</span>
     }
-    
+
     protected String getFileName(final String sourceFile) {
 <span class="fc" id="L68">        return directoryPrefix + sourceFile;</span>
     }
-    
+
     protected abstract InputStream locate(String sourceFile) throws IOException;
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

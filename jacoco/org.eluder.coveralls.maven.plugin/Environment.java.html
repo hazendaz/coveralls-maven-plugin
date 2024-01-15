@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Environment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin</a> &gt; <span class="el_source">Environment.java</span></div><h1>Environment.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Environment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin</a> &gt; <span class="el_source">Environment.java</span></div><h1>Environment.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -25,14 +25,14 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.util.Properties;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 
 /**
  * Constructs and setups the project environment and continuous integration service.
  */
 public final class Environment {
-    
+
     private final CoverallsReportMojo mojo;
     private final Iterable&lt;ServiceSetup&gt; services;
 
@@ -46,18 +46,18 @@ public final class Environment {
 <span class="fc" id="L46">        this.mojo = mojo;</span>
 <span class="fc" id="L47">        this.services = services;</span>
 <span class="fc" id="L48">    }</span>
-    
+
     public void setup() {
 <span class="fc" id="L51">        setupService();</span>
 <span class="fc" id="L52">        verify();</span>
 <span class="fc" id="L53">    }</span>
-    
+
     private void verify() {
 <span class="fc bfc" id="L56" title="All 2 branches covered.">        if (mojo.sourceEncoding == null) {</span>
 <span class="fc" id="L57">            throw new IllegalArgumentException(&quot;Source encoding not set, use &lt;sourceEncoding&gt; configuration option or set project wide property &lt;project.build.sourceEncoding&gt;&quot;);</span>
         }
 <span class="fc" id="L59">    }</span>
-    
+
     private void setupService() {
 <span class="fc bfc" id="L62" title="All 2 branches covered.">        for (ServiceSetup service : services) {</span>
 <span class="fc bfc" id="L63" title="All 2 branches covered.">            if (service.isSelected()) {</span>
@@ -66,38 +66,38 @@ public final class Environment {
             }
 <span class="fc" id="L67">        }</span>
 <span class="fc" id="L68">    }</span>
-    
+
     private void setupEnvironment(final ServiceSetup service) {
 <span class="fc" id="L71">        String name = service.getName();</span>
 <span class="pc bpc" id="L72" title="1 of 4 branches missed.">        if (StringUtils.isBlank(mojo.serviceName) &amp;&amp; StringUtils.isNotBlank(name)) {</span>
 <span class="fc" id="L73">            mojo.serviceName = name;</span>
         }
-        
+
 <span class="fc" id="L76">        String jobId = service.getJobId();</span>
 <span class="fc bfc" id="L77" title="All 4 branches covered.">        if (StringUtils.isBlank(mojo.serviceJobId) &amp;&amp; StringUtils.isNotBlank(jobId)) {</span>
 <span class="fc" id="L78">            mojo.serviceJobId = jobId;</span>
         }
-        
+
 <span class="fc" id="L81">        String buildNumber = service.getBuildNumber();</span>
 <span class="fc bfc" id="L82" title="All 4 branches covered.">        if (StringUtils.isBlank(mojo.serviceBuildNumber) &amp;&amp; StringUtils.isNotBlank(buildNumber)) {</span>
 <span class="fc" id="L83">            mojo.serviceBuildNumber = buildNumber;</span>
         }
-        
+
 <span class="fc" id="L86">        String buildUrl = service.getBuildUrl();</span>
 <span class="fc bfc" id="L87" title="All 4 branches covered.">        if (StringUtils.isBlank(mojo.serviceBuildUrl) &amp;&amp; StringUtils.isNotBlank(buildUrl)) {</span>
 <span class="fc" id="L88">            mojo.serviceBuildUrl = buildUrl;</span>
         }
-        
+
 <span class="fc" id="L91">        String branch = service.getBranch();</span>
 <span class="fc bfc" id="L92" title="All 4 branches covered.">        if (StringUtils.isBlank(mojo.branch) &amp;&amp; StringUtils.isNotBlank(branch)) {</span>
 <span class="fc" id="L93">            mojo.branch = branch;</span>
         }
-        
+
 <span class="fc" id="L96">        String pullRequest = service.getPullRequest();</span>
 <span class="fc bfc" id="L97" title="All 4 branches covered.">        if (StringUtils.isBlank(mojo.pullRequest) &amp;&amp; StringUtils.isNotBlank(pullRequest)) {</span>
 <span class="fc" id="L98">            mojo.pullRequest = pullRequest;</span>
         }
-        
+
 <span class="fc" id="L101">        Properties environment = service.getEnvironment();</span>
 <span class="pc bpc" id="L102" title="1 of 6 branches missed.">        if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty()) &amp;&amp;</span>
 <span class="pc bpc" id="L103" title="1 of 2 branches missed.">                (environment != null &amp;&amp; !environment.isEmpty())) {</span>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverageParsersFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">CoverageParsersFactory.java</span></div><h1>CoverageParsersFactory.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverageParsersFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">CoverageParsersFactory.java</span></div><h1>CoverageParsersFactory.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -51,7 +51,7 @@ public class CoverageParsersFactory {
 
     private static final String SAGA_FILE = &quot;/total-coverage.xml&quot;;
     private static final String SAGA_PREFIX = &quot;/saga-coverage&quot;;
-    
+
     private final MavenProject project;
     private final SourceLoader sourceLoader;
     private List&lt;File&gt; jacocoReports;
@@ -64,17 +64,17 @@ public class CoverageParsersFactory {
 <span class="fc" id="L64">        this.project = project;</span>
 <span class="fc" id="L65">        this.sourceLoader = sourceLoader;</span>
 <span class="fc" id="L66">    }</span>
-    
+
     public CoverageParsersFactory withJaCoCoReports(final List&lt;File&gt; jacocoReports) {
 <span class="fc" id="L69">        this.jacocoReports = jacocoReports;</span>
 <span class="fc" id="L70">        return this;</span>
     }
-    
+
     public CoverageParsersFactory withCoberturaReports(final List&lt;File&gt; coberturaReports) {
 <span class="fc" id="L74">        this.coberturaReports = coberturaReports;</span>
 <span class="fc" id="L75">        return this;</span>
     }
-    
+
     public CoverageParsersFactory withSagaReports(final List&lt;File&gt; sagaReports) {
 <span class="fc" id="L79">        this.sagaReports = sagaReports;</span>
 <span class="fc" id="L80">        return this;</span>
@@ -84,7 +84,7 @@ public class CoverageParsersFactory {
 <span class="fc" id="L84">        this.relativeReportDirs = relativeReportDirs;</span>
 <span class="fc" id="L85">        return this;</span>
     }
-    
+
     public List&lt;CoverageParser&gt; createParsers() throws IOException {
 <span class="fc" id="L89">        List&lt;CoverageParser&gt; parsers = new ArrayList&lt;&gt;();</span>
 <span class="fc" id="L90">        List&lt;MavenProject&gt; projects = new MavenProjectCollector(project).collect();</span>
@@ -96,7 +96,7 @@ public class CoverageParsersFactory {
 <span class="fc bfc" id="L96" title="All 2 branches covered.">        for (MavenProject p : projects) {</span>
 <span class="fc" id="L97">            File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());</span>
 <span class="fc" id="L98">            File buildDirectory = new File(p.getBuild().getDirectory());</span>
-            
+
 <span class="fc" id="L100">            jacocoFiles.add(new File(reportingDirectory, JACOCO_PREFIX + JACOCO_FILE));</span>
 <span class="fc" id="L101">            jacocoFiles.add(new File(reportingDirectory, JACOCO_IT_PREFIX + JACOCO_FILE));</span>
 <span class="fc" id="L102">            coberturaFiles.add(new File(reportingDirectory, COBERTURA_PREFIX + COBERTURA_FILE));</span>
@@ -123,7 +123,7 @@ public class CoverageParsersFactory {
 <span class="fc" id="L123">                }</span>
             }
 <span class="fc" id="L125">        }</span>
-        
+
 <span class="fc bfc" id="L127" title="All 2 branches covered.">        for (File jacocoFile : jacocoFiles) {</span>
 <span class="fc" id="L128">            parsers.add(new JaCoCoParser(jacocoFile, sourceLoader));</span>
 <span class="fc" id="L129">        }</span>
@@ -136,11 +136,11 @@ public class CoverageParsersFactory {
 <span class="pc bpc" id="L136" title="1 of 2 branches missed.">        for (File cloverFile : cloverFiles) {</span>
 <span class="nc" id="L137">            parsers.add(new CloverParser(cloverFile, sourceLoader));</span>
 <span class="nc" id="L138">        }</span>
-        
+
 <span class="fc bfc" id="L140" title="All 2 branches covered.">        if (parsers.isEmpty()) {</span>
 <span class="fc" id="L141">            throw new IOException(&quot;No coverage report files found&quot;);</span>
         }
-        
+
 <span class="fc" id="L144">        return Collections.unmodifiableList(parsers);</span>
     }
 }

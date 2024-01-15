@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Source.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">Source.java</span></div><h1>Source.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Source.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">Source.java</span></div><h1>Source.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -35,162 +35,164 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Source implements JsonObject {
-    
-<span class="fc" id="L39">    private static final Pattern NEWLINE = Pattern.compile(&quot;\r\n|\r|\n&quot;);</span>
-    //private static final String CLASSIFIER_SEPARATOR = &quot;#&quot;;
-    
-    private final String name;
-    private final String digest;
-    private final Integer[] coverage;
-    private final List&lt;Branch&gt; branches;
-    private String classifier;
-    
-    public Source(final String name, final String source, final String digest) {
-<span class="fc" id="L49">        this(name, getLines(source), digest, null);</span>
-<span class="fc" id="L50">    }</span>
 
-<span class="fc" id="L52">    protected Source(final String name, final int lines, final String digest, final String classifier) {</span>
-<span class="fc" id="L53">        this.name = name;</span>
-<span class="fc" id="L54">        this.digest = digest;</span>
-<span class="fc" id="L55">        this.coverage = new Integer[lines];</span>
-<span class="fc" id="L56">        this.classifier = classifier;</span>
-<span class="fc" id="L57">        this.branches = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L58">    }</span>
-    
+    private static final long serialVersionUID = 1L;
+
+<span class="fc" id="L41">    private static final Pattern NEWLINE = Pattern.compile(&quot;\r\n|\r|\n&quot;);</span>
+    //private static final String CLASSIFIER_SEPARATOR = &quot;#&quot;;
+
+    String name;
+    String digest;
+    Integer[] coverage;
+    List&lt;Branch&gt; branches;
+    String classifier;
+
+    public Source(final String name, final String source, final String digest) {
+<span class="fc" id="L51">        this(name, getLines(source), digest, null);</span>
+<span class="fc" id="L52">    }</span>
+
+<span class="fc" id="L54">    public Source(final String name, final int lines, final String digest, final String classifier) {</span>
+<span class="fc" id="L55">        this.name = name;</span>
+<span class="fc" id="L56">        this.digest = digest;</span>
+<span class="fc" id="L57">        this.coverage = new Integer[lines];</span>
+<span class="fc" id="L58">        this.classifier = classifier;</span>
+<span class="fc" id="L59">        this.branches = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L60">    }</span>
+
     @JsonIgnore
     public String getName() {
-<span class="fc" id="L62">        return name;</span>
+<span class="fc" id="L64">        return name;</span>
     }
-    
+
     @JsonProperty(&quot;name&quot;)
     public String getFullName() {
-<span class="fc" id="L67">        return name;</span>
+<span class="fc" id="L69">        return name;</span>
 
         // #45: cannot use identifier due to unfetchable source files
         //return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
-    
+
     @JsonProperty(&quot;source_digest&quot;)
     public String getDigest() {
-<span class="fc" id="L75">        return digest;</span>
+<span class="fc" id="L77">        return digest;</span>
     }
-    
+
     @JsonProperty(&quot;coverage&quot;)
     public Integer[] getCoverage() {
-<span class="fc" id="L80">        return coverage;</span>
+<span class="fc" id="L82">        return coverage;</span>
     }
-    
+
     @JsonProperty(&quot;branches&quot;)
     public Integer[] getBranches() {
-<span class="fc" id="L85">        final List&lt;Integer&gt; branchesRaw = new ArrayList&lt;&gt;(branches.size() * 4);</span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (final Branch b : branches) {</span>
-<span class="fc" id="L87">            branchesRaw.add(b.getLineNumber());</span>
-<span class="fc" id="L88">            branchesRaw.add(b.getBlockNumber());</span>
-<span class="fc" id="L89">            branchesRaw.add(b.getBranchNumber());</span>
-<span class="fc" id="L90">            branchesRaw.add(b.getHits());</span>
-<span class="fc" id="L91">        }</span>
-<span class="fc" id="L92">        return branchesRaw.toArray(new Integer[branchesRaw.size()]);</span>
+<span class="fc" id="L87">        final List&lt;Integer&gt; branchesRaw = new ArrayList&lt;&gt;(branches.size() * 4);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        for (final Branch b : branches) {</span>
+<span class="fc" id="L89">            branchesRaw.add(b.getLineNumber());</span>
+<span class="fc" id="L90">            branchesRaw.add(b.getBlockNumber());</span>
+<span class="fc" id="L91">            branchesRaw.add(b.getBranchNumber());</span>
+<span class="fc" id="L92">            branchesRaw.add(b.getHits());</span>
+<span class="fc" id="L93">        }</span>
+<span class="fc" id="L94">        return branchesRaw.toArray(new Integer[branchesRaw.size()]);</span>
     }
 
     public List&lt;Branch&gt; getBranchesList() {
-<span class="fc" id="L96">        return Collections.unmodifiableList(branches);</span>
+<span class="fc" id="L98">        return Collections.unmodifiableList(branches);</span>
     }
 
     @JsonIgnore
     public String getClassifier() {
-<span class="fc" id="L101">        return classifier;</span>
+<span class="fc" id="L103">        return classifier;</span>
     }
-    
+
     public void setClassifier(final String classifier) {
-<span class="fc" id="L105">        this.classifier = classifier;</span>
-<span class="fc" id="L106">    }</span>
-    
+<span class="fc" id="L107">        this.classifier = classifier;</span>
+<span class="fc" id="L108">    }</span>
+
     private void checkLineRange(final int lineNumber) {
-<span class="fc" id="L109">        int index = lineNumber - 1;</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (index &gt;= this.coverage.length) {</span>
-<span class="fc" id="L111">            throw new IllegalArgumentException(&quot;Line number &quot; + lineNumber + &quot; is greater than the source file &quot; + name + &quot; size&quot;);</span>
+<span class="fc" id="L111">        int index = lineNumber - 1;</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (index &gt;= this.coverage.length) {</span>
+<span class="fc" id="L113">            throw new IllegalArgumentException(&quot;Line number &quot; + lineNumber + &quot; is greater than the source file &quot; + name + &quot; size&quot;);</span>
         }
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L115">    }</span>
 
     public void addCoverage(final int lineNumber, final Integer coverage) {
-<span class="fc" id="L116">        checkLineRange(lineNumber);</span>
-<span class="fc" id="L117">        this.coverage[lineNumber - 1] = coverage;</span>
-<span class="fc" id="L118">    }</span>
+<span class="fc" id="L118">        checkLineRange(lineNumber);</span>
+<span class="fc" id="L119">        this.coverage[lineNumber - 1] = coverage;</span>
+<span class="fc" id="L120">    }</span>
 
     public void addBranchCoverage(final int lineNumber,
                                   final int blockNumber,
                                   final int branchNumber,
                                   final int hits) {
-<span class="fc" id="L124">        addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);</span>
-<span class="fc" id="L125">    }</span>
+<span class="fc" id="L126">        addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);</span>
+<span class="fc" id="L127">    }</span>
 
     private void addBranchCoverage(final boolean merge,
                                    final int lineNumber,
                                    final int blockNumber,
                                    final int branchNumber,
                                    final int hits) {
-<span class="fc" id="L132">        checkLineRange(lineNumber);</span>
-<span class="fc" id="L133">        int hitSum = hits;</span>
-<span class="fc" id="L134">        final ListIterator&lt;Branch&gt; it = this.branches.listIterator();</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        while (it.hasNext()) {</span>
-<span class="fc" id="L136">            final Branch b = it.next();</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            if (b.getLineNumber() == lineNumber &amp;&amp;</span>
-<span class="pc bpc" id="L138" title="1 of 2 branches missed.">                b.getBlockNumber() == blockNumber &amp;&amp;</span>
-<span class="fc bfc" id="L139" title="All 2 branches covered.">                b.getBranchNumber() == branchNumber) {</span>
-<span class="fc" id="L140">                    it.remove();</span>
-<span class="fc bfc" id="L141" title="All 2 branches covered.">                    if (merge) {</span>
-<span class="fc" id="L142">                        hitSum += b.getHits();</span>
+<span class="fc" id="L134">        checkLineRange(lineNumber);</span>
+<span class="fc" id="L135">        int hitSum = hits;</span>
+<span class="fc" id="L136">        final ListIterator&lt;Branch&gt; it = this.branches.listIterator();</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        while (it.hasNext()) {</span>
+<span class="fc" id="L138">            final Branch b = it.next();</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">            if (b.getLineNumber() == lineNumber &amp;&amp;</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">                b.getBlockNumber() == blockNumber &amp;&amp;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">                b.getBranchNumber() == branchNumber) {</span>
+<span class="fc" id="L142">                    it.remove();</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">                    if (merge) {</span>
+<span class="fc" id="L144">                        hitSum += b.getHits();</span>
                     }
                 }
-<span class="fc" id="L145">        }</span>
-<span class="fc" id="L146">        this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hitSum));</span>
-<span class="fc" id="L147">    }</span>
+<span class="fc" id="L147">        }</span>
+<span class="fc" id="L148">        this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hitSum));</span>
+<span class="fc" id="L149">    }</span>
 
     public Source merge(final Source source) {
-<span class="fc" id="L150">        Source copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);</span>
-<span class="fc" id="L151">        System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);</span>
-<span class="fc" id="L152">        copy.branches.addAll(this.branches);</span>
-<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (copy.equals(source)) {</span>
-<span class="fc bfc" id="L154" title="All 2 branches covered.">            for (int i = 0; i &lt; copy.coverage.length; i++) {</span>
-<span class="fc bfc" id="L155" title="All 2 branches covered.">                if (source.coverage[i] != null) {</span>
-<span class="fc bfc" id="L156" title="All 2 branches covered.">                    int base = copy.coverage[i] != null ? copy.coverage[i] : 0;</span>
-<span class="fc" id="L157">                    copy.coverage[i] = base + source.coverage[i];</span>
+<span class="fc" id="L152">        Source copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);</span>
+<span class="fc" id="L153">        System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);</span>
+<span class="fc" id="L154">        copy.branches.addAll(this.branches);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (copy.equals(source)) {</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">            for (int i = 0; i &lt; copy.coverage.length; i++) {</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">                if (source.coverage[i] != null) {</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">                    int base = copy.coverage[i] != null ? copy.coverage[i] : 0;</span>
+<span class="fc" id="L159">                    copy.coverage[i] = base + source.coverage[i];</span>
                 }
             }
-<span class="fc bfc" id="L160" title="All 2 branches covered.">            for (final Branch b : source.branches) {</span>
-<span class="fc" id="L161">                copy.addBranchCoverage(true,</span>
-<span class="fc" id="L162">                        b.getLineNumber(),</span>
-<span class="fc" id="L163">                        b.getBlockNumber(),</span>
-<span class="fc" id="L164">                        b.getBranchNumber(),</span>
-<span class="fc" id="L165">                        b.getHits());</span>
-<span class="fc" id="L166">            }</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            for (final Branch b : source.branches) {</span>
+<span class="fc" id="L163">                copy.addBranchCoverage(true,</span>
+<span class="fc" id="L164">                        b.getLineNumber(),</span>
+<span class="fc" id="L165">                        b.getBlockNumber(),</span>
+<span class="fc" id="L166">                        b.getBranchNumber(),</span>
+<span class="fc" id="L167">                        b.getHits());</span>
+<span class="fc" id="L168">            }</span>
         }
-<span class="fc" id="L168">        return copy;</span>
+<span class="fc" id="L170">        return copy;</span>
     }
 
     @Override
     public boolean equals(final Object obj) {
-<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (!(obj instanceof Source)) {</span>
-<span class="fc" id="L174">            return false;</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (!(obj instanceof Source)) {</span>
+<span class="fc" id="L176">            return false;</span>
         }
-<span class="fc" id="L176">        Source other = (Source) obj;</span>
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        return (Objects.equals(this.name, other.name) &amp;&amp;</span>
-<span class="fc bfc" id="L178" title="All 2 branches covered.">                Objects.equals(this.digest, other.digest) &amp;&amp;</span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                Objects.equals(this.coverage.length, other.coverage.length));</span>
+<span class="fc" id="L178">        Source other = (Source) obj;</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        return (Objects.equals(this.name, other.name) &amp;&amp;</span>
+<span class="pc bpc" id="L180" title="1 of 4 branches missed.">                Objects.equals(this.digest, other.digest) &amp;&amp;</span>
+               this.coverage.length == other.coverage.length);
     }
 
     @Override
     public int hashCode() {
-<span class="fc" id="L184">        return Objects.hash(this.name, this.digest, this.coverage.length);</span>
+<span class="fc" id="L186">        return Objects.hash(this.name, this.digest, this.coverage.length);</span>
     }
-    
+
     private static int getLines(final String source) {
-<span class="fc" id="L188">        int lines = 1;</span>
-<span class="fc" id="L189">        Matcher matcher = NEWLINE.matcher(source);</span>
-<span class="fc bfc" id="L190" title="All 2 branches covered.">        while (matcher.find()) {</span>
-<span class="fc" id="L191">            lines++;</span>
+<span class="fc" id="L190">        int lines = 1;</span>
+<span class="fc" id="L191">        Matcher matcher = NEWLINE.matcher(source);</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        while (matcher.find()) {</span>
+<span class="fc" id="L193">            lines++;</span>
         }
-<span class="fc" id="L193">        return lines;</span>
+<span class="fc" id="L195">        return lines;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

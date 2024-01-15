@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverallsClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.httpclient</a> &gt; <span class="el_source">CoverallsClient.java</span></div><h1>CoverallsClient.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverallsClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.httpclient</a> &gt; <span class="el_source">CoverallsClient.java</span></div><h1>CoverallsClient.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -25,6 +25,15 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.security.Provider;
+import java.security.Security;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -33,92 +42,80 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.security.Provider;
-import java.security.Security;
 
 public class CoverallsClient {
 
     static {
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        for (Provider provider : Security.getProviders()) {</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (provider.getName().startsWith(&quot;SunPKCS11&quot;)) {</span>
-<span class="fc" id="L52">                Security.removeProvider(provider.getName());</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for (Provider provider : Security.getProviders()) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (provider.getName().startsWith(&quot;SunPKCS11&quot;)) {</span>
+<span class="fc" id="L53">                Security.removeProvider(provider.getName());</span>
             }
         }
     }
-    
+
     private static final String FILE_NAME = &quot;coveralls.json&quot;;
-<span class="fc" id="L58">    private static final ContentType MIME_TYPE = ContentType.create(&quot;application/octet-stream&quot;, &quot;utf-8&quot;);</span>
-    
+<span class="fc" id="L59">    private static final ContentType MIME_TYPE = ContentType.create(&quot;application/octet-stream&quot;, &quot;utf-8&quot;);</span>
+
     private final String coverallsUrl;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    
+
     public CoverallsClient(final String coverallsUrl) {
-<span class="fc" id="L65">        this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());</span>
-<span class="fc" id="L66">    }</span>
-    
-<span class="fc" id="L68">    public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {</span>
-<span class="fc" id="L69">        this.coverallsUrl = coverallsUrl;</span>
-<span class="fc" id="L70">        this.httpClient = httpClient;</span>
-<span class="fc" id="L71">        this.objectMapper = objectMapper;</span>
-<span class="fc" id="L72">    }</span>
-    
+<span class="fc" id="L66">        this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());</span>
+<span class="fc" id="L67">    }</span>
+
+<span class="fc" id="L69">    public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {</span>
+<span class="fc" id="L70">        this.coverallsUrl = coverallsUrl;</span>
+<span class="fc" id="L71">        this.httpClient = httpClient;</span>
+<span class="fc" id="L72">        this.objectMapper = objectMapper;</span>
+<span class="fc" id="L73">    }</span>
+
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-<span class="fc" id="L75">        HttpEntity entity = MultipartEntityBuilder.create()</span>
-<span class="fc" id="L76">                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)</span>
-<span class="fc" id="L77">                .addBinaryBody(&quot;json_file&quot;, file, MIME_TYPE, FILE_NAME)</span>
-<span class="fc" id="L78">                .build();</span>
-<span class="fc" id="L79">        HttpPost post = new HttpPost(coverallsUrl);</span>
-<span class="fc" id="L80">        post.setEntity(entity);</span>
-<span class="fc" id="L81">        HttpResponse response = httpClient.execute(post);</span>
-<span class="fc" id="L82">        return parseResponse(response);</span>
+<span class="fc" id="L76">        HttpEntity entity = MultipartEntityBuilder.create()</span>
+<span class="fc" id="L77">                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)</span>
+<span class="fc" id="L78">                .addBinaryBody(&quot;json_file&quot;, file, MIME_TYPE, FILE_NAME)</span>
+<span class="fc" id="L79">                .build();</span>
+<span class="fc" id="L80">        HttpPost post = new HttpPost(coverallsUrl);</span>
+<span class="fc" id="L81">        post.setEntity(entity);</span>
+<span class="fc" id="L82">        HttpResponse response = httpClient.execute(post);</span>
+<span class="fc" id="L83">        return parseResponse(response);</span>
     }
-    
+
     private CoverallsResponse parseResponse(final HttpResponse response) throws ProcessingException, IOException {
-<span class="fc" id="L86">        HttpEntity entity = response.getEntity();</span>
-<span class="fc" id="L87">        ContentType contentType = ContentType.getOrDefault(entity);</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (contentType.getCharset() == null) {</span>
-<span class="fc" id="L89">            throw new ProcessingException(getResponseErrorMessage(response, &quot;Response doesn't contain Content-Type header&quot;));</span>
+<span class="fc" id="L87">        HttpEntity entity = response.getEntity();</span>
+<span class="fc" id="L88">        ContentType contentType = ContentType.getOrDefault(entity);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (contentType.getCharset() == null) {</span>
+<span class="fc" id="L90">            throw new ProcessingException(getResponseErrorMessage(response, &quot;Response doesn't contain Content-Type header&quot;));</span>
         }
-<span class="fc" id="L91">        InputStreamReader reader = null;</span>
-        try {
-<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (response.getStatusLine().getStatusCode() &gt;= HttpStatus.SC_INTERNAL_SERVER_ERROR) {</span>
-<span class="fc" id="L94">                throw new IOException(&quot;Coveralls API internal error&quot;);</span>
+
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (response.getStatusLine().getStatusCode() &gt;= HttpStatus.SC_INTERNAL_SERVER_ERROR) {</span>
+<span class="fc" id="L94">            throw new IOException(getResponseErrorMessage(response, &quot;Coveralls API internal error&quot;));</span>
+        }
+
+<span class="fc" id="L97">        try (BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), contentType.getCharset()))) {</span>
+<span class="fc" id="L98">            CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            if (cr.isError()) {</span>
+<span class="fc" id="L100">                throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));</span>
             }
-<span class="fc" id="L96">            reader = new InputStreamReader(entity.getContent(), contentType.getCharset());</span>
-<span class="fc" id="L97">            CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">            if (cr.isError()) {</span>
-<span class="fc" id="L99">                throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));</span>
-            }
-<span class="fc" id="L101">            return cr;</span>
-<span class="fc" id="L102">        } catch (JsonProcessingException ex) {</span>
-<span class="fc" id="L103">            throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);</span>
-<span class="fc" id="L104">        } catch (IOException ex) {</span>
-<span class="fc" id="L105">            throw new IOException(getResponseErrorMessage(response, ex.getMessage()), ex);</span>
-        } finally {
-<span class="fc" id="L107">            IOUtil.close(reader);</span>
+<span class="fc" id="L102">            return cr;</span>
+<span class="fc" id="L103">        } catch (JsonProcessingException ex) {</span>
+<span class="fc" id="L104">            throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);</span>
         }
     }
-    
+
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
-<span class="fc" id="L112">        int status = response.getStatusLine().getStatusCode();</span>
-<span class="fc" id="L113">        String reason = response.getStatusLine().getReasonPhrase();</span>
-<span class="fc" id="L114">        String errorMessage = &quot;Report submission to Coveralls API failed with HTTP status &quot; + status + &quot;:&quot;;</span>
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (StringUtils.isNotBlank(reason)) {</span>
-<span class="fc" id="L116">            errorMessage += &quot; &quot; + reason;</span>
+<span class="fc" id="L109">        int status = response.getStatusLine().getStatusCode();</span>
+<span class="fc" id="L110">        String reason = response.getStatusLine().getReasonPhrase();</span>
+<span class="fc" id="L111">        String errorMessage = &quot;Report submission to Coveralls API failed with HTTP status &quot; + status + &quot;:&quot;;</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (StringUtils.isNotBlank(reason)) {</span>
+<span class="fc" id="L113">            errorMessage += &quot; &quot; + reason;</span>
         }
-<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (StringUtils.isNotBlank(message)) {</span>
-<span class="fc" id="L119">            errorMessage += &quot; (&quot; + message + &quot;)&quot;;</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (StringUtils.isNotBlank(message)) {</span>
+<span class="fc" id="L116">            errorMessage += &quot; (&quot; + message + &quot;)&quot;;</span>
         }
-<span class="fc" id="L121">        return errorMessage;</span>
+<span class="fc" id="L118">        return errorMessage;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

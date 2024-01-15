@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>General.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">General.java</span></div><h1>General.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>General.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">General.java</span></div><h1>General.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -36,14 +36,14 @@ public class General extends AbstractServiceSetup {
     public static final String CI_BUILD_URL = &quot;CI_BUILD_URL&quot;;
     public static final String CI_BRANCH = &quot;CI_BRANCH&quot;;
     public static final String CI_PULL_REQUEST = &quot;CI_PULL_REQUEST&quot;;
-    
+
     public General(final Map&lt;String, String&gt; env) {
 <span class="fc" id="L41">        super(env);</span>
 <span class="fc" id="L42">    }</span>
 
     @Override
     public boolean isSelected() {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        return (getProperty(CI_NAME) != null);</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        return getProperty(CI_NAME) != null;</span>
     }
 
     @Override
@@ -55,17 +55,17 @@ public class General extends AbstractServiceSetup {
     public String getBuildNumber() {
 <span class="fc" id="L56">        return getProperty(CI_BUILD_NUMBER);</span>
     }
-    
+
     @Override
     public String getBuildUrl() {
 <span class="fc" id="L61">        return getProperty(CI_BUILD_URL);</span>
     }
-    
+
     @Override
     public String getBranch() {
 <span class="fc" id="L66">        return getProperty(CI_BRANCH);</span>
     }
-    
+
     @Override
     public String getPullRequest() {
 <span class="fc" id="L71">        return getProperty(CI_PULL_REQUEST);</span>

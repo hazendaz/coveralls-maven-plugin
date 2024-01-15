@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JaCoCoParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">JaCoCoParser.java</span></div><h1>JaCoCoParser.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JaCoCoParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">JaCoCoParser.java</span></div><h1>JaCoCoParser.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -42,19 +42,19 @@ public class JaCoCoParser extends AbstractXmlEventParser {
     public JaCoCoParser(final File coverageFile, final SourceLoader sourceLoader) {
 <span class="fc" id="L43">        super(coverageFile, sourceLoader);</span>
 <span class="fc" id="L44">    }</span>
-    
+
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
 <span class="fc bfc" id="L48" title="All 2 branches covered.">        if (isStartElement(xml, &quot;package&quot;)) {</span>
 <span class="fc" id="L49">            this.packageName = xml.getAttributeValue(null, &quot;name&quot;);</span>
         } else
-        
+
 <span class="pc bpc" id="L52" title="1 of 4 branches missed.">        if (isStartElement(xml, &quot;sourcefile&quot;) &amp;&amp; packageName != null) {</span>
 <span class="fc" id="L53">            String sourceFile = this.packageName + &quot;/&quot; + xml.getAttributeValue(null, &quot;name&quot;);</span>
 <span class="fc" id="L54">            this.source = loadSource(sourceFile);</span>
 <span class="fc" id="L55">            this.branchId = 0;</span>
 <span class="fc" id="L56">        } else</span>
-        
+
 <span class="pc bpc" id="L58" title="1 of 4 branches missed.">        if (isStartElement(xml, &quot;line&quot;) &amp;&amp; this.source != null) {</span>
 <span class="fc" id="L59">            int ci = Integer.parseInt(xml.getAttributeValue(null, &quot;ci&quot;));</span>
 <span class="fc" id="L60">            int cb = Integer.parseInt(xml.getAttributeValue(null, &quot;cb&quot;));</span>
@@ -73,12 +73,12 @@ public class JaCoCoParser extends AbstractXmlEventParser {
 <span class="fc" id="L73">              this.source.addBranchCoverage(nr, 0, this.branchId++, 0);</span>
             }
 <span class="fc" id="L75">        } else</span>
-        
+
 <span class="pc bpc" id="L77" title="1 of 4 branches missed.">        if (isEndElement(xml, &quot;sourcefile&quot;) &amp;&amp; this.source != null) {</span>
 <span class="fc" id="L78">            callback.onSource(this.source);</span>
 <span class="fc" id="L79">            this.source = null;</span>
         } else
-        
+
 <span class="fc bfc" id="L82" title="All 2 branches covered.">        if (isEndElement(xml, &quot;package&quot;)) {</span>
 <span class="fc" id="L83">            this.packageName = null;</span>
         }

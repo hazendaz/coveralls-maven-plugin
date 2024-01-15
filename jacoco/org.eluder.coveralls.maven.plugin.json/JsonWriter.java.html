@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JsonWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.json</a> &gt; <span class="el_source">JsonWriter.java</span></div><h1>JsonWriter.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JsonWriter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.json</a> &gt; <span class="el_source">JsonWriter.java</span></div><h1>JsonWriter.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -27,7 +27,8 @@ import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
-import org.codehaus.plexus.util.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
@@ -44,107 +45,107 @@ import java.util.Properties;
 public class JsonWriter implements SourceCallback, Closeable {
 
     protected static final String TIMESTAMP_FORMAT = &quot;yyyy-MM-dd HH:mm:ss Z&quot;;
-    
+
     private final Job job;
     private final File coverallsFile;
     private final JsonGenerator generator;
-    
-<span class="fc" id="L52">    public JsonWriter(final Job job, final File coverallsFile) throws IOException {</span>
-<span class="fc" id="L53">        File directory = coverallsFile.getParentFile();</span>
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (!directory.exists()) {</span>
-<span class="fc" id="L55">            directory.mkdirs();</span>
+
+<span class="fc" id="L53">    public JsonWriter(final Job job, final File coverallsFile) throws IOException {</span>
+<span class="fc" id="L54">        File directory = coverallsFile.getParentFile();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (!directory.exists()) {</span>
+<span class="fc" id="L56">            directory.mkdirs();</span>
         }
-<span class="fc" id="L57">        this.job = job;</span>
-<span class="fc" id="L58">        this.coverallsFile = coverallsFile;</span>
-<span class="fc" id="L59">        this.generator = new MappingJsonFactory().createGenerator(coverallsFile, JsonEncoding.UTF8);</span>
-<span class="fc" id="L60">    }</span>
-    
+<span class="fc" id="L58">        this.job = job;</span>
+<span class="fc" id="L59">        this.coverallsFile = coverallsFile;</span>
+<span class="fc" id="L60">        this.generator = new MappingJsonFactory().createGenerator(coverallsFile, JsonEncoding.UTF8);</span>
+<span class="fc" id="L61">    }</span>
+
     public final Job getJob() {
-<span class="fc" id="L63">        return job;</span>
+<span class="fc" id="L64">        return job;</span>
     }
-    
+
     public final File getCoverallsFile() {
-<span class="fc" id="L67">        return coverallsFile;</span>
+<span class="fc" id="L68">        return coverallsFile;</span>
     }
 
     @Override
     public void onBegin() throws ProcessingException, IOException {
         try {
-<span class="fc" id="L73">            generator.writeStartObject();</span>
-<span class="fc" id="L74">            writeOptionalString(&quot;repo_token&quot;, job.getRepoToken());</span>
-<span class="fc" id="L75">            writeOptionalString(&quot;service_name&quot;, job.getServiceName());</span>
-<span class="fc" id="L76">            writeOptionalString(&quot;service_job_id&quot;, job.getServiceJobId());</span>
-<span class="fc" id="L77">            writeOptionalString(&quot;service_number&quot;, job.getServiceBuildNumber());</span>
-<span class="fc" id="L78">            writeOptionalString(&quot;service_build_url&quot;, job.getServiceBuildUrl());</span>
-<span class="fc" id="L79">            writeOptionalString(&quot;service_branch&quot;, job.getBranch());</span>
-<span class="fc" id="L80">            writeOptionalString(&quot;service_pull_request&quot;, job.getPullRequest());</span>
-<span class="fc" id="L81">            writeOptionalBoolean(&quot;parallel&quot;, job.isParallel());</span>
-<span class="fc" id="L82">            writeOptionalTimestamp(&quot;run_at&quot;, job.getTimestamp());</span>
-<span class="fc" id="L83">            writeOptionalEnvironment(&quot;environment&quot;, job.getServiceEnvironment());</span>
-<span class="fc" id="L84">            writeOptionalObject(&quot;git&quot;, job.getGit());</span>
-<span class="fc" id="L85">            generator.writeArrayFieldStart(&quot;source_files&quot;);</span>
-<span class="nc" id="L86">        } catch (JsonProcessingException ex) {</span>
-<span class="nc" id="L87">            throw new ProcessingException(ex);</span>
-<span class="fc" id="L88">        }</span>
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L74">            generator.writeStartObject();</span>
+<span class="fc" id="L75">            writeOptionalString(&quot;repo_token&quot;, job.getRepoToken());</span>
+<span class="fc" id="L76">            writeOptionalString(&quot;service_name&quot;, job.getServiceName());</span>
+<span class="fc" id="L77">            writeOptionalString(&quot;service_job_id&quot;, job.getServiceJobId());</span>
+<span class="fc" id="L78">            writeOptionalString(&quot;service_number&quot;, job.getServiceBuildNumber());</span>
+<span class="fc" id="L79">            writeOptionalString(&quot;service_build_url&quot;, job.getServiceBuildUrl());</span>
+<span class="fc" id="L80">            writeOptionalString(&quot;service_branch&quot;, job.getBranch());</span>
+<span class="fc" id="L81">            writeOptionalString(&quot;service_pull_request&quot;, job.getPullRequest());</span>
+<span class="fc" id="L82">            writeOptionalBoolean(&quot;parallel&quot;, job.isParallel());</span>
+<span class="fc" id="L83">            writeOptionalTimestamp(&quot;run_at&quot;, job.getTimestamp());</span>
+<span class="fc" id="L84">            writeOptionalEnvironment(&quot;environment&quot;, job.getServiceEnvironment());</span>
+<span class="fc" id="L85">            writeOptionalObject(&quot;git&quot;, job.getGit());</span>
+<span class="fc" id="L86">            generator.writeArrayFieldStart(&quot;source_files&quot;);</span>
+<span class="nc" id="L87">        } catch (JsonProcessingException ex) {</span>
+<span class="nc" id="L88">            throw new ProcessingException(ex);</span>
+<span class="fc" id="L89">        }</span>
+<span class="fc" id="L90">    }</span>
 
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
         try {
-<span class="fc" id="L94">            generator.writeObject(source);</span>
-<span class="nc" id="L95">        } catch (JsonProcessingException ex) {</span>
-<span class="nc" id="L96">            throw new ProcessingException(ex);</span>
-<span class="fc" id="L97">        }</span>
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L95">            generator.writeObject(source);</span>
+<span class="nc" id="L96">        } catch (JsonProcessingException ex) {</span>
+<span class="nc" id="L97">            throw new ProcessingException(ex);</span>
+<span class="fc" id="L98">        }</span>
+<span class="fc" id="L99">    }</span>
 
     @Override
     public void onComplete() throws ProcessingException, IOException {
         try {
-<span class="fc" id="L103">            generator.writeEndArray();</span>
-<span class="fc" id="L104">            generator.writeEndObject();</span>
-<span class="nc" id="L105">        } catch (JsonProcessingException ex) {</span>
-<span class="nc" id="L106">            throw new ProcessingException(ex);</span>
-<span class="fc" id="L107">        }</span>
-<span class="fc" id="L108">    }</span>
+<span class="fc" id="L104">            generator.writeEndArray();</span>
+<span class="fc" id="L105">            generator.writeEndObject();</span>
+<span class="nc" id="L106">        } catch (JsonProcessingException ex) {</span>
+<span class="nc" id="L107">            throw new ProcessingException(ex);</span>
+<span class="fc" id="L108">        }</span>
+<span class="fc" id="L109">    }</span>
 
     @Override
     public void close() throws IOException {
-<span class="fc" id="L112">        generator.close();</span>
-<span class="fc" id="L113">    }</span>
-    
-    private void writeOptionalString(final String field, final String value) throws ProcessingException, IOException {
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (StringUtils.isNotBlank(value)) {</span>
-<span class="fc" id="L117">            generator.writeStringField(field, value);</span>
-        }
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L113">        generator.close();</span>
+<span class="fc" id="L114">    }</span>
 
-    private void writeOptionalBoolean(final String field, final boolean value) throws ProcessingException, IOException {
-<span class="pc bpc" id="L122" title="1 of 2 branches missed.">        if (value) {</span>
-<span class="nc" id="L123">            generator.writeBooleanField(field, value);</span>
+    private void writeOptionalString(final String field, final String value) throws IOException {
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (StringUtils.isNotBlank(value)) {</span>
+<span class="fc" id="L118">            generator.writeStringField(field, value);</span>
         }
-<span class="fc" id="L125">    }</span>
-    
-    private void writeOptionalObject(final String field, final Object value) throws ProcessingException, IOException {
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (value != null) {</span>
-<span class="fc" id="L129">            generator.writeObjectField(field, value);</span>
+<span class="fc" id="L120">    }</span>
+
+    private void writeOptionalBoolean(final String field, final boolean value) throws IOException {
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (value) {</span>
+<span class="nc" id="L124">            generator.writeBooleanField(field, value);</span>
         }
-<span class="fc" id="L131">    }</span>
-    
+<span class="fc" id="L126">    }</span>
+
+    private void writeOptionalObject(final String field, final Object value) throws IOException {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (value != null) {</span>
+<span class="fc" id="L130">            generator.writeObjectField(field, value);</span>
+        }
+<span class="fc" id="L132">    }</span>
+
     private void writeOptionalTimestamp(final String field, final Date value) throws ProcessingException, IOException {
-<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (value != null) {</span>
-<span class="fc" id="L135">            SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);</span>
-<span class="fc" id="L136">            writeOptionalString(field, format.format(value));</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (value != null) {</span>
+<span class="fc" id="L136">            SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);</span>
+<span class="fc" id="L137">            writeOptionalString(field, format.format(value));</span>
         }
-<span class="fc" id="L138">    }</span>
-    
+<span class="fc" id="L139">    }</span>
+
     private void writeOptionalEnvironment(final String field, final Properties properties) throws ProcessingException, IOException {
-<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (properties != null) {</span>
-<span class="fc" id="L142">            generator.writeObjectFieldStart(field);</span>
-<span class="fc bfc" id="L143" title="All 2 branches covered.">            for (Entry&lt;Object, Object&gt; property : properties.entrySet()) {</span>
-<span class="fc" id="L144">                writeOptionalString(property.getKey().toString(), property.getValue().toString());</span>
-<span class="fc" id="L145">            }</span>
-<span class="fc" id="L146">            generator.writeEndObject();</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (properties != null) {</span>
+<span class="fc" id="L143">            generator.writeObjectFieldStart(field);</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">            for (Entry&lt;Object, Object&gt; property : properties.entrySet()) {</span>
+<span class="fc" id="L145">                writeOptionalString(property.getKey().toString(), property.getValue().toString());</span>
+<span class="fc" id="L146">            }</span>
+<span class="fc" id="L147">            generator.writeEndObject();</span>
         }
-<span class="fc" id="L148">    }</span>
+<span class="fc" id="L149">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

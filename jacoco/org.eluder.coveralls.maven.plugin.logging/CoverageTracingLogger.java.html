@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverageTracingLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.logging</a> &gt; <span class="el_source">CoverageTracingLogger.java</span></div><h1>CoverageTracingLogger.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverageTracingLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.logging</a> &gt; <span class="el_source">CoverageTracingLogger.java</span></div><h1>CoverageTracingLogger.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -40,31 +40,31 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
 <span class="fc" id="L40">    private long covered = 0;</span>
 <span class="fc" id="L41">    private long branches = 0;</span>
 <span class="fc" id="L42">    private long coveredBranches = 0;</span>
-    
+
     public CoverageTracingLogger(final SourceCallback chained) {
 <span class="fc" id="L45">        super(chained);</span>
 <span class="fc" id="L46">    }</span>
-    
+
     public long getFiles() {
 <span class="fc" id="L49">        return files;</span>
     }
-    
+
     public final long getLines() {
 <span class="fc" id="L53">        return lines;</span>
     }
-    
+
     public final long getRelevant() {
 <span class="fc" id="L57">        return relevant;</span>
     }
-    
+
     public final long getCovered() {
 <span class="fc" id="L61">        return covered;</span>
     }
-    
+
     public final long getMissed() {
 <span class="fc" id="L65">        return relevant - covered;</span>
     }
-    
+
     public final long getBranches() {
 <span class="fc" id="L69">        return branches;</span>
     }

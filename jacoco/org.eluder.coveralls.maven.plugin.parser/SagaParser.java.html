@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SagaParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">SagaParser.java</span></div><h1>SagaParser.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SagaParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">SagaParser.java</span></div><h1>SagaParser.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -32,23 +32,20 @@ import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
-/**
- * @author Jakub Bednář (25/12/2013 10:07)
- */
 public class SagaParser extends CoberturaParser {
 
     public SagaParser(final File coverageFile, final SourceLoader sourceLoader) {
-<span class="fc" id="L41">        super(coverageFile, sourceLoader);</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L38">        super(coverageFile, sourceLoader);</span>
+<span class="fc" id="L39">    }</span>
 
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (isStartElement(xml, &quot;class&quot;)) {</span>
-<span class="fc" id="L47">            String name = xml.getAttributeValue(null, &quot;name&quot;);</span>
-<span class="fc" id="L48">            source = loadSource(name);</span>
-<span class="fc" id="L49">        } else {</span>
-<span class="fc" id="L50">            super.onEvent(xml, callback);</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (isStartElement(xml, &quot;class&quot;)) {</span>
+<span class="fc" id="L44">            String name = xml.getAttributeValue(null, &quot;name&quot;);</span>
+<span class="fc" id="L45">            source = loadSource(name);</span>
+<span class="fc" id="L46">        } else {</span>
+<span class="fc" id="L47">            super.onEvent(xml, callback);</span>
         }
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L49">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

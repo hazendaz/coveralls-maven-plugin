@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">GitRepository.java</span></div><h1>GitRepository.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">GitRepository.java</span></div><h1>GitRepository.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -37,13 +37,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GitRepository {
-    
+
     private final File sourceDirectory;
-    
+
 <span class="fc" id="L43">    public GitRepository(final File sourceDirectory) {</span>
 <span class="fc" id="L44">        this.sourceDirectory = sourceDirectory;</span>
 <span class="fc" id="L45">    }</span>
-    
+
     public Git load() throws IOException {
 <span class="fc" id="L48">        try (Repository repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {</span>
 <span class="fc" id="L49">            Git.Head head = getHead(repository);</span>
@@ -66,11 +66,11 @@ public class GitRepository {
         );
 <span class="fc" id="L67">        return head;</span>
     }
-    
+
     private String getBranch(final Repository repository) throws IOException {
 <span class="fc" id="L71">        return repository.getBranch();</span>
     }
-    
+
     private List&lt;Git.Remote&gt; getRemotes(final Repository repository) {
 <span class="fc" id="L75">        Config config = repository.getConfig();</span>
 <span class="fc" id="L76">        List&lt;Git.Remote&gt; remotes = new ArrayList&lt;&gt;();</span>

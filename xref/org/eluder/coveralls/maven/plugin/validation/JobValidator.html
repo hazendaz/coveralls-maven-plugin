@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
 <head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <title>JobValidator xref</title>
 <link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
@@ -31,7 +31,7 @@
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">package</strong> org.eluder.coveralls.maven.plugin.validation;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.codehaus.plexus.util.StringUtils;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.commons.lang3.StringUtils;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.eluder.coveralls.maven.plugin.domain.Job;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
@@ -48,14 +48,14 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>          }
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>          <strong class="jxr_keyword">this</strong>.job = job;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>      }
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>      
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>      <strong class="jxr_keyword">public</strong> <a name="ValidationErrors" href="../../../../../../org/eluder/coveralls/maven/plugin/validation/ValidationErrors.html#ValidationErrors">ValidationErrors</a> validate() {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>          <a name="ValidationErrors" href="../../../../../../org/eluder/coveralls/maven/plugin/validation/ValidationErrors.html#ValidationErrors">ValidationErrors</a> errors = <strong class="jxr_keyword">new</strong> <a name="ValidationErrors" href="../../../../../../org/eluder/coveralls/maven/plugin/validation/ValidationErrors.html#ValidationErrors">ValidationErrors</a>();
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>          errors.addAll(repoTokenOrTravis());
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>          errors.addAll(git());
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>          <strong class="jxr_keyword">return</strong> errors;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>      }
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>      
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>      <strong class="jxr_keyword">private</strong> List&lt;ValidationError&gt; repoTokenOrTravis() {
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>          <strong class="jxr_keyword">if</strong> (hasValue(job.getRepoToken())) {
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>              <strong class="jxr_keyword">return</strong> Collections.emptyList();
@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>          String message = <span class="jxr_string">"Either repository token or service with job id must be defined"</span>;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>          <strong class="jxr_keyword">return</strong> Collections.singletonList(<strong class="jxr_keyword">new</strong> <a name="ValidationError" href="../../../../../../org/eluder/coveralls/maven/plugin/validation/ValidationError.html#ValidationError">ValidationError</a>(level, message));
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>      }
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>      
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>      <strong class="jxr_keyword">private</strong> List&lt;ValidationError&gt; git() {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>          <strong class="jxr_keyword">if</strong> (job.getGit() == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>              <strong class="jxr_keyword">return</strong> Collections.emptyList();
@@ -77,13 +77,13 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>          }
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>          <strong class="jxr_keyword">return</strong> Collections.singletonList(<strong class="jxr_keyword">new</strong> <a name="ValidationError" href="../../../../../../org/eluder/coveralls/maven/plugin/validation/ValidationError.html#ValidationError">ValidationError</a>(Level.ERROR, <span class="jxr_string">"Commit id for HEAD must be defined"</span>));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>      }
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>      
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> hasValue(<strong class="jxr_keyword">final</strong> String value) {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>          <strong class="jxr_keyword">return</strong> StringUtils.isNotBlank(value);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>      }
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
 </pre>
 <hr/>
-<div id="footer">Copyright &#169; 2013&#x2013;2023 <a href="https://github.com/hazendaz/">hazendaz</a>. All rights reserved.</div>
+<div id="footer">Copyright &#169; 2013&#x2013;2024 <a href="https://github.com/hazendaz/">hazendaz</a>. All rights reserved.</div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Circle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">Circle.java</span></div><h1>Circle.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Circle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">Circle.java</span></div><h1>Circle.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -38,31 +38,31 @@ public class Circle extends AbstractServiceSetup {
     public static final String CIRCLE_BUILD_NUMBER  = &quot;CIRCLE_BUILD_NUM&quot;;
     public static final String CIRCLE_BRANCH = &quot;CIRCLE_BRANCH&quot;;
     public static final String CIRCLE_COMMIT = &quot;CIRCLE_SHA1&quot;;
-    
+
     public Circle(final Map&lt;String, String&gt; env) {
 <span class="fc" id="L43">        super(env);</span>
 <span class="fc" id="L44">    }</span>
 
     @Override
     public boolean isSelected() {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        return (getProperty(CIRCLE) != null);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        return getProperty(CIRCLE) != null;</span>
     }
-    
+
     @Override
     public String getName() {
 <span class="fc" id="L53">        return CIRCLE_NAME;</span>
     }
-    
+
     @Override
     public String getBuildNumber() {
 <span class="fc" id="L58">        return getProperty(CIRCLE_BUILD_NUMBER);</span>
     }
-    
+
     @Override
     public String getBranch() {
 <span class="fc" id="L63">        return getProperty(CIRCLE_BRANCH);</span>
     }
-    
+
     @Override
     public Properties getEnvironment() {
 <span class="fc" id="L68">        Properties environment = new Properties();</span>

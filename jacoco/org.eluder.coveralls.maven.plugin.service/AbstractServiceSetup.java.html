@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractServiceSetup.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">AbstractServiceSetup.java</span></div><h1>AbstractServiceSetup.java</h1><pre class="source lang-java linenums">/*
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractServiceSetup.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">AbstractServiceSetup.java</span></div><h1>AbstractServiceSetup.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
  * Copyright (c) 2013 - 2023, Tapio Rautonen
@@ -26,7 +26,7 @@ package org.eluder.coveralls.maven.plugin.service;
 import java.util.Map;
 import java.util.Properties;
 
-import org.codehaus.plexus.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Convenient base class for service setups.
@@ -34,8 +34,8 @@ import org.codehaus.plexus.util.StringUtils;
 public abstract class AbstractServiceSetup implements ServiceSetup {
 
     private final Map&lt;String, String&gt; env;
-    
-<span class="fc" id="L38">    public AbstractServiceSetup(final Map&lt;String, String&gt; env) {</span>
+
+<span class="fc" id="L38">    protected AbstractServiceSetup(final Map&lt;String, String&gt; env) {</span>
 <span class="fc" id="L39">        this.env = env;</span>
 <span class="fc" id="L40">    }</span>
 
@@ -68,11 +68,11 @@ public abstract class AbstractServiceSetup implements ServiceSetup {
     public Properties getEnvironment() {
 <span class="fc" id="L69">        return null;</span>
     }
-    
+
     protected final String getProperty(final String name) {
 <span class="fc" id="L73">        return env.get(name);</span>
     }
-    
+
     protected final void addProperty(final Properties properties, final String name, final String value) {
 <span class="fc bfc" id="L77" title="All 2 branches covered.">        if (StringUtils.isBlank(name)) {</span>
 <span class="fc" id="L78">            throw new IllegalArgumentException(&quot;name must be defined&quot;);</span>
