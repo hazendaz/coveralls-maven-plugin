@@ -46,7 +46,7 @@
     <maven.cobertura.version>2.7</maven.cobertura.version>
     <maven.jasmine.version>2.2</maven.jasmine.version>
     <maven.saga.version>1.5.5</maven.saga.version>
-    <maven.clover.version>4.5.1</maven.clover.version>
+    <maven.clover.version>4.5.2</maven.clover.version>
 
     <!-- Skip Javadocs for samples -->
     <maven.javadoc.skip>true</maven.javadoc.skip>
