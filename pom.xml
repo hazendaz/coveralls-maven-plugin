@@ -98,7 +98,7 @@
     <!-- Artifacts -->
     <byte-buddy.version>1.14.12</byte-buddy.version>
     <httpclient.version>4.5.14</httpclient.version>
-    <jackson.version>2.16.1</jackson.version>
+    <jackson.version>2.16.2</jackson.version>
     <jgit.version>5.13.3.202401111512-r</jgit.version>
     <junit.version>5.10.2</junit.version>
     <maven.version>3.9.6</maven.version>
