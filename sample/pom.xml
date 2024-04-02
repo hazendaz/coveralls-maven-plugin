@@ -42,7 +42,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <maven.jacoco.version>0.8.11</maven.jacoco.version>
+    <maven.jacoco.version>0.8.12</maven.jacoco.version>
     <maven.cobertura.version>2.7</maven.cobertura.version>
     <maven.jasmine.version>2.2</maven.jasmine.version>
     <maven.saga.version>1.5.5</maven.saga.version>
