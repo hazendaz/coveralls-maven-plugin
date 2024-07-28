@@ -86,6 +86,10 @@
   </distributionManagement>
 
   <properties>
+    <!-- Set Java Runtimes -->
+    <java.version>8</java.version>
+    <java.release.version>8</java.release.version>
+
     <!-- Checkstyle -->
     <checkstyle.config>checkstyle-4space.xml</checkstyle.config>
 
