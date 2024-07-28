@@ -130,14 +130,14 @@ public class JsonWriter implements SourceCallback, Closeable {
         }
     }
 
-    private void writeOptionalTimestamp(final String field, final Long value) throws ProcessingException, IOException {
+    private void writeOptionalTimestamp(final String field, final Long value) throws IOException {
         if (value != null) {
             SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
             writeOptionalString(field, format.format(value));
         }
     }
 
-    private void writeOptionalEnvironment(final String field, final Properties properties) throws ProcessingException, IOException {
+    private void writeOptionalEnvironment(final String field, final Properties properties) throws IOException {
         if (properties != null) {
             generator.writeObjectFieldStart(field);
             for (Entry<Object, Object> property : properties.entrySet()) {
