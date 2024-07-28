@@ -115,7 +115,7 @@ class JsonWriterTest {
     }
 
     @Test
-    void testOnSource() throws Exception {
+    void testOnSource() throws IOException, ProcessingException {
         try (JsonWriter writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onSource(source());
