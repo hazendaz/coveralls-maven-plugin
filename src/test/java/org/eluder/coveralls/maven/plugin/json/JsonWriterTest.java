@@ -88,7 +88,6 @@ class JsonWriterTest {
     void testGetCoverallsFile() throws IOException {
         Job job = job();
         assertSame(file, new JsonWriter(job, file).getCoverallsFile());
-
     }
 
     @SuppressWarnings("rawtypes")
