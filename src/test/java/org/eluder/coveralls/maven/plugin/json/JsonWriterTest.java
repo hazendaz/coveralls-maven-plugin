@@ -33,13 +33,13 @@ import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.CleanupMode;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -50,37 +50,37 @@ import java.util.Map;
 import java.util.Properties;
 
 
-public class JsonWriterTest {
+class JsonWriterTest {
 
     private static final long TEST_TIME = 1357009200000l;
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    @TempDir(cleanup = CleanupMode.NEVER)
+    public Path folder;
 
     private File file;
 
-    @Before
-    public void init() throws IOException {
-        file = folder.newFile();
+    @BeforeEach
+    public void init() {
+        file = folder.resolve("file").toFile();
     }
 
     @Test
-    public void testSubDirectoryCreation() throws Exception {
-        File f = new File(new File(folder.getRoot(), "sub1"), "sub2");
+    void testSubDirectoryCreation() throws Exception {
+        File f = new File(new File(folder.toFile(), "sub1"), "sub2");
         Job job = job();
         assertTrue(new JsonWriter(job, f).getCoverallsFile().getParentFile().isDirectory());
     }
 
     @Test
     @SuppressWarnings("resource")
-    public void testGetJob() throws Exception {
+    void testGetJob() throws Exception {
         Job job = job();
         assertSame(job, new JsonWriter(job, file).getJob());
     }
 
     @Test
     @SuppressWarnings("resource")
-    public void testGetCoverallsFile() throws Exception {
+    void testGetCoverallsFile() throws Exception {
         Job job = job();
         assertSame(file, new JsonWriter(job, file).getCoverallsFile());
 
@@ -88,7 +88,7 @@ public class JsonWriterTest {
 
     @SuppressWarnings("rawtypes")
     @Test
-    public void testWriteStartAndEnd() throws Exception {
+    void testWriteStartAndEnd() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
         try {
             writer.onBegin();
@@ -112,7 +112,7 @@ public class JsonWriterTest {
     }
 
     @Test
-    public void testOnSource() throws Exception {
+    void testOnSource() throws Exception {
         JsonWriter writer = new JsonWriter(job(), file);
         try {
             writer.onBegin();
