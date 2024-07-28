@@ -32,9 +32,9 @@ public final class UrlUtils {
 
     public static URL create(final String url) {
         try {
-            return new URL(url);
-        } catch (MalformedURLException ex) {
-            throw new IllegalArgumentException(ex);
+            return new URI(url).toURL();
+        } catch (MalformedURLException | URISyntaxException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
