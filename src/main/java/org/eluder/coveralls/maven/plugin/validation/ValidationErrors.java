@@ -31,6 +31,8 @@ import java.util.List;
 
 public class ValidationErrors extends ArrayList<ValidationError> {
 
+    private static final long serialVersionUID = 1L;
+
     public void throwOrInform(final Log log) {
         List<ValidationError> errors = filter(Level.ERROR);
         if (!errors.isEmpty()) {

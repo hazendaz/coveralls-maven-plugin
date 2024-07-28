@@ -25,6 +25,8 @@ package org.eluder.coveralls.maven.plugin.validation;
 
 public class ValidationException extends IllegalArgumentException {
 
+    private static final long serialVersionUID = 1L;
+
     public ValidationException() {
         super();
     }
