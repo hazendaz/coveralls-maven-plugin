@@ -53,7 +53,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-
 class JsonWriterTest {
 
     private static final long TEST_TIME = 1357009200000l;

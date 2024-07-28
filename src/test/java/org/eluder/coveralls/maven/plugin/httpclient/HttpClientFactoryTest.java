@@ -25,6 +25,8 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
+import java.io.IOException;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
@@ -37,7 +39,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
-public class HttpClientFactoryTest {
+class HttpClientFactoryTest {
 
     private static final int PROXY_PORT = 9797;
     private static final int TARGET_PORT = 9696;
@@ -55,10 +57,8 @@ public class HttpClientFactoryTest {
             .configureStaticDsl(true)
             .build();
 
-
-
     @Test
-    void testSimpleRequest() throws Exception {
+    void testSimpleRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         HttpClient client = new HttpClientFactory(TARGET_URL).create();
@@ -68,7 +68,7 @@ public class HttpClientFactoryTest {
     }
 
     @Test
-    void testUnAuthorizedProxyRequest() throws Exception {
+    void testUnAuthorizedProxyRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
@@ -85,7 +85,7 @@ public class HttpClientFactoryTest {
     }
 
     @Test
-    void testAuthorixedProxyRequest() throws Exception {
+    void testAuthorixedProxyRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).withHeader("Proxy-Authorization", matching("Basic Zm9vOmJhcg=="))
@@ -109,7 +109,7 @@ public class HttpClientFactoryTest {
     }
 
     @Test
-    void testNonProxiedHostRequest() throws Exception {
+    void testNonProxiedHostRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
