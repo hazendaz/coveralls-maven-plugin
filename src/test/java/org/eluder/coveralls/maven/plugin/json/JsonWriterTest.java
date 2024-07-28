@@ -140,7 +140,7 @@ class JsonWriterTest {
             .withServiceEnvironment(environment)
             .withBranch("master")
             .withPullRequest("pull10")
-            .withTimestamp(new Date(TEST_TIME))
+            .withTimestamp(TEST_TIME)
             .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
 
