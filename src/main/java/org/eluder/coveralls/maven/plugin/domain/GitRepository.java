@@ -53,18 +53,14 @@ public class GitRepository {
         }
     }
 
+    // Resource is closed in load()
+    @SuppressWarnings("resource")
     private Git.Head getHead(final Repository repository) throws IOException {
         ObjectId revision = repository.resolve(Constants.HEAD);
         RevCommit commit = new RevWalk(repository).parseCommit(revision);
-        Git.Head head = new Git.Head(
-                revision.getName(),
-                commit.getAuthorIdent().getName(),
-                commit.getAuthorIdent().getEmailAddress(),
-                commit.getCommitterIdent().getName(),
-                commit.getCommitterIdent().getEmailAddress(),
-                commit.getFullMessage()
-        );
-        return head;
+        return new Git.Head(revision.getName(), commit.getAuthorIdent().getName(),
+                commit.getAuthorIdent().getEmailAddress(), commit.getCommitterIdent().getName(),
+                commit.getCommitterIdent().getEmailAddress(), commit.getFullMessage());
     }
 
     private String getBranch(final Repository repository) throws IOException {
