@@ -27,8 +27,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
+
+import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
@@ -39,6 +42,7 @@ import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -65,22 +69,24 @@ class JsonWriterTest {
     }
 
     @Test
-    void testSubDirectoryCreation() throws Exception {
+    void testSubDirectoryCreation() throws IOException {
         File f = new File(new File(folder.toFile(), "sub1"), "sub2");
         Job job = job();
-        assertTrue(new JsonWriter(job, f).getCoverallsFile().getParentFile().isDirectory());
+        try (JsonWriter writer = new JsonWriter(job, f)) {
+            assertTrue(writer.getCoverallsFile().getParentFile().isDirectory());
+        }
     }
 
     @Test
     @SuppressWarnings("resource")
-    void testGetJob() throws Exception {
+    void testGetJob() throws IOException {
         Job job = job();
         assertSame(job, new JsonWriter(job, file).getJob());
     }
 
     @Test
     @SuppressWarnings("resource")
-    void testGetCoverallsFile() throws Exception {
+    void testGetCoverallsFile() throws IOException {
         Job job = job();
         assertSame(file, new JsonWriter(job, file).getCoverallsFile());
 
@@ -88,13 +94,10 @@ class JsonWriterTest {
 
     @SuppressWarnings("rawtypes")
     @Test
-    void testWriteStartAndEnd() throws Exception {
-        JsonWriter writer = new JsonWriter(job(), file);
-        try {
+    void testWriteStartAndEnd() throws IOException, ProcessingException {
+        try (JsonWriter writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onComplete();
-        } finally {
-            writer.close();
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
@@ -113,13 +116,10 @@ class JsonWriterTest {
 
     @Test
     void testOnSource() throws Exception {
-        JsonWriter writer = new JsonWriter(job(), file);
-        try {
+        try (JsonWriter writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onSource(source());
             writer.onComplete();
-        } finally {
-            writer.close();
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
@@ -150,7 +150,7 @@ class JsonWriterTest {
         return new Source("Foo.java", "public class Foo { }", "6E0F89B516198DC6AB743EA5FBFB3108");
     }
 
-    private Map<String, Object> stringToJsonMap(final String content) throws Exception {
+    private Map<String, Object> stringToJsonMap(final String content) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         MapType type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
         return mapper.readValue(content, type);
