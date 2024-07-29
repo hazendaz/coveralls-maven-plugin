@@ -45,7 +45,7 @@ public class TestIoUtil {
         }
     }
 
-    public static String readFileContent(final File file) throws FileNotFoundException, IOException {
+    public static String readFileContent(final File file) throws IOException {
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             return IOUtils.toString(reader);
         }
