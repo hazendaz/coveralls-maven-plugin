@@ -32,14 +32,14 @@ import org.junit.jupiter.api.Test;
 class ValidationErrorTest {
 
     @Test
-    void testMissingLevel() {
+    void missingLevel() {
         assertThrows(IllegalArgumentException.class, () -> {
             new ValidationError(null, "message");
         });
     }
 
     @Test
-    void testMissingMessage() {
+    void missingMessage() {
         assertThrows(IllegalArgumentException.class, () -> {
             new ValidationError(Level.ERROR, null);
         });

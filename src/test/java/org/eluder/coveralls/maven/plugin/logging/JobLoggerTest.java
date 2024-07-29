@@ -56,7 +56,7 @@ class JobLoggerTest {
     private ObjectMapper jsonMapperMock;
 
     @Test
-    void testMissingJob() {
+    void missingJob() {
         assertThrows(IllegalArgumentException.class, () -> {
             new JobLogger(null);
         });
@@ -68,7 +68,7 @@ class JobLoggerTest {
     }
 
     @Test
-    void testLogJobWithId() {
+    void logJobWithId() {
         Git git = new Git(null, new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceJobId()).thenReturn("666");
@@ -86,7 +86,7 @@ class JobLoggerTest {
     }
 
     @Test
-    void testLogWithBuildNumberAndUrl() {
+    void logWithBuildNumberAndUrl() {
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceBuildNumber()).thenReturn("10");
         when(jobMock.getServiceBuildUrl()).thenReturn("http://ci.com/build/10");
@@ -99,7 +99,7 @@ class JobLoggerTest {
     }
 
     @Test
-    void testLogDryRun() {
+    void logDryRun() {
         when(jobMock.isDryRun()).thenReturn(true);
 
         new JobLogger(jobMock).log(logMock);
@@ -110,7 +110,7 @@ class JobLoggerTest {
     }
 
     @Test
-    void testLogParallel() {
+    void logParallel() {
         when(jobMock.isParallel()).thenReturn(true);
 
         new JobLogger(jobMock).log(logMock);
@@ -122,7 +122,7 @@ class JobLoggerTest {
     }
 
     @Test
-    void testLogJobWithDebug() throws JsonProcessingException {
+    void logJobWithDebug() throws JsonProcessingException {
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jsonMapperMock.writeValueAsString(same(jobMock))).thenReturn("{\"serviceName\":\"service\"}");
@@ -136,7 +136,7 @@ class JobLoggerTest {
     }
 
     @Test
-    void testLogJobWithErrorInDebug() throws JsonProcessingException {
+    void logJobWithErrorInDebug() throws JsonProcessingException {
         when(logMock.isDebugEnabled()).thenReturn(true);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jsonMapperMock.writeValueAsString(same(jobMock))).thenThrow(JsonProcessingException.class);

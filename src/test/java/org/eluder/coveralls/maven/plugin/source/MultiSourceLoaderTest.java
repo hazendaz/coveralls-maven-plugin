@@ -49,21 +49,21 @@ class MultiSourceLoaderTest {
     private Source s2 = new Source("source", "{ 2 }", "849409F24F4BCAAC904F3B142447D65D");
 
     @Test
-    void testMissingSource() {
+    void missingSource() {
         assertThrows(IOException.class, () -> {
             creaMultiSourceLoader().load("source");
         });
     }
 
     @Test
-    void testPrimarySource() throws IOException {
+    void primarySource() throws IOException {
         when(sl1.load("source")).thenReturn(s1);
         Source source = creaMultiSourceLoader().load("source");
         assertSame(s1, source);
     }
 
     @Test
-    void testSecondarySource() throws IOException {
+    void secondarySource() throws IOException {
         when(sl2.load("source")).thenReturn(s2);
         Source source = creaMultiSourceLoader().load("source");
         assertSame(s2, source);

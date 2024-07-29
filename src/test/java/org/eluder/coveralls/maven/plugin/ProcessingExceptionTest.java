@@ -35,28 +35,28 @@ class ProcessingExceptionTest {
     private static final RuntimeException CAUSE = new RuntimeException();
 
     @Test
-    void testException() {
+    void exception() {
         ProcessingException exception = new ProcessingException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    void testExceptionWithMessage() {
+    void exceptionWithMessage() {
         ProcessingException exception = new ProcessingException(MESSAGE);
         assertEquals(MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    void testExceptionWithCause() {
+    void exceptionWithCause() {
         ProcessingException exception = new ProcessingException(CAUSE);
         assertEquals(CAUSE.toString(), exception.getMessage());
         assertSame(CAUSE, exception.getCause());
     }
 
     @Test
-    void testExceptionWithMessageAndCause() {
+    void exceptionWithMessageAndCause() {
         ProcessingException exception = new ProcessingException(MESSAGE, CAUSE);
         assertEquals(MESSAGE, exception.getMessage());
         assertSame(CAUSE, exception.getCause());

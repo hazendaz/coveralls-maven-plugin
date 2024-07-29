@@ -185,7 +185,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testCreateCoverageParsersWithoutCoverageReports() {
+    void createCoverageParsersWithoutCoverageReports() {
         mojo = new CoverallsReportMojo();
         mojo.settings = settingsMock;
         mojo.project = projectMock;
@@ -211,7 +211,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testDefaultBehavior() throws IOException, MojoExecutionException, MojoFailureException {
+    void defaultBehavior() throws IOException, MojoExecutionException, MojoFailureException {
         mojo = new CoverallsReportMojo() {
             @Override
             protected SourceLoader createSourceLoader(final Job job) {
@@ -236,7 +236,7 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testSuccessfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void successfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         String json = TestIoUtil.readFileContent(coverallsFile);
@@ -251,41 +251,41 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testFailWithProcessingException() throws ProcessingException, IOException, MojoExecutionException {
+    void failWithProcessingException() throws ProcessingException, IOException, MojoExecutionException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             mojo.execute();
             fail("Should have failed with MojoFailureException");
         } catch (MojoFailureException ex) {
-            assertEquals(ex.getCause().getClass(), ProcessingException.class);
+            assertEquals(ProcessingException.class, ex.getCause().getClass());
         }
     }
 
     @Test
-    void testProcessingExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException {
+    void processingExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             mojo.execute();
             fail("Should have failed with MojoFailureException");
         } catch (MojoFailureException ex) {
-            assertEquals(ex.getCause().getClass(), ProcessingException.class);
+            assertEquals(ProcessingException.class, ex.getCause().getClass());
         }
     }
 
     @Test
-    void testFailWithIOException() throws ProcessingException, IOException, MojoExecutionException {
+    void failWithIOException() throws ProcessingException, IOException, MojoExecutionException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         try {
             mojo.execute();
             fail("Should have failed with MojoFailureException");
         } catch (MojoFailureException ex) {
-            assertEquals(ex.getCause().getClass(), IOException.class);
+            assertEquals(IOException.class, ex.getCause().getClass());
         }
     }
 
     @Test
-    void testIOExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void iOExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         mojo.execute();
@@ -293,18 +293,18 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void testFailWithNullPointerException() throws ProcessingException, IOException, MojoFailureException {
+    void failWithNullPointerException() throws ProcessingException, IOException, MojoFailureException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new NullPointerException());
         try {
             mojo.execute();
             fail("Should have failed with MojoFailureException");
         } catch (MojoExecutionException ex) {
-            assertEquals(ex.getCause().getClass(), NullPointerException.class);
+            assertEquals(NullPointerException.class, ex.getCause().getClass());
         }
     }
 
     @Test
-    void testSkipExecution() throws MojoExecutionException, MojoFailureException {
+    void skipExecution() throws MojoExecutionException, MojoFailureException {
         mojo.skip = true;
         mojo.execute();
 

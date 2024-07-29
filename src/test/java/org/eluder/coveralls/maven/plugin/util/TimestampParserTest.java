@@ -36,14 +36,14 @@ import org.junit.jupiter.api.Test;
 class TimestampParserTest {
 
     @Test
-    void testInvalidFormat() {
+    void invalidFormat() {
         assertThrows(IllegalArgumentException.class, () -> {
             new TimestampParser("scsscdfsd");
         });
     }
 
     @Test
-    void testParseEpochMillis() throws ProcessingException {
+    void parseEpochMillis() throws ProcessingException {
         String format = TimestampParser.EPOCH_MILLIS;
         long time = System.currentTimeMillis();
         Date parsed = new TimestampParser(format).parse(String.valueOf(time));
@@ -52,7 +52,7 @@ class TimestampParserTest {
     }
 
     @Test
-    void testParseSimpleFormat() throws ProcessingException {
+    void parseSimpleFormat() throws ProcessingException {
         String format = "yyyy-MM-dd";
         Date parsed = new TimestampParser(format).parse("2015-08-20");
         String formatted = new SimpleDateFormat(format).format(parsed);
@@ -61,7 +61,7 @@ class TimestampParserTest {
     }
 
     @Test
-    void testParseDefaultFormat() throws ProcessingException {
+    void parseDefaultFormat() throws ProcessingException {
         String format = TimestampParser.DEFAULT_FORMAT;
         Date parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
         String formatted = new SimpleDateFormat(format).format(parsed);
@@ -70,14 +70,14 @@ class TimestampParserTest {
     }
 
     @Test
-    void testParseNull() throws ProcessingException {
+    void parseNull() throws ProcessingException {
         Date parsed = new TimestampParser(null).parse(null);
 
         assertNull(parsed);
     }
 
     @Test
-    void testParseInvalidTimestamp() {
+    void parseInvalidTimestamp() {
         assertThrows(ProcessingException.class, () -> {
             new TimestampParser(null).parse("2015-08-20");
         });

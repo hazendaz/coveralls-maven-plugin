@@ -79,12 +79,12 @@ class CoverallsClientTest {
     private File file;
 
     @BeforeEach
-    public void init() throws IOException {
+    void init() throws IOException {
         file = Files.createFile(folder.resolve("coverallsClientTest.tmp")).toFile();
     }
 
     @Test
-    void testConstructors() {
+    void constructors() {
         assertNotNull(new CoverallsClient("http://test.com/coveralls"));
         assertNotNull(new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper()));
     }
@@ -101,7 +101,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testFailOnServiceError() throws ClientProtocolException, IOException  {
+    void failOnServiceError() throws ClientProtocolException, IOException  {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 500, "Internal Error");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -112,7 +112,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseInvalidResponse() throws ClientProtocolException, IOException {
+    void parseInvalidResponse() throws ClientProtocolException, IOException {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -125,7 +125,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseErrorousResponse() throws UnsupportedOperationException, Exception {
+    void parseErrorousResponse() throws UnsupportedOperationException, Exception {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 400, "Bad Request");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -138,7 +138,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseFailingEntity() throws ClientProtocolException, IOException {
+    void parseFailingEntity() throws ClientProtocolException, IOException {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
@@ -151,7 +151,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testParseEntityWithoutContentType() throws ClientProtocolException, IOException {
+    void parseEntityWithoutContentType() throws ClientProtocolException, IOException {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 400, "Bad Request");
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);

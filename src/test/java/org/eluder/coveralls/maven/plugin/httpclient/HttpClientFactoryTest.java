@@ -24,6 +24,7 @@
 package org.eluder.coveralls.maven.plugin.httpclient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
@@ -34,7 +35,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 import org.apache.maven.settings.Proxy;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -57,17 +57,17 @@ class HttpClientFactoryTest {
             .build();
 
     @Test
-    void testSimpleRequest() throws IOException {
+    void simpleRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         HttpClient client = new HttpClientFactory(TARGET_URL).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assertions.assertEquals("Hello World!", body);
+        assertEquals("Hello World!", body);
     }
 
     @Test
-    void testUnAuthorizedProxyRequest() throws IOException {
+    void unAuthorizedProxyRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
@@ -80,11 +80,11 @@ class HttpClientFactoryTest {
         HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assertions.assertEquals("Hello Proxy!", body);
+        assertEquals("Hello Proxy!", body);
     }
 
     @Test
-    void testAuthorixedProxyRequest() throws IOException {
+    void authorixedProxyRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).withHeader("Proxy-Authorization", matching("Basic Zm9vOmJhcg=="))
@@ -104,11 +104,11 @@ class HttpClientFactoryTest {
         HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assertions.assertEquals("Hello Proxy!", body);
+        assertEquals("Hello Proxy!", body);
     }
 
     @Test
-    void testNonProxiedHostRequest() throws IOException {
+    void nonProxiedHostRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
@@ -122,6 +122,6 @@ class HttpClientFactoryTest {
         HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
         String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
-        Assertions.assertEquals("Hello World!", body);
+        assertEquals("Hello World!", body);
     }
 }

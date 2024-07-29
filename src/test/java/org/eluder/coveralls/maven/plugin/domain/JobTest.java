@@ -33,10 +33,10 @@ import org.eluder.coveralls.maven.plugin.domain.Git.Head;
 import org.eluder.coveralls.maven.plugin.domain.Git.Remote;
 import org.junit.jupiter.api.Test;
 
-public class JobTest {
+class JobTest {
 
     @Test
-    void testGetBranchWithRemote() {
+    void getBranchWithRemote() {
         List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
         Git git = new Git(new File("."), new Head(null, null, null, null, null, null), "master", remotes);
         Job job = new Job().withBranch("origin/master").withGit(git);

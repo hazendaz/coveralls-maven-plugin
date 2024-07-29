@@ -35,47 +35,47 @@ import org.junit.jupiter.api.Test;
 class JobValidatorTest {
 
     @Test
-    void testMissingJob() {
+    void missingJob() {
         assertThrows(IllegalArgumentException.class, () -> {
             new JobValidator(null);
         });
     }
 
     @Test
-    void testValidateWithoutRepoTokenOrTravis() {
+    void validateWithoutRepoTokenOrTravis() {
         ValidationErrors errors = new JobValidator(new Job()).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
-    void testValidateWithoutRepoTokenOrTravisForDryRun() {
+    void validateWithoutRepoTokenOrTravisForDryRun() {
         ValidationErrors errors = new JobValidator(new Job().withDryRun(true)).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.WARN);
     }
 
     @Test
-    void testValidateWithInvalidTravis() {
+    void validateWithInvalidTravis() {
         ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
-    void testValidateWithRepoToken() {
+    void validateWithRepoToken() {
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
-    void testValidateWithTravis() {
+    void validateWithTravis() {
         ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
-    void testValidateWithoutGitCommitId() {
+    void validateWithoutGitCommitId() {
         Git git = new Git(null, new Head(null, null, null, null, null, null), null, null);
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         Assertions.assertThat(errors).hasSize(1);
@@ -83,14 +83,14 @@ class JobValidatorTest {
     }
 
     @Test
-    void testValidateWithGit() {
+    void validateWithGit() {
         Git git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
-    void testValidateWithParallel() {
+    void validateWithParallel() {
         ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();
         Assertions.assertThat(errors).isEmpty();
     }

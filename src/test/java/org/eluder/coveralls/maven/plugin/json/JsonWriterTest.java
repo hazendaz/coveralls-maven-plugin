@@ -63,12 +63,12 @@ class JsonWriterTest {
     private File file;
 
     @BeforeEach
-    public void init() {
+    void init() {
         file = folder.resolve("file").toFile();
     }
 
     @Test
-    void testSubDirectoryCreation() throws IOException {
+    void subDirectoryCreation() throws IOException {
         File f = new File(new File(folder.toFile(), "sub1"), "sub2");
         Job job = job();
         try (JsonWriter writer = new JsonWriter(job, f)) {
@@ -92,7 +92,7 @@ class JsonWriterTest {
 
     @SuppressWarnings("rawtypes")
     @Test
-    void testWriteStartAndEnd() throws IOException, ProcessingException {
+    void writeStartAndEnd() throws IOException, ProcessingException {
         try (JsonWriter writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onComplete();

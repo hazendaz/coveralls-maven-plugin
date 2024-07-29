@@ -47,12 +47,12 @@ class AppveyorTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new Appveyor(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForAppveyor() {
+    void isSelectedForAppveyor() {
         assertTrue(new Appveyor(env()).isSelected());
     }
 
@@ -77,7 +77,7 @@ class AppveyorTest {
     }
 
     @Test
-    void testPullRequest() {
+    void pullRequest() {
         assertEquals("10", new Appveyor(env()).getPullRequest());
     }
 

@@ -46,12 +46,12 @@ class JenkinsTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new Jenkins(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForJenkins() {
+    void isSelectedForJenkins() {
         assertTrue(new Jenkins(env()).isSelected());
     }
 

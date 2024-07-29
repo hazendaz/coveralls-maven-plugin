@@ -35,28 +35,28 @@ class ValidationExceptionTest {
     private static final RuntimeException CAUSE = new RuntimeException();
 
     @Test
-    void testException() {
+    void exception() {
         ValidationException exception = new ValidationException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    void testExceptionWithMessage() {
+    void exceptionWithMessage() {
         ValidationException exception = new ValidationException(MESSAGE);
         assertEquals(MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
-    void testExceptionWithCause() {
+    void exceptionWithCause() {
         ValidationException exception = new ValidationException(CAUSE);
         assertEquals(CAUSE.toString(), exception.getMessage());
         assertSame(CAUSE, exception.getCause());
     }
 
     @Test
-    void testExceptionWithMessageAndCause() {
+    void exceptionWithMessageAndCause() {
         ValidationException exception = new ValidationException(MESSAGE, CAUSE);
         assertEquals(MESSAGE, exception.getMessage());
         assertSame(CAUSE, exception.getCause());

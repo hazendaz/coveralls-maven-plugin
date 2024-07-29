@@ -45,7 +45,7 @@ class UniqueSourceCallbackTest {
     private SourceCallback sourceCallbackMock;
 
     @Test
-    void testOnSourceWithUniqueFiles() throws NoSuchAlgorithmException, ProcessingException, IOException {
+    void onSourceWithUniqueFiles() throws NoSuchAlgorithmException, ProcessingException, IOException {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Bar.java", "{\n  bar();\n}\n", 2);
 
@@ -60,7 +60,7 @@ class UniqueSourceCallbackTest {
     }
 
     @Test
-    void testOnSourceWithDuplicateSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
+    void onSourceWithDuplicateSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Foo.java", "{\n  void();\n}\n", 2);
 
@@ -75,7 +75,7 @@ class UniqueSourceCallbackTest {
     }
 
     @Test
-    void testOnSourceWithUniqueSources() throws NoSuchAlgorithmException, ProcessingException, IOException  {
+    void onSourceWithUniqueSources() throws NoSuchAlgorithmException, ProcessingException, IOException  {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
 

@@ -23,7 +23,8 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +44,7 @@ class ExistingFilesTest {
 
 
     @Test
-    void testAddAllForNull() {
+    void addAllForNull() {
         ExistingFiles existingFiles = new ExistingFiles();
         assertThrows(NullPointerException.class, () -> {
             existingFiles.addAll(null);
@@ -51,7 +52,7 @@ class ExistingFilesTest {
     }
 
     @Test
-    void testAddForNull() {
+    void addForNull() {
         ExistingFiles existingFiles = new ExistingFiles();
         assertThrows(NullPointerException.class, () -> {
             existingFiles.add(null);
@@ -59,27 +60,27 @@ class ExistingFilesTest {
     }
 
     @Test
-    void testAddForExisting() throws IOException {
+    void addForExisting() throws IOException {
         File f = Files.createFile(folder.resolve("f")).toFile(); 
         Iterator<File> iter = new ExistingFiles().add(f).add(f).iterator();
         assertSize(iter, 1);
     }
 
     @Test
-    void testAddForDirectory() throws IOException {
+    void addForDirectory() throws IOException {
         File d = Files.createDirectory(folder.resolve("d")).toFile(); 
         Iterator<File> iter = new ExistingFiles().add(d).iterator();
         assertSize(iter, 0);
     }
 
     @Test
-    void testCreateForNull() {
+    void createForNull() {
         Iterator<File> iter = ExistingFiles.create(null).iterator();
         assertSize(iter, 0);
     }
 
     @Test
-    void testCreateForMultipleFiles() throws IOException {
+    void createForMultipleFiles() throws IOException {
         File f1 = Files.createFile(folder.resolve("f1")).toFile(); 
         File f2 = Files.createFile(folder.resolve("f2")).toFile(); 
         Iterator<File> iter = ExistingFiles.create(Arrays.asList(f1, f2)).iterator();

@@ -47,7 +47,7 @@ class SourceTest {
     }
 
     @Test
-    void testAddSameBranchReplaceExistingOne() {
+    void addSameBranchReplaceExistingOne() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");
         source.addBranchCoverage(2, 0, 0, 2);
         source.addBranchCoverage(2, 0, 0, 3);
@@ -55,7 +55,7 @@ class SourceTest {
     }
 
     @Test
-    void testAddSameBranchDoNotKeepOrdering() {
+    void addSameBranchDoNotKeepOrdering() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");
         source.addBranchCoverage(2, 0, 0, 0);
         source.addBranchCoverage(2, 0, 1, 0);
@@ -64,7 +64,7 @@ class SourceTest {
     }
 
     @Test
-    void testAddCoverageForSourceOutOfBounds() {
+    void addCoverageForSourceOutOfBounds() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         assertThrows(IllegalArgumentException.class, () -> {
             source.addCoverage(5, 1);
@@ -72,7 +72,7 @@ class SourceTest {
     }
 
     @Test
-    void testAddBranchCoverageForSourceOutOfBounds() {
+    void addBranchCoverageForSourceOutOfBounds() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n", "609BD24390ADB11D11536CA2ADD18BD0");
         assertThrows(IllegalArgumentException.class, () -> {
             source.addBranchCoverage(6, 0, 0, 2);
@@ -81,7 +81,7 @@ class SourceTest {
 
     @Test
     @Disabled("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
-    void testGetNameWithClassifier() {
+    void getNameWithClassifier() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         source.setClassifier("Inner");
         assertEquals("src/main/java/Hello.java", source.getName());
@@ -121,7 +121,7 @@ class SourceTest {
     }
 
     @Test
-    void testMergeDifferent() {
+    void mergeDifferent() {
         Source source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         source1.addCoverage(1, 3);
         Source source2 = new Source("src/main/java/Hello.java", "public class Hello {\n  void();\n}\n", "CBA7831606B51D1499349451B70758E3");
@@ -133,13 +133,13 @@ class SourceTest {
     }
 
     @Test
-    void testEqualsForNull() {
+    void equalsForNull() {
         Source source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         assertNotNull(source);
     }
 
     @Test
-    void testEqualsForDifferentSources() {
+    void equalsForDifferentSources() {
         Source source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n", "E8BD88CF0BDB77A6408234FD91FD22C3");
         Source source2 = new Source("src/main/java/Hello.java", "public class Hello {\n  void();\n}\n", "CBA7831606B51D1499349451B70758E3");
         assertNotEquals(source1, source2);

@@ -23,7 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.lenient;
 
 import java.io.File;
@@ -82,7 +82,7 @@ class SourceLoaderFactoryTest {
     }
 
     @Test
-    void testCreateSourceLoaderWithAdditionalSourceDirectories() throws IOException {
+    void createSourceLoaderWithAdditionalSourceDirectories() throws IOException {
         Path s1 = Files.createDirectory(folder.resolve("s1"));
         Path s2 = Files.createDirectory(folder.resolve("s2"));
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
@@ -92,7 +92,7 @@ class SourceLoaderFactoryTest {
     }
 
     @Test
-    void testCreateSourceLoaderWithScanForSources() {
+    void createSourceLoaderWithScanForSources() {
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withScanForSources( true )
                 .createSourceLoader();
@@ -100,7 +100,7 @@ class SourceLoaderFactoryTest {
     }
 
     @Test
-    void testCreateSourceLoaderInvalidDirectory() throws IOException {
+    void createSourceLoaderInvalidDirectory() throws IOException {
         File file = Files.createDirectory(folder.resolve("aFile")).toFile();
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withSourceDirectories(Arrays.asList(file))

@@ -45,12 +45,12 @@ class GeneralTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new General(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForCi() {
+    void isSelectedForCi() {
         assertTrue(new General(env()).isSelected());
     }
 

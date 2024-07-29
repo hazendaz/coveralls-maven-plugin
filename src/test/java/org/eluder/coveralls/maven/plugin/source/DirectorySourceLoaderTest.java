@@ -44,13 +44,13 @@ class DirectorySourceLoaderTest {
     public Path folder;
 
     @Test
-    void testMissingSourceFileFromDirectory() throws IOException {
+    void missingSourceFileFromDirectory() throws IOException {
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
-    void testInvalidSourceFile() throws IOException {
+    void invalidSourceFile() throws IOException {
         String subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile().getName();
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertThrows(IllegalArgumentException.class, () -> {
@@ -59,7 +59,7 @@ class DirectorySourceLoaderTest {
     }
 
     @Test
-    void testLoadSource() throws IOException {
+    void loadSource() throws IOException {
         File file = Files.createFile(folder.resolve("newFile")).toFile(); 
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");

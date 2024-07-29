@@ -48,7 +48,7 @@ class DryRunLoggerTest {
     private File coverallsFileMock;
 
     @Test
-    void testMissingCoverallsFile() {
+    void missingCoverallsFile() {
         assertThrows(IllegalArgumentException.class, () -> {
             new DryRunLogger(true, null);
         });
@@ -60,14 +60,14 @@ class DryRunLoggerTest {
     }
 
     @Test
-    void testLogDryRunDisabled() {
+    void logDryRunDisabled() {
         new DryRunLogger(false, coverallsFileMock).log(logMock);
 
         verifyNoInteractions(logMock);
     }
 
     @Test
-    void testLogDryRunEnabled() {
+    void logDryRunEnabled() {
         when(coverallsFileMock.length()).thenReturn(1024l);
         when(coverallsFileMock.getAbsolutePath()).thenReturn("/target/coveralls.json");
 

@@ -45,12 +45,12 @@ class CircleTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new Circle(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForCircle() {
+    void isSelectedForCircle() {
         assertTrue(new Circle(env()).isSelected());
     }
 

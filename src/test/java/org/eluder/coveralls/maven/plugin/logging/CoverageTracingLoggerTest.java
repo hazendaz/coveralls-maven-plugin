@@ -52,7 +52,7 @@ class CoverageTracingLoggerTest {
     private SourceCallback sourceCallbackMock;
 
     @Test
-    void testConstructorWithNull() {
+    void constructorWithNull() {
         assertThrows(IllegalArgumentException.class, () -> {
             new CoverageTracingLogger(null);
         });
@@ -64,7 +64,7 @@ class CoverageTracingLoggerTest {
     }
 
     @Test
-    void testLogForSources() throws ProcessingException, IOException {
+    void logForSources() throws ProcessingException, IOException {
         Source source1 = new Source("Source1.java", "public class Source1 {\n  if(true) { }\n}\n", "FE0538639E8CE73733E77659C1043B5C");
         source1.addCoverage(1, 0);
         source1.addCoverage(2, 0);

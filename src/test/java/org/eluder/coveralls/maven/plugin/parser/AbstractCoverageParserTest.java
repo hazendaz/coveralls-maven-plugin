@@ -91,7 +91,7 @@ public abstract class AbstractCoverageParserTest {
     }
 
     @Test
-    public void testParseCoverage() throws ProcessingException, IOException  {
+    public void parseCoverage() throws ProcessingException, IOException  {
         for (String coverageResource : getCoverageResources()) {
             CoverageParser parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
             parser.parse(sourceCallbackMock);

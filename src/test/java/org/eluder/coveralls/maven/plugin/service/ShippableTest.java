@@ -48,12 +48,12 @@ class ShippableTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new Shippable(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForShippable() {
+    void isSelectedForShippable() {
         assertTrue(new Shippable(env()).isSelected());
     }
 
@@ -78,12 +78,12 @@ class ShippableTest {
     }
 
     @Test
-    void testPullRequest() {
+    void pullRequest() {
         assertEquals("10", new Shippable(env()).getPullRequest());
     }
 
     @Test
-    void testPullRequestFalse() {
+    void pullRequestFalse() {
         Map<String, String> env = env();
         env.put(Shippable.SHIPPABLE_PULL_REQUEST, "false");
         assertNull(new Shippable(env).getPullRequest());

@@ -36,26 +36,26 @@ import org.junit.jupiter.api.Test;
 class UrlUtilsTest {
 
     @Test
-    void testCreateInvalidUrl() {
+    void createInvalidUrl() {
         assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.create("sdfds");
         });
     }
 
     @Test
-    void testCreateValidUrl() throws URISyntaxException {
+    void createValidUrl() throws URISyntaxException {
         assertEquals("http://example.org", UrlUtils.create("http://example.org").toURI().toASCIIString());
     }
 
     @Test
-    void testInvalidUrlToUri() {
+    void invalidUrlToUri() {
         assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.toUri(new URL("http://google.com?q=s|r"));
         });
     }
 
     @Test
-    void testValidUrlToUri() throws MalformedURLException, URISyntaxException {
+    void validUrlToUri() throws MalformedURLException, URISyntaxException {
         URI uri = UrlUtils.toUri(new URL("http://google.com"));
         assertEquals(new URI("http://google.com"), uri);
     }

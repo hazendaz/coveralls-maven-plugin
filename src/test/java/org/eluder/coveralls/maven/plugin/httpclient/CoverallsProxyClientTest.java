@@ -31,12 +31,12 @@ import org.junit.jupiter.api.Test;
 class CoverallsProxyClientTest {
 
     @Test
-    void testConstructorWithoutProxy() {
+    void constructorWithoutProxy() {
         assertNotNull(new CoverallsProxyClient("http://test.com/coveralls", null));
     }
 
     @Test
-    void testConstructorWithProxy() {
+    void constructorWithProxy() {
         Proxy proxy = new Proxy();
         proxy.setHost("localhost");
         proxy.setPort(8080);

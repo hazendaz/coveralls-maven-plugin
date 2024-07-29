@@ -36,7 +36,7 @@ import org.junit.jupiter.api.Test;
 class AbstractServiceSetupTest {
 
     @Test
-    void testGetMissingProperty() {
+    void getMissingProperty() {
         AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
         assertNull(serviceSetup.getProperty("property"));
     }
@@ -49,28 +49,28 @@ class AbstractServiceSetupTest {
     }
 
     @Test
-    void testAddPropertyWithoutName() {
+    void addPropertyWithoutName() {
         assertThrows(IllegalArgumentException.class, () -> {
             create(new HashMap<String, String>()).addProperty(new Properties(), null, "value");
         });
     }
 
     @Test
-    void testAddPropertyWithoutValue() {
+    void addPropertyWithoutValue() {
         Properties properties = new Properties();
         create(new HashMap<String, String>()).addProperty(properties, "prop", " ");
         assertNull(properties.getProperty("prop"));
     }
 
     @Test
-    void testAddPropertyWithValue() {
+    void addPropertyWithValue() {
         Properties properties = new Properties();
         create(new HashMap<String, String>()).addProperty(properties, "prop", "value");
         assertEquals("value", properties.getProperty("prop"));
     }
 
     @Test
-    void testGetDefaultValues() {
+    void getDefaultValues() {
         AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
         assertNull(serviceSetup.getName());
         assertNull(serviceSetup.getJobId());

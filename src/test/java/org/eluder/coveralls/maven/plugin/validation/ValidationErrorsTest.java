@@ -42,14 +42,14 @@ class ValidationErrorsTest {
     private Log logMock;
 
     @Test
-    void testThrowOrInformWithError() {
+    void throwOrInformWithError() {
         assertThrows(ValidationException.class, () -> {
             createValidationErrors(new ValidationError(Level.ERROR, "message")).throwOrInform(logMock);
         });
     }
 
     @Test
-    void testThrowOrInformWithWarnings() {
+    void throwOrInformWithWarnings() {
         createValidationErrors(new ValidationError(Level.WARN, "error1"), new ValidationError(Level.WARN, "error2")).throwOrInform(logMock);
         verify(logMock, times(2)).warn(any(CharSequence.class));
     }

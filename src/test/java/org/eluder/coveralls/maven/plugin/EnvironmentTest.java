@@ -75,27 +75,27 @@ class EnvironmentTest {
     }
 
     @Test
-    void testMissingMojo() {
+    void missingMojo() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Environment(null, Arrays.asList(serviceMock));
         });
     }
 
     @Test
-    void testMissingServices() {
+    void missingServices() {
         assertThrows(IllegalArgumentException.class, () -> {
             new Environment(mojo, null);
         });
     }
 
     @Test
-    void testSetupWithoutServices() {
+    void setupWithoutServices() {
         create(Collections.<ServiceSetup>emptyList()).setup();
         assertEquals("service", mojo.serviceName);
     }
 
     @Test
-    void testSetupWithoutSourceEncoding() {
+    void setupWithoutSourceEncoding() {
         mojo.sourceEncoding = null;
         assertThrows(IllegalArgumentException.class, () -> {
             create(Arrays.asList(serviceMock)).setup();
@@ -103,7 +103,7 @@ class EnvironmentTest {
     }
 
     @Test
-    void testSetupWithIncompleteJob() {
+    void setupWithIncompleteJob() {
         when(serviceMock.getJobId()).thenReturn("");
         when(serviceMock.getBuildUrl()).thenReturn("  ");
 
@@ -118,7 +118,7 @@ class EnvironmentTest {
     }
 
     @Test
-    void testSetupWithCompleteJob() {
+    void setupWithCompleteJob() {
         mojo.serviceName = null;
         Properties environment = new Properties();
         environment.setProperty("env", "true");
@@ -141,7 +141,7 @@ class EnvironmentTest {
     }
 
     @Test
-    void testSetupWithoutJobOverride() {
+    void setupWithoutJobOverride() {
         Properties environment = new Properties();
         environment.setProperty("env", "true");
         Properties serviceEnvironment = new Properties();

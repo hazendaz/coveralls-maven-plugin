@@ -44,13 +44,13 @@ class UrlSourceLoaderTest {
     public Path folder;
 
     @Test
-    void testMissingSourceFileFromUrl() throws IOException  {
+    void missingSourceFileFromUrl() throws IOException  {
         UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
-    void testLoadSourceFromUrl() throws IOException {
+    void loadSourceFromUrl() throws IOException {
         Path scripts = Files.createDirectory(folder.resolve("scripts"));
         File file = Files.createFile(scripts.resolve("file.coffee")).toFile();
 

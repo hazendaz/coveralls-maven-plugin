@@ -44,12 +44,12 @@ class WerckerTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new Wercker(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForWercker() {
+    void isSelectedForWercker() {
         assertTrue(new Wercker(env()).isSelected());
     }
 

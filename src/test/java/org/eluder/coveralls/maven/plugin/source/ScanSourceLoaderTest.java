@@ -44,13 +44,13 @@ class ScanSourceLoaderTest {
     public Path folder;
 
     @Test
-    void testMissingSourceFileFromDirectory() throws IOException {
+    void missingSourceFileFromDirectory() throws IOException {
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
-    void testInvalidSourceFile() throws IOException {
+    void invalidSourceFile() throws IOException {
         File subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile(); 
         ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertThrows(IllegalArgumentException.class, () -> {
@@ -59,7 +59,7 @@ class ScanSourceLoaderTest {
     }
 
     @Test
-    void testLoadSource() throws IOException {
+    void loadSource() throws IOException {
         Path level1 = Files.createDirectory(folder.resolve("level1"));
         Path level2 = Files.createDirectory(level1.resolve("level2"));
         Path level3 = Files.createDirectory(level2.resolve("level3"));

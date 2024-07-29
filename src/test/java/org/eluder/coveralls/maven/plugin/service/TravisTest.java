@@ -45,12 +45,12 @@ class TravisTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new Travis(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForTravis() {
+    void isSelectedForTravis() {
         assertTrue(new Travis(env()).isSelected());
     }
 

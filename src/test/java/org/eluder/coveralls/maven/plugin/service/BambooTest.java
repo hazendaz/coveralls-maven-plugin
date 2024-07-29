@@ -43,12 +43,12 @@ class BambooTest {
     }
 
     @Test
-    void testIsSelectedForNothing() {
+    void isSelectedForNothing() {
         assertFalse(new Bamboo(new HashMap<String, String>()).isSelected());
     }
 
     @Test
-    void testIsSelectedForBamboo() {
+    void isSelectedForBamboo() {
         assertTrue(new Bamboo(env()).isSelected());
     }
 
