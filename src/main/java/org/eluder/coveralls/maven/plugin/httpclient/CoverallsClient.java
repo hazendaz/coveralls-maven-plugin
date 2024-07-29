@@ -80,8 +80,9 @@ public class CoverallsClient {
                 .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
         HttpPost post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
-        CloseableHttpResponse response = httpClient.execute(post);
-        return parseResponse(response);
+        try (CloseableHttpResponse response = httpClient.execute(post)) {
+            return parseResponse(response);
+        }
     }
 
     private CoverallsResponse parseResponse(final CloseableHttpResponse response)

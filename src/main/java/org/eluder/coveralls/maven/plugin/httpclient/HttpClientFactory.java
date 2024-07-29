@@ -32,6 +32,7 @@ import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.routing.DefaultProxyRoutePlanner;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.util.Timeout;
 import org.apache.maven.settings.Proxy;
@@ -55,6 +56,8 @@ class HttpClientFactory {
 
     public HttpClientFactory proxy(final Proxy proxy) {
         if (proxy != null && isProxied(targetUrl, proxy)) {
+            DefaultProxyRoutePlanner planner = new DefaultProxyRoutePlanner(
+                    new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
             rcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
             if (StringUtils.isNotBlank(proxy.getUsername())) {
                 BasicCredentialsProvider cp = new BasicCredentialsProvider();
