@@ -25,6 +25,8 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -329,7 +331,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected Job createJob() throws ProcessingException, IOException {
         Git git = new GitRepository(basedir).load();
-        Long time = timestamp == null ? null :new TimestampParser(timestampFormat).parse(timestamp).getTime();
+        Long time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).atZone(ZoneId.systemDefault()).toEpochSecond();
         return new Job()
             .withRepoToken(repoToken)
             .withServiceName(serviceName)

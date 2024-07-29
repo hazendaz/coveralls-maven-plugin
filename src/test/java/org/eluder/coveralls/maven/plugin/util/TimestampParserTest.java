@@ -27,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.junit.jupiter.api.Test;
@@ -46,16 +47,16 @@ class TimestampParserTest {
     void parseEpochMillis() throws ProcessingException {
         String format = TimestampParser.EPOCH_MILLIS;
         long time = System.currentTimeMillis();
-        Date parsed = new TimestampParser(format).parse(String.valueOf(time));
+        LocalDateTime parsed = new TimestampParser(format).parse(String.valueOf(time));
 
-        assertEquals(time, parsed.getTime());
+        assertEquals(time, parsed.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
     }
 
     @Test
     void parseSimpleFormat() throws ProcessingException {
         String format = "yyyy-MM-dd";
-        Date parsed = new TimestampParser(format).parse("2015-08-20");
-        String formatted = new SimpleDateFormat(format).format(parsed);
+        LocalDateTime parsed = new TimestampParser(format).parse("2015-08-20");
+        String formatted = DateTimeFormatter.ofPattern(format).format(parsed);
 
         assertEquals("2015-08-20", formatted);
     }
@@ -63,15 +64,15 @@ class TimestampParserTest {
     @Test
     void parseDefaultFormat() throws ProcessingException {
         String format = TimestampParser.DEFAULT_FORMAT;
-        Date parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
-        String formatted = new SimpleDateFormat(format).format(parsed);
+        LocalDateTime parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
+        String formatted = DateTimeFormatter.ofPattern(format).format(parsed);
 
         assertEquals("2015-08-20T20:10:00Z", formatted);
     }
 
     @Test
     void parseNull() throws ProcessingException {
-        Date parsed = new TimestampParser(null).parse(null);
+        LocalDateTime parsed = new TimestampParser(null).parse(null);
 
         assertNull(parsed);
     }

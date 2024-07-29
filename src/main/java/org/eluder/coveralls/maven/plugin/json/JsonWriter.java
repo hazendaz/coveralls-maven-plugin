@@ -31,7 +31,8 @@ import com.fasterxml.jackson.databind.MappingJsonFactory;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -132,8 +133,8 @@ public class JsonWriter implements SourceCallback, Closeable {
 
     private void writeOptionalTimestamp(final String field, final Long value) throws IOException {
         if (value != null) {
-            SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
-            writeOptionalString(field, format.format(value));
+            DateTimeFormatter format = DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT);
+            writeOptionalString(field, format.format(Instant.ofEpochMilli(value)));
         }
     }
 
