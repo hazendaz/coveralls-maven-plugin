@@ -55,7 +55,7 @@ public class JobValidator {
         if (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId())) {
             return Collections.emptyList();
         }
-        Level level = (job.isDryRun() ? Level.WARN : Level.ERROR);
+        Level level = job.isDryRun() ? Level.WARN : Level.ERROR;
         String message = "Either repository token or service with job id must be defined";
         return Collections.singletonList(new ValidationError(level, message));
     }

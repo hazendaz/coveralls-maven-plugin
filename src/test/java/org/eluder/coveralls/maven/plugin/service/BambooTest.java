@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 class BambooTest {
 
     private Map<String, String> env() {
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         env.put("bamboo.buildNumber", "build123");
         env.put("bamboo.buildResultsUrl", "http://company.com/bamboo/build123");
         env.put("bamboo.repository.git.branch", "master");

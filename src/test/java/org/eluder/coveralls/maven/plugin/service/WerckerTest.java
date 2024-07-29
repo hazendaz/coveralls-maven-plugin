@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 class WerckerTest {
 
     private Map<String, String> env() {
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         env.put("WERCKER", "true");
         env.put("WERCKER_BUILD_URL", "https://app.wercker.com/build/123456789");
         env.put("WERCKER_BUILD_ID", "123456789");

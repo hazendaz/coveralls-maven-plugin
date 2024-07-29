@@ -44,7 +44,7 @@ class UrlSourceLoaderTest {
     public Path folder;
 
     @Test
-    void missingSourceFileFromUrl() throws IOException  {
+    void missingSourceFileFromUrl() throws IOException {
         UrlSourceLoader sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }

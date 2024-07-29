@@ -37,13 +37,13 @@ class AbstractServiceSetupTest {
 
     @Test
     void getMissingProperty() {
-        AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
+        AbstractServiceSetup serviceSetup = create(new HashMap<>());
         assertNull(serviceSetup.getProperty("property"));
     }
 
     @Test
     void testGetProperty() {
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         env.put("CI_NAME", "bamboo");
         assertEquals("bamboo", create(env).getProperty("CI_NAME"));
     }
@@ -71,7 +71,7 @@ class AbstractServiceSetupTest {
 
     @Test
     void getDefaultValues() {
-        AbstractServiceSetup serviceSetup = create(new HashMap<String, String>());
+        AbstractServiceSetup serviceSetup = create(new HashMap<>());
         assertNull(serviceSetup.getName());
         assertNull(serviceSetup.getJobId());
         assertNull(serviceSetup.getBuildNumber());

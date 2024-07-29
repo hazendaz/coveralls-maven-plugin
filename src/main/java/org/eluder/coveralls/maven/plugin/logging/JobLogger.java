@@ -48,7 +48,7 @@ public class JobLogger implements Logger {
             throw new IllegalArgumentException("job must be defined");
         }
         this.job = job;
-        this.jsonMapper = (jsonMapper != null ? jsonMapper : createDefaultJsonMapper());
+        this.jsonMapper = jsonMapper != null ? jsonMapper : createDefaultJsonMapper();
     }
 
     @Override
@@ -60,13 +60,13 @@ public class JobLogger implements Logger {
     public void log(final Log log) {
         StringBuilder starting = new StringBuilder("Starting Coveralls job");
         if (job.getServiceName() != null) {
-            starting.append(" for " + job.getServiceName());
+            starting.append(" for ").append(job.getServiceName());
             if (job.getServiceJobId() != null) {
-                starting.append(" (" + job.getServiceJobId() + ")");
+                starting.append(" (").append(job.getServiceJobId()).append(")");
             } else if (job.getServiceBuildNumber() != null) {
-                starting.append(" (" + job.getServiceBuildNumber());
+                starting.append(" (").append(job.getServiceBuildNumber());
                 if (job.getServiceBuildUrl() != null) {
-                    starting.append(" / " + job.getServiceBuildUrl());
+                    starting.append(" / ").append(job.getServiceBuildUrl());
                 }
                 starting.append(")");
             }
@@ -85,7 +85,7 @@ public class JobLogger implements Logger {
 
         if (job.getGit() != null) {
             String commit = job.getGit().getHead().getId();
-            String branch = (job.getBranch() != null ? job.getBranch() : job.getGit().getBranch());
+            String branch = job.getBranch() != null ? job.getBranch() : job.getGit().getBranch();
             log.info("Git commit " + commit.substring(0, ABBREV) + " in " + branch);
         }
 

@@ -69,7 +69,7 @@ public abstract class AbstractCoverageParserTest {
     protected SourceCallback sourceCallbackMock;
 
     @BeforeEach
-    public void init() throws IOException  {
+    public void init() throws IOException {
         for (String[] coverageFile : getCoverageFixture()) {
             final String name = sourceName(coverageFile[0]);
             final String content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
@@ -84,14 +84,14 @@ public abstract class AbstractCoverageParserTest {
     protected Answer<Source> sourceAnswer(final String name, final String content) {
         return new Answer<Source>() {
             @Override
-            public Source answer(final InvocationOnMock invocation) throws NoSuchAlgorithmException  {
+            public Source answer(final InvocationOnMock invocation) throws NoSuchAlgorithmException {
                 return new Source(name, content, TestIoUtil.getSha512DigestHex(content));
             }
         };
     }
 
     @Test
-    public void parseCoverage() throws ProcessingException, IOException  {
+    public void parseCoverage() throws ProcessingException, IOException {
         for (String coverageResource : getCoverageResources()) {
             CoverageParser parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
             parser.parse(sourceCallbackMock);

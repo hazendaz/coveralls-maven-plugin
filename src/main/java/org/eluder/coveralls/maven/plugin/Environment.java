@@ -99,8 +99,8 @@ public final class Environment {
         }
 
         Properties environment = service.getEnvironment();
-        if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty()) &&
-                (environment != null && !environment.isEmpty())) {
+        if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty())
+                && (environment != null && !environment.isEmpty())) {
             mojo.serviceEnvironment = environment;
         }
     }

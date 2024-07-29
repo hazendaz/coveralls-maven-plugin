@@ -37,7 +37,7 @@ import java.util.Locale;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 
-public class TestIoUtil {
+public final class TestIoUtil {
 
     public static void writeFileContent(final String content, final File file) throws FileNotFoundException {
         try (PrintWriter writer = new PrintWriter(file)) {
@@ -72,5 +72,8 @@ public class TestIoUtil {
 
     private static URL getResourceUrl(final String resource) {
         return TestIoUtil.class.getResource(resource);
+    }
+
+    private TestIoUtil() {
     }
 }

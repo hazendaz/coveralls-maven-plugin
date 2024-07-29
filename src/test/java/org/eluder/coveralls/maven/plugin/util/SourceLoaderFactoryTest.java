@@ -94,7 +94,7 @@ class SourceLoaderFactoryTest {
     @Test
     void createSourceLoaderWithScanForSources() {
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
-                .withScanForSources( true )
+                .withScanForSources(true)
                 .createSourceLoader();
         assertNotNull(sourceLoader);
     }

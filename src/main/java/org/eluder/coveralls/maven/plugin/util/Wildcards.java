@@ -38,7 +38,7 @@ public final class Wildcards {
      */
     public static boolean matches(final String text, final String wildcard) {
         String pattern = wildcard.replace("?", "\\w").replace("*", "\\w*");
-        return (text != null && text.matches(pattern));
+        return text != null && text.matches(pattern);
     }
 
     private Wildcards() {

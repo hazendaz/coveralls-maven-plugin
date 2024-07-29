@@ -37,7 +37,7 @@ import org.junit.jupiter.api.Test;
 class ShippableTest {
 
     private Map<String, String> env() {
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         env.put(Shippable.SHIPPABLE, "true");
         env.put(Shippable.SHIPPABLE_BUILD_ID, "54de3316c44f");
         env.put(Shippable.SHIPPABLE_BUILD_NUMBER, "431.1");

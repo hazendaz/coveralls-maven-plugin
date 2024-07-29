@@ -55,11 +55,11 @@ public class CloverParser extends AbstractXmlEventParser {
             String type = xml.getAttributeValue(null, "type");
             int coverage = 0;
             if ("method".equals(type) || "stmt".equals(type)) {
-                coverage = (Integer.parseInt(xml.getAttributeValue(null, "count")) == 0) ? 0 : 1;
+                coverage = Integer.parseInt(xml.getAttributeValue(null, "count")) == 0 ? 0 : 1;
             } else if ("cond".equals(type)) {
                 int falseCount = Integer.parseInt(xml.getAttributeValue(null, "falsecount"));
                 int trueCount = Integer.parseInt(xml.getAttributeValue(null, "truecount"));
-                coverage = (trueCount == 0 || falseCount == 0) ? 0 : 1;
+                coverage = trueCount == 0 || falseCount == 0 ? 0 : 1;
             }
             int lineNumber = Integer.parseInt(xml.getAttributeValue(null, "num"));
             this.source.addCoverage(lineNumber, coverage);

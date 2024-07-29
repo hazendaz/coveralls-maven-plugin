@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 class GeneralTest {
 
     private Map<String, String> env() {
-        Map<String, String> env = new HashMap<String, String>();
+        Map<String, String> env = new HashMap<>();
         env.put("CI_NAME", "ci_service");
         env.put("CI_BUILD_NUMBER", "build123");
         env.put("CI_BUILD_URL", "http://ci.com/build123");

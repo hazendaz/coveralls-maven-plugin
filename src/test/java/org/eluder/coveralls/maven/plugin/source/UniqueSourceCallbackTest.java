@@ -75,7 +75,7 @@ class UniqueSourceCallbackTest {
     }
 
     @Test
-    void onSourceWithUniqueSources() throws NoSuchAlgorithmException, ProcessingException, IOException  {
+    void onSourceWithUniqueSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
         Source s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
         Source s2 = createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
 
@@ -93,7 +93,7 @@ class UniqueSourceCallbackTest {
         return new UniqueSourceCallback(sourceCallbackMock);
     }
 
-    private Source createSource(final String name, final String source, final int... relevant) throws NoSuchAlgorithmException  {
+    private Source createSource(final String name, final String source, final int... relevant) throws NoSuchAlgorithmException {
         Source s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
         for (int i : relevant) {
             s.addCoverage(i, 1);

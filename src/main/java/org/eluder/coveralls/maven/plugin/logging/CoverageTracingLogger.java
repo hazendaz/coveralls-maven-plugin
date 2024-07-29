@@ -34,12 +34,12 @@ import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 
 public class CoverageTracingLogger extends ChainingSourceCallback implements Logger {
 
-    private long files = 0;
-    private long lines = 0;
-    private long relevant = 0;
-    private long covered = 0;
-    private long branches = 0;
-    private long coveredBranches = 0;
+    private long files;
+    private long lines;
+    private long relevant;
+    private long covered;
+    private long branches;
+    private long coveredBranches;
 
     public CoverageTracingLogger(final SourceCallback chained) {
         super(chained);

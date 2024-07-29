@@ -55,7 +55,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 class JsonWriterTest {
 
-    private static final long TEST_TIME = 1357009200000l;
+    private static final long TEST_TIME = 1357009200000L;
 
     @TempDir(cleanup = CleanupMode.NEVER)
     public Path folder;

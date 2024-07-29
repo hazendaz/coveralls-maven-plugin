@@ -90,7 +90,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testSubmit() throws UnsupportedOperationException, Exception  {
+    void testSubmit() throws UnsupportedOperationException, Exception {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
@@ -101,7 +101,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void failOnServiceError() throws ClientProtocolException, IOException  {
+    void failOnServiceError() throws ClientProtocolException, IOException {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 500, "Internal Error");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);

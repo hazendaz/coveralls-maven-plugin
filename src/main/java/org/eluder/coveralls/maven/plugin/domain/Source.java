@@ -136,9 +136,9 @@ public final class Source implements JsonObject {
         final ListIterator<Branch> it = this.branches.listIterator();
         while (it.hasNext()) {
             final Branch b = it.next();
-            if (b.getLineNumber() == lineNumber &&
-                b.getBlockNumber() == blockNumber &&
-                b.getBranchNumber() == branchNumber) {
+            if (b.getLineNumber() == lineNumber
+                && b.getBlockNumber() == blockNumber
+                && b.getBranchNumber() == branchNumber) {
                     it.remove();
                     if (merge) {
                         hitSum += b.getHits();
@@ -176,9 +176,9 @@ public final class Source implements JsonObject {
             return false;
         }
         Source other = (Source) obj;
-        return (Objects.equals(this.name, other.name) &&
-                Objects.equals(this.digest, other.digest) &&
-               this.coverage.length == other.coverage.length);
+        return Objects.equals(this.name, other.name)
+                && Objects.equals(this.digest, other.digest)
+               && this.coverage.length == other.coverage.length;
     }
 
     @Override

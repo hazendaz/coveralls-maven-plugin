@@ -103,10 +103,10 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
     }
 
     protected final boolean isStartElement(final XMLStreamReader xml, final String name) {
-        return (XMLStreamConstants.START_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name));
+        return XMLStreamConstants.START_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name);
     }
 
     protected final boolean isEndElement(final XMLStreamReader xml, final String name) {
-        return (XMLStreamConstants.END_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name));
+        return XMLStreamConstants.END_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name);
     }
 }

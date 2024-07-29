@@ -116,7 +116,7 @@ public class CoverallsReportMojoTest {
     private Settings settingsMock;
 
     @BeforeEach
-    void init() throws IOException  {
+    void init() throws IOException {
         coverallsFile = Files.createFile(folder.resolve("coverallsFile.json")).toFile();
 
         lenient().when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
@@ -138,7 +138,7 @@ public class CoverallsReportMojoTest {
             }
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {
-                List<CoverageParser> parsers = new ArrayList<CoverageParser>();
+                List<CoverageParser> parsers = new ArrayList<>();
                 parsers.add(new CoberturaParser(TestIoUtil.getFile("cobertura.xml"), sourceLoader));
                 return parsers;
             }
@@ -172,12 +172,12 @@ public class CoverallsReportMojoTest {
         lenient().when(reportingMock.getOutputDirectory()).thenReturn(folder.toFile().getAbsolutePath());
         lenient().when(buildMock.getDirectory()).thenReturn(folder.toFile().getAbsolutePath());
 
-        List<MavenProject> projects = new ArrayList<MavenProject>();
+        List<MavenProject> projects = new ArrayList<>();
         projects.add(collectedProjectMock);
         lenient().when(projectMock.getCollectedProjects()).thenReturn(projects);
         lenient().when(projectMock.getBuild()).thenReturn(buildMock);
         lenient().when(projectMock.getModel()).thenReturn(modelMock);
-        List<String> sourceRoots = new ArrayList<String>();
+        List<String> sourceRoots = new ArrayList<>();
         sourceRoots.add(folder.toFile().getAbsolutePath());
         lenient().when(collectedProjectMock.getCompileSourceRoots()).thenReturn(sourceRoots);
         lenient().when(collectedProjectMock.getBuild()).thenReturn(buildMock);
@@ -316,7 +316,7 @@ public class CoverallsReportMojoTest {
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 
-    protected String readFileContent(final String sourceFile) throws FileNotFoundException, IOException  {
+    protected String readFileContent(final String sourceFile) throws FileNotFoundException, IOException {
         return TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
     }
 }
