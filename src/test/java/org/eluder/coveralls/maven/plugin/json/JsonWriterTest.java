@@ -33,10 +33,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,7 +105,7 @@ class JsonWriterTest {
         assertEquals("foobar", ((Map) jsonMap.get("environment")).get("custom_property"));
         assertEquals("master", jsonMap.get("service_branch"));
         assertEquals("pull10", jsonMap.get("service_pull_request"));
-        assertEquals(new SimpleDateFormat(JsonWriter.TIMESTAMP_FORMAT).format(new Date(TEST_TIME)),
+        assertEquals(DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT).format(Instant.ofEpochMilli(TEST_TIME)),
                 jsonMap.get("run_at"));
         assertEquals("af456fge34acd", ((Map) jsonMap.get("git")).get("branch"));
         assertEquals("aefg837fge", ((Map) ((Map) jsonMap.get("git")).get("head")).get("id"));
