@@ -42,7 +42,7 @@ class HttpClientFactoryTest {
 
     private static final int PROXY_PORT = 9797;
     private static final int TARGET_PORT = 9696;
-    private final String TARGET_URL = "http://localhost:" + TARGET_PORT;
+    private static final String TARGET_URL = "http://localhost:" + TARGET_PORT;
 
     @RegisterExtension
     static WireMockExtension targetServer = WireMockExtension.newInstance()
