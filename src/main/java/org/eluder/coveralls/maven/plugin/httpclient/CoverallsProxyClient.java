@@ -24,6 +24,7 @@
 package org.eluder.coveralls.maven.plugin.httpclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.maven.settings.Proxy;
 
 public class CoverallsProxyClient extends CoverallsClient {

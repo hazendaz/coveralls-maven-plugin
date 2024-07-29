@@ -25,6 +25,7 @@ package org.eluder.coveralls.maven.plugin.parser;
 
 import java.io.File;
 import java.io.IOException;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 

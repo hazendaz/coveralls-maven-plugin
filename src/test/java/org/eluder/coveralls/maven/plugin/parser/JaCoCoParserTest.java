@@ -23,13 +23,13 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
-import org.eluder.coveralls.maven.plugin.CoverageFixture;
-import org.eluder.coveralls.maven.plugin.CoverageParser;
-import org.eluder.coveralls.maven.plugin.source.SourceLoader;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
+import org.eluder.coveralls.maven.plugin.CoverageFixture;
+import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
 class JaCoCoParserTest extends AbstractCoverageParserTest {
 

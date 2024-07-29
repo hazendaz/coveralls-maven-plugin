@@ -23,16 +23,16 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.apache.commons.io.IOUtils;
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.Sha521DigestInputStream;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.io.IOUtils;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.Sha521DigestInputStream;
 
 public abstract class AbstractSourceLoader implements SourceLoader {
 

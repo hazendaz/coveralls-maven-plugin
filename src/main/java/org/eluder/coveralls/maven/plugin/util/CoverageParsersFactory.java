@@ -23,6 +23,12 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.parser.CloverParser;
@@ -30,12 +36,6 @@ import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
 import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class CoverageParsersFactory {
 

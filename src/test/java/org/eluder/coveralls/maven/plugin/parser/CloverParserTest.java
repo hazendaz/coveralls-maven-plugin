@@ -23,14 +23,14 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.junit.jupiter.api.Disabled;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 // TODO Needs similar support added to upstream for cobertura, jacoco, and saga
 @Disabled

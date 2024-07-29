@@ -23,10 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
+import java.io.IOException;
+
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
-
-import java.io.IOException;
 
 /**
  * Source callback handler that allows chaining multiple callback handlers. Chained callback

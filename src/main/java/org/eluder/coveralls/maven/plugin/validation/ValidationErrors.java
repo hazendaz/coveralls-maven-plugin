@@ -23,11 +23,11 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import org.apache.maven.plugin.logging.Log;
-import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.maven.plugin.logging.Log;
+import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
 public class ValidationErrors extends ArrayList<ValidationError> {
 

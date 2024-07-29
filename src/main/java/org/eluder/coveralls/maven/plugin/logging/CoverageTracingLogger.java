@@ -23,14 +23,14 @@
  */
 package org.eluder.coveralls.maven.plugin.logging;
 
+import java.io.IOException;
+
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Branch;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
-
-import java.io.IOException;
 
 public class CoverageTracingLogger extends ChainingSourceCallback implements Logger {
 

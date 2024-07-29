@@ -23,14 +23,14 @@
  */
 package org.eluder.coveralls.maven.plugin.logging;
 
-import org.apache.maven.plugin.logging.Log;
-import org.eluder.coveralls.maven.plugin.domain.Job;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+
+import org.apache.maven.plugin.logging.Log;
+import org.eluder.coveralls.maven.plugin.domain.Job;
 
 public class JobLogger implements Logger {
 

@@ -23,12 +23,12 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
-
-import java.util.Collections;
-import java.util.List;
 
 public class JobValidator {
 

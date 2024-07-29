@@ -23,10 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.apache.maven.settings.Proxy;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CoverallsProxyClientTest {
 

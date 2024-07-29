@@ -23,15 +23,15 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import org.eluder.coveralls.maven.plugin.ProcessingException;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.junit.jupiter.api.Test;
 
 class TimestampParserTest {
 

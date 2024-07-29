@@ -23,10 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.apache.commons.io.FilenameUtils;
-import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.SelectorUtils;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,6 +30,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.io.FilenameUtils;
+import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.SelectorUtils;
 
 public class ScanSourceLoader extends AbstractSourceLoader {
 

@@ -23,11 +23,11 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eluder.coveralls.maven.plugin.domain.Source;
 
 public class MultiSourceLoader implements SourceLoader {
 

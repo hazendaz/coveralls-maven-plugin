@@ -28,7 +28,6 @@ import java.io.IOException;
 
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 
-
 /**
  * Handles parsing of a coverage report. The implemenation can be statefull, and the same instance
  * should be used only one time to parse a coverage report. Completed source files are passed to

@@ -23,6 +23,9 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
 import java.io.IOException;
@@ -34,10 +37,6 @@ import org.apache.maven.settings.Proxy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 
 class HttpClientFactoryTest {
 
