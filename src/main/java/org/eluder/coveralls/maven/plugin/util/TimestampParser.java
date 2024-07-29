@@ -23,10 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
@@ -35,7 +35,7 @@ public class TimestampParser {
 
     public static final String EPOCH_MILLIS = "EpochMillis";
 
-    public static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String DEFAULT_FORMAT = "uuuu-MM-dd HH:mm:ss Z";
 
     private final Parser parser;
 
@@ -70,15 +70,15 @@ public class TimestampParser {
 
     private static class DateFormatParser implements Parser {
 
-        final DateFormat format;
+        final DateTimeFormatter format;
 
         DateFormatParser(final String format) {
-            this.format = new SimpleDateFormat(format);
+            this.format = DateTimeFormatter.ofPattern(format);
         }
 
         @Override
-        public synchronized Instant parse(final String timestamp) throws ParseException {
-            return format.parse(timestamp).toInstant();
+        public synchronized Instant parse(final String timestamp) {
+            return LocalDateTime.parse(timestamp, format).toInstant(ZoneOffset.ofTotalSeconds(0));
         }
     }
 
