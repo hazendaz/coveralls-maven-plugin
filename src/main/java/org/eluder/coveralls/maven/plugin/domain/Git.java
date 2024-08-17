@@ -90,7 +90,8 @@ public class Git implements JsonObject {
         @JsonProperty("message")
         private final String message;
 
-        public Head(final String id, final String authorName, final String authorEmail, final String committerName, final String committerEmail, final String message) {
+        public Head(final String id, final String authorName, final String authorEmail, final String committerName,
+                final String committerEmail, final String message) {
             this.id = id;
             this.authorName = authorName;
             this.authorEmail = authorEmail;

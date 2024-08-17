@@ -84,7 +84,8 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
 
     @Override
     public void log(final Log log) {
-        log.info("Gathered code coverage metrics for " + getFiles() + " source files with " + getLines() + " lines of code:");
+        log.info("Gathered code coverage metrics for " + getFiles() + " source files with " + getLines()
+                + " lines of code:");
         log.info("- " + getRelevant() + " relevant lines");
         log.info("- " + getCovered() + " covered lines");
         log.info("- " + getMissed() + " missed lines");

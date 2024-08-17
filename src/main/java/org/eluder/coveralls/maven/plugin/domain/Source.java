@@ -39,7 +39,7 @@ public final class Source implements JsonObject {
     private static final long serialVersionUID = 1L;
 
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
-    //private static final String CLASSIFIER_SEPARATOR = "#";
+    // private static final String CLASSIFIER_SEPARATOR = "#";
 
     String name;
     String digest;
@@ -69,7 +69,7 @@ public final class Source implements JsonObject {
         return name;
 
         // #45: cannot use identifier due to unfetchable source files
-        //return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
+        // return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
 
     @JsonProperty("source_digest")
@@ -110,7 +110,8 @@ public final class Source implements JsonObject {
     private void checkLineRange(final int lineNumber) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
-            throw new IllegalArgumentException("Line number " + lineNumber + " is greater than the source file " + name + " size");
+            throw new IllegalArgumentException(
+                    "Line number " + lineNumber + " is greater than the source file " + name + " size");
         }
     }
 
@@ -119,31 +120,24 @@ public final class Source implements JsonObject {
         this.coverage[lineNumber - 1] = coverage;
     }
 
-    public void addBranchCoverage(final int lineNumber,
-                                  final int blockNumber,
-                                  final int branchNumber,
-                                  final int hits) {
+    public void addBranchCoverage(final int lineNumber, final int blockNumber, final int branchNumber, final int hits) {
         addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);
     }
 
-    private void addBranchCoverage(final boolean merge,
-                                   final int lineNumber,
-                                   final int blockNumber,
-                                   final int branchNumber,
-                                   final int hits) {
+    private void addBranchCoverage(final boolean merge, final int lineNumber, final int blockNumber,
+            final int branchNumber, final int hits) {
         checkLineRange(lineNumber);
         int hitSum = hits;
         final ListIterator<Branch> it = this.branches.listIterator();
         while (it.hasNext()) {
             final Branch b = it.next();
-            if (b.getLineNumber() == lineNumber
-                && b.getBlockNumber() == blockNumber
-                && b.getBranchNumber() == branchNumber) {
-                    it.remove();
-                    if (merge) {
-                        hitSum += b.getHits();
-                    }
+            if (b.getLineNumber() == lineNumber && b.getBlockNumber() == blockNumber
+                    && b.getBranchNumber() == branchNumber) {
+                it.remove();
+                if (merge) {
+                    hitSum += b.getHits();
                 }
+            }
         }
         this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hitSum));
     }
@@ -160,11 +154,7 @@ public final class Source implements JsonObject {
                 }
             }
             for (final Branch b : source.branches) {
-                copy.addBranchCoverage(true,
-                        b.getLineNumber(),
-                        b.getBlockNumber(),
-                        b.getBranchNumber(),
-                        b.getHits());
+                copy.addBranchCoverage(true, b.getLineNumber(), b.getBlockNumber(), b.getBranchNumber(), b.getHits());
             }
         }
         return copy;
@@ -176,9 +166,8 @@ public final class Source implements JsonObject {
             return false;
         }
         Source other = (Source) obj;
-        return Objects.equals(this.name, other.name)
-                && Objects.equals(this.digest, other.digest)
-               && this.coverage.length == other.coverage.length;
+        return Objects.equals(this.name, other.name) && Objects.equals(this.digest, other.digest)
+                && this.coverage.length == other.coverage.length;
     }
 
     @Override

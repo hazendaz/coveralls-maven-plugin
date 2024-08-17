@@ -62,7 +62,8 @@ public class Appveyor extends AbstractServiceSetup {
 
     @Override
     public String getBuildUrl() {
-        return "https://ci.appveyor.com/project/" + getProperty(APPVEYOR_REPO_NAME) + "/build/" + getProperty(APPVEYOR_BUILD_NUMBER);
+        return "https://ci.appveyor.com/project/" + getProperty(APPVEYOR_REPO_NAME) + "/build/"
+                + getProperty(APPVEYOR_BUILD_NUMBER);
     }
 
     @Override
@@ -74,7 +75,6 @@ public class Appveyor extends AbstractServiceSetup {
     public String getPullRequest() {
         return getProperty(APPVEYOR_PULL_REQUEST);
     }
-
 
     @Override
     public String getJobId() {

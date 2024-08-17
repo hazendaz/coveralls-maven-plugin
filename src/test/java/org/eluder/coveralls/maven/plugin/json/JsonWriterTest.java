@@ -106,7 +106,8 @@ class JsonWriterTest {
         assertEquals("foobar", ((Map) jsonMap.get("environment")).get("custom_property"));
         assertEquals("master", jsonMap.get("service_branch"));
         assertEquals("pull10", jsonMap.get("service_pull_request"));
-        assertEquals(new SimpleDateFormat(JsonWriter.TIMESTAMP_FORMAT).format(new Date(TEST_TIME)), jsonMap.get("run_at"));
+        assertEquals(new SimpleDateFormat(JsonWriter.TIMESTAMP_FORMAT).format(new Date(TEST_TIME)),
+                jsonMap.get("run_at"));
         assertEquals("af456fge34acd", ((Map) jsonMap.get("git")).get("branch"));
         assertEquals("aefg837fge", ((Map) ((Map) jsonMap.get("git")).get("head")).get("id"));
         assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
@@ -121,7 +122,7 @@ class JsonWriterTest {
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
-        jsonMap = ((List<Map<String, Object>>)jsonMap.get("source_files")).get(0);
+        jsonMap = ((List<Map<String, Object>>) jsonMap.get("source_files")).get(0);
         assertEquals("Foo.java", jsonMap.get("name"));
         assertEquals("6E0F89B516198DC6AB743EA5FBFB3108", jsonMap.get("source_digest"));
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
@@ -132,16 +133,10 @@ class JsonWriterTest {
         Git.Remote remote = new Git.Remote("origin", "git@git.com:foo.git");
         Properties environment = new Properties();
         environment.setProperty("custom_property", "foobar");
-        return new Job()
-            .withServiceName("service")
-            .withServiceJobId("job123")
-            .withServiceBuildNumber("build5")
-            .withServiceBuildUrl("http://ci.com/build5")
-            .withServiceEnvironment(environment)
-            .withBranch("master")
-            .withPullRequest("pull10")
-            .withTimestamp(TEST_TIME)
-            .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
+        return new Job().withServiceName("service").withServiceJobId("job123").withServiceBuildNumber("build5")
+                .withServiceBuildUrl("http://ci.com/build5").withServiceEnvironment(environment).withBranch("master")
+                .withPullRequest("pull10").withTimestamp(TEST_TIME)
+                .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
 
     private Source source() {

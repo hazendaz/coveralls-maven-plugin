@@ -177,8 +177,8 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected String timestampFormat;
 
     /**
-     * Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in
-     * default timestamp format yyyy-MM-dd'T'HH:mm:ss'Z'.
+     * Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in default timestamp format
+     * yyyy-MM-dd'T'HH:mm:ss'Z'.
      */
     @Parameter(property = "timestamp", defaultValue = "${maven.build.timestamp}")
     protected String timestamp;
@@ -213,7 +213,6 @@ public class CoverallsReportMojo extends AbstractMojo {
     @Parameter(property = "coveralls.skip", defaultValue = "false")
     protected boolean skip;
 
-
     /**
      * Maven settings.
      */
@@ -225,7 +224,6 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     @Parameter(defaultValue = "${project}", readonly = true)
     protected MavenProject project;
-
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
@@ -266,30 +264,31 @@ public class CoverallsReportMojo extends AbstractMojo {
     /**
      * Creates the coverage parsers.
      *
-     * @param sourceLoader source loader that extracts source files
+     * @param sourceLoader
+     *            source loader that extracts source files
+     *
      * @return coverage parsers for all maven modules and additional reports
-     * @throws IOException if parsers cannot be created
+     *
+     * @throws IOException
+     *             if parsers cannot be created
      */
     protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) throws IOException {
-        return new CoverageParsersFactory(project, sourceLoader)
-                .withJaCoCoReports(jacocoReports)
-                .withCoberturaReports(coberturaReports)
-                .withSagaReports(sagaReports)
-                .withRelativeReportDirs(relativeReportDirs)
-                .createParsers();
+        return new CoverageParsersFactory(project, sourceLoader).withJaCoCoReports(jacocoReports)
+                .withCoberturaReports(coberturaReports).withSagaReports(sagaReports)
+                .withRelativeReportDirs(relativeReportDirs).createParsers();
     }
 
     /**
      * Creates the source loader.
      *
-     * @param job the job describing the coveralls report
+     * @param job
+     *            the job describing the coveralls report
+     *
      * @return source loader that extracts source files
      */
     protected SourceLoader createSourceLoader(final Job job) {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
-                .withSourceDirectories(sourceDirectories)
-                .withScanForSources(scanForSources)
-                .createSourceLoader();
+                .withSourceDirectories(sourceDirectories).withScanForSources(scanForSources).createSourceLoader();
     }
 
     /**
@@ -324,33 +323,31 @@ public class CoverallsReportMojo extends AbstractMojo {
      * Creates the job.
      *
      * @return job that describes the coveralls report
-     * @throws ProcessingException if processing of timestamp fails
-     * @throws IOException if an I/O error occurs
+     *
+     * @throws ProcessingException
+     *             if processing of timestamp fails
+     * @throws IOException
+     *             if an I/O error occurs
      */
     protected Job createJob() throws ProcessingException, IOException {
         Git git = new GitRepository(basedir).load();
-        Long time = timestamp == null ? null :new TimestampParser(timestampFormat).parse(timestamp).getTime();
-        return new Job()
-            .withRepoToken(repoToken)
-            .withServiceName(serviceName)
-            .withServiceJobId(serviceJobId)
-            .withServiceBuildNumber(serviceBuildNumber)
-            .withServiceBuildUrl(serviceBuildUrl)
-            .withParallel(parallel)
-            .withServiceEnvironment(serviceEnvironment)
-            .withDryRun(dryRun)
-            .withBranch(branch)
-            .withPullRequest(pullRequest)
-            .withTimestamp(time)
-            .withGit(git);
+        Long time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).getTime();
+        return new Job().withRepoToken(repoToken).withServiceName(serviceName).withServiceJobId(serviceJobId)
+                .withServiceBuildNumber(serviceBuildNumber).withServiceBuildUrl(serviceBuildUrl).withParallel(parallel)
+                .withServiceEnvironment(serviceEnvironment).withDryRun(dryRun).withBranch(branch)
+                .withPullRequest(pullRequest).withTimestamp(time).withGit(git);
     }
 
     /**
      * Creates the json writer.
      *
-     * @param job the job describing the coveralls report
+     * @param job
+     *            the job describing the coveralls report
+     *
      * @return JSON writer that writes the coveralls data
-     * @throws IOException if an I/O error occurs
+     *
+     * @throws IOException
+     *             if an I/O error occurs
      */
     protected JsonWriter createJsonWriter(final Job job) throws IOException {
         return new JsonWriter(job, coverallsFile);
@@ -368,8 +365,11 @@ public class CoverallsReportMojo extends AbstractMojo {
     /**
      * Creates the source callback chain.
      *
-     * @param writer the JSON writer
-     * @param reporters the logging reporters
+     * @param writer
+     *            the JSON writer
+     * @param reporters
+     *            the logging reporters
+     *
      * @return source callback chain for different source handlers
      */
     protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
@@ -386,13 +386,20 @@ public class CoverallsReportMojo extends AbstractMojo {
     /**
      * Writes coverage data to JSON file.
      *
-     * @param writer JSON writer that writes the coveralls data
-     * @param sourceCallback the source callback handler
-     * @param parsers list of coverage parsers
-     * @throws ProcessingException if process to to create JSON file fails
-     * @throws IOException if an I/O error occurs
+     * @param writer
+     *            JSON writer that writes the coveralls data
+     * @param sourceCallback
+     *            the source callback handler
+     * @param parsers
+     *            list of coverage parsers
+     *
+     * @throws ProcessingException
+     *             if process to to create JSON file fails
+     * @throws IOException
+     *             if an I/O error occurs
      */
-    protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback, final List<CoverageParser> parsers) throws ProcessingException, IOException {
+    protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback,
+            final List<CoverageParser> parsers) throws ProcessingException, IOException {
         try {
             getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + "...");
             long now = System.currentTimeMillis();
@@ -409,7 +416,8 @@ public class CoverallsReportMojo extends AbstractMojo {
         }
     }
 
-    private void submitData(final CoverallsClient client, final File coverallsFile) throws ProcessingException, IOException {
+    private void submitData(final CoverallsClient client, final File coverallsFile)
+            throws ProcessingException, IOException {
         getLog().info("Submitting Coveralls data to API");
         long now = System.currentTimeMillis();
         try {
@@ -430,7 +438,8 @@ public class CoverallsReportMojo extends AbstractMojo {
         }
     }
 
-    private <T extends Exception> void handleSubmissionError(final T ex, final String message, final boolean failOnException) throws T {
+    private <T extends Exception> void handleSubmissionError(final T ex, final String message,
+            final boolean failOnException) throws T {
         if (failOnException) {
             getLog().error(message);
             throw ex;

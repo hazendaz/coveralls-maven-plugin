@@ -35,7 +35,7 @@ public class Circle extends AbstractServiceSetup {
 
     public static final String CIRCLE_NAME = "circleci";
     public static final String CIRCLE = "CIRCLECI";
-    public static final String CIRCLE_BUILD_NUMBER  = "CIRCLE_BUILD_NUM";
+    public static final String CIRCLE_BUILD_NUMBER = "CIRCLE_BUILD_NUM";
     public static final String CIRCLE_BRANCH = "CIRCLE_BRANCH";
     public static final String CIRCLE_COMMIT = "CIRCLE_SHA1";
 

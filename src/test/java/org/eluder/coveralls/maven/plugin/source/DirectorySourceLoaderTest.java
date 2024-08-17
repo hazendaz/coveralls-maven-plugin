@@ -60,12 +60,14 @@ class DirectorySourceLoaderTest {
 
     @Test
     void loadSource() throws IOException {
-        File file = Files.createFile(folder.resolve("newFile")).toFile(); 
+        File file = Files.createFile(folder.resolve("newFile")).toFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
         DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         Source source = sourceLoader.load(file.getName());
         assertEquals(file.getName(), source.getName());
-        assertEquals("27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6", source.getDigest());
+        assertEquals(
+                "27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6",
+                source.getDigest());
         assertEquals(4, source.getCoverage().length);
     }
 }

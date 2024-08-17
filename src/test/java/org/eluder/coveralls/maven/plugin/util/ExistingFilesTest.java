@@ -42,7 +42,6 @@ class ExistingFilesTest {
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     public Path folder;
 
-
     @Test
     void addAllForNull() {
         ExistingFiles existingFiles = new ExistingFiles();
@@ -61,14 +60,14 @@ class ExistingFilesTest {
 
     @Test
     void addForExisting() throws IOException {
-        File f = Files.createFile(folder.resolve("f")).toFile(); 
+        File f = Files.createFile(folder.resolve("f")).toFile();
         Iterator<File> iter = new ExistingFiles().add(f).add(f).iterator();
         assertSize(iter, 1);
     }
 
     @Test
     void addForDirectory() throws IOException {
-        File d = Files.createDirectory(folder.resolve("d")).toFile(); 
+        File d = Files.createDirectory(folder.resolve("d")).toFile();
         Iterator<File> iter = new ExistingFiles().add(d).iterator();
         assertSize(iter, 0);
     }
@@ -81,8 +80,8 @@ class ExistingFilesTest {
 
     @Test
     void createForMultipleFiles() throws IOException {
-        File f1 = Files.createFile(folder.resolve("f1")).toFile(); 
-        File f2 = Files.createFile(folder.resolve("f2")).toFile(); 
+        File f1 = Files.createFile(folder.resolve("f1")).toFile();
+        File f2 = Files.createFile(folder.resolve("f2")).toFile();
         Iterator<File> iter = ExistingFiles.create(Arrays.asList(f1, f2)).iterator();
         assertSize(iter, 2);
     }

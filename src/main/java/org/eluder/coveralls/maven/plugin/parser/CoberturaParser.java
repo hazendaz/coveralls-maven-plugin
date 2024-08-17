@@ -45,7 +45,8 @@ public class CoberturaParser extends AbstractXmlEventParser {
     }
 
     @Override
-    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback)
+            throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "class")) {
             source = loadSource(xml.getAttributeValue(null, "filename"));
             String className = xml.getAttributeValue(null, "name");
@@ -77,10 +78,10 @@ public class CoberturaParser extends AbstractXmlEventParser {
 
                 // C'mon Cobertura, human readable format for XML ?
                 final String[] values = value // 50% (2/4)
-                        .replace(" ", "")     // 50%(2/4)
-                        .replace("%", "/")    // 50/(2/4)
-                        .replace("(", "")     // 50/2/4)
-                        .replace(")", "")     // 50/2/4
+                        .replace(" ", "") // 50%(2/4)
+                        .replace("%", "/") // 50/(2/4)
+                        .replace("(", "") // 50/2/4)
+                        .replace(")", "") // 50/2/4
                         .split("/", -1);
 
                 final int cb = Integer.parseInt(values[1]);
@@ -90,10 +91,10 @@ public class CoberturaParser extends AbstractXmlEventParser {
                 // add branches. unfortunately, there is NO block number and
                 // branch number will NOT be unique between coverage changes.
                 for (int b = 0; b < cb; b++) {
-                  this.source.addBranchCoverage(nr, 0, this.branchId++, 1);
+                    this.source.addBranchCoverage(nr, 0, this.branchId++, 1);
                 }
                 for (int b = 0; b < mb; b++) {
-                  this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
+                    this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
                 }
             }
         } else

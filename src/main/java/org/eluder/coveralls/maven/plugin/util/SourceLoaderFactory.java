@@ -70,15 +70,16 @@ public class SourceLoaderFactory {
         if (sourceDirectories != null) {
             directories.addAll(sourceDirectories);
         }
-        for (File directory: directories) {
+        for (File directory : directories) {
             if (directory.exists() && directory.isDirectory()) {
-                DirectorySourceLoader moduleSourceLoader = new DirectorySourceLoader(baseDir, directory, sourceEncoding);
+                DirectorySourceLoader moduleSourceLoader = new DirectorySourceLoader(baseDir, directory,
+                        sourceEncoding);
                 multiSourceLoader.add(moduleSourceLoader);
             }
         }
 
         if (scanForSources) {
-            for (File directory: directories) {
+            for (File directory : directories) {
                 if (directory.exists() && directory.isDirectory()) {
                     ScanSourceLoader scanSourceLoader = new ScanSourceLoader(baseDir, directory, sourceEncoding);
                     multiSourceLoader.add(scanSourceLoader);

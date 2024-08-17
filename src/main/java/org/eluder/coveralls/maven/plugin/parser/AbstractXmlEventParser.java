@@ -96,7 +96,8 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
         }
     }
 
-    protected abstract void onEvent(final XMLStreamReader xml, SourceCallback callback) throws XMLStreamException, ProcessingException, IOException;
+    protected abstract void onEvent(final XMLStreamReader xml, SourceCallback callback)
+            throws XMLStreamException, ProcessingException, IOException;
 
     protected final Source loadSource(final String sourceFile) throws IOException {
         return sourceLoader.load(sourceFile);

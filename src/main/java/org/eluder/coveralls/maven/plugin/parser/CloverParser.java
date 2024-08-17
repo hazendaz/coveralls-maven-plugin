@@ -44,7 +44,8 @@ public class CloverParser extends AbstractXmlEventParser {
     }
 
     @Override
-    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback)
+            throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "package")) {
             this.packageName = xml.getAttributeValue(null, "name");
         } else if (isStartElement(xml, "file") && packageName != null) {

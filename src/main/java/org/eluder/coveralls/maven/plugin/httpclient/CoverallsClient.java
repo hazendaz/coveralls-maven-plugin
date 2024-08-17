@@ -74,10 +74,8 @@ public class CoverallsClient {
     }
 
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-        HttpEntity entity = MultipartEntityBuilder.create()
-                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-                .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME)
-                .build();
+        HttpEntity entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
         HttpPost post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
         HttpResponse response = httpClient.execute(post);
@@ -88,14 +86,16 @@ public class CoverallsClient {
         HttpEntity entity = response.getEntity();
         ContentType contentType = ContentType.getOrDefault(entity);
         if (contentType.getCharset() == null) {
-            throw new ProcessingException(getResponseErrorMessage(response, "Response doesn't contain Content-Type header"));
+            throw new ProcessingException(
+                    getResponseErrorMessage(response, "Response doesn't contain Content-Type header"));
         }
 
         if (response.getStatusLine().getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
         }
 
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), contentType.getCharset()))) {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(entity.getContent(), contentType.getCharset()))) {
             CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
             if (cr.isError()) {
                 throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));

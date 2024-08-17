@@ -33,10 +33,7 @@ public class Branch {
 
     private final int hits;
 
-    public Branch(final int lineNumber,
-                  final int blockNumber,
-                  final int branchNumber,
-                  final int hits) {
+    public Branch(final int lineNumber, final int blockNumber, final int branchNumber, final int hits) {
         this.lineNumber = lineNumber;
         this.blockNumber = blockNumber;
         this.branchNumber = branchNumber;

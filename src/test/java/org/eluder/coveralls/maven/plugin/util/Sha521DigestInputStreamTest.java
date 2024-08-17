@@ -42,7 +42,9 @@ class Sha521DigestInputStreamTest {
             assertEquals(0xCC, is.read());
             assertEquals(0xDD, is.read());
             assertEquals(-1, is.read());
-            assertEquals("48E218B30D4EA16305096FE35E84002A0D262EB3853131309423492228980C60238F9EED238285036F22E37C4662E40C80A461000A7AA9A03FB3CB6E4223E83B", is.getDigestHex());
+            assertEquals(
+                    "48E218B30D4EA16305096FE35E84002A0D262EB3853131309423492228980C60238F9EED238285036F22E37C4662E40C80A461000A7AA9A03FB3CB6E4223E83B",
+                    is.getDigestHex());
         }
     }
 
@@ -56,7 +58,9 @@ class Sha521DigestInputStreamTest {
             for (int i = 0; i < data.length; i++) {
                 assertEquals(data[i], buff[i]);
             }
-            assertEquals("48E218B30D4EA16305096FE35E84002A0D262EB3853131309423492228980C60238F9EED238285036F22E37C4662E40C80A461000A7AA9A03FB3CB6E4223E83B", is.getDigestHex());
+            assertEquals(
+                    "48E218B30D4EA16305096FE35E84002A0D262EB3853131309423492228980C60238F9EED238285036F22E37C4662E40C80A461000A7AA9A03FB3CB6E4223E83B",
+                    is.getDigestHex());
         }
     }
 }

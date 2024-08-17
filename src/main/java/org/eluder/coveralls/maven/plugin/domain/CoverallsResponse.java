@@ -34,9 +34,7 @@ public final class CoverallsResponse implements JsonObject {
     private final String url;
 
     @JsonCreator
-    public CoverallsResponse(
-            @JsonProperty("message") final String message,
-            @JsonProperty("error") final boolean error,
+    public CoverallsResponse(@JsonProperty("message") final String message, @JsonProperty("error") final boolean error,
             @JsonProperty("url") final String url) {
         this.message = message;
         this.error = error;

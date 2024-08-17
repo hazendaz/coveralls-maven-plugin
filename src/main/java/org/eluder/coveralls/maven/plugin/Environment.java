@@ -54,7 +54,8 @@ public final class Environment {
 
     private void verify() {
         if (mojo.sourceEncoding == null) {
-            throw new IllegalArgumentException("Source encoding not set, use <sourceEncoding> configuration option or set project wide property <project.build.sourceEncoding>");
+            throw new IllegalArgumentException(
+                    "Source encoding not set, use <sourceEncoding> configuration option or set project wide property <project.build.sourceEncoding>");
         }
     }
 

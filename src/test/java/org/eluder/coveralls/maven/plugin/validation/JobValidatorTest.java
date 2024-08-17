@@ -70,7 +70,8 @@ class JobValidatorTest {
 
     @Test
     void validateWithTravis() {
-        ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
+        ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123"))
+                .validate();
         Assertions.assertThat(errors).isEmpty();
     }
 

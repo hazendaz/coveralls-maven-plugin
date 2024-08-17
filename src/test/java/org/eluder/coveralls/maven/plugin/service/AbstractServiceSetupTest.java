@@ -87,6 +87,7 @@ class AbstractServiceSetupTest {
             public boolean isSelected() {
                 return true;
             }
+
             @Override
             public String getName() {
                 return getProperty("CI_NAME");

@@ -50,7 +50,8 @@ class ValidationErrorsTest {
 
     @Test
     void throwOrInformWithWarnings() {
-        createValidationErrors(new ValidationError(Level.WARN, "error1"), new ValidationError(Level.WARN, "error2")).throwOrInform(logMock);
+        createValidationErrors(new ValidationError(Level.WARN, "error1"), new ValidationError(Level.WARN, "error2"))
+                .throwOrInform(logMock);
         verify(logMock, times(2)).warn(any(CharSequence.class));
     }
 

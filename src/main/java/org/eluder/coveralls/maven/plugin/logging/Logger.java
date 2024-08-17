@@ -34,7 +34,6 @@ public interface Logger {
         BEFORE, AFTER
     }
 
-
     /**
      * Gets the position.
      *
@@ -45,7 +44,8 @@ public interface Logger {
     /**
      * Create the log output.
      *
-     * @param log the logger to output
+     * @param log
+     *            the logger to output
      */
     void log(Log log);
 

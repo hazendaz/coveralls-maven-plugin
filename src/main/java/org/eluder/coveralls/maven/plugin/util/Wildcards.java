@@ -29,11 +29,13 @@ package org.eluder.coveralls.maven.plugin.util;
 public final class Wildcards {
 
     /**
-     * Matches text against a wildcard pattern where ? is single letter and * is zero or more
-     * letters.
+     * Matches text against a wildcard pattern where ? is single letter and * is zero or more letters.
      *
-     * @param text the text to test against
-     * @param wildcard the wildcard pattern
+     * @param text
+     *            the text to test against
+     * @param wildcard
+     *            the wildcard pattern
+     *
      * @return <code>true</code> if the given text matches the wildcard, otherwise <code>false</code>
      */
     public static boolean matches(final String text, final String wildcard) {

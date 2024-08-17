@@ -106,15 +106,15 @@ public abstract class AbstractCoverageParserTest {
         UniqueSourceCallback uniqueSourceCallback = new UniqueSourceCallback(sourceCollector);
         ClassifierRemover classifierRemover = new ClassifierRemover(uniqueSourceCallback);
         classifierRemover.onBegin();
-        for (Source source: captor.getAllValues()) {
+        for (Source source : captor.getAllValues()) {
             classifierRemover.onSource(source);
         }
         classifierRemover.onComplete();
 
         for (String[] coverageFile : fixture) {
             assertCoverage(sourceCollector.sources, coverageFile[0], Integer.parseInt(coverageFile[1]),
-                    toIntegerSet(coverageFile[2]), toIntegerSet(coverageFile[3]),
-                    toIntegerSet(coverageFile[4]), toIntegerSet(coverageFile[5]));
+                    toIntegerSet(coverageFile[2]), toIntegerSet(coverageFile[3]), toIntegerSet(coverageFile[4]),
+                    toIntegerSet(coverageFile[5]));
         }
     }
 
@@ -169,8 +169,8 @@ public abstract class AbstractCoverageParserTest {
     }
 
     private static void assertCoverage(final Collection<Source> sources, final String name, final int lines,
-            final Set<Integer> coveredLines, final Set<Integer> missedLines,
-            final Set<Integer> coveredBranches, final Set<Integer> missedBranches) {
+            final Set<Integer> coveredLines, final Set<Integer> missedLines, final Set<Integer> coveredBranches,
+            final Set<Integer> missedBranches) {
 
         Source tested = null;
         for (Source source : sources) {

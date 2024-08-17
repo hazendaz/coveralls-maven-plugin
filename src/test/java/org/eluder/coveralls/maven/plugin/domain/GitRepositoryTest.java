@@ -35,7 +35,8 @@ class GitRepositoryTest {
     /**
      * This tests assumes that the project resides in git repository.
      *
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     void testLoad() throws IOException {

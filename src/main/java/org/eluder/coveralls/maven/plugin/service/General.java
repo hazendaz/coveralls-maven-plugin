@@ -26,8 +26,7 @@ package org.eluder.coveralls.maven.plugin.service;
 import java.util.Map;
 
 /**
- * General implementation for any continuous integration service that provides the required
- * environment properties.
+ * General implementation for any continuous integration service that provides the required environment properties.
  */
 public class General extends AbstractServiceSetup {
 

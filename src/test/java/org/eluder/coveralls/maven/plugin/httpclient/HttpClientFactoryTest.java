@@ -47,14 +47,12 @@ class HttpClientFactoryTest {
     @RegisterExtension
     static WireMockExtension targetServer = WireMockExtension.newInstance()
             .options(WireMockConfiguration.wireMockConfig().port(TARGET_PORT).dynamicHttpsPort())
-            .configureStaticDsl(true)
-            .build();
+            .configureStaticDsl(true).build();
 
     @RegisterExtension
     static WireMockExtension proxyServer = WireMockExtension.newInstance()
             .options(WireMockConfiguration.wireMockConfig().port(PROXY_PORT).dynamicHttpsPort())
-            .configureStaticDsl(true)
-            .build();
+            .configureStaticDsl(true).build();
 
     @Test
     void simpleRequest() throws IOException {
@@ -88,11 +86,9 @@ class HttpClientFactoryTest {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).withHeader("Proxy-Authorization", matching("Basic Zm9vOmJhcg=="))
-                .willReturn(aResponse().withBody("Hello Proxy!"))
-                .atPriority(1));
+                .willReturn(aResponse().withBody("Hello Proxy!")).atPriority(1));
         proxyServer.stubFor(any(urlMatching(".*"))
-                .willReturn(aResponse().withStatus(407).withHeader("Proxy-Authenticate", "Basic"))
-                .atPriority(2));
+                .willReturn(aResponse().withStatus(407).withHeader("Proxy-Authenticate", "Basic")).atPriority(2));
 
         Proxy proxy = new Proxy();
         proxy.setHost("localhost");

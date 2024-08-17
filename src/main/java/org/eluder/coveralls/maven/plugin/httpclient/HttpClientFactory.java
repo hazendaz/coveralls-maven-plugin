@@ -44,8 +44,7 @@ class HttpClientFactory {
     private final String targetUrl;
 
     private final HttpClientBuilder hcb = HttpClientBuilder.create();
-    private final RequestConfig.Builder rcb = RequestConfig.custom()
-            .setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
+    private final RequestConfig.Builder rcb = RequestConfig.custom().setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
             .setSocketTimeout(DEFAULT_SOCKET_TIMEOUT);
 
     HttpClientFactory(final String targetUrl) {
@@ -57,10 +56,8 @@ class HttpClientFactory {
             rcb.setProxy(new HttpHost(proxy.getHost(), proxy.getPort(), proxy.getProtocol()));
             if (StringUtils.isNotBlank(proxy.getUsername())) {
                 CredentialsProvider cp = new BasicCredentialsProvider();
-                cp.setCredentials(
-                        new AuthScope(proxy.getHost(), proxy.getPort()),
-                        new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword())
-                );
+                cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
+                        new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
                 hcb.setDefaultCredentialsProvider(cp);
             }
         }

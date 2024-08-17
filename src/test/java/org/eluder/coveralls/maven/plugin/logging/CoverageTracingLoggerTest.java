@@ -65,16 +65,21 @@ class CoverageTracingLoggerTest {
 
     @Test
     void logForSources() throws ProcessingException, IOException {
-        Source source1 = new Source("Source1.java", "public class Source1 {\n  if(true) { }\n}\n", "FE0538639E8CE73733E77659C1043B5C");
+        Source source1 = new Source("Source1.java", "public class Source1 {\n  if(true) { }\n}\n",
+                "FE0538639E8CE73733E77659C1043B5C");
         source1.addCoverage(1, 0);
         source1.addCoverage(2, 0);
         source1.addCoverage(3, 0);
         source1.addBranchCoverage(2, 0, 0, 3);
         source1.addBranchCoverage(2, 0, 1, 0);
-        Source source2 = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "34BD6501A6D1CE5181AECEA688C7D382");
+        Source source2 = new Source("Source2.java",
+                "public class Source2 {\n    new Interface() { public void run() { } };\n}\n",
+                "34BD6501A6D1CE5181AECEA688C7D382");
         source2.addCoverage(1, 1);
         source2.addCoverage(3, 1);
-        Source source2inner = new Source("Source2.java", "public class Source2 {\n    new Interface() { public void run() { } };\n}\n", "34BD6501A6D1CE5181AECEA688C7D382");
+        Source source2inner = new Source("Source2.java",
+                "public class Source2 {\n    new Interface() { public void run() { } };\n}\n",
+                "34BD6501A6D1CE5181AECEA688C7D382");
         source2inner.setClassifier("$1");
         source2inner.addCoverage(2, 1);
 

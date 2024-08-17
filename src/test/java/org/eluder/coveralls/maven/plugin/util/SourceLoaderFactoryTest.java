@@ -64,7 +64,7 @@ class SourceLoaderFactoryTest {
 
     @BeforeEach
     void init() throws IOException {
-        rootSources = Files.createDirectory(folder.resolve("src")); 
+        rootSources = Files.createDirectory(folder.resolve("src"));
         m1Sources = Files.createDirectory(rootSources.resolve("m1"));
         m2Sources = Files.createDirectory(m1Sources.resolve("m2"));
         lenient().when(root.getCollectedProjects()).thenReturn(Arrays.asList(m1, m2));
@@ -86,26 +86,21 @@ class SourceLoaderFactoryTest {
         Path s1 = Files.createDirectory(folder.resolve("s1"));
         Path s2 = Files.createDirectory(folder.resolve("s2"));
         SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
-                .withSourceDirectories(Arrays.asList(s1.toFile(), s2.toFile()))
-                .createSourceLoader();
+                .withSourceDirectories(Arrays.asList(s1.toFile(), s2.toFile())).createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
     @Test
     void createSourceLoaderWithScanForSources() {
-        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
-                .withScanForSources(true)
-                .createSourceLoader();
+        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").withScanForSources(true).createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
     @Test
     void createSourceLoaderInvalidDirectory() throws IOException {
         File file = Files.createDirectory(folder.resolve("aFile")).toFile();
-        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
-                .withSourceDirectories(Arrays.asList(file))
-                .withScanForSources(true)
-                .createSourceLoader();
+        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").withSourceDirectories(Arrays.asList(file))
+                .withScanForSources(true).createSourceLoader();
         assertNotNull(sourceLoader);
     }
 

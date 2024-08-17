@@ -130,34 +130,39 @@ public class CoverallsReportMojoTest {
         lenient().when(logMock.isInfoEnabled()).thenReturn(true);
         lenient().when(jobMock.validate()).thenReturn(new ValidationErrors());
 
-
         mojo = new CoverallsReportMojo() {
             @Override
             protected SourceLoader createSourceLoader(final Job job) {
                 return sourceLoaderMock;
             }
+
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {
                 List<CoverageParser> parsers = new ArrayList<>();
                 parsers.add(new CoberturaParser(TestIoUtil.getFile("cobertura.xml"), sourceLoader));
                 return parsers;
             }
+
             @Override
             protected Environment createEnvironment() {
                 return new Environment(this, Collections.<ServiceSetup>emptyList());
             }
+
             @Override
             protected Job createJob() {
                 return jobMock;
             }
+
             @Override
             protected JsonWriter createJsonWriter(final Job job) throws IOException {
                 return new JsonWriter(jobMock, CoverallsReportMojoTest.this.coverallsFile);
             }
+
             @Override
             protected CoverallsClient createCoverallsClient() {
                 return coverallsClientMock;
             }
+
             @Override
             public Log getLog() {
                 return logMock;
@@ -200,7 +205,7 @@ public class CoverallsReportMojoTest {
         Path git = Files.createDirectory(folder.resolve("git"));
         when(gitMock.getBaseDir()).thenReturn(git.toFile());
         when(jobMock.getGit()).thenReturn(gitMock);
-        TestIoUtil.writeFileContent("public interface Test { }", Files.createFile(git.resolve("source.java")).toFile()); 
+        TestIoUtil.writeFileContent("public interface Test { }", Files.createFile(git.resolve("source.java")).toFile());
         mojo = new CoverallsReportMojo();
         mojo.settings = settingsMock;
         mojo.project = projectMock;
@@ -217,6 +222,7 @@ public class CoverallsReportMojoTest {
             protected SourceLoader createSourceLoader(final Job job) {
                 return sourceLoaderMock;
             }
+
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) throws IOException {
                 return Collections.emptyList();
@@ -227,7 +233,7 @@ public class CoverallsReportMojoTest {
         mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.repoToken = "asdfg";
-        mojo.coverallsFile = Files.createFile(folder.resolve("mojoCoverallsFile")).toFile(); 
+        mojo.coverallsFile = Files.createFile(folder.resolve("mojoCoverallsFile")).toFile();
         mojo.dryRun = true;
         mojo.skip = false;
         mojo.basedir = TestIoUtil.getFile("/");
@@ -262,7 +268,8 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void processingExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException {
+    void processingExceptionWithAllowedServiceFailure()
+            throws ProcessingException, IOException, MojoExecutionException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
@@ -285,7 +292,8 @@ public class CoverallsReportMojoTest {
     }
 
     @Test
-    void iOExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void iOExceptionWithAllowedServiceFailure()
+            throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         mojo.execute();
@@ -312,7 +320,8 @@ public class CoverallsReportMojoTest {
     }
 
     public static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
-        verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture) + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
+        verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
+                + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 

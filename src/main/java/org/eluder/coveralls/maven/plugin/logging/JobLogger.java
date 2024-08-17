@@ -99,9 +99,9 @@ public class JobLogger implements Logger {
     }
 
     private ObjectMapper createDefaultJsonMapper() {
-        return JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).
-        configure(SerializationFeature.INDENT_OUTPUT, true).
-        configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).build();
+        return JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
+                .configure(SerializationFeature.INDENT_OUTPUT, true)
+                .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).build();
     }
 
 }

@@ -64,7 +64,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir(sourceDirectory);
             scanner.addDefaultExcludes();
-            scanner.setIncludes(new String[] {"**/*." + extension});
+            scanner.setIncludes(new String[] { "**/*." + extension });
             scanner.scan();
 
             cache.put(extension, scanner.getIncludedFiles());

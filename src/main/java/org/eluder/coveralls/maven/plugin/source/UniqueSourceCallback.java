@@ -31,10 +31,9 @@ import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
 /**
- * Source callback that tracks passed by source files and provides only unique
- * source files to the delegate. Note that the implementation is not thread
- * safe so the {@link #onSource(org.eluder.coveralls.maven.plugin.domain.Source)}
- * can be called only from single thread concurrently.
+ * Source callback that tracks passed by source files and provides only unique source files to the delegate. Note that
+ * the implementation is not thread safe so the {@link #onSource(org.eluder.coveralls.maven.plugin.domain.Source)} can
+ * be called only from single thread concurrently.
  */
 public class UniqueSourceCallback implements SourceCallback {
 

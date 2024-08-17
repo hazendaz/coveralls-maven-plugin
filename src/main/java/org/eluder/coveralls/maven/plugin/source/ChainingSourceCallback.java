@@ -29,8 +29,8 @@ import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
 /**
- * Source callback handler that allows chaining multiple callback handlers. Chained callback
- * handler is executed after this callback.
+ * Source callback handler that allows chaining multiple callback handlers. Chained callback handler is executed after
+ * this callback.
  */
 public abstract class ChainingSourceCallback implements SourceCallback {
 
@@ -66,8 +66,10 @@ public abstract class ChainingSourceCallback implements SourceCallback {
      *
      * @see #onBegin()
      *
-     * @throws ProcessingException if processing fails
-     * @throws IOException if an I/O error occurs
+     * @throws ProcessingException
+     *             if processing fails
+     * @throws IOException
+     *             if an I/O error occurs
      */
     protected void onBeginInternal() throws ProcessingException, IOException {
 
@@ -76,9 +78,14 @@ public abstract class ChainingSourceCallback implements SourceCallback {
     /**
      * On source internal.
      *
-     * @param source the source file
-     * @throws ProcessingException if further processing of the source fails
-     * @throws IOException if an I/O error occurs
+     * @param source
+     *            the source file
+     *
+     * @throws ProcessingException
+     *             if further processing of the source fails
+     * @throws IOException
+     *             if an I/O error occurs
+     *
      * @see #onSource(Source)
      */
     protected abstract void onSourceInternal(final Source source) throws ProcessingException, IOException;
@@ -88,8 +95,10 @@ public abstract class ChainingSourceCallback implements SourceCallback {
      *
      * @see #onComplete()
      *
-     * @throws ProcessingException if processing fails
-     * @throws IOException if an I/O error occurs
+     * @throws ProcessingException
+     *             if processing fails
+     * @throws IOException
+     *             if an I/O error occurs
      */
     protected void onCompleteInternal() throws ProcessingException, IOException {
 

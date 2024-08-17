@@ -117,7 +117,8 @@ class CoverallsClientTest {
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        when(httpEntityMock.getContent()).thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
+        when(httpEntityMock.getContent())
+                .thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
             client.submit(file);
@@ -130,7 +131,8 @@ class CoverallsClientTest {
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
+        when(httpEntityMock.getContent())
+                .thenReturn(coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
             client.submit(file);
@@ -161,8 +163,8 @@ class CoverallsClientTest {
         when(element.getName()).thenReturn("HeaderName");
         NameValuePair pair = mock(NameValuePair.class);
         when(pair.getName()).thenReturn("name");
-        when(element.getParameters()).thenReturn(new NameValuePair[] { pair } );
-        when(header.getElements()).thenReturn(new HeaderElement[] { element } );
+        when(element.getParameters()).thenReturn(new NameValuePair[] { pair });
+        when(header.getElements()).thenReturn(new HeaderElement[] { element });
         when(httpEntityMock.getContentType()).thenReturn(header);
         CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
