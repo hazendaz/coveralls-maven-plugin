@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 class TravisTest {
 
-    private Map<String, String> env() {
+    Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("TRAVIS", "true");
         env.put("TRAVIS_JOB_ID", "job123");
@@ -80,4 +80,5 @@ class TravisTest {
         assertEquals("job123", properties.getProperty("travis_job_id"));
         assertEquals("pull10", properties.getProperty("travis_pull_request"));
     }
+
 }

@@ -65,18 +65,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CoverallsClientTest {
 
     @Mock
-    private HttpClient httpClientMock;
+    HttpClient httpClientMock;
 
     @Mock
-    private HttpResponse httpResponseMock;
+    HttpResponse httpResponseMock;
 
     @Mock
-    private HttpEntity httpEntityMock;
+    HttpEntity httpEntityMock;
 
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
-    public Path folder;
+    Path folder;
 
-    private File file;
+    File file;
 
     @BeforeEach
     void init() throws IOException {
@@ -172,7 +172,7 @@ class CoverallsClientTest {
         });
     }
 
-    private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
+    InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
         var content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }

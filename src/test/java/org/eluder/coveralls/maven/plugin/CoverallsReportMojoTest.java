@@ -74,44 +74,44 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class CoverallsReportMojoTest {
+class CoverallsReportMojoTest {
 
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
-    public Path folder;
+    Path folder;
 
-    public File coverallsFile;
+    File coverallsFile;
 
-    private CoverallsReportMojo mojo;
-
-    @Mock
-    private CoverallsClient coverallsClientMock;
+    CoverallsReportMojo mojo;
 
     @Mock
-    private SourceLoader sourceLoaderMock;
+    CoverallsClient coverallsClientMock;
 
     @Mock
-    private Job jobMock;
+    SourceLoader sourceLoaderMock;
 
     @Mock
-    private Log logMock;
+    Job jobMock;
 
     @Mock
-    private MavenProject projectMock;
+    Log logMock;
 
     @Mock
-    private MavenProject collectedProjectMock;
+    MavenProject projectMock;
 
     @Mock
-    private Model modelMock;
+    MavenProject collectedProjectMock;
 
     @Mock
-    private Reporting reportingMock;
+    Model modelMock;
 
     @Mock
-    private Build buildMock;
+    Reporting reportingMock;
 
     @Mock
-    private Settings settingsMock;
+    Build buildMock;
+
+    @Mock
+    Settings settingsMock;
 
     @BeforeEach
     void init() throws IOException {
@@ -314,13 +314,13 @@ public class CoverallsReportMojoTest {
         verifyNoInteractions(jobMock);
     }
 
-    public static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
+    static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
         verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                 + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 
-    protected String readFileContent(final String sourceFile) throws FileNotFoundException, IOException {
+    String readFileContent(final String sourceFile) throws FileNotFoundException, IOException {
         return TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
     }
 }

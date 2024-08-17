@@ -89,12 +89,11 @@ class UniqueSourceCallbackTest {
         verify(sourceCallbackMock).onComplete();
     }
 
-    private UniqueSourceCallback createUniqueSourceCallback() {
+    UniqueSourceCallback createUniqueSourceCallback() {
         return new UniqueSourceCallback(sourceCallbackMock);
     }
 
-    private Source createSource(final String name, final String source, final int... relevant)
-            throws NoSuchAlgorithmException {
+    Source createSource(final String name, final String source, final int... relevant) throws NoSuchAlgorithmException {
         var s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
         for (int i : relevant) {
             s.addCoverage(i, 1);

@@ -47,13 +47,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class JobLoggerTest {
 
     @Mock
-    private Job jobMock;
+    Job jobMock;
 
     @Mock
-    private Log logMock;
+    Log logMock;
 
     @Mock
-    private ObjectMapper jsonMapperMock;
+    ObjectMapper jsonMapperMock;
 
     @Test
     void missingJob() {

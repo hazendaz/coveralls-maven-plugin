@@ -39,7 +39,7 @@ import org.junit.jupiter.api.io.TempDir;
 class DirectorySourceLoaderTest {
 
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
-    public Path folder;
+    Path folder;
 
     @Test
     void missingSourceFileFromDirectory() throws IOException {
@@ -68,4 +68,5 @@ class DirectorySourceLoaderTest {
                 source.getDigest());
         assertEquals(4, source.getCoverage().length);
     }
+
 }

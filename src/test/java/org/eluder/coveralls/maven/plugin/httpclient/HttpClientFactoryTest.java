@@ -43,9 +43,9 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 class HttpClientFactoryTest {
 
-    private static final int PROXY_PORT = 9797;
-    private static final int TARGET_PORT = 9696;
-    private static final String TARGET_URL = "http://localhost:" + TARGET_PORT;
+    static final int PROXY_PORT = 9797;
+    static final int TARGET_PORT = 9696;
+    static final String TARGET_URL = "http://localhost:" + TARGET_PORT;
 
     @RegisterExtension
     static WireMockExtension targetServer = WireMockExtension.newInstance()

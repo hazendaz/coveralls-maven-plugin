@@ -46,10 +46,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CoverageTracingLoggerTest {
 
     @Mock
-    private Log logMock;
+    Log logMock;
 
     @Mock
-    private SourceCallback sourceCallbackMock;
+    SourceCallback sourceCallbackMock;
 
     @Test
     void constructorWithNull() {

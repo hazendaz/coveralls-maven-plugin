@@ -47,16 +47,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class EnvironmentTest {
 
-    private CoverallsReportMojo mojo;
+    CoverallsReportMojo mojo;
 
     @Mock
-    private CoverageParser coverageParserMock;
+    CoverageParser coverageParserMock;
 
     @Mock
-    private Log logMock;
+    Log logMock;
 
     @Mock
-    private ServiceSetup serviceMock;
+    ServiceSetup serviceMock;
 
     @BeforeEach
     void init() {
@@ -173,7 +173,7 @@ class EnvironmentTest {
         assertEquals("setProperty", mojo.serviceEnvironment.get("env"));
     }
 
-    private Environment create(final Iterable<ServiceSetup> services) {
+    Environment create(final Iterable<ServiceSetup> services) {
         return new Environment(mojo, services);
     }
 }

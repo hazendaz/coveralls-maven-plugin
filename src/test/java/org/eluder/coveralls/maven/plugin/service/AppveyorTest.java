@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 class AppveyorTest {
 
-    private Map<String, String> env() {
+    Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put(Appveyor.APPVEYOR, "true");
         env.put(Appveyor.APPVEYOR_BUILD_ID, "54de3316c44f");

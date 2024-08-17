@@ -39,14 +39,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class MultiSourceLoaderTest {
 
     @Mock
-    private SourceLoader sl1;
+    SourceLoader sl1;
 
     @Mock
-    private SourceLoader sl2;
+    SourceLoader sl2;
 
-    private Source s1 = new Source("source", "{ 1 }", "9A0174D3A5B8D202C6E404601FC260D1");
+    Source s1 = new Source("source", "{ 1 }", "9A0174D3A5B8D202C6E404601FC260D1");
 
-    private Source s2 = new Source("source", "{ 2 }", "849409F24F4BCAAC904F3B142447D65D");
+    Source s2 = new Source("source", "{ 2 }", "849409F24F4BCAAC904F3B142447D65D");
 
     @Test
     void missingSource() {
@@ -69,7 +69,7 @@ class MultiSourceLoaderTest {
         assertSame(s2, source);
     }
 
-    private MultiSourceLoader creaMultiSourceLoader() {
+    MultiSourceLoader creaMultiSourceLoader() {
         return new MultiSourceLoader().add(sl1).add(sl2);
     }
 }

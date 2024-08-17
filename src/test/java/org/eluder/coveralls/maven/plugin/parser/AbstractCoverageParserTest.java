@@ -61,13 +61,17 @@ import org.mockito.stubbing.Answer;
 public abstract class AbstractCoverageParserTest {
 
     @Mock
-    protected SourceLoader sourceLoaderMock;
+    SourceLoader sourceLoaderMock;
 
     @Mock
-    protected SourceCallback sourceCallbackMock;
+    SourceCallback sourceCallbackMock;
+
+    public AbstractCoverageParserTest() {
+        // Do Nothing
+    }
 
     @BeforeEach
-    public void init() throws IOException {
+    void init() throws IOException {
         for (String[] coverageFile : getCoverageFixture()) {
             final var name = sourceName(coverageFile[0]);
             final var content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
@@ -75,16 +79,16 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
-    protected String sourceName(final String coverageFile) {
+    String sourceName(final String coverageFile) {
         return coverageFile;
     }
 
-    protected Answer<Source> sourceAnswer(final String name, final String content) {
+    Answer<Source> sourceAnswer(final String name, final String content) {
         return invocation -> new Source(name, content, TestIoUtil.getSha512DigestHex(content));
     }
 
     @Test
-    public void parseCoverage() throws ProcessingException, IOException {
+    void parseCoverage() throws ProcessingException, IOException {
         for (String coverageResource : getCoverageResources()) {
             var parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
             parser.parse(sourceCallbackMock);
@@ -117,7 +121,7 @@ public abstract class AbstractCoverageParserTest {
 
     protected abstract String[][] getCoverageFixture();
 
-    private Set<Integer> toIntegerSet(final String commaSeparated) {
+    Set<Integer> toIntegerSet(final String commaSeparated) {
         if (commaSeparated.isEmpty()) {
             return Collections.emptySet();
         }
@@ -129,7 +133,7 @@ public abstract class AbstractCoverageParserTest {
         return values;
     }
 
-    private static class SourceCollector implements SourceCallback {
+    static class SourceCollector implements SourceCallback {
 
         private List<Source> sources = new ArrayList<>();
 
@@ -149,7 +153,7 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
-    private static class ClassifierRemover extends ChainingSourceCallback {
+    static class ClassifierRemover extends ChainingSourceCallback {
 
         public ClassifierRemover(SourceCallback chained) {
             super(chained);
@@ -161,7 +165,7 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
-    private static void assertCoverage(final Collection<Source> sources, final String name, final int lines,
+    static void assertCoverage(final Collection<Source> sources, final String name, final int lines,
             final Set<Integer> coveredLines, final Set<Integer> missedLines, final Set<Integer> coveredBranches,
             final Set<Integer> missedBranches) {
 
@@ -198,4 +202,5 @@ public abstract class AbstractCoverageParserTest {
             }
         }
     }
+
 }

@@ -54,12 +54,12 @@ import org.junit.jupiter.api.io.TempDir;
 
 class JsonWriterTest {
 
-    private static final long TEST_TIME = 1357009200000L;
+    static final long TEST_TIME = 1357009200000L;
 
     @TempDir(cleanup = CleanupMode.NEVER)
-    public Path folder;
+    Path folder;
 
-    private File file;
+    File file;
 
     @BeforeEach
     void init() {
@@ -129,7 +129,7 @@ class JsonWriterTest {
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
     }
 
-    private Job job() {
+    Job job() {
         var head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
         var remote = new Git.Remote("origin", "git@git.com:foo.git");
         var environment = new Properties();
@@ -140,11 +140,11 @@ class JsonWriterTest {
                 .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
 
-    private Source source() {
+    Source source() {
         return new Source("Foo.java", "public class Foo { }", "6E0F89B516198DC6AB743EA5FBFB3108");
     }
 
-    private Map<String, Object> stringToJsonMap(final String content) throws JsonProcessingException {
+    Map<String, Object> stringToJsonMap(final String content) throws JsonProcessingException {
         var mapper = new ObjectMapper();
         var type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
         return mapper.readValue(content, type);

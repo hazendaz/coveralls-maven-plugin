@@ -42,10 +42,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class DryRunLoggerTest {
 
     @Mock
-    private Log logMock;
+    Log logMock;
 
     @Mock
-    private File coverallsFileMock;
+    File coverallsFileMock;
 
     @Test
     void missingCoverallsFile() {

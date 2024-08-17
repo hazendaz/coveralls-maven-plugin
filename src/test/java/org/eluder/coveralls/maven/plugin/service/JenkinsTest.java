@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 class JenkinsTest {
 
-    private Map<String, String> env() {
+    Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("JENKINS_URL", "http://company.com/jenkins");
         env.put("BUILD_NUMBER", "build123");

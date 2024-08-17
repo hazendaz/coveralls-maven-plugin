@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 class CircleTest {
 
-    private Map<String, String> env() {
+    Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("CIRCLECI", "true");
         env.put("CIRCLE_BUILD_NUM", "build123");

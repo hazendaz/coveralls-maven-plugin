@@ -31,8 +31,8 @@ import org.junit.jupiter.api.Test;
 
 class ProcessingExceptionTest {
 
-    private static final String MESSAGE = "message";
-    private static final RuntimeException CAUSE = new RuntimeException();
+    static final String MESSAGE = "message";
+    static final RuntimeException CAUSE = new RuntimeException();
 
     @Test
     void exception() {
