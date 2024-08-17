@@ -25,7 +25,6 @@ package org.eluder.coveralls.maven.plugin.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -39,8 +38,8 @@ import org.apache.commons.io.IOUtils;
 
 public final class TestIoUtil {
 
-    public static void writeFileContent(final String content, final File file) throws FileNotFoundException {
-        try (PrintWriter writer = new PrintWriter(file)) {
+    public static void writeFileContent(final String content, final File file) throws IOException {
+        try (PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8)) {
             writer.write(content);
         }
     }
