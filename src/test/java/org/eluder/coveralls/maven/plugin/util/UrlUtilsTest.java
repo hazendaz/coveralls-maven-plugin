@@ -56,7 +56,7 @@ class UrlUtilsTest {
 
     @Test
     void validUrlToUri() throws MalformedURLException, URISyntaxException {
-        URI uri = UrlUtils.toUri(new URL("http://google.com"));
+        var uri = UrlUtils.toUri(new URL("http://google.com"));
         assertEquals(new URI("http://google.com"), uri);
     }
 }

@@ -39,20 +39,20 @@ import org.apache.commons.io.IOUtils;
 public final class TestIoUtil {
 
     public static void writeFileContent(final String content, final File file) throws IOException {
-        try (PrintWriter writer = new PrintWriter(file, StandardCharsets.UTF_8)) {
+        try (var writer = new PrintWriter(file, StandardCharsets.UTF_8)) {
             writer.write(content);
         }
     }
 
     public static String readFileContent(final File file) throws IOException {
-        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+        try (var reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             return IOUtils.toString(reader);
         }
     }
 
     public static File getFile(final String resource) {
         try {
-            String local = resource;
+            var local = resource;
             if (local.lastIndexOf("/") > 0) {
                 local = local.substring(local.lastIndexOf('/'));
             }

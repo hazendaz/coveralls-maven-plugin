@@ -32,7 +32,6 @@ import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,7 +54,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
@@ -71,8 +69,8 @@ public abstract class AbstractCoverageParserTest {
     @BeforeEach
     public void init() throws IOException {
         for (String[] coverageFile : getCoverageFixture()) {
-            final String name = sourceName(coverageFile[0]);
-            final String content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
+            final var name = sourceName(coverageFile[0]);
+            final var content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
             lenient().when(sourceLoaderMock.load(name)).then(sourceAnswer(name, content));
         }
     }
@@ -82,29 +80,24 @@ public abstract class AbstractCoverageParserTest {
     }
 
     protected Answer<Source> sourceAnswer(final String name, final String content) {
-        return new Answer<Source>() {
-            @Override
-            public Source answer(final InvocationOnMock invocation) throws NoSuchAlgorithmException {
-                return new Source(name, content, TestIoUtil.getSha512DigestHex(content));
-            }
-        };
+        return invocation -> new Source(name, content, TestIoUtil.getSha512DigestHex(content));
     }
 
     @Test
     public void parseCoverage() throws ProcessingException, IOException {
         for (String coverageResource : getCoverageResources()) {
-            CoverageParser parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
+            var parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
             parser.parse(sourceCallbackMock);
         }
 
-        String[][] fixture = getCoverageFixture();
+        var fixture = getCoverageFixture();
 
         ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
         verify(sourceCallbackMock, atLeast(CoverageFixture.getTotalFiles(fixture))).onSource(captor.capture());
 
-        SourceCollector sourceCollector = new SourceCollector();
-        UniqueSourceCallback uniqueSourceCallback = new UniqueSourceCallback(sourceCollector);
-        ClassifierRemover classifierRemover = new ClassifierRemover(uniqueSourceCallback);
+        var sourceCollector = new SourceCollector();
+        var uniqueSourceCallback = new UniqueSourceCallback(sourceCollector);
+        var classifierRemover = new ClassifierRemover(uniqueSourceCallback);
         classifierRemover.onBegin();
         for (Source source : captor.getAllValues()) {
             classifierRemover.onSource(source);
@@ -128,7 +121,7 @@ public abstract class AbstractCoverageParserTest {
         if (commaSeparated.isEmpty()) {
             return Collections.emptySet();
         }
-        String[] split = commaSeparated.split(",", -1);
+        var split = commaSeparated.split(",", -1);
         Set<Integer> values = new HashSet<>();
         for (String value : split) {
             values.add(Integer.valueOf(value));
@@ -185,9 +178,9 @@ public abstract class AbstractCoverageParserTest {
         if (tested.getCoverage().length != lines) {
             fail("Expected " + lines + " lines for " + name + " was " + tested.getCoverage().length);
         }
-        for (int i = 0; i < tested.getCoverage().length; i++) {
+        for (var i = 0; i < tested.getCoverage().length; i++) {
             Integer lineNumber = i + 1;
-            String message = name + " line " + lineNumber + " coverage";
+            var message = name + " line " + lineNumber + " coverage";
             if (coveredLines.contains(lineNumber)) {
                 assertTrue(tested.getCoverage()[i] > 0, message);
             } else if (missedLines.contains(lineNumber)) {
@@ -197,7 +190,7 @@ public abstract class AbstractCoverageParserTest {
             }
         }
         for (final Branch b : tested.getBranchesList()) {
-            final String message = name + " branch " + b.getBranchNumber() + " coverage in line " + b.getLineNumber();
+            final var message = name + " branch " + b.getBranchNumber() + " coverage in line " + b.getLineNumber();
             if (b.getHits() > 0) {
                 assertTrue(coveredBranches.contains(b.getLineNumber()), message);
             } else {

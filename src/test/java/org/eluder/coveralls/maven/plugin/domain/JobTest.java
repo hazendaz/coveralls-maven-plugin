@@ -38,15 +38,15 @@ class JobTest {
     @Test
     void getBranchWithRemote() {
         List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
-        Git git = new Git(new File("."), new Head(null, null, null, null, null, null), "master", remotes);
-        Job job = new Job().withBranch("origin/master").withGit(git);
+        var git = new Git(new File("."), new Head(null, null, null, null, null, null), "master", remotes);
+        var job = new Job().withBranch("origin/master").withGit(git);
         assertEquals(".", git.getBaseDir().getPath());
         assertEquals("master", job.getBranch());
     }
 
     @Test
     void testGetBranch() {
-        Job job = new Job().withBranch("master");
+        var job = new Job().withBranch("master");
         assertEquals("master", job.getBranch());
     }
 }

@@ -45,7 +45,7 @@ class WerckerTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Wercker(new HashMap<String, String>()).isSelected());
+        assertFalse(new Wercker(new HashMap<>()).isSelected());
     }
 
     @Test

@@ -40,7 +40,7 @@ class GitRepositoryTest {
      */
     @Test
     void testLoad() throws IOException {
-        Git git = new GitRepository(TestIoUtil.getFile("/")).load();
+        var git = new GitRepository(TestIoUtil.getFile("/")).load();
         assertNotNull(git.getHead().getId());
     }
 }

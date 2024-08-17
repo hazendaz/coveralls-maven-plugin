@@ -36,28 +36,28 @@ class ValidationExceptionTest {
 
     @Test
     void exception() {
-        ValidationException exception = new ValidationException();
+        var exception = new ValidationException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
     void exceptionWithMessage() {
-        ValidationException exception = new ValidationException(MESSAGE);
+        var exception = new ValidationException(MESSAGE);
         assertEquals(MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
     void exceptionWithCause() {
-        ValidationException exception = new ValidationException(CAUSE);
+        var exception = new ValidationException(CAUSE);
         assertEquals(CAUSE.toString(), exception.getMessage());
         assertSame(CAUSE, exception.getCause());
     }
 
     @Test
     void exceptionWithMessageAndCause() {
-        ValidationException exception = new ValidationException(MESSAGE, CAUSE);
+        var exception = new ValidationException(MESSAGE, CAUSE);
         assertEquals(MESSAGE, exception.getMessage());
         assertSame(CAUSE, exception.getCause());
 

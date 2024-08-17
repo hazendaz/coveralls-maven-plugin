@@ -26,7 +26,6 @@ package org.eluder.coveralls.maven.plugin.util;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.lenient;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +33,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.apache.maven.project.MavenProject;
-import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -77,29 +75,29 @@ class SourceLoaderFactoryTest {
 
     @Test
     void testCreateSourceLoader() {
-        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").createSourceLoader();
+        var sourceLoader = createSourceLoaderFactory("UTF-8").createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
     @Test
     void createSourceLoaderWithAdditionalSourceDirectories() throws IOException {
-        Path s1 = Files.createDirectory(folder.resolve("s1"));
-        Path s2 = Files.createDirectory(folder.resolve("s2"));
-        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8")
+        var s1 = Files.createDirectory(folder.resolve("s1"));
+        var s2 = Files.createDirectory(folder.resolve("s2"));
+        var sourceLoader = createSourceLoaderFactory("UTF-8")
                 .withSourceDirectories(Arrays.asList(s1.toFile(), s2.toFile())).createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
     @Test
     void createSourceLoaderWithScanForSources() {
-        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").withScanForSources(true).createSourceLoader();
+        var sourceLoader = createSourceLoaderFactory("UTF-8").withScanForSources(true).createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
     @Test
     void createSourceLoaderInvalidDirectory() throws IOException {
-        File file = Files.createDirectory(folder.resolve("aFile")).toFile();
-        SourceLoader sourceLoader = createSourceLoaderFactory("UTF-8").withSourceDirectories(Arrays.asList(file))
+        var file = Files.createDirectory(folder.resolve("aFile")).toFile();
+        var sourceLoader = createSourceLoaderFactory("UTF-8").withSourceDirectories(Arrays.asList(file))
                 .withScanForSources(true).createSourceLoader();
         assertNotNull(sourceLoader);
     }

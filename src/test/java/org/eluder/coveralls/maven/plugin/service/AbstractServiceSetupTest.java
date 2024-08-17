@@ -37,7 +37,7 @@ class AbstractServiceSetupTest {
 
     @Test
     void getMissingProperty() {
-        AbstractServiceSetup serviceSetup = create(new HashMap<>());
+        var serviceSetup = create(new HashMap<>());
         assertNull(serviceSetup.getProperty("property"));
     }
 
@@ -51,27 +51,27 @@ class AbstractServiceSetupTest {
     @Test
     void addPropertyWithoutName() {
         assertThrows(IllegalArgumentException.class, () -> {
-            create(new HashMap<String, String>()).addProperty(new Properties(), null, "value");
+            create(new HashMap<>()).addProperty(new Properties(), null, "value");
         });
     }
 
     @Test
     void addPropertyWithoutValue() {
-        Properties properties = new Properties();
-        create(new HashMap<String, String>()).addProperty(properties, "prop", " ");
+        var properties = new Properties();
+        create(new HashMap<>()).addProperty(properties, "prop", " ");
         assertNull(properties.getProperty("prop"));
     }
 
     @Test
     void addPropertyWithValue() {
-        Properties properties = new Properties();
-        create(new HashMap<String, String>()).addProperty(properties, "prop", "value");
+        var properties = new Properties();
+        create(new HashMap<>()).addProperty(properties, "prop", "value");
         assertEquals("value", properties.getProperty("prop"));
     }
 
     @Test
     void getDefaultValues() {
-        AbstractServiceSetup serviceSetup = create(new HashMap<>());
+        var serviceSetup = create(new HashMap<>());
         assertNull(serviceSetup.getName());
         assertNull(serviceSetup.getJobId());
         assertNull(serviceSetup.getBuildNumber());

@@ -69,7 +69,7 @@ class JobLoggerTest {
 
     @Test
     void logJobWithId() {
-        Git git = new Git(null, new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
+        var git = new Git(null, new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceJobId()).thenReturn("666");
         when(jobMock.getRepoToken()).thenReturn("123456789");
@@ -141,7 +141,7 @@ class JobLoggerTest {
         when(jobMock.getServiceName()).thenReturn("service");
         when(jsonMapperMock.writeValueAsString(same(jobMock))).thenThrow(JsonProcessingException.class);
 
-        JobLogger jobLogger = new JobLogger(jobMock, jsonMapperMock);
+        var jobLogger = new JobLogger(jobMock, jsonMapperMock);
         assertThrows(RuntimeException.class, () -> {
             jobLogger.log(logMock);
         });

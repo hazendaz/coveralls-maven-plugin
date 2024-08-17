@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.junit.jupiter.api.Test;
@@ -44,34 +43,34 @@ class TimestampParserTest {
 
     @Test
     void parseEpochMillis() throws ProcessingException {
-        String format = TimestampParser.EPOCH_MILLIS;
-        long time = System.currentTimeMillis();
-        Date parsed = new TimestampParser(format).parse(String.valueOf(time));
+        var format = TimestampParser.EPOCH_MILLIS;
+        var time = System.currentTimeMillis();
+        var parsed = new TimestampParser(format).parse(String.valueOf(time));
 
         assertEquals(time, parsed.getTime());
     }
 
     @Test
     void parseSimpleFormat() throws ProcessingException {
-        String format = "yyyy-MM-dd";
-        Date parsed = new TimestampParser(format).parse("2015-08-20");
-        String formatted = new SimpleDateFormat(format).format(parsed);
+        var format = "yyyy-MM-dd";
+        var parsed = new TimestampParser(format).parse("2015-08-20");
+        var formatted = new SimpleDateFormat(format).format(parsed);
 
         assertEquals("2015-08-20", formatted);
     }
 
     @Test
     void parseDefaultFormat() throws ProcessingException {
-        String format = TimestampParser.DEFAULT_FORMAT;
-        Date parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
-        String formatted = new SimpleDateFormat(format).format(parsed);
+        var format = TimestampParser.DEFAULT_FORMAT;
+        var parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
+        var formatted = new SimpleDateFormat(format).format(parsed);
 
         assertEquals("2015-08-20T20:10:00Z", formatted);
     }
 
     @Test
     void parseNull() throws ProcessingException {
-        Date parsed = new TimestampParser(null).parse(null);
+        var parsed = new TimestampParser(null).parse(null);
 
         assertNull(parsed);
     }

@@ -36,28 +36,28 @@ class ProcessingExceptionTest {
 
     @Test
     void exception() {
-        ProcessingException exception = new ProcessingException();
+        var exception = new ProcessingException();
         assertNull(exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
     void exceptionWithMessage() {
-        ProcessingException exception = new ProcessingException(MESSAGE);
+        var exception = new ProcessingException(MESSAGE);
         assertEquals(MESSAGE, exception.getMessage());
         assertNull(exception.getCause());
     }
 
     @Test
     void exceptionWithCause() {
-        ProcessingException exception = new ProcessingException(CAUSE);
+        var exception = new ProcessingException(CAUSE);
         assertEquals(CAUSE.toString(), exception.getMessage());
         assertSame(CAUSE, exception.getCause());
     }
 
     @Test
     void exceptionWithMessageAndCause() {
-        ProcessingException exception = new ProcessingException(MESSAGE, CAUSE);
+        var exception = new ProcessingException(MESSAGE, CAUSE);
         assertEquals(MESSAGE, exception.getMessage());
         assertSame(CAUSE, exception.getCause());
 

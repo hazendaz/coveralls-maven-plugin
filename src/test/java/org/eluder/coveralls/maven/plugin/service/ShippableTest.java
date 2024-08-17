@@ -30,7 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +48,7 @@ class ShippableTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Shippable(new HashMap<String, String>()).isSelected());
+        assertFalse(new Shippable(new HashMap<>()).isSelected());
     }
 
     @Test
@@ -84,14 +83,14 @@ class ShippableTest {
 
     @Test
     void pullRequestFalse() {
-        Map<String, String> env = env();
+        var env = env();
         env.put(Shippable.SHIPPABLE_PULL_REQUEST, "false");
         assertNull(new Shippable(env).getPullRequest());
     }
 
     @Test
     void testGetEnvironment() {
-        Properties properties = new Shippable(env()).getEnvironment();
+        var properties = new Shippable(env()).getEnvironment();
         assertEquals(5, properties.size());
         assertEquals("431.1", properties.getProperty("shippable_build_number"));
         assertEquals("54de3316c44f", properties.getProperty("shippable_build_id"));

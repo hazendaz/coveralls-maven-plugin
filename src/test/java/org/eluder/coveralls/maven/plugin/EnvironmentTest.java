@@ -23,7 +23,9 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -120,7 +122,7 @@ class EnvironmentTest {
     @Test
     void setupWithCompleteJob() {
         mojo.serviceName = null;
-        Properties environment = new Properties();
+        var environment = new Properties();
         environment.setProperty("env", "true");
         when(serviceMock.getName()).thenReturn("defined service");
         when(serviceMock.getJobId()).thenReturn("123");
@@ -142,9 +144,9 @@ class EnvironmentTest {
 
     @Test
     void setupWithoutJobOverride() {
-        Properties environment = new Properties();
+        var environment = new Properties();
         environment.setProperty("env", "true");
-        Properties serviceEnvironment = new Properties();
+        var serviceEnvironment = new Properties();
         serviceEnvironment.setProperty("env", "setProperty");
         when(serviceMock.getName()).thenReturn("defined service");
         when(serviceMock.getJobId()).thenReturn("123");

@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +46,7 @@ class JenkinsTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Jenkins(new HashMap<String, String>()).isSelected());
+        assertFalse(new Jenkins(new HashMap<>()).isSelected());
     }
 
     @Test
@@ -77,7 +76,7 @@ class JenkinsTest {
 
     @Test
     void testGetEnvironment() {
-        Properties properties = new Jenkins(env()).getEnvironment();
+        var properties = new Jenkins(env()).getEnvironment();
         assertEquals(4, properties.size());
         assertEquals("build123", properties.getProperty("jenkins_build_num"));
         assertEquals("http://company.com/jenkins/build123", properties.getProperty("jenkins_build_url"));

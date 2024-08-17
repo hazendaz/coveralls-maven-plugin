@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +45,7 @@ class CircleTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Circle(new HashMap<String, String>()).isSelected());
+        assertFalse(new Circle(new HashMap<>()).isSelected());
     }
 
     @Test
@@ -71,7 +70,7 @@ class CircleTest {
 
     @Test
     void testGetEnvironment() {
-        Properties properties = new Circle(env()).getEnvironment();
+        var properties = new Circle(env()).getEnvironment();
         assertEquals(3, properties.size());
         assertEquals("build123", properties.getProperty("circleci_build_num"));
         assertEquals("master", properties.getProperty("branch"));

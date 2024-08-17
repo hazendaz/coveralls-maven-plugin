@@ -44,7 +44,7 @@ class BambooTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Bamboo(new HashMap<String, String>()).isSelected());
+        assertFalse(new Bamboo(new HashMap<>()).isSelected());
     }
 
     @Test

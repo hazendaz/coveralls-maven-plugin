@@ -23,7 +23,11 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.any;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.matching;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
@@ -31,7 +35,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
 import java.io.IOException;
 
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 import org.apache.maven.settings.Proxy;
@@ -58,8 +61,8 @@ class HttpClientFactoryTest {
     void simpleRequest() throws IOException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
-        HttpClient client = new HttpClientFactory(TARGET_URL).create();
-        String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var client = new HttpClientFactory(TARGET_URL).create();
+        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
         assertEquals("Hello World!", body);
     }
@@ -70,13 +73,13 @@ class HttpClientFactoryTest {
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
 
-        Proxy proxy = new Proxy();
+        var proxy = new Proxy();
         proxy.setHost("localhost");
         proxy.setPort(PROXY_PORT);
         proxy.setProtocol("http");
 
-        HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
+        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
         assertEquals("Hello Proxy!", body);
     }
@@ -90,15 +93,15 @@ class HttpClientFactoryTest {
         proxyServer.stubFor(any(urlMatching(".*"))
                 .willReturn(aResponse().withStatus(407).withHeader("Proxy-Authenticate", "Basic")).atPriority(2));
 
-        Proxy proxy = new Proxy();
+        var proxy = new Proxy();
         proxy.setHost("localhost");
         proxy.setPort(PROXY_PORT);
         proxy.setProtocol("http");
         proxy.setUsername("foo");
         proxy.setPassword("bar");
 
-        HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
+        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
         assertEquals("Hello Proxy!", body);
     }
@@ -109,14 +112,14 @@ class HttpClientFactoryTest {
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
 
-        Proxy proxy = new Proxy();
+        var proxy = new Proxy();
         proxy.setHost("localhost");
         proxy.setPort(PROXY_PORT);
         proxy.setProtocol("http");
         proxy.setNonProxyHosts("localhost|example.com");
 
-        HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        String body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
+        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
 
         assertEquals("Hello World!", body);
     }

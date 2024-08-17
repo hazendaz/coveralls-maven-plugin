@@ -96,7 +96,7 @@ class CoverallsClientTest {
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
-        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
 
@@ -105,7 +105,7 @@ class CoverallsClientTest {
         StatusLine statusLine = new BasicStatusLine(HttpVersion.HTTP_1_1, 500, "Internal Error");
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
-        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(IOException.class, () -> {
             client.submit(file);
         });
@@ -119,7 +119,7 @@ class CoverallsClientTest {
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent())
                 .thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
-        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
             client.submit(file);
         });
@@ -133,7 +133,7 @@ class CoverallsClientTest {
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent())
                 .thenReturn(coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
-        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
             client.submit(file);
         });
@@ -146,7 +146,7 @@ class CoverallsClientTest {
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenThrow(IOException.class);
-        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(IOException.class, () -> {
             client.submit(file);
         });
@@ -158,22 +158,22 @@ class CoverallsClientTest {
         when(httpResponseMock.getStatusLine()).thenReturn(statusLine);
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        Header header = mock(Header.class);
-        HeaderElement element = mock(HeaderElement.class);
+        var header = mock(Header.class);
+        var element = mock(HeaderElement.class);
         when(element.getName()).thenReturn("HeaderName");
-        NameValuePair pair = mock(NameValuePair.class);
+        var pair = mock(NameValuePair.class);
         when(pair.getName()).thenReturn("name");
         when(element.getParameters()).thenReturn(new NameValuePair[] { pair });
         when(header.getElements()).thenReturn(new HeaderElement[] { element });
         when(httpEntityMock.getContentType()).thenReturn(header);
-        CoverallsClient client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
             client.submit(file);
         });
     }
 
     private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
-        String content = new ObjectMapper().writeValueAsString(coverallsResponse);
+        var content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }
 

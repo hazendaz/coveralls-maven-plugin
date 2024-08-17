@@ -71,9 +71,7 @@ import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
 @ExtendWith(MockitoExtension.class)
 public class CoverallsReportMojoTest {
@@ -119,13 +117,10 @@ public class CoverallsReportMojoTest {
     void init() throws IOException {
         coverallsFile = Files.createFile(folder.resolve("coverallsFile.json")).toFile();
 
-        lenient().when(sourceLoaderMock.load(anyString())).then(new Answer<Source>() {
-            @Override
-            public Source answer(final InvocationOnMock invocation) throws IOException {
-                String sourceFile = invocation.getArguments()[0].toString();
-                String content = readFileContent(sourceFile);
-                return new Source(sourceFile, content, TestIoUtil.getSha512DigestHex(content));
-            }
+        lenient().when(sourceLoaderMock.load(anyString())).then(invocation -> {
+            var sourceFile = invocation.getArguments()[0].toString();
+            var content = readFileContent(sourceFile);
+            return new Source(sourceFile, content, TestIoUtil.getSha512DigestHex(content));
         });
         lenient().when(logMock.isInfoEnabled()).thenReturn(true);
         lenient().when(jobMock.validate()).thenReturn(new ValidationErrors());
@@ -201,8 +196,8 @@ public class CoverallsReportMojoTest {
 
     @Test
     void testCreateSourceLoader() throws IOException {
-        Git gitMock = Mockito.mock(Git.class);
-        Path git = Files.createDirectory(folder.resolve("git"));
+        var gitMock = Mockito.mock(Git.class);
+        var git = Files.createDirectory(folder.resolve("git"));
         when(gitMock.getBaseDir()).thenReturn(git.toFile());
         when(jobMock.getGit()).thenReturn(gitMock);
         TestIoUtil.writeFileContent("public interface Test { }", Files.createFile(git.resolve("source.java")).toFile());
@@ -210,8 +205,8 @@ public class CoverallsReportMojoTest {
         mojo.settings = settingsMock;
         mojo.project = projectMock;
         mojo.sourceEncoding = "UTF-8";
-        SourceLoader sourceLoader = mojo.createSourceLoader(jobMock);
-        Source source = sourceLoader.load("git/source.java");
+        var sourceLoader = mojo.createSourceLoader(jobMock);
+        var source = sourceLoader.load("git/source.java");
         assertNotNull(source);
     }
 
@@ -245,10 +240,10 @@ public class CoverallsReportMojoTest {
     void successfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
-        String json = TestIoUtil.readFileContent(coverallsFile);
+        var json = TestIoUtil.readFileContent(coverallsFile);
         assertNotNull(json);
 
-        String[][] fixture = CoverageFixture.JAVA_FILES;
+        var fixture = CoverageFixture.JAVA_FILES;
         for (String[] coverageFile : fixture) {
             assertTrue(json.contains(coverageFile[0]));
         }

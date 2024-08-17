@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
@@ -45,14 +44,14 @@ class ScanSourceLoaderTest {
 
     @Test
     void missingSourceFileFromDirectory() throws IOException {
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
     void invalidSourceFile() throws IOException {
-        File subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile();
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile();
+        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertThrows(IllegalArgumentException.class, () -> {
             sourceLoader.load(subFolder.getName());
         });
@@ -60,22 +59,22 @@ class ScanSourceLoaderTest {
 
     @Test
     void loadSource() throws IOException {
-        Path level1 = Files.createDirectory(folder.resolve("level1"));
-        Path level2 = Files.createDirectory(level1.resolve("level2"));
-        Path level3 = Files.createDirectory(level2.resolve("level3"));
-        File fileA = Files.createFile(level3.resolve("AFile.java")).toFile();
-        File fileB = Files.createFile(level3.resolve("BFile.java")).toFile();
+        var level1 = Files.createDirectory(folder.resolve("level1"));
+        var level2 = Files.createDirectory(level1.resolve("level2"));
+        var level3 = Files.createDirectory(level2.resolve("level3"));
+        var fileA = Files.createFile(level3.resolve("AFile.java")).toFile();
+        var fileB = Files.createFile(level3.resolve("BFile.java")).toFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileA);
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileB);
-        ScanSourceLoader sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
-        Source sourceA = sourceLoader.load(fileA.getName());
+        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceA = sourceLoader.load(fileA.getName());
         assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "AFile.java",
                 sourceA.getName());
         assertEquals(
                 "27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6",
                 sourceA.getDigest());
         assertEquals(4, sourceA.getCoverage().length);
-        Source sourceB = sourceLoader.load(fileB.getName());
+        var sourceB = sourceLoader.load(fileB.getName());
         assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "BFile.java",
                 sourceB.getName());
         assertEquals(

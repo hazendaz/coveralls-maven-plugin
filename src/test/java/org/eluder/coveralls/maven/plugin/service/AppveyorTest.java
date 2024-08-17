@@ -48,7 +48,7 @@ class AppveyorTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Appveyor(new HashMap<String, String>()).isSelected());
+        assertFalse(new Appveyor(new HashMap<>()).isSelected());
     }
 
     @Test

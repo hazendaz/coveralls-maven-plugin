@@ -27,12 +27,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
@@ -45,14 +43,14 @@ class DirectorySourceLoaderTest {
 
     @Test
     void missingSourceFileFromDirectory() throws IOException {
-        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
     @Test
     void invalidSourceFile() throws IOException {
-        String subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile().getName();
-        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile().getName();
+        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertThrows(IllegalArgumentException.class, () -> {
             sourceLoader.load(subFolder);
         });
@@ -60,10 +58,10 @@ class DirectorySourceLoaderTest {
 
     @Test
     void loadSource() throws IOException {
-        File file = Files.createFile(folder.resolve("newFile")).toFile();
+        var file = Files.createFile(folder.resolve("newFile")).toFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
-        DirectorySourceLoader sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
-        Source source = sourceLoader.load(file.getName());
+        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var source = sourceLoader.load(file.getName());
         assertEquals(file.getName(), source.getName());
         assertEquals(
                 "27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6",

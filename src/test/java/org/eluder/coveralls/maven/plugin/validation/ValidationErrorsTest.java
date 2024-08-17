@@ -28,6 +28,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.Collections;
+
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 import org.junit.jupiter.api.Test;
@@ -56,10 +58,8 @@ class ValidationErrorsTest {
     }
 
     private ValidationErrors createValidationErrors(final ValidationError... errors) {
-        ValidationErrors validationErrors = new ValidationErrors();
-        for (ValidationError error : errors) {
-            validationErrors.add(error);
-        }
+        var validationErrors = new ValidationErrors();
+        Collections.addAll(validationErrors, errors);
         return validationErrors;
     }
 }

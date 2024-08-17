@@ -46,7 +46,7 @@ class GeneralTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new General(new HashMap<String, String>()).isSelected());
+        assertFalse(new General(new HashMap<>()).isSelected());
     }
 
     @Test

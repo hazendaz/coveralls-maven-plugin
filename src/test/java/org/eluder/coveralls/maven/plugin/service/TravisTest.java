@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +45,7 @@ class TravisTest {
 
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Travis(new HashMap<String, String>()).isSelected());
+        assertFalse(new Travis(new HashMap<>()).isSelected());
     }
 
     @Test
@@ -76,7 +75,7 @@ class TravisTest {
 
     @Test
     void testGetEnvironment() {
-        Properties properties = new Travis(env()).getEnvironment();
+        var properties = new Travis(env()).getEnvironment();
         assertEquals(2, properties.size());
         assertEquals("job123", properties.getProperty("travis_job_id"));
         assertEquals("pull10", properties.getProperty("travis_pull_request"));

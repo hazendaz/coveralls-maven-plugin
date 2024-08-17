@@ -37,7 +37,7 @@ class CoverallsProxyClientTest {
 
     @Test
     void constructorWithProxy() {
-        Proxy proxy = new Proxy();
+        var proxy = new Proxy();
         proxy.setHost("localhost");
         proxy.setPort(8080);
         proxy.setProtocol("http");

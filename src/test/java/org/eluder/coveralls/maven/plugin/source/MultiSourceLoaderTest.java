@@ -58,14 +58,14 @@ class MultiSourceLoaderTest {
     @Test
     void primarySource() throws IOException {
         when(sl1.load("source")).thenReturn(s1);
-        Source source = creaMultiSourceLoader().load("source");
+        var source = creaMultiSourceLoader().load("source");
         assertSame(s1, source);
     }
 
     @Test
     void secondarySource() throws IOException {
         when(sl2.load("source")).thenReturn(s2);
-        Source source = creaMultiSourceLoader().load("source");
+        var source = creaMultiSourceLoader().load("source");
         assertSame(s2, source);
     }
 

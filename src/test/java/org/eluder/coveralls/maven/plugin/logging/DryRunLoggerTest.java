@@ -68,7 +68,7 @@ class DryRunLoggerTest {
 
     @Test
     void logDryRunEnabled() {
-        when(coverallsFileMock.length()).thenReturn(1024l);
+        when(coverallsFileMock.length()).thenReturn(1024L);
         when(coverallsFileMock.getAbsolutePath()).thenReturn("/target/coveralls.json");
 
         new DryRunLogger(true, coverallsFileMock).log(logMock);

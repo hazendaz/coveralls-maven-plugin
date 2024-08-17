@@ -43,56 +43,55 @@ class JobValidatorTest {
 
     @Test
     void validateWithoutRepoTokenOrTravis() {
-        ValidationErrors errors = new JobValidator(new Job()).validate();
+        var errors = new JobValidator(new Job()).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
     void validateWithoutRepoTokenOrTravisForDryRun() {
-        ValidationErrors errors = new JobValidator(new Job().withDryRun(true)).validate();
+        var errors = new JobValidator(new Job().withDryRun(true)).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.WARN);
     }
 
     @Test
     void validateWithInvalidTravis() {
-        ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
+        var errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
     void validateWithRepoToken() {
-        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
+        var errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
     void validateWithTravis() {
-        ValidationErrors errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123"))
-                .validate();
+        var errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
     void validateWithoutGitCommitId() {
-        Git git = new Git(null, new Head(null, null, null, null, null, null), null, null);
-        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        var git = new Git(null, new Head(null, null, null, null, null, null), null, null);
+        var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
     @Test
     void validateWithGit() {
-        Git git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
-        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        var git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
+        var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
     @Test
     void validateWithParallel() {
-        ValidationErrors errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();
+        var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 

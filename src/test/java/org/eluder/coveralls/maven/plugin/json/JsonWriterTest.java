@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,9 +68,9 @@ class JsonWriterTest {
 
     @Test
     void subDirectoryCreation() throws IOException {
-        File f = new File(new File(folder.toFile(), "sub1"), "sub2");
-        Job job = job();
-        try (JsonWriter writer = new JsonWriter(job, f)) {
+        var f = new File(new File(folder.toFile(), "sub1"), "sub2");
+        var job = job();
+        try (var writer = new JsonWriter(job, f)) {
             assertTrue(writer.getCoverallsFile().getParentFile().isDirectory());
         }
     }
@@ -79,26 +78,26 @@ class JsonWriterTest {
     @Test
     @SuppressWarnings("resource")
     void testGetJob() throws IOException {
-        Job job = job();
+        var job = job();
         assertSame(job, new JsonWriter(job, file).getJob());
     }
 
     @Test
     @SuppressWarnings("resource")
     void testGetCoverallsFile() throws IOException {
-        Job job = job();
+        var job = job();
         assertSame(file, new JsonWriter(job, file).getCoverallsFile());
     }
 
     @SuppressWarnings("rawtypes")
     @Test
     void writeStartAndEnd() throws IOException, ProcessingException {
-        try (JsonWriter writer = new JsonWriter(job(), file)) {
+        try (var writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onComplete();
         }
-        String content = TestIoUtil.readFileContent(file);
-        Map<String, Object> jsonMap = stringToJsonMap(content);
+        var content = TestIoUtil.readFileContent(file);
+        var jsonMap = stringToJsonMap(content);
         assertEquals("service", jsonMap.get("service_name"));
         assertEquals("job123", jsonMap.get("service_job_id"));
         assertEquals("build5", jsonMap.get("service_number"));
@@ -115,13 +114,13 @@ class JsonWriterTest {
 
     @Test
     void testOnSource() throws IOException, ProcessingException {
-        try (JsonWriter writer = new JsonWriter(job(), file)) {
+        try (var writer = new JsonWriter(job(), file)) {
             writer.onBegin();
             writer.onSource(source());
             writer.onComplete();
         }
-        String content = TestIoUtil.readFileContent(file);
-        Map<String, Object> jsonMap = stringToJsonMap(content);
+        var content = TestIoUtil.readFileContent(file);
+        var jsonMap = stringToJsonMap(content);
         if (jsonMap.get("source_files") instanceof List) {
             jsonMap = ((List<Map<String, Object>>) jsonMap.get("source_files")).get(0);
         }
@@ -131,9 +130,9 @@ class JsonWriterTest {
     }
 
     private Job job() {
-        Git.Head head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
-        Git.Remote remote = new Git.Remote("origin", "git@git.com:foo.git");
-        Properties environment = new Properties();
+        var head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
+        var remote = new Git.Remote("origin", "git@git.com:foo.git");
+        var environment = new Properties();
         environment.setProperty("custom_property", "foobar");
         return new Job().withServiceName("service").withServiceJobId("job123").withServiceBuildNumber("build5")
                 .withServiceBuildUrl("http://ci.com/build5").withServiceEnvironment(environment).withBranch("master")
@@ -146,8 +145,8 @@ class JsonWriterTest {
     }
 
     private Map<String, Object> stringToJsonMap(final String content) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        MapType type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
+        var mapper = new ObjectMapper();
+        var type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
         return mapper.readValue(content, type);
     }
 }
