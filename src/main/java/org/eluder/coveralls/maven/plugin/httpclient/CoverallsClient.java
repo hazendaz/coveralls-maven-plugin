@@ -109,13 +109,14 @@ public class CoverallsClient {
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
         int status = response.getStatusLine().getStatusCode();
         String reason = response.getStatusLine().getReasonPhrase();
-        String errorMessage = "Report submission to Coveralls API failed with HTTP status " + status + ":";
+        StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
+                .append(status).append(":");
         if (StringUtils.isNotBlank(reason)) {
-            errorMessage += " " + reason;
+            errorMessage.append(" ").append(reason);
         }
         if (StringUtils.isNotBlank(message)) {
-            errorMessage += " (" + message + ")";
+            errorMessage.append(" (").append(message).append(")");
         }
-        return errorMessage;
+        return errorMessage.toString();
     }
 }

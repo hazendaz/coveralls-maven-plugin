@@ -49,10 +49,7 @@ public class JobValidator {
     }
 
     private List<ValidationError> repoTokenOrTravis() {
-        if (hasValue(job.getRepoToken())) {
-            return Collections.emptyList();
-        }
-        if (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId())) {
+        if (hasValue(job.getRepoToken()) || (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId()))) {
             return Collections.emptyList();
         }
         Level level = job.isDryRun() ? Level.WARN : Level.ERROR;
@@ -61,10 +58,7 @@ public class JobValidator {
     }
 
     private List<ValidationError> git() {
-        if (job.getGit() == null) {
-            return Collections.emptyList();
-        }
-        if (hasValue(job.getGit().getHead().getId())) {
+        if ((job.getGit() == null) || hasValue(job.getGit().getHead().getId())) {
             return Collections.emptyList();
         }
         return Collections.singletonList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));

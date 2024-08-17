@@ -86,7 +86,7 @@ public class TimestampParser {
 
         @Override
         public Date parse(final String timestamp) {
-            return new Date(Long.valueOf(timestamp));
+            return new Date(Long.parseLong(timestamp));
         }
     }
 }

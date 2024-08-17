@@ -47,16 +47,15 @@ public abstract class AbstractSourceLoader implements SourceLoader {
     @Override
     public Source load(final String sourceFile) throws IOException {
         InputStream stream = locate(sourceFile);
-        if (stream != null) {
-            try (Sha521DigestInputStream ds = new Sha521DigestInputStream(stream);
-                    InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {
-                String source = IOUtils.toString(reader);
-                return new Source(getFileName(sourceFile), source, ds.getDigestHex());
-            } catch (NoSuchAlgorithmException ex) {
-                throw new IOException("Sha-512 algorithm not available", ex);
-            }
-        } else {
+        if (stream == null) {
             return null;
+        }
+        try (Sha521DigestInputStream ds = new Sha521DigestInputStream(stream);
+                InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {
+            String source = IOUtils.toString(reader);
+            return new Source(getFileName(sourceFile), source, ds.getDigestHex());
+        } catch (NoSuchAlgorithmException ex) {
+            throw new IOException("Sha-512 algorithm not available", ex);
         }
     }
 

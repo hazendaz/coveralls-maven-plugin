@@ -379,8 +379,7 @@ public class CoverallsReportMojo extends AbstractMojo {
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
         }
-        chain = new UniqueSourceCallback(chain);
-        return chain;
+        return new UniqueSourceCallback(chain);
     }
 
     /**
@@ -443,9 +442,8 @@ public class CoverallsReportMojo extends AbstractMojo {
         if (failOnException) {
             getLog().error(message);
             throw ex;
-        } else {
-            getLog().warn(message);
         }
+        getLog().warn(message);
     }
 
     private void report(final List<Logger> reporters, final Position position) {
