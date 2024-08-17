@@ -122,7 +122,9 @@ class JsonWriterTest {
         }
         String content = TestIoUtil.readFileContent(file);
         Map<String, Object> jsonMap = stringToJsonMap(content);
-        jsonMap = ((List<Map<String, Object>>) jsonMap.get("source_files")).get(0);
+        if (jsonMap.get("source_files") instanceof List) {
+            jsonMap = ((List<Map<String, Object>>) jsonMap.get("source_files")).get(0);
+        }
         assertEquals("Foo.java", jsonMap.get("name"));
         assertEquals("6E0F89B516198DC6AB743EA5FBFB3108", jsonMap.get("source_digest"));
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
