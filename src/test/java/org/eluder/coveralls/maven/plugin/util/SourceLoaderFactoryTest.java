@@ -66,8 +66,8 @@ class SourceLoaderFactoryTest {
         m1Sources = Files.createDirectory(rootSources.resolve("m1"));
         m2Sources = Files.createDirectory(m1Sources.resolve("m2"));
         lenient().when(root.getCollectedProjects()).thenReturn(Arrays.asList(m1, m2));
-        lenient().when(m1.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
-        lenient().when(m2.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
+        lenient().when(m1.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
+        lenient().when(m2.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
         lenient().when(root.getCompileSourceRoots()).thenReturn(Arrays.asList(rootSources.toFile().getAbsolutePath()));
         lenient().when(m1.getCompileSourceRoots()).thenReturn(Arrays.asList(m1Sources.toFile().getAbsolutePath()));
         lenient().when(m2.getCompileSourceRoots()).thenReturn(Arrays.asList(m2Sources.toFile().getAbsolutePath()));

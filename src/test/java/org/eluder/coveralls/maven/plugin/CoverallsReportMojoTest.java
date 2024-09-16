@@ -140,7 +140,7 @@ class CoverallsReportMojoTest {
 
             @Override
             protected Environment createEnvironment() {
-                return new Environment(this, Collections.<ServiceSetup>emptyList());
+                return new Environment(this, Collections.<ServiceSetup> emptyList());
             }
 
             @Override

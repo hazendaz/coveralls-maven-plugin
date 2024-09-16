@@ -79,7 +79,7 @@ class CoverageParsersFactoryTest {
     void init() throws IOException {
         reportingDir = Files.createDirectory(folder.resolve("reportingDir"));
         targetDir = Files.createDirectory(folder.resolve("targetDir"));
-        lenient().when(projectMock.getCollectedProjects()).thenReturn(Collections.<MavenProject>emptyList());
+        lenient().when(projectMock.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
         lenient().when(projectMock.getModel()).thenReturn(modelMock);
         lenient().when(projectMock.getBuild()).thenReturn(buildMock);
         lenient().when(modelMock.getReporting()).thenReturn(reportingMock);

@@ -92,7 +92,7 @@ class EnvironmentTest {
 
     @Test
     void setupWithoutServices() {
-        create(Collections.<ServiceSetup>emptyList()).setup();
+        create(Collections.<ServiceSetup> emptyList()).setup();
         assertEquals("service", mojo.serviceName);
     }
 
