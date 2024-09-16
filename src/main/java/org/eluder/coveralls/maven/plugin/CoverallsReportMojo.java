@@ -53,6 +53,7 @@ import org.eluder.coveralls.maven.plugin.service.Appveyor;
 import org.eluder.coveralls.maven.plugin.service.Bamboo;
 import org.eluder.coveralls.maven.plugin.service.Circle;
 import org.eluder.coveralls.maven.plugin.service.General;
+import org.eluder.coveralls.maven.plugin.service.GitHub;
 import org.eluder.coveralls.maven.plugin.service.Jenkins;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.service.Shippable;
@@ -308,6 +309,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected List<ServiceSetup> getServices() {
         Map<String, String> env = System.getenv();
         List<ServiceSetup> services = new ArrayList<>();
+        services.add(new GitHub(env));
         services.add(new Shippable(env));
         services.add(new Travis(env));
         services.add(new Circle(env));
