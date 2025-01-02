@@ -26,6 +26,7 @@ package org.eluder.coveralls.maven.plugin.parser;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -33,7 +34,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.codehaus.plexus.util.xml.XmlStreamReader;
+import org.apache.commons.io.input.XmlStreamReader;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
@@ -53,7 +54,8 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
     @Override
     public final void parse(final SourceCallback callback) throws ProcessingException, IOException {
         XMLStreamReader xml = null;
-        try (XmlStreamReader reader = new XmlStreamReader(coverageFile)) {
+        try (XmlStreamReader reader = XmlStreamReader.builder().setPath(coverageFile.getPath())
+                .setCharset(StandardCharsets.UTF_8).get()) {
             xml = createEventReader(reader);
             while (xml.hasNext()) {
                 xml.next();
