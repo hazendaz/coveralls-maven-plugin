@@ -49,7 +49,7 @@ public class JobValidator {
     }
 
     private List<ValidationError> repoTokenOrTravis() {
-        if (hasValue(job.getRepoToken()) || hasValue(job.getServiceName()) && hasValue(job.getServiceJobId())) {
+        if (hasValue(job.getRepoToken()) || (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId()))) {
             return Collections.emptyList();
         }
         Level level = job.isDryRun() ? Level.WARN : Level.ERROR;
