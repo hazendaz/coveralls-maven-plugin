@@ -27,7 +27,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
@@ -87,7 +86,7 @@ public class TimestampParser {
 
         @Override
         public Instant parse(final String timestamp) {
-            return new Date(Long.parseLong(timestamp)).toInstant();
+            return Instant.ofEpochMilli(Long.parseLong(timestamp));
         }
     }
 }
