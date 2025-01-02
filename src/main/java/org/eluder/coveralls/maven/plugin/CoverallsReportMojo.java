@@ -334,7 +334,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected Job createJob() throws ProcessingException, IOException {
         Git git = new GitRepository(basedir).load();
-        Long time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).getTime();
+        Long time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).toEpochMilli();
         return new Job().withRepoToken(repoToken).withServiceName(serviceName).withServiceJobId(serviceJobId)
                 .withServiceBuildNumber(serviceBuildNumber).withServiceBuildUrl(serviceBuildUrl).withParallel(parallel)
                 .withServiceEnvironment(serviceEnvironment).withDryRun(dryRun).withBranch(branch)

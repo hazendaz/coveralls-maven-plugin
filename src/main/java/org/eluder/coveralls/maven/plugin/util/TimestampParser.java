@@ -26,6 +26,7 @@ package org.eluder.coveralls.maven.plugin.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +54,7 @@ public class TimestampParser {
         }
     }
 
-    public Date parse(final String timestamp) throws ProcessingException {
+    public Instant parse(final String timestamp) throws ProcessingException {
         if (StringUtils.isBlank(timestamp)) {
             return null;
         }
@@ -65,7 +66,7 @@ public class TimestampParser {
     }
 
     private interface Parser {
-        Date parse(String timestamp) throws Exception;
+        Instant parse(String timestamp) throws Exception;
     }
 
     private static class DateFormatParser implements Parser {
@@ -77,16 +78,16 @@ public class TimestampParser {
         }
 
         @Override
-        public synchronized Date parse(final String timestamp) throws ParseException {
-            return format.parse(timestamp);
+        public synchronized Instant parse(final String timestamp) throws ParseException {
+            return format.parse(timestamp).toInstant();
         }
     }
 
     private static class EpochMillisParser implements Parser {
 
         @Override
-        public Date parse(final String timestamp) {
-            return new Date(Long.parseLong(timestamp));
+        public Instant parse(final String timestamp) {
+            return new Date(Long.parseLong(timestamp)).toInstant();
         }
     }
 }
