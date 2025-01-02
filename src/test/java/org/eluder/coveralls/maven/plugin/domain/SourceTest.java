@@ -23,9 +23,9 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -116,8 +116,8 @@ class SourceTest {
         source2.addBranchCoverage(2, 0, 1, 3);
 
         var merged = source1.merge(source2);
-        assertFalse(source1 == merged);
-        assertFalse(source2 == merged);
+        assertThat(source1).isNotSameAs(merged);
+        assertThat(source2).isNotSameAs(merged);
         assertEquals(source1.getName(), merged.getName());
         assertEquals(source1.getDigest(), merged.getDigest());
         assertEquals(source1.getClassifier(), merged.getClassifier());
@@ -144,8 +144,8 @@ class SourceTest {
                 "CBA7831606B51D1499349451B70758E3");
         source2.addCoverage(2, 4);
         var merged = source1.merge(source2);
-        assertFalse(source1 == merged);
-        assertFalse(source2 == merged);
+        assertThat(source1).isNotSameAs(merged);
+        assertThat(source2).isNotSameAs(merged);
         assertArrayEquals(source1.getCoverage(), merged.getCoverage());
     }
 
