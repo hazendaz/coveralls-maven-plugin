@@ -73,158 +73,158 @@ public class CoverallsReportMojo extends AbstractMojo {
      * File paths to additional JaCoCo coverage report files.
      */
     @Parameter(property = "jacocoReports")
-    protected List<File> jacocoReports;
+    private List<File> jacocoReports;
 
     /**
      * File paths to additional Cobertura coverage report files.
      */
     @Parameter(property = "coberturaReports")
-    protected List<File> coberturaReports;
+    private List<File> coberturaReports;
 
     /**
      * File paths to additional Saga coverage report files.
      */
     @Parameter(property = "sagaReports")
-    protected List<File> sagaReports;
+    private List<File> sagaReports;
 
     /**
      * Directories for relative per module specific report files.
      */
     @Parameter(property = "relativeReportDirs")
-    protected List<String> relativeReportDirs;
+    private List<String> relativeReportDirs;
 
     /**
      * File path to write and submit Coveralls data.
      */
     @Parameter(property = "coverallsFile", defaultValue = "${project.build.directory}/coveralls.json")
-    protected File coverallsFile;
+    private File coverallsFile;
 
     /**
      * Url for the Coveralls API.
      */
     @Parameter(property = "coverallsUrl", defaultValue = "https://coveralls.io/api/v1/jobs")
-    protected String coverallsUrl;
+    private String coverallsUrl;
 
     /**
      * Source directories.
      */
     @Parameter(property = "sourceDirectories")
-    protected List<File> sourceDirectories;
+    private List<File> sourceDirectories;
 
     /**
      * Source file encoding.
      */
     @Parameter(property = "sourceEncoding", defaultValue = "${project.build.sourceEncoding}")
-    protected String sourceEncoding;
+    private String sourceEncoding;
 
     /**
      * CI service name.
      */
     @Parameter(property = "serviceName")
-    protected String serviceName;
+    private String serviceName;
 
     /**
      * CI service job id.
      */
     @Parameter(property = "serviceJobId")
-    protected String serviceJobId;
+    private String serviceJobId;
 
     /**
      * CI service build number.
      */
     @Parameter(property = "serviceBuildNumber")
-    protected String serviceBuildNumber;
+    private String serviceBuildNumber;
 
     /**
      * CI service build url.
      */
     @Parameter(property = "serviceBuildUrl")
-    protected String serviceBuildUrl;
+    private String serviceBuildUrl;
 
     /**
      * CI service specific environment properties.
      */
     @Parameter(property = "serviceEnvironment")
-    protected Properties serviceEnvironment;
+    private Properties serviceEnvironment;
 
     /**
      * Coveralls repository token.
      */
     @Parameter(property = "repoToken")
-    protected String repoToken;
+    private String repoToken;
 
     /**
      * Git branch name.
      */
     @Parameter(property = "branch")
-    protected String branch;
+    private String branch;
 
     /**
      * GitHub pull request identifier.
      */
     @Parameter(property = "pullRequest")
-    protected String pullRequest;
+    private String pullRequest;
 
     /**
      * Coveralls parallel flag.
      */
     @Parameter(property = "parallel")
-    protected boolean parallel;
+    private boolean parallel;
 
     /**
      * Build timestamp format. Must be in format supported by SimpleDateFormat.
      */
     @Parameter(property = "timestampFormat", defaultValue = "${maven.build.timestamp.format}")
-    protected String timestampFormat;
+    private String timestampFormat;
 
     /**
      * Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in default timestamp format
      * yyyy-MM-dd'T'HH:mm:ss'Z'.
      */
     @Parameter(property = "timestamp", defaultValue = "${maven.build.timestamp}")
-    protected String timestamp;
+    private String timestamp;
 
     /**
      * Dry run Coveralls report without actually sending it.
      */
     @Parameter(property = "dryRun", defaultValue = "false")
-    protected boolean dryRun;
+    private boolean dryRun;
 
     /**
      * Fail build if Coveralls service is not available or submission fails for internal errors.
      */
     @Parameter(property = "failOnServiceError", defaultValue = "true")
-    protected boolean failOnServiceError;
+    private boolean failOnServiceError;
 
     /**
      * Scan subdirectories for source files.
      */
     @Parameter(property = "scanForSources", defaultValue = "false")
-    protected boolean scanForSources;
+    private boolean scanForSources;
 
     /**
      * Base directory of the project.
      */
     @Parameter(property = "coveralls.basedir", defaultValue = "${project.basedir}")
-    protected File basedir;
+    private File basedir;
 
     /**
      * Skip the plugin execution.
      */
     @Parameter(property = "coveralls.skip", defaultValue = "false")
-    protected boolean skip;
+    private boolean skip;
 
     /**
      * Maven settings.
      */
     @Parameter(defaultValue = "${settings}", readonly = true, required = true)
-    protected Settings settings;
+    private Settings settings;
 
     /**
      * Maven project for runtime value resolution.
      */
     @Parameter(defaultValue = "${project}", readonly = true)
-    protected MavenProject project;
+    private MavenProject project;
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
