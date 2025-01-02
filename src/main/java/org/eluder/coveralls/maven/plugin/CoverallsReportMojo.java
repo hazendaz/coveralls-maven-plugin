@@ -253,6 +253,7 @@ public class CoverallsReportMojo extends AbstractMojo {
             if (!job.isDryRun()) {
                 submitData(client, writer.getCoverallsFile());
             }
+            writer.close();
         } catch (ProcessingException ex) {
             throw new MojoFailureException("Processing of input or output data failed", ex);
         } catch (IOException ex) {
