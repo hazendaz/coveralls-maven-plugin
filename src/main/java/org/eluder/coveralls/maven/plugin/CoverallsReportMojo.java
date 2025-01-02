@@ -97,7 +97,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * File path to write and submit Coveralls data.
      */
     @Parameter(property = "coverallsFile", defaultValue = "${project.build.directory}/coveralls.json")
-    private File coverallsFile;
+    File coverallsFile;
 
     /**
      * Url for the Coveralls API.
@@ -109,61 +109,61 @@ public class CoverallsReportMojo extends AbstractMojo {
      * Source directories.
      */
     @Parameter(property = "sourceDirectories")
-    private List<File> sourceDirectories;
+    List<File> sourceDirectories;
 
     /**
      * Source file encoding.
      */
     @Parameter(property = "sourceEncoding", defaultValue = "${project.build.sourceEncoding}")
-    private String sourceEncoding;
+    String sourceEncoding;
 
     /**
      * CI service name.
      */
     @Parameter(property = "serviceName")
-    private String serviceName;
+    String serviceName;
 
     /**
      * CI service job id.
      */
     @Parameter(property = "serviceJobId")
-    private String serviceJobId;
+    String serviceJobId;
 
     /**
      * CI service build number.
      */
     @Parameter(property = "serviceBuildNumber")
-    private String serviceBuildNumber;
+    String serviceBuildNumber;
 
     /**
      * CI service build url.
      */
     @Parameter(property = "serviceBuildUrl")
-    private String serviceBuildUrl;
+    String serviceBuildUrl;
 
     /**
      * CI service specific environment properties.
      */
     @Parameter(property = "serviceEnvironment")
-    private Properties serviceEnvironment;
+    Properties serviceEnvironment;
 
     /**
      * Coveralls repository token.
      */
     @Parameter(property = "repoToken")
-    private String repoToken;
+    String repoToken;
 
     /**
      * Git branch name.
      */
     @Parameter(property = "branch")
-    private String branch;
+    String branch;
 
     /**
      * GitHub pull request identifier.
      */
     @Parameter(property = "pullRequest")
-    private String pullRequest;
+    String pullRequest;
 
     /**
      * Coveralls parallel flag.
@@ -188,13 +188,13 @@ public class CoverallsReportMojo extends AbstractMojo {
      * Dry run Coveralls report without actually sending it.
      */
     @Parameter(property = "dryRun", defaultValue = "false")
-    private boolean dryRun;
+    boolean dryRun;
 
     /**
      * Fail build if Coveralls service is not available or submission fails for internal errors.
      */
     @Parameter(property = "failOnServiceError", defaultValue = "true")
-    private boolean failOnServiceError;
+    boolean failOnServiceError;
 
     /**
      * Scan subdirectories for source files.
@@ -206,25 +206,25 @@ public class CoverallsReportMojo extends AbstractMojo {
      * Base directory of the project.
      */
     @Parameter(property = "coveralls.basedir", defaultValue = "${project.basedir}")
-    private File basedir;
+    File basedir;
 
     /**
      * Skip the plugin execution.
      */
     @Parameter(property = "coveralls.skip", defaultValue = "false")
-    private boolean skip;
+    boolean skip;
 
     /**
      * Maven settings.
      */
     @Parameter(defaultValue = "${settings}", readonly = true, required = true)
-    private Settings settings;
+    Settings settings;
 
     /**
      * Maven project for runtime value resolution.
      */
     @Parameter(defaultValue = "${project}", readonly = true)
-    private MavenProject project;
+    MavenProject project;
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
