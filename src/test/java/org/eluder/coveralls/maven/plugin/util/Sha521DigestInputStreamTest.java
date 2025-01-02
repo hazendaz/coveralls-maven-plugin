@@ -36,7 +36,7 @@ class Sha521DigestInputStreamTest {
     @Test
     void testRead() throws NoSuchAlgorithmException, IOException {
         byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
-        try (var is = new Sha521DigestInputStream(new ByteArrayInputStream(data))) {
+        try (var is = new Sha512DigestInputStream(new ByteArrayInputStream(data))) {
             assertEquals(0xAA, is.read());
             assertEquals(0xBB, is.read());
             assertEquals(0xCC, is.read());
@@ -51,7 +51,7 @@ class Sha521DigestInputStreamTest {
     @Test
     void readArray() throws NoSuchAlgorithmException, IOException {
         byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
-        try (var is = new Sha521DigestInputStream(new ByteArrayInputStream(data))) {
+        try (var is = new Sha512DigestInputStream(new ByteArrayInputStream(data))) {
             var buff = new byte[5];
             assertEquals(4, is.read(buff));
             assertEquals(-1, is.read());

@@ -30,9 +30,9 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Hex;
 
-public class Sha521DigestInputStream extends DigestInputStream {
+public class Sha512DigestInputStream extends DigestInputStream {
 
-    public Sha521DigestInputStream(final InputStream stream) throws NoSuchAlgorithmException {
+    public Sha512DigestInputStream(final InputStream stream) throws NoSuchAlgorithmException {
         super(stream, MessageDigest.getInstance("SHA-512"));
     }
 

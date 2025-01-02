@@ -32,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.io.IOUtils;
 import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.Sha521DigestInputStream;
+import org.eluder.coveralls.maven.plugin.util.Sha512DigestInputStream;
 
 public abstract class AbstractSourceLoader implements SourceLoader {
 
@@ -50,7 +50,7 @@ public abstract class AbstractSourceLoader implements SourceLoader {
         if (stream == null) {
             return null;
         }
-        try (Sha521DigestInputStream ds = new Sha521DigestInputStream(stream);
+        try (Sha512DigestInputStream ds = new Sha512DigestInputStream(stream);
                 InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {
             String source = IOUtils.toString(reader);
             return new Source(getFileName(sourceFile), source, ds.getDigestHex());
