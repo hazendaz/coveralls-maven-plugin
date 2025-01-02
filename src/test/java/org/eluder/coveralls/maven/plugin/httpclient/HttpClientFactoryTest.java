@@ -35,8 +35,9 @@ import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
 import java.io.IOException;
 
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.maven.settings.Proxy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -58,7 +59,7 @@ class HttpClientFactoryTest {
             .configureStaticDsl(true).build();
 
     @Test
-    void simpleRequest() throws IOException {
+    void simpleRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         var client = new HttpClientFactory(TARGET_URL).create();
@@ -68,7 +69,7 @@ class HttpClientFactoryTest {
     }
 
     @Test
-    void unAuthorizedProxyRequest() throws IOException {
+    void unAuthorizedProxyRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
@@ -85,7 +86,7 @@ class HttpClientFactoryTest {
     }
 
     @Test
-    void authorixedProxyRequest() throws IOException {
+    void authorixedProxyRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).withHeader("Proxy-Authorization", matching("Basic Zm9vOmJhcg=="))
@@ -107,7 +108,7 @@ class HttpClientFactoryTest {
     }
 
     @Test
-    void nonProxiedHostRequest() throws IOException {
+    void nonProxiedHostRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));

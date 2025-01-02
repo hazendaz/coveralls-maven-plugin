@@ -35,14 +35,15 @@ import java.security.Provider;
 import java.security.Security;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.HttpStatus;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
@@ -60,42 +61,38 @@ public class CoverallsClient {
     private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", StandardCharsets.UTF_8);
 
     private final String coverallsUrl;
-    private final HttpClient httpClient;
+    private final CloseableHttpClient httpClient;
     private final ObjectMapper objectMapper;
 
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
     }
 
-    public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
+    public CoverallsClient(final String coverallsUrl, final CloseableHttpClient httpClient,
+            final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
     }
 
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-        HttpEntity entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+        HttpEntity entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
                 .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
         HttpPost post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
-        HttpResponse response = httpClient.execute(post);
+        CloseableHttpResponse response = httpClient.execute(post);
         return parseResponse(response);
     }
 
-    private CoverallsResponse parseResponse(final HttpResponse response) throws ProcessingException, IOException {
+    private CoverallsResponse parseResponse(final CloseableHttpResponse response)
+            throws ProcessingException, IOException {
         HttpEntity entity = response.getEntity();
-        ContentType contentType = ContentType.getOrDefault(entity);
-        if (contentType.getCharset() == null) {
-            throw new ProcessingException(
-                    getResponseErrorMessage(response, "Response doesn't contain Content-Type header"));
-        }
-
-        if (response.getStatusLine().getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+        if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
         }
 
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(entity.getContent(), contentType.getCharset()))) {
+                new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8))) {
             CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
             if (cr.isError()) {
                 throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
@@ -107,8 +104,8 @@ public class CoverallsClient {
     }
 
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
-        int status = response.getStatusLine().getStatusCode();
-        String reason = response.getStatusLine().getReasonPhrase();
+        int status = response.getCode();
+        String reason = response.getReasonPhrase();
         StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
                 .append(status).append(":");
         if (StringUtils.isNotBlank(reason)) {
