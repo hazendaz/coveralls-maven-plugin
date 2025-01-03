@@ -14,12 +14,8 @@ service.
 
 ### Requirements
 
-* Java 6 up to 3.x
-* Java 7 for 4.x to 4.3.
-* 4.4 not released but was set to require java 8 from original codeline
-* 4.4.1 was released on a fork still requring java 7 from https://github.com/jwtk/coveralls-maven-plugin which was work to release from https://github.com/dogeared/coveralls-maven-plugin
 * java 8 for 4.5.0 onwards
-* Maven 3.3.9 or newer.
+* Maven 3.6.3 or newer.
 
 
 ### Features
@@ -48,7 +44,7 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>coveralls-maven-plugin</artifactId>
-    <version>4.5.0-M2</version>
+    <version>4.5.0-M6</version>
     <configuration>
         <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
     </configuration>
@@ -64,10 +60,10 @@ project repository token, using `-DrepoToken=yourcoverallsprojectrepositorytoken
 maven command. **Do not publish your repository token in public GitHub repositories.** If you do,
 anyone can submit coverage data without permission.
 
-If you are using Travis CI, CircleCI, Codeship, Jenkins or Bamboo continuous integration services,
-no other configuration is required. The plugin's built-in service environment support take care of
-the rest. The plugin tries to find report files for any of the supported coverage tools and
-finally aggregates the coverage report. Java 8 is currently supported only by JaCoCo.
+If you are using Travis CI, CircleCI, Codeship, Github, Jenkins, Bamboo, Shippable, or Appveyor
+continuous integration services, no other configuration is required. The plugin's built-in service
+environment support take care of the rest. The plugin tries to find report files for any of the
+supported coverage tools and finally aggregates the coverage report.
 
 See [Complete plugin configuration](#complete-plugin-configuration) for all of the available
 configuration parameters.
@@ -114,7 +110,7 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.11</version>
+    <version>0.8.12</version>
     <executions>
         <execution>
             <id>prepare-agent</id>
@@ -196,7 +192,7 @@ Set up the Open Clover Maven plugin in the build section of the project pom.xml:
 <plugin>
   <groupId>org.openclover</groupId>
   <artifactId>clover-maven-plugin</artifactId>
-  <version>4.5.1</version>
+  <version>4.5.2</version>
   <configuration>
     <excludes>
       <exclude>**/*Test*</exclude>
@@ -365,6 +361,13 @@ See [changelog](CHANGELOG.md) for more details for legacy releases
 See [releases](https://github.com/hazendaz/coveralls-maven-plugin/releases) for all releases since 4.5.0
 
 
+### History
+* For Java 6 support up to 3.x versions
+* For Java 7 support in 4.x to 4.3 versions.
+* Version 4.4 not released but was set to require java 8 from original codeline
+* Version 4.4.1 was released on a fork still requring java 7 from https://github.com/jwtk/coveralls-maven-plugin which was work to release from https://github.com/dogeared/coveralls-maven-plugin
+
+
 ### Migration
 
 See [migration](MIGRATION.md) documentation for more information.
@@ -381,8 +384,8 @@ See [migration](MIGRATION.md) documentation for more information.
 
 ### Continuous integration
 
-Travis CI builds the plugin with Oracle JDK 7. All successfully built snapshots are deployed to
-Sonatype OSS repository. Cobertura is used to gather coverage metrics and the report is submitted
+Github CI builds the plugin with Oracle JDK 17+. All successfully built snapshots are deployed to
+Sonatype OSS repository. Jacoco is used to gather coverage metrics and the report is submitted
 to Coveralls with this plugin.
 
 
