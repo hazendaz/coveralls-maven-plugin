@@ -89,8 +89,8 @@
         <!-- Set Java Runtimes -->
         <java.version>8</java.version>
         <java.release.version>8</java.release.version>
-        <java.test.version>11</java.test.version>
-        <java.test.release.version>11</java.test.release.version>
+        <java.test.version>17</java.test.version>
+        <java.test.release.version>17</java.test.release.version>
 
         <!-- Checkstyle -->
         <checkstyle.config>checkstyle-4space.xml</checkstyle.config>
