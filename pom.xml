@@ -42,7 +42,7 @@
 
     <name>coveralls-maven-plugin</name>
     <description>Maven plugin for submitting Java code coverage reports to Coveralls web service.</description>
-    <url>https://github.com/trautonen/coveralls-maven-plugin</url>
+    <url>https://github.com/hazendaz/coveralls-maven-plugin</url>
     <inceptionYear>2013</inceptionYear>
 
     <licenses>
@@ -71,11 +71,11 @@
     </scm>
     <issueManagement>
         <system>Github</system>
-        <url>https://github.com/trautonen/coveralls-maven-plugin/issues</url>
+        <url>https://github.com/hazendaz/coveralls-maven-plugin/issues</url>
     </issueManagement>
     <ciManagement>
         <system>Github</system>
-        <url>https://github.com/trautonen/coveralls-maven-plugin/actions</url>
+        <url>https://github.com/hazendaz/coveralls-maven-plugin/actions</url>
     </ciManagement>
     <distributionManagement>
         <site>
