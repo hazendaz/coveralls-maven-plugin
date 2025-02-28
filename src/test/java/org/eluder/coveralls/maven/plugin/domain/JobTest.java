@@ -25,7 +25,7 @@ package org.eluder.coveralls.maven.plugin.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +38,7 @@ class JobTest {
     @Test
     void getBranchWithRemote() {
         List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
-        var git = new Git(new File("."), new Head(null, null, null, null, null, null), "master", remotes);
+        var git = new Git(Path.of(".").toFile(), new Head(null, null, null, null, null, null), "master", remotes);
         var job = new Job().withBranch("origin/master").withGit(git);
         assertEquals(".", git.getBaseDir().getPath());
         assertEquals("master", job.getBranch());

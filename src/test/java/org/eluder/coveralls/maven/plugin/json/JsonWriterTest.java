@@ -68,9 +68,9 @@ class JsonWriterTest {
 
     @Test
     void subDirectoryCreation() throws IOException {
-        var f = new File(new File(folder.toFile(), "sub1"), "sub2");
+        var f = folder.resolve("sub1").resolve("sub2");
         var job = job();
-        try (var writer = new JsonWriter(job, f)) {
+        try (var writer = new JsonWriter(job, f.toFile())) {
             assertTrue(writer.getCoverallsFile().getParentFile().isDirectory());
         }
     }

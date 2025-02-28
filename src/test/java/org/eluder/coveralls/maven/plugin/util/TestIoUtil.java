@@ -24,13 +24,14 @@
 package org.eluder.coveralls.maven.plugin.util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -45,7 +46,7 @@ public final class TestIoUtil {
     }
 
     public static String readFileContent(final File file) throws IOException {
-        try (var reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+        try (var reader = new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8)) {
             return IOUtils.toString(reader);
         }
     }
@@ -59,7 +60,7 @@ public final class TestIoUtil {
             if (!local.startsWith("/")) {
                 local = "/" + local;
             }
-            return new File(getResourceUrl(local).toURI());
+            return Path.of(getResourceUrl(local).toURI()).toFile();
         } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
