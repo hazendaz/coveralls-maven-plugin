@@ -25,9 +25,9 @@ package org.eluder.coveralls.maven.plugin.source;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +54,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
             if (!file.isFile()) {
                 throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
             }
-            return new BufferedInputStream(new FileInputStream(file));
+            return new BufferedInputStream(Files.newInputStream(file.toPath()));
         }
         return null;
     }
