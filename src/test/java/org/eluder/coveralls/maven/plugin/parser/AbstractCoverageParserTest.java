@@ -183,7 +183,7 @@ public abstract class AbstractCoverageParserTest {
             fail("Expected " + lines + " lines for " + name + " was " + tested.getCoverage().length);
         }
         for (var i = 0; i < tested.getCoverage().length; i++) {
-            Integer lineNumber = i + 1;
+            int lineNumber = i + 1;
             var message = name + " line " + lineNumber + " coverage";
             if (coveredLines.contains(lineNumber)) {
                 assertTrue(tested.getCoverage()[i] > 0, message);

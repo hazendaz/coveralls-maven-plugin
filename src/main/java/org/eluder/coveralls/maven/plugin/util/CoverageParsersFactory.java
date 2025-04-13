@@ -109,9 +109,8 @@ public class CoverageParsersFactory {
                     Path relativeReportingDirectory = reportingDirectory;
                     Path relativeBuildDirectory = buildDirectory;
                     if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
-                        relativeReportingDirectory = Path.of(reportingDirectory.toString(),
-                                relativeReportPath.toString());
-                        relativeBuildDirectory = Path.of(buildDirectory.toString(), relativeReportPath.toString());
+                        relativeReportingDirectory = Path.of(reportingDirectory.toString(), relativeReportPath);
+                        relativeBuildDirectory = Path.of(buildDirectory.toString(), relativeReportPath);
                     }
 
                     jacocoFiles.add(Path.of(relativeReportingDirectory.toString(), JACOCO_FILE).toFile());

@@ -64,7 +64,7 @@ public class SourceLoaderFactory {
         List<MavenProject> modules = new MavenProjectCollector(project).collect();
         for (MavenProject module : modules) {
             for (String sourceRoot : module.getCompileSourceRoots()) {
-                Path sourceDirectory = Path.of(sourceRoot.toString());
+                Path sourceDirectory = Path.of(sourceRoot);
                 directories.add(sourceDirectory.toFile());
             }
         }
