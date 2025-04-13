@@ -37,7 +37,7 @@
 
     <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>coveralls-maven-plugin</artifactId>
-    <version>4.6.1-SNAPSHOT</version>
+    <version>4.7.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
 
     <name>coveralls-maven-plugin</name>
@@ -87,8 +87,8 @@
 
     <properties>
         <!-- Java Runtime Requirements -->
-        <java.version>11</java.version>
-        <java.release.version>11</java.release.version>
+        <java.version>17</java.version>
+        <java.release.version>17</java.release.version>
         <java.test.version>17</java.test.version>
         <java.test.release.version>17</java.test.release.version>
 
