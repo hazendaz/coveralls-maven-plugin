@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class DirectorySourceLoader extends AbstractSourceLoader {
 
@@ -40,12 +42,12 @@ public class DirectorySourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        File file = new File(sourceDirectory, sourceFile);
-        if (file.exists()) {
-            if (!file.isFile()) {
-                throw new IllegalArgumentException(file.getAbsolutePath() + " is not file");
+        Path path = Paths.get(sourceDirectory.toString(), sourceFile);
+        if (Files.exists(path)) {
+            if (!Files.isRegularFile(path)) {
+                throw new IllegalArgumentException(path.toAbsolutePath() + " is not file");
             }
-            return new BufferedInputStream(Files.newInputStream(file.toPath()));
+            return new BufferedInputStream(Files.newInputStream(path));
         }
         return null;
     }

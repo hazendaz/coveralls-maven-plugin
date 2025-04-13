@@ -25,6 +25,8 @@ package org.eluder.coveralls.maven.plugin.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -94,32 +96,33 @@ public class CoverageParsersFactory {
         ExistingFiles sagaFiles = ExistingFiles.create(sagaReports);
         ExistingFiles cloverFiles = ExistingFiles.create(cloverReports);
         for (MavenProject p : projects) {
-            File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());
-            File buildDirectory = new File(p.getBuild().getDirectory());
+            Path reportingDirectory = Paths.get(p.getModel().getReporting().getOutputDirectory());
+            Path buildDirectory = Paths.get(p.getBuild().getDirectory());
 
-            jacocoFiles.add(new File(reportingDirectory, JACOCO_PREFIX + JACOCO_FILE));
-            jacocoFiles.add(new File(reportingDirectory, JACOCO_IT_PREFIX + JACOCO_FILE));
-            coberturaFiles.add(new File(reportingDirectory, COBERTURA_PREFIX + COBERTURA_FILE));
-            sagaFiles.add(new File(buildDirectory, SAGA_PREFIX + SAGA_FILE));
-            cloverFiles.add(new File(reportingDirectory, CLOVER_PREFIX + CLOVER_FILE));
+            jacocoFiles.add(Paths.get(reportingDirectory.toString(), JACOCO_PREFIX + JACOCO_FILE).toFile());
+            jacocoFiles.add(Paths.get(reportingDirectory.toString(), JACOCO_IT_PREFIX + JACOCO_FILE).toFile());
+            coberturaFiles.add(Paths.get(reportingDirectory.toString(), COBERTURA_PREFIX + COBERTURA_FILE).toFile());
+            sagaFiles.add(Paths.get(buildDirectory.toString(), SAGA_PREFIX + SAGA_FILE).toFile());
+            cloverFiles.add(Paths.get(reportingDirectory.toString(), CLOVER_PREFIX + CLOVER_FILE).toFile());
 
             if (relativeReportDirs != null) {
                 for (String relativeReportPath : relativeReportDirs) {
-                    File relativeReportingDirectory = reportingDirectory;
-                    File relativeBuildDirectory = buildDirectory;
+                    Path relativeReportingDirectory = reportingDirectory;
+                    Path relativeBuildDirectory = buildDirectory;
                     if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
-                        relativeReportingDirectory = new File(reportingDirectory, relativeReportPath);
-                        relativeBuildDirectory = new File(buildDirectory, relativeReportPath);
+                        relativeReportingDirectory = Paths.get(reportingDirectory.toString(),
+                                relativeReportPath.toString());
+                        relativeBuildDirectory = Paths.get(buildDirectory.toString(), relativeReportPath.toString());
                     }
 
-                    jacocoFiles.add(new File(relativeReportingDirectory, JACOCO_FILE));
-                    jacocoFiles.add(new File(relativeBuildDirectory, JACOCO_FILE));
-                    coberturaFiles.add(new File(relativeReportingDirectory, COBERTURA_FILE));
-                    coberturaFiles.add(new File(relativeBuildDirectory, COBERTURA_FILE));
-                    sagaFiles.add(new File(relativeReportingDirectory, SAGA_FILE));
-                    sagaFiles.add(new File(relativeBuildDirectory, SAGA_FILE));
-                    cloverFiles.add(new File(relativeReportingDirectory, CLOVER_FILE));
-                    cloverFiles.add(new File(relativeBuildDirectory, CLOVER_FILE));
+                    jacocoFiles.add(Paths.get(relativeReportingDirectory.toString(), JACOCO_FILE).toFile());
+                    jacocoFiles.add(Paths.get(relativeBuildDirectory.toString(), JACOCO_FILE).toFile());
+                    coberturaFiles.add(Paths.get(relativeReportingDirectory.toString(), COBERTURA_FILE).toFile());
+                    coberturaFiles.add(Paths.get(relativeBuildDirectory.toString(), COBERTURA_FILE).toFile());
+                    sagaFiles.add(Paths.get(relativeReportingDirectory.toString(), SAGA_FILE).toFile());
+                    sagaFiles.add(Paths.get(relativeBuildDirectory.toString(), SAGA_FILE).toFile());
+                    cloverFiles.add(Paths.get(relativeReportingDirectory.toString(), CLOVER_FILE).toFile());
+                    cloverFiles.add(Paths.get(relativeBuildDirectory.toString(), CLOVER_FILE).toFile());
                 }
             }
         }
