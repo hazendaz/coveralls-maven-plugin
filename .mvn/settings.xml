@@ -44,10 +44,9 @@
       </configuration>
     </server>
 
-    <!-- Github deployments (site) -->
+    <!-- Site Builds -->
     <server>
       <id>github</id>
-      <username>${env.CI_DEPLOY_USERNAME}</username>
       <password>${env.GITHUB_TOKEN}</password>
     </server>
 
