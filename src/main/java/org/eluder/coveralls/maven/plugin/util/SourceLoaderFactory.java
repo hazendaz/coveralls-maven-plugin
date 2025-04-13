@@ -25,7 +25,6 @@ package org.eluder.coveralls.maven.plugin.util;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class SourceLoaderFactory {
         List<MavenProject> modules = new MavenProjectCollector(project).collect();
         for (MavenProject module : modules) {
             for (String sourceRoot : module.getCompileSourceRoots()) {
-                Path sourceDirectory = Paths.get(sourceRoot.toString());
+                Path sourceDirectory = Path.of(sourceRoot.toString());
                 directories.add(sourceDirectory.toFile());
             }
         }

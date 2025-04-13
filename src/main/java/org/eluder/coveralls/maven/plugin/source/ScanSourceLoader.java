@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +49,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        Path path = Paths.get(sourceDirectory.toString(), getFileName(sourceFile));
+        Path path = Path.of(sourceDirectory.toString(), getFileName(sourceFile));
 
         if (Files.exists(path)) {
             if (!Files.isRegularFile(path)) {

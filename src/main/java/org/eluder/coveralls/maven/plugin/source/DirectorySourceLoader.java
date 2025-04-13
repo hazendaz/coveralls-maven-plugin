@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class DirectorySourceLoader extends AbstractSourceLoader {
 
@@ -42,7 +41,7 @@ public class DirectorySourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        Path path = Paths.get(sourceDirectory.toString(), sourceFile);
+        Path path = Path.of(sourceDirectory.toString(), sourceFile);
         if (Files.exists(path)) {
             if (!Files.isRegularFile(path)) {
                 throw new IllegalArgumentException(path.toAbsolutePath() + " is not file");
