@@ -44,7 +44,7 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>coveralls-maven-plugin</artifactId>
-    <version>4.5.0-M6</version>
+    <version>4.7.0</version>
     <configuration>
         <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
     </configuration>
@@ -110,7 +110,7 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.12</version>
+    <version>0.8.13</version>
     <executions>
         <execution>
             <id>prepare-agent</id>
@@ -366,6 +366,9 @@ See [releases](https://github.com/hazendaz/coveralls-maven-plugin/releases) for 
 * For Java 7 support in 4.x to 4.3 versions.
 * Version 4.4 not released but was set to require java 8 from original codeline
 * Version 4.4.1 was released on a fork still requring java 7 from https://github.com/jwtk/coveralls-maven-plugin which was work to release from https://github.com/dogeared/coveralls-maven-plugin
+* Version 4.5.0 requires java 8.
+* Version 4.6.0 requires java 11.
+* Version 4.7.0 requires java 17.
 
 
 ### Migration
@@ -397,16 +400,16 @@ plugin to be used.
 ```xml
   <repositories>
     <repository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central-snapshots</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
       <releases><enabled>false</enabled></releases>
       <snapshots><enabled>true</enabled></snapshots>
     </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
-      <id>sonatype-nexus-snapshot</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central-snapshot</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
       <releases><enabled>false</enabled></releases>
       <snapshots><enabled>true</enabled></snapshots>
     </pluginRepository>
