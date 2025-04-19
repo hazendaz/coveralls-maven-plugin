@@ -14,7 +14,7 @@ service.
 
 ### Requirements
 
-* java 8 for 4.5.0 onwards
+* java 17 for 4.7.0 onwards
 * Maven 3.6.3 or newer.
 
 
