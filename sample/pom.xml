@@ -72,7 +72,7 @@
         <groupId>com.github.hazendaz.maven</groupId>
         <artifactId>coveralls-maven-plugin</artifactId>
         <!-- Remove version once in base-parent -->
-        <version>4.6.0</version>
+        <version>4.7.0</version>
         <configuration>
           <sourceDirectories>
             <sourceDirectory>module1/src/main/resources</sourceDirectory>
