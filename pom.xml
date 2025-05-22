@@ -103,7 +103,7 @@
 
         <!-- Artifacts -->
         <byte-buddy.version>1.17.5</byte-buddy.version>
-        <httpclient.version>5.4.4</httpclient.version>
+        <httpclient.version>5.5</httpclient.version>
         <httpcore.version>5.3.4</httpcore.version>
         <jackson.version>2.19.0</jackson.version>
         <jgit.version>7.2.1.202505142326-r</jgit.version>
