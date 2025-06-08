@@ -109,7 +109,7 @@
         <jgit.version>7.3.0.202506031305-r</jgit.version>
         <json-smart.version>2.5.2</json-smart.version>
         <junit.version>5.13.1</junit.version>
-        <maven.version>3.9.9</maven.version>
+        <maven.version>3.9.10</maven.version>
         <mockito.version>5.18.0</mockito.version>
         <slf4j.version>2.0.17</slf4j.version>
 
@@ -233,6 +233,11 @@
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
+        </dependency>
+        <!-- Somehow this is being blocked but is required by plexus-utils in maven 3.9.10, check if fixed in 3.9.11! -->
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-xml</artifactId>
         </dependency>
 
         <dependency>
