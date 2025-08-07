@@ -107,7 +107,7 @@
         <httpcore.version>5.3.4</httpcore.version>
         <jackson.version>2.19.2</jackson.version>
         <jgit.version>7.3.0.202506031305-r</jgit.version>
-        <json-smart.version>2.5.2</json-smart.version>
+        <json-smart.version>2.6.0</json-smart.version>
         <junit.version>5.13.4</junit.version>
         <maven.version>3.9.11</maven.version>
         <mockito.version>5.18.0</mockito.version>
