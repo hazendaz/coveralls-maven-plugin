@@ -102,7 +102,7 @@
         <project.build.outputTimestamp>1745098082</project.build.outputTimestamp>
 
         <!-- Artifacts -->
-        <byte-buddy.version>1.17.6</byte-buddy.version>
+        <byte-buddy.version>1.17.7</byte-buddy.version>
         <httpclient.version>5.5</httpclient.version>
         <httpcore.version>5.3.4</httpcore.version>
         <jackson.version>2.19.2</jackson.version>
