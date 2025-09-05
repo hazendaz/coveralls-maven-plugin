@@ -44,7 +44,7 @@
       </configuration>
     </server>
 
-    <!-- Site Builds -->
+    <!-- Github deployments (site) -->
     <server>
       <id>github</id>
       <password>${env.GITHUB_TOKEN}</password>
