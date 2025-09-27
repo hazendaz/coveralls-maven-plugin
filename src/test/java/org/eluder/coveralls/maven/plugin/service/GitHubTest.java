@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * The Class GitHubTest.
  */
-public class GitHubTest {
+class GitHubTest {
 
     /**
      * Env.
