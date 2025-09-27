@@ -24,24 +24,22 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.Provider;
 import java.security.Security;
+import java.time.Duration;
+import java.util.List;
 
-import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
-import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.HttpResponse;
-import org.apache.hc.core5.http.HttpStatus;
+import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
@@ -58,26 +56,23 @@ public class CoverallsClient {
         }
     }
 
+    private static final Duration DEFAULT_SOCKET_TIMEOUT = Duration.ofSeconds(60);
     /** The Constant FILE_NAME. */
     private static final String FILE_NAME = "coveralls.json";
+    private static final String USER_AGENT_STRING = "coveralls-maven-plugin";
 
     /** The Constant MIME_TYPE. */
     private static final ContentType MIME_TYPE = ContentType.create("application/json", StandardCharsets.UTF_8);
 
     /** The coveralls url. */
     private final String coverallsUrl;
-
-    /** The http client. */
-    private final CloseableHttpClient httpClient;
-
-    /** The object mapper. */
+    private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
     /**
      * Instantiates a new coveralls client.
      *
-     * @param coverallsUrl
-     *            the coveralls url
+     * @param coverallsUrl the coveralls url
      */
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
@@ -86,15 +81,11 @@ public class CoverallsClient {
     /**
      * Instantiates a new coveralls client.
      *
-     * @param coverallsUrl
-     *            the coveralls url
-     * @param httpClient
-     *            the http client
-     * @param objectMapper
-     *            the object mapper
+     * @param coverallsUrl the coveralls url
+     * @param httpClient the http client
+     * @param objectMapper the object mapper
      */
-    public CoverallsClient(final String coverallsUrl, final CloseableHttpClient httpClient,
-            final ObjectMapper objectMapper) {
+    public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
@@ -103,43 +94,47 @@ public class CoverallsClient {
     /**
      * Submit.
      *
-     * @param file
-     *            the file
+     * @param file the file
      *
      * @return the coveralls response
      *
-     * @throws ProcessingException
-     *             the processing exception
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+     * @throws ProcessingException the processing exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
-    public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-        final var entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
-                .addBinaryBody("json_file", file, CoverallsClient.MIME_TYPE, CoverallsClient.FILE_NAME).build();
-        final var post = new HttpPost(this.coverallsUrl);
-        post.setEntity(entity);
-        final var result = this.httpClient.execute(post, response -> {
-            final var responseEntity = response.getEntity();
-            if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                return new SubmitResult(this.getResponseErrorMessage(response, "Coveralls API internal error"),
-                        SubmitResult.ErrorType.IO);
-            }
+    public CoverallsResponse submit(final File file) throws ProcessingException, IOException, InterruptedException {
+        final Path filePath = file.toPath();
 
-            try (var reader = new BufferedReader(
-                    new InputStreamReader(responseEntity.getContent(), StandardCharsets.UTF_8))) {
-                final var cr = this.objectMapper.readValue(reader, CoverallsResponse.class);
-                if (cr.isError()) {
-                    return new SubmitResult(this.getResponseErrorMessage(response, cr.getMessage()),
-                            SubmitResult.ErrorType.PROCESSING);
-                }
-                return new SubmitResult(cr);
-            } catch (final JsonProcessingException ex) {
-                return new SubmitResult(this.getResponseErrorMessage(response, ex.getMessage()), ex,
-                        SubmitResult.ErrorType.PROCESSING);
+        final Iterable<byte[]> multipartData = List.of("--boundary\r\n".getBytes(),
+                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(),
+                FILE_NAME.getBytes(),
+                "\"\r\nContent-Type: application/octet-stream;charset=UTF-8\r\n\r\n".getBytes(),
+                Files.readAllBytes(filePath), "\r\n--boundary--\r\n".getBytes());
+
+        final HttpRequest request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(coverallsUrl))
+                .timeout(DEFAULT_SOCKET_TIMEOUT)
+                .header("User-Agent", USER_AGENT_STRING)
+                .POST(HttpRequest.BodyPublishers.ofByteArrays(multipartData)).build();
+
+        final HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
+        return parseResponse(response);
+    }
+
+    private CoverallsResponse parseResponse(final HttpResponse<InputStream> response)
+            throws ProcessingException, IOException {
+        if (response.statusCode() >= 500) {
+            throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
+        }
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(response.body(), StandardCharsets.UTF_8))) {
+            CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
+            if (cr.isError()) {
+                throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
             }
-        });
-        if (result.errorType == SubmitResult.ErrorType.PROCESSING) {
-            throw new ProcessingException(result.errorMessage, result.errorCause);
+            return cr;
+        } catch (final IOException ex) {
+            throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);
         }
         if (result.errorType == SubmitResult.ErrorType.IO) {
             throw new IOException(result.errorMessage);
@@ -147,26 +142,11 @@ public class CoverallsClient {
         return result.response;
     }
 
-    /**
-     * Gets the response error message.
-     *
-     * @param response
-     *            the response
-     * @param message
-     *            the message
-     *
-     * @return the response error message
-     */
-    private String getResponseErrorMessage(final HttpResponse response, final String message) {
-        final var status = response.getCode();
-        final var reason = response.getReasonPhrase();
-        final var errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
-                .append(status).append(":");
-        if (reason != null && !reason.isBlank()) {
-            errorMessage.append(" ").append(reason);
-        }
-        if (reason != null && !message.isBlank()) {
-            errorMessage.append(" (").append(message).append(")");
+    private String getResponseErrorMessage(final HttpResponse<InputStream> response, final String message) {
+        final StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
+                .append(response.statusCode());
+        if (StringUtils.isNotBlank(message)) {
+            errorMessage.append(": ").append(message);
         }
         return errorMessage.toString();
     }

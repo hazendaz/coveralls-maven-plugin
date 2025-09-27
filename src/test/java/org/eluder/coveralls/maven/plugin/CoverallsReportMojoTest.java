@@ -284,19 +284,19 @@ class CoverallsReportMojoTest {
      *             the mojo failure exception
      */
     @Test
-    void successfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
-        Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
-                .thenReturn(new CoverallsResponse("success", false, null));
-        this.mojo.execute();
-        final var json = TestIoUtil.readFileContent(this.coverallsFile);
-        Assertions.assertNotNull(json);
+    void successfulSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException,
+            InterruptedException {
+        when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
+        mojo.execute();
+        var json = TestIoUtil.readFileContent(coverallsFile);
+        assertNotNull(json);
 
         final var fixture = CoverageFixture.JAVA_FILES;
         for (final List<String> coverageFile : fixture) {
             Assertions.assertTrue(json.contains(coverageFile.get(0)));
         }
 
-        CoverallsReportMojoTest.verifySuccessfullSubmit(this.logMock, fixture);
+        verifySuccessfulSubmit(logMock, fixture);
     }
 
     /**
@@ -310,9 +310,9 @@ class CoverallsReportMojoTest {
      *             the mojo execution exception
      */
     @Test
-    void failWithProcessingException() throws ProcessingException, IOException, MojoExecutionException {
-        Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
-                .thenThrow(new ProcessingException());
+    void failWithProcessingException()
+            throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
+        when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -333,10 +333,9 @@ class CoverallsReportMojoTest {
      */
     @Test
     void processingExceptionWithAllowedServiceFailure()
-            throws ProcessingException, IOException, MojoExecutionException {
-        this.mojo.failOnServiceError = false;
-        Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
-                .thenThrow(new ProcessingException());
+            throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
+        mojo.failOnServiceError = false;
+        when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -356,8 +355,8 @@ class CoverallsReportMojoTest {
      *             the mojo execution exception
      */
     @Test
-    void failWithIOException() throws ProcessingException, IOException, MojoExecutionException {
-        Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
+    void failWithIOException() throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
+        Mockito.when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -379,12 +378,12 @@ class CoverallsReportMojoTest {
      *             the mojo failure exception
      */
     @Test
-    void iOExceptionWithAllowedServiceFailure()
-            throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
-        this.mojo.failOnServiceError = false;
-        Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
-        this.mojo.execute();
-        Mockito.verify(this.logMock).warn(ArgumentMatchers.anyString());
+    void iOExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException,
+            MojoFailureException, InterruptedException {
+        mojo.failOnServiceError = false;
+        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
+        mojo.execute();
+        Mockito.verify(logMock).warn(ArgumentMatchers.anyString());
     }
 
     /**
@@ -398,9 +397,9 @@ class CoverallsReportMojoTest {
      *             the mojo failure exception
      */
     @Test
-    void failWithNullPointerException() throws ProcessingException, IOException, MojoFailureException {
-        Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
-                .thenThrow(new NullPointerException());
+    void failWithNullPointerException()
+            throws ProcessingException, IOException, MojoFailureException, InterruptedException {
+        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new NullPointerException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -425,15 +424,7 @@ class CoverallsReportMojoTest {
         Mockito.verifyNoInteractions(this.jobMock);
     }
 
-    /**
-     * Verify successfull submit.
-     *
-     * @param logMock
-     *            the log mock
-     * @param fixture
-     *            the fixture
-     */
-    static void verifySuccessfullSubmit(Log logMock, List<List<String>> fixture) {
+    static void verifySuccessfulSubmit(Log logMock, String[][] fixture) {
         Mockito.verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                 + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         Mockito.verify(logMock).info("*** Coverage results are usually available immediately on Coveralls.");

@@ -24,22 +24,25 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.core5.http.ClassicHttpResponse;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.commons.io.IOUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.junit.jupiter.api.Assertions;
@@ -59,176 +62,82 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class CoverallsClientTest {
 
-    /** The http client mock. */
     @Mock
-    CloseableHttpClient httpClientMock;
+    private HttpClient httpClientMock;
 
-    /** The http entity mock. */
     @Mock
-    HttpEntity httpEntityMock;
+    private HttpResponse<InputStream> httpResponseMock;
 
-    /** The http response mock. */
-    @Mock
-    ClassicHttpResponse httpResponseMock;
-
-    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
-    Path folder;
+    private Path folder;
 
-    /** The file. */
-    File file;
+    private File file;
 
-    /**
-     * Inits the.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
     @BeforeEach
     void init() throws IOException {
         this.file = Files.createFile(this.folder.resolve("coverallsClientTest.tmp")).toFile();
     }
 
-    /**
-     * Constructors.
-     */
     @Test
     void constructors() {
-        Assertions.assertNotNull(new CoverallsClient("https://test.com/coveralls"));
-        Assertions.assertNotNull(
-                new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper()));
+        Assertions.assertNotNull(new CoverallsClient("http://test.com/coveralls"));
+        Assertions.assertNotNull(new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper()));
     }
 
-    /**
-     * Test submit.
-     *
-     * @throws UnsupportedOperationException
-     *             the unsupported operation exception
-     * @throws Exception
-     *             the exception
-     */
     @Test
-    void testSubmit() throws UnsupportedOperationException, Exception {
-        Mockito.when(this.httpClientMock.execute(ArgumentMatchers.any(HttpUriRequest.class),
-                ArgumentMatchers.any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
-                    final HttpClientResponseHandler<?> handler = invocation.getArgument(1);
-                    return handler.handleResponse(this.httpResponseMock);
-                });
-        Mockito.when(this.httpResponseMock.getCode()).thenReturn(200);
-        Mockito.when(this.httpResponseMock.getEntity()).thenReturn(this.httpEntityMock);
-        Mockito.when(this.httpEntityMock.getContent())
-                .thenReturn(this.coverallsResponse(new CoverallsResponse("success", false, "")));
-        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertDoesNotThrow(() -> {
-            client.submit(this.file);
-        });
+    void testSubmit() throws Exception {
+        Mockito.when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        Mockito.when(httpResponseMock.statusCode()).thenReturn(200);
+        Mockito.when(httpResponseMock.body()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
+        final var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        client.submit(file);
     }
 
-    /**
-     * Fail on service error.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
     @Test
-    void failOnServiceError() throws IOException {
-        Mockito.when(this.httpClientMock.execute(ArgumentMatchers.any(HttpUriRequest.class),
-                ArgumentMatchers.any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
-                    final HttpClientResponseHandler<?> handler = invocation.getArgument(1);
-                    return handler.handleResponse(this.httpResponseMock);
-                });
-        Mockito.when(this.httpResponseMock.getCode()).thenReturn(500);
-        Mockito.when(this.httpResponseMock.getReasonPhrase()).thenReturn("Internal Error");
-        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(IOException.class, () -> {
-            client.submit(this.file);
-        });
+    void failOnServiceError() throws Exception {
+        Mockito.when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        Mockito.when(httpResponseMock.statusCode()).thenReturn(500);
+        final var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        Assertions.assertThrows(IOException.class, () -> client.submit(file));
     }
 
-    /**
-     * Parses the invalid response.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
     @Test
-    void parseInvalidResponse() throws IOException {
-        Mockito.when(this.httpClientMock.execute(ArgumentMatchers.any(HttpUriRequest.class),
-                ArgumentMatchers.any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
-                    final HttpClientResponseHandler<?> handler = invocation.getArgument(1);
-                    return handler.handleResponse(this.httpResponseMock);
-                });
-        Mockito.when(this.httpResponseMock.getCode()).thenReturn(200);
-        Mockito.when(this.httpResponseMock.getReasonPhrase()).thenReturn("OK");
-        Mockito.when(this.httpResponseMock.getEntity()).thenReturn(this.httpEntityMock);
-        Mockito.when(this.httpEntityMock.getContent())
-                .thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
-        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(ProcessingException.class, () -> {
-            client.submit(this.file);
-        });
+    void parseInvalidResponse() throws Exception {
+        Mockito.when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        Mockito.when(httpResponseMock.statusCode()).thenReturn(200);
+        Mockito.when(httpResponseMock.body()).thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
+        final var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        Assertions.assertThrows(ProcessingException.class, () -> client.submit(file));
     }
 
-    /**
-     * Parses the errorous response.
-     *
-     * @throws UnsupportedOperationException
-     *             the unsupported operation exception
-     * @throws Exception
-     *             the exception
-     */
     @Test
-    void parseErrorousResponse() throws UnsupportedOperationException, Exception {
-        Mockito.when(this.httpClientMock.execute(ArgumentMatchers.any(HttpUriRequest.class),
-                ArgumentMatchers.any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
-                    final HttpClientResponseHandler<?> handler = invocation.getArgument(1);
-                    return handler.handleResponse(this.httpResponseMock);
-                });
-        Mockito.when(this.httpResponseMock.getCode()).thenReturn(400);
-        Mockito.when(this.httpResponseMock.getReasonPhrase()).thenReturn("Bad Request");
-        Mockito.when(this.httpResponseMock.getEntity()).thenReturn(this.httpEntityMock);
-        Mockito.when(this.httpEntityMock.getContent())
-                .thenReturn(this.coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
-        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(ProcessingException.class, () -> {
-            client.submit(this.file);
-        });
+    void parseErrorousResponse() throws Exception {
+        Mockito.when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        Mockito.when(httpResponseMock.statusCode()).thenReturn(400);
+        Mockito.when(httpResponseMock.body())
+                .thenReturn(coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
+        final var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        Assertions.assertThrows(ProcessingException.class, () -> client.submit(file));
     }
 
-    /**
-     * Parses the failing entity.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
-     */
     @Test
-    void parseFailingEntity() throws IOException {
-        Mockito.when(this.httpClientMock.execute(ArgumentMatchers.any(HttpUriRequest.class),
-                ArgumentMatchers.any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
-                    final HttpClientResponseHandler<?> handler = invocation.getArgument(1);
-                    return handler.handleResponse(this.httpResponseMock);
-                });
-        Mockito.when(this.httpResponseMock.getCode()).thenReturn(200);
-        Mockito.when(this.httpResponseMock.getEntity()).thenReturn(this.httpEntityMock);
-        Mockito.when(this.httpEntityMock.getContent()).thenThrow(IOException.class);
-        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(IOException.class, () -> {
-            client.submit(this.file);
-        });
+    void parseFailingEntity() throws Exception {
+        Mockito.when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        Mockito.when(httpResponseMock.statusCode()).thenReturn(200);
+        Mockito.when(httpResponseMock.body()).thenReturn(IOUtils.toInputStream("{}", StandardCharsets.UTF_8));
+        final ObjectMapper mockMapper = mock(ObjectMapper.class); // Jackson's object mapper can potentially throw
+                                                                  // exception
+        Mockito.when(mockMapper.readValue(any(BufferedReader.class), eq(CoverallsResponse.class))).thenThrow(IOException.class);
+        final var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, mockMapper);
+        Assertions.assertThrows(ProcessingException.class, () -> client.submit(file));
     }
 
-    /**
-     * Coveralls response.
-     *
-     * @param coverallsResponse
-     *            the coveralls response
-     *
-     * @return the input stream
-     *
-     * @throws JsonProcessingException
-     *             the json processing exception
-     */
-    InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
+    private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
         final var content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }
