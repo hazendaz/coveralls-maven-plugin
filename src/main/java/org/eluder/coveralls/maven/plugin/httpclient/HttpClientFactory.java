@@ -77,7 +77,7 @@ class HttpClientFactory {
      */
     public HttpClientFactory proxy(final Proxy proxy) {
         if (proxy != null && isProxied(targetUrl, proxy)) {
-            rcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
+            hcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
             if (StringUtils.isNotBlank(proxy.getUsername())) {
                 BasicCredentialsProvider cp = new BasicCredentialsProvider();
                 cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
