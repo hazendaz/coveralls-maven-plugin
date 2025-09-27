@@ -38,6 +38,7 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
 import org.apache.maven.project.MavenProject;
+import org.eluder.coveralls.maven.plugin.parser.CloverParser;
 import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
 import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
@@ -160,6 +161,21 @@ class CoverageParsersFactoryTest {
     }
 
     /**
+     * Creates the clover parser.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    void createCloverParser() throws IOException {
+        var cloverDir = Files.createDirectory(targetDir.resolve("clover"));
+        Files.createFile(cloverDir.resolve("clover.xml"));
+        var parsers = createCoverageParsersFactory().createParsers();
+        assertEquals(1, parsers.size());
+        assertEquals(CloverParser.class, parsers.get(0).getClass());
+    }
+
+    /**
      * With jacoco report.
      *
      * @throws IOException
@@ -205,6 +221,22 @@ class CoverageParsersFactoryTest {
         var parsers = factory.createParsers();
         assertEquals(1, parsers.size());
         assertEquals(SagaParser.class, parsers.get(0).getClass());
+    }
+
+    /**
+     * With clover report.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    void withCloverReport() throws IOException {
+        var cloverFile = Files.createFile(reportingDir.resolve("clover-report.xml")).toFile();
+        cloverFile.createNewFile();
+        var factory = createCoverageParsersFactory().withCloverReports(Arrays.asList(cloverFile));
+        var parsers = factory.createParsers();
+        assertEquals(1, parsers.size());
+        assertEquals(CloverParser.class, parsers.get(0).getClass());
     }
 
     /**

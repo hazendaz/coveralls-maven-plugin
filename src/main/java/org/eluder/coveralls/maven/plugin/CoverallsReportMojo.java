@@ -91,6 +91,12 @@ public class CoverallsReportMojo extends AbstractMojo {
     private List<File> sagaReports;
 
     /**
+     * File paths to additional Clover coverage report files.
+     */
+    @Parameter(property = "cloverReports")
+    private List<File> cloverReports;
+
+    /**
      * Directories for relative per module specific report files.
      */
     @Parameter(property = "relativeReportDirs")
@@ -279,7 +285,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) throws IOException {
         return new CoverageParsersFactory(project, sourceLoader).withJaCoCoReports(jacocoReports)
-                .withCoberturaReports(coberturaReports).withSagaReports(sagaReports)
+                .withCoberturaReports(coberturaReports).withSagaReports(sagaReports).withCloverReports(cloverReports)
                 .withRelativeReportDirs(relativeReportDirs).createParsers();
     }
 

@@ -144,6 +144,19 @@ public class CoverageParsersFactory {
     }
 
     /**
+     * With clover reports.
+     *
+     * @param cloverReports
+     *            the clover reports
+     *
+     * @return the coverage parsers factory
+     */
+    public CoverageParsersFactory withCloverReports(final List<File> cloverReports) {
+        this.cloverReports = cloverReports;
+        return this;
+    }
+
+    /**
      * With relative report dirs.
      *
      * @param relativeReportDirs
@@ -181,6 +194,7 @@ public class CoverageParsersFactory {
             coberturaFiles.add(reportingDirectory.resolve(COBERTURA_DIRECTORY).resolve(COBERTURA_FILE).toFile());
             sagaFiles.add(buildDirectory.resolve(SAGA_DIRECTORY).resolve(SAGA_FILE).toFile());
             cloverFiles.add(reportingDirectory.resolve(CLOVER_DIRECTORY).resolve(CLOVER_FILE).toFile());
+            cloverFiles.add(buildDirectory.resolve(CLOVER_DIRECTORY).resolve(CLOVER_FILE).toFile());
 
             if (relativeReportDirs != null) {
                 for (String relativeReportPath : relativeReportDirs) {
