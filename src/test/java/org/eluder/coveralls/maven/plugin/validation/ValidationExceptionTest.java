@@ -37,9 +37,6 @@ class ValidationExceptionTest {
     /** The Constant MESSAGE. */
     private static final String MESSAGE = "message";
 
-    /** The Constant CAUSE. */
-    private static final RuntimeException CAUSE = new RuntimeException();
-
     /**
      * Exception.
      */
@@ -65,9 +62,10 @@ class ValidationExceptionTest {
      */
     @Test
     void exceptionWithCause() {
-        var exception = new ValidationException(CAUSE);
-        assertEquals(CAUSE.toString(), exception.getMessage());
-        assertSame(CAUSE, exception.getCause());
+        var cause = new RuntimeException("cause message");
+        var exception = new ValidationException(cause);
+        assertEquals(cause.toString(), exception.getMessage());
+        assertSame(cause, exception.getCause());
     }
 
     /**
@@ -75,9 +73,9 @@ class ValidationExceptionTest {
      */
     @Test
     void exceptionWithMessageAndCause() {
-        var exception = new ValidationException(MESSAGE, CAUSE);
+        var cause = new RuntimeException("cause message");
+        var exception = new ValidationException(MESSAGE, cause);
         assertEquals(MESSAGE, exception.getMessage());
-        assertSame(CAUSE, exception.getCause());
-
+        assertSame(cause, exception.getCause());
     }
 }
