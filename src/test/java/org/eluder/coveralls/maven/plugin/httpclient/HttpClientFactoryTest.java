@@ -81,7 +81,7 @@ class HttpClientFactoryTest {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         var client = new HttpClientFactory(TARGET_URL).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
 
         assertEquals("Hello World!", body);
     }
@@ -106,7 +106,7 @@ class HttpClientFactoryTest {
         proxy.setProtocol("http");
 
         var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
 
         assertEquals("Hello Proxy!", body);
     }
@@ -136,7 +136,7 @@ class HttpClientFactoryTest {
         proxy.setPassword("bar");
 
         var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
 
         assertEquals("Hello Proxy!", body);
     }
@@ -162,7 +162,7 @@ class HttpClientFactoryTest {
         proxy.setNonProxyHosts("localhost|example.com");
 
         var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
 
         assertEquals("Hello World!", body);
     }
