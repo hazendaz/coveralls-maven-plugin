@@ -437,6 +437,10 @@ public class CoverallsReportMojo extends AbstractMojo {
             long duration = System.currentTimeMillis() - now;
             String message = "Submission failed in " + duration + "ms while handling I/O operations";
             handleSubmissionError(ex, message, failOnServiceError);
+        } catch (InterruptedException ex) {
+            long duration = System.currentTimeMillis() - now;
+            String message = "Submission failed in " + duration + "ms due to an interuption";
+            getLog().error(message, ex);
         }
     }
 

@@ -23,27 +23,22 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.Provider;
 import java.security.Security;
+import java.time.Duration;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
-import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpResponse;
-import org.apache.hc.core5.http.HttpStatus;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
@@ -57,62 +52,66 @@ public class CoverallsClient {
         }
     }
 
+    private static final Duration DEFAULT_SOCKET_TIMEOUT = Duration.ofSeconds(60);
     private static final String FILE_NAME = "coveralls.json";
-    private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", StandardCharsets.UTF_8);
+    private static final String USER_AGENT_STRING = "coveralls-maven-plugin";
 
     private final String coverallsUrl;
-    private final CloseableHttpClient httpClient;
+    private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
     }
 
-    public CoverallsClient(final String coverallsUrl, final CloseableHttpClient httpClient,
-            final ObjectMapper objectMapper) {
+    public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
     }
 
-    public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-        HttpEntity entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
-                .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
-        HttpPost post = new HttpPost(coverallsUrl);
-        post.setEntity(entity);
-        CloseableHttpResponse response = httpClient.execute(post);
+    public CoverallsResponse submit(final File file) throws ProcessingException, IOException, InterruptedException {
+        final Path filePath = file.toPath();
+
+        final Iterable<byte[]> multipartData = List.of("--boundary\r\n".getBytes(),
+                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(),
+                FILE_NAME.getBytes(),
+                "\"\r\nContent-Type: application/octet-stream;charset=UTF-8\r\n\r\n".getBytes(),
+                Files.readAllBytes(filePath), "\r\n--boundary--\r\n".getBytes());
+
+        final HttpRequest request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(coverallsUrl))
+                .timeout(DEFAULT_SOCKET_TIMEOUT)
+                .header("User-Agent", USER_AGENT_STRING)
+                .POST(HttpRequest.BodyPublishers.ofByteArrays(multipartData)).build();
+
+        final HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
         return parseResponse(response);
     }
 
-    private CoverallsResponse parseResponse(final CloseableHttpResponse response)
+    private CoverallsResponse parseResponse(final HttpResponse<InputStream> response)
             throws ProcessingException, IOException {
-        HttpEntity entity = response.getEntity();
-        if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+        if (response.statusCode() >= 500) {
             throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
         }
 
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8))) {
+                new InputStreamReader(response.body(), StandardCharsets.UTF_8))) {
             CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
             if (cr.isError()) {
                 throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
             }
             return cr;
-        } catch (JsonProcessingException ex) {
+        } catch (final IOException ex) {
             throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);
         }
     }
 
-    private String getResponseErrorMessage(final HttpResponse response, final String message) {
-        int status = response.getCode();
-        String reason = response.getReasonPhrase();
-        StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
-                .append(status).append(":");
-        if (StringUtils.isNotBlank(reason)) {
-            errorMessage.append(" ").append(reason);
-        }
+    private String getResponseErrorMessage(final HttpResponse<InputStream> response, final String message) {
+        final StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
+                .append(response.statusCode());
         if (StringUtils.isNotBlank(message)) {
-            errorMessage.append(" (").append(message).append(")");
+            errorMessage.append(": ").append(message);
         }
         return errorMessage.toString();
     }

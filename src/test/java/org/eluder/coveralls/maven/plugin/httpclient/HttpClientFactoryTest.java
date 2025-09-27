@@ -33,11 +33,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
-import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.maven.settings.Proxy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -47,6 +47,7 @@ class HttpClientFactoryTest {
     static final int PROXY_PORT = 9797;
     static final int TARGET_PORT = 9696;
     static final String TARGET_URL = "http://localhost:" + TARGET_PORT;
+    static final HttpResponse.BodyHandler<String> STRING_RESPONSE_HANDLER = HttpResponse.BodyHandlers.ofString();
 
     @RegisterExtension
     static WireMockExtension targetServer = WireMockExtension.newInstance()
@@ -59,17 +60,17 @@ class HttpClientFactoryTest {
             .configureStaticDsl(true).build();
 
     @Test
-    void simpleRequest() throws IOException, ParseException {
+    void simpleRequest() throws Exception {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
-        var client = new HttpClientFactory(TARGET_URL).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
-
-        assertEquals("Hello World!", body);
+        final HttpClient client = new HttpClientFactory(TARGET_URL).create();
+        final HttpResponse<String> response = client
+                .send(HttpRequest.newBuilder().uri(URI.create(TARGET_URL)).GET().build(), STRING_RESPONSE_HANDLER);
+        assertEquals("Hello World!", response.body());
     }
 
     @Test
-    void unAuthorizedProxyRequest() throws IOException, ParseException {
+    void unAuthorizedProxyRequest() throws Exception {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
@@ -79,14 +80,15 @@ class HttpClientFactoryTest {
         proxy.setPort(PROXY_PORT);
         proxy.setProtocol("http");
 
-        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        final HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
+        final HttpResponse<String> response = client
+                .send(HttpRequest.newBuilder().uri(URI.create(TARGET_URL)).GET().build(), STRING_RESPONSE_HANDLER);
 
-        assertEquals("Hello Proxy!", body);
+        assertEquals("Hello Proxy!", response.body());
     }
 
     @Test
-    void authorixedProxyRequest() throws IOException, ParseException {
+    void authorizedProxyRequest() throws Exception {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).withHeader("Proxy-Authorization", matching("Basic Zm9vOmJhcg=="))
@@ -101,14 +103,15 @@ class HttpClientFactoryTest {
         proxy.setUsername("foo");
         proxy.setPassword("bar");
 
-        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        final HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
+        final HttpResponse<String> response = client
+                .send(HttpRequest.newBuilder().uri(URI.create(TARGET_URL)).GET().build(), STRING_RESPONSE_HANDLER);
 
-        assertEquals("Hello Proxy!", body);
+        assertEquals("Hello Proxy!", response.body());
     }
 
     @Test
-    void nonProxiedHostRequest() throws IOException, ParseException {
+    void nonProxiedHostRequest() throws Exception {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
 
         proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
@@ -119,9 +122,10 @@ class HttpClientFactoryTest {
         proxy.setProtocol("http");
         proxy.setNonProxyHosts("localhost|example.com");
 
-        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = EntityUtils.toString(client.execute(new HttpGet(TARGET_URL)).getEntity());
+        final HttpClient client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
+        final HttpResponse<String> response = client
+                .send(HttpRequest.newBuilder().uri(URI.create(TARGET_URL)).GET().build(), STRING_RESPONSE_HANDLER);
 
-        assertEquals("Hello World!", body);
+        assertEquals("Hello World!", response.body());
     }
 }
