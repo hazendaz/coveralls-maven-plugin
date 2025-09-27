@@ -14,7 +14,14 @@ service.
 
 ### Requirements
 
-* java 17 for 4.7.0 onwards
+To build
+
+* java 17 for 4.7.0 onwards.
+* Maven 3.6.3 or newer.
+
+To run
+
+* java 11 for 4.8.0 onwards.
 * Maven 3.6.3 or newer.
 
 
