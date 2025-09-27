@@ -397,6 +397,9 @@
                 <java.test.version>11</java.test.version>
                 <java.test.release.version>11</java.test.release.version>
                 <jgit.version>6.10.1.202505221210-r</jgit.version>
+
+                <!-- Enforcer Jdks Allowed -->
+                <allowed.build.jdks note="Allow any java 11">[11,12)</allowed.build.jdks>
             </properties>
         </profile>
     </profiles>
