@@ -384,4 +384,21 @@
         </plugins>
     </reporting>
 
+    <profiles>
+        <profile>
+            <id>jdk-pre-17</id>
+            <activation>
+                <jdk>[,16]</jdk>
+            </activation>
+            <properties>
+                <!-- Java Runtime Requirements -->
+                <java.version>11</java.version>
+                <java.release.version>11</java.release.version>
+                <java.test.version>11</java.test.version>
+                <java.test.release.version>11</java.test.release.version>
+                <jgit.version>6.10.1.202505221210-r</jgit.version>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>
