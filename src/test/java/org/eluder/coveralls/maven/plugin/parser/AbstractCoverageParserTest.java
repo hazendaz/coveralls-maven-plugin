@@ -23,6 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -287,7 +288,7 @@ public abstract class AbstractCoverageParserTest {
             if (coveredLines.contains(lineNumber)) {
                 assertTrue(tested.getCoverage()[i] > 0, message);
             } else if (missedLines.contains(lineNumber)) {
-                assertTrue(tested.getCoverage()[i] == 0, message);
+                assertEquals(0, tested.getCoverage()[i], message);
             } else {
                 assertNull(tested.getCoverage()[i], message);
             }
