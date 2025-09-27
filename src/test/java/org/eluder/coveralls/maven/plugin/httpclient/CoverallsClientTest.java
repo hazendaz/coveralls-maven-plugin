@@ -39,11 +39,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.hc.client5.http.ClientProtocolException;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,10 +61,10 @@ class CoverallsClientTest {
     CloseableHttpClient httpClientMock;
 
     @Mock
-    CloseableHttpResponse httpResponseMock;
+    HttpEntity httpEntityMock;
 
     @Mock
-    HttpEntity httpEntityMock;
+    ClassicHttpResponse httpResponseMock;
 
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     Path folder;
@@ -84,7 +84,11 @@ class CoverallsClientTest {
 
     @Test
     void testSubmit() throws UnsupportedOperationException, Exception {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
+                .thenAnswer(invocation -> {
+                    HttpClientResponseHandler<?> handler = invocation.getArgument(1);
+                    return handler.handleResponse(httpResponseMock);
+                });
         when(httpResponseMock.getCode()).thenReturn(200);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
@@ -94,7 +98,11 @@ class CoverallsClientTest {
 
     @Test
     void failOnServiceError() throws IOException {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
+                .thenAnswer(invocation -> {
+                    HttpClientResponseHandler<?> handler = invocation.getArgument(1);
+                    return handler.handleResponse(httpResponseMock);
+                });
         when(httpResponseMock.getCode()).thenReturn(500);
         when(httpResponseMock.getReasonPhrase()).thenReturn("Internal Error");
         var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
@@ -105,7 +113,11 @@ class CoverallsClientTest {
 
     @Test
     void parseInvalidResponse() throws IOException {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
+                .thenAnswer(invocation -> {
+                    HttpClientResponseHandler<?> handler = invocation.getArgument(1);
+                    return handler.handleResponse(httpResponseMock);
+                });
         when(httpResponseMock.getCode()).thenReturn(200);
         when(httpResponseMock.getReasonPhrase()).thenReturn("OK");
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
@@ -119,7 +131,11 @@ class CoverallsClientTest {
 
     @Test
     void parseErrorousResponse() throws UnsupportedOperationException, Exception {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
+                .thenAnswer(invocation -> {
+                    HttpClientResponseHandler<?> handler = invocation.getArgument(1);
+                    return handler.handleResponse(httpResponseMock);
+                });
         when(httpResponseMock.getCode()).thenReturn(400);
         when(httpResponseMock.getReasonPhrase()).thenReturn("Bad Request");
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
@@ -133,7 +149,11 @@ class CoverallsClientTest {
 
     @Test
     void parseFailingEntity() throws IOException {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
+        when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
+                .thenAnswer(invocation -> {
+                    HttpClientResponseHandler<?> handler = invocation.getArgument(1);
+                    return handler.handleResponse(httpResponseMock);
+                });
         when(httpResponseMock.getCode()).thenReturn(200);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenThrow(IOException.class);
