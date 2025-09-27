@@ -37,9 +37,6 @@ class ProcessingExceptionTest {
     /** The Constant MESSAGE. */
     static final String MESSAGE = "message";
 
-    /** The Constant CAUSE. */
-    static final RuntimeException CAUSE = new RuntimeException();
-
     /**
      * Exception.
      */
@@ -65,9 +62,10 @@ class ProcessingExceptionTest {
      */
     @Test
     void exceptionWithCause() {
-        var exception = new ProcessingException(CAUSE);
-        assertEquals(CAUSE.toString(), exception.getMessage());
-        assertSame(CAUSE, exception.getCause());
+        var cause = new RuntimeException("cause message");
+        var exception = new ProcessingException(cause);
+        assertEquals(cause.toString(), exception.getMessage());
+        assertSame(cause, exception.getCause());
     }
 
     /**
@@ -75,10 +73,10 @@ class ProcessingExceptionTest {
      */
     @Test
     void exceptionWithMessageAndCause() {
-        var exception = new ProcessingException(MESSAGE, CAUSE);
+        var cause = new RuntimeException("cause message");
+        var exception = new ProcessingException(MESSAGE, cause);
         assertEquals(MESSAGE, exception.getMessage());
-        assertSame(CAUSE, exception.getCause());
-
+        assertSame(cause, exception.getCause());
     }
 
 }
