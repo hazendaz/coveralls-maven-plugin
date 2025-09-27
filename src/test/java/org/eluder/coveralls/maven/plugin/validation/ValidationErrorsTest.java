@@ -37,12 +37,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class ValidationErrorsTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class ValidationErrorsTest {
 
+    /** The log mock. */
     @Mock
     private Log logMock;
 
+    /**
+     * Throw or inform with error.
+     */
     @Test
     void throwOrInformWithError() {
         assertThrows(ValidationException.class, () -> {
@@ -50,6 +57,9 @@ class ValidationErrorsTest {
         });
     }
 
+    /**
+     * Throw or inform with warnings.
+     */
     @Test
     void throwOrInformWithWarnings() {
         createValidationErrors(new ValidationError(Level.WARN, "error1"), new ValidationError(Level.WARN, "error2"))
@@ -57,6 +67,14 @@ class ValidationErrorsTest {
         verify(logMock, times(2)).warn(any(CharSequence.class));
     }
 
+    /**
+     * Creates the validation errors.
+     *
+     * @param errors
+     *            the errors
+     *
+     * @return the validation errors
+     */
     private ValidationErrors createValidationErrors(final ValidationError... errors) {
         var validationErrors = new ValidationErrors();
         Collections.addAll(validationErrors, errors);

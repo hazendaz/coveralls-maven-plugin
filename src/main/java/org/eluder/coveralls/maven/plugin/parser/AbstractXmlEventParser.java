@@ -41,11 +41,25 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class AbstractXmlEventParser.
+ */
 public abstract class AbstractXmlEventParser implements CoverageParser {
 
+    /** The coverage file. */
     private final File coverageFile;
+
+    /** The source loader. */
     private final SourceLoader sourceLoader;
 
+    /**
+     * Instantiates a new abstract xml event parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     */
     protected AbstractXmlEventParser(final File coverageFile, final SourceLoader sourceLoader) {
         this.coverageFile = coverageFile;
         this.sourceLoader = sourceLoader;
@@ -73,6 +87,17 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
         return coverageFile;
     }
 
+    /**
+     * Creates the event reader.
+     *
+     * @param reader
+     *            the reader
+     *
+     * @return the XML stream reader
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
     protected XMLStreamReader createEventReader(final Reader reader) throws ProcessingException {
         try {
             XMLInputFactory xmlif = XMLInputFactory.newInstance();
@@ -87,6 +112,15 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
         }
     }
 
+    /**
+     * Close.
+     *
+     * @param xml
+     *            the xml
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
     private void close(final XMLStreamReader xml) throws ProcessingException {
         if (xml != null) {
             try {
@@ -97,17 +131,63 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
         }
     }
 
+    /**
+     * On event.
+     *
+     * @param xml
+     *            the xml
+     * @param callback
+     *            the callback
+     *
+     * @throws XMLStreamException
+     *             the XML stream exception
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected abstract void onEvent(final XMLStreamReader xml, SourceCallback callback)
             throws XMLStreamException, ProcessingException, IOException;
 
+    /**
+     * Load source.
+     *
+     * @param sourceFile
+     *            the source file
+     *
+     * @return the source
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected final Source loadSource(final String sourceFile) throws IOException {
         return sourceLoader.load(sourceFile);
     }
 
+    /**
+     * Checks if is start element.
+     *
+     * @param xml
+     *            the xml
+     * @param name
+     *            the name
+     *
+     * @return true, if is start element
+     */
     protected final boolean isStartElement(final XMLStreamReader xml, final String name) {
         return XMLStreamConstants.START_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name);
     }
 
+    /**
+     * Checks if is end element.
+     *
+     * @param xml
+     *            the xml
+     * @param name
+     *            the name
+     *
+     * @return true, if is end element
+     */
     protected final boolean isEndElement(final XMLStreamReader xml, final String name) {
         return XMLStreamConstants.END_ELEMENT == xml.getEventType() && xml.getLocalName().equals(name);
     }

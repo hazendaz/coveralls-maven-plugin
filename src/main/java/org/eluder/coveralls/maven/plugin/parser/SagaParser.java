@@ -33,8 +33,19 @@ import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class SagaParser.
+ */
 public class SagaParser extends CoberturaParser {
 
+    /**
+     * Instantiates a new saga parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     */
     public SagaParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }

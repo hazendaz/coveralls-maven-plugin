@@ -32,12 +32,27 @@ import java.util.Map;
  */
 public class Wercker extends AbstractServiceSetup {
 
+    /** The Constant WERCKER_NAME. */
     public static final String WERCKER_NAME = "wercker";
+
+    /** The Constant WERCKER. */
     public static final String WERCKER = "WERCKER";
+
+    /** The Constant WERCKER_BUILD_ID. */
     public static final String WERCKER_BUILD_ID = "WERCKER_BUILD_ID";
+
+    /** The Constant WERCKER_BUILD_URL. */
     public static final String WERCKER_BUILD_URL = "WERCKER_BUILD_URL";
+
+    /** The Constant WERCKER_BRANCH. */
     public static final String WERCKER_BRANCH = "WERCKER_GIT_BRANCH";
 
+    /**
+     * Instantiates a new wercker.
+     *
+     * @param env
+     *            the env
+     */
     public Wercker(final Map<String, String> env) {
         super(env);
     }

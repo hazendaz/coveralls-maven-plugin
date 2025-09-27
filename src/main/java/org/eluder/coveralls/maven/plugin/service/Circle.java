@@ -33,12 +33,27 @@ import java.util.Properties;
  */
 public class Circle extends AbstractServiceSetup {
 
+    /** The Constant CIRCLE_NAME. */
     public static final String CIRCLE_NAME = "circleci";
+
+    /** The Constant CIRCLE. */
     public static final String CIRCLE = "CIRCLECI";
+
+    /** The Constant CIRCLE_BUILD_NUMBER. */
     public static final String CIRCLE_BUILD_NUMBER = "CIRCLE_BUILD_NUM";
+
+    /** The Constant CIRCLE_BRANCH. */
     public static final String CIRCLE_BRANCH = "CIRCLE_BRANCH";
+
+    /** The Constant CIRCLE_COMMIT. */
     public static final String CIRCLE_COMMIT = "CIRCLE_SHA1";
 
+    /**
+     * Instantiates a new circle.
+     *
+     * @param env
+     *            the env
+     */
     public Circle(final Map<String, String> env) {
         super(env);
     }

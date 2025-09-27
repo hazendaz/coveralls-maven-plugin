@@ -73,46 +73,68 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class CoverallsReportMojoTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class CoverallsReportMojoTest {
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     Path folder;
 
+    /** The coveralls file. */
     File coverallsFile;
 
+    /** The mojo. */
     CoverallsReportMojo mojo;
 
+    /** The coveralls client mock. */
     @Mock
     CoverallsClient coverallsClientMock;
 
+    /** The source loader mock. */
     @Mock
     SourceLoader sourceLoaderMock;
 
+    /** The job mock. */
     @Mock
     Job jobMock;
 
+    /** The log mock. */
     @Mock
     Log logMock;
 
+    /** The project mock. */
     @Mock
     MavenProject projectMock;
 
+    /** The collected project mock. */
     @Mock
     MavenProject collectedProjectMock;
 
+    /** The model mock. */
     @Mock
     Model modelMock;
 
+    /** The reporting mock. */
     @Mock
     Reporting reportingMock;
 
+    /** The build mock. */
     @Mock
     Build buildMock;
 
+    /** The settings mock. */
     @Mock
     Settings settingsMock;
 
+    /**
+     * Inits the.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @BeforeEach
     void init() throws IOException {
         coverallsFile = Files.createFile(folder.resolve("coverallsFile.json")).toFile();
@@ -184,6 +206,9 @@ class CoverallsReportMojoTest {
         lenient().when(collectedProjectMock.getModel()).thenReturn(modelMock);
     }
 
+    /**
+     * Creates the coverage parsers without coverage reports.
+     */
     @Test
     void createCoverageParsersWithoutCoverageReports() {
         mojo = new CoverallsReportMojo();
@@ -194,6 +219,12 @@ class CoverallsReportMojoTest {
         });
     }
 
+    /**
+     * Test create source loader.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void testCreateSourceLoader() throws IOException {
         var gitMock = Mockito.mock(Git.class);
@@ -210,6 +241,16 @@ class CoverallsReportMojoTest {
         assertNotNull(source);
     }
 
+    /**
+     * Default behavior.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     * @throws MojoFailureException
+     *             the mojo failure exception
+     */
     @Test
     void defaultBehavior() throws IOException, MojoExecutionException, MojoFailureException {
         mojo = new CoverallsReportMojo() {
@@ -236,6 +277,18 @@ class CoverallsReportMojoTest {
         mojo.execute();
     }
 
+    /**
+     * Successfull submission.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     * @throws MojoFailureException
+     *             the mojo failure exception
+     */
     @Test
     void successfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
@@ -251,6 +304,16 @@ class CoverallsReportMojoTest {
         verifySuccessfullSubmit(logMock, fixture);
     }
 
+    /**
+     * Fail with processing exception.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     */
     @Test
     void failWithProcessingException() throws ProcessingException, IOException, MojoExecutionException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
@@ -262,6 +325,16 @@ class CoverallsReportMojoTest {
         }
     }
 
+    /**
+     * Processing exception with allowed service failure.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     */
     @Test
     void processingExceptionWithAllowedServiceFailure()
             throws ProcessingException, IOException, MojoExecutionException {
@@ -275,6 +348,16 @@ class CoverallsReportMojoTest {
         }
     }
 
+    /**
+     * Fail with IO exception.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     */
     @Test
     void failWithIOException() throws ProcessingException, IOException, MojoExecutionException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
@@ -286,6 +369,18 @@ class CoverallsReportMojoTest {
         }
     }
 
+    /**
+     * I O exception with allowed service failure.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     * @throws MojoFailureException
+     *             the mojo failure exception
+     */
     @Test
     void iOExceptionWithAllowedServiceFailure()
             throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
@@ -295,6 +390,16 @@ class CoverallsReportMojoTest {
         verify(logMock).warn(anyString());
     }
 
+    /**
+     * Fail with null pointer exception.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws MojoFailureException
+     *             the mojo failure exception
+     */
     @Test
     void failWithNullPointerException() throws ProcessingException, IOException, MojoFailureException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new NullPointerException());
@@ -306,6 +411,14 @@ class CoverallsReportMojoTest {
         }
     }
 
+    /**
+     * Skip execution.
+     *
+     * @throws MojoExecutionException
+     *             the mojo execution exception
+     * @throws MojoFailureException
+     *             the mojo failure exception
+     */
     @Test
     void skipExecution() throws MojoExecutionException, MojoFailureException {
         mojo.skip = true;
@@ -314,12 +427,33 @@ class CoverallsReportMojoTest {
         verifyNoInteractions(jobMock);
     }
 
+    /**
+     * Verify successfull submit.
+     *
+     * @param logMock
+     *            the log mock
+     * @param fixture
+     *            the fixture
+     */
     static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
         verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                 + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
     }
 
+    /**
+     * Read file content.
+     *
+     * @param sourceFile
+     *            the source file
+     *
+     * @return the string
+     *
+     * @throws FileNotFoundException
+     *             the file not found exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     String readFileContent(final String sourceFile) throws FileNotFoundException, IOException {
         return TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
     }

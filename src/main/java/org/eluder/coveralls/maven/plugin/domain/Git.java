@@ -30,22 +30,42 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * The Class Git.
+ */
 public class Git implements JsonObject {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /** The base dir. */
     @JsonIgnore
     private final File baseDir;
 
+    /** The head. */
     @JsonProperty("head")
     private final Head head;
 
+    /** The branch. */
     @JsonProperty("branch")
     private final String branch;
 
+    /** The remotes. */
     @JsonProperty("remotes")
     private final List<Remote> remotes;
 
+    /**
+     * Instantiates a new git.
+     *
+     * @param baseDir
+     *            the base dir
+     * @param head
+     *            the head
+     * @param branch
+     *            the branch
+     * @param remotes
+     *            the remotes
+     */
     public Git(final File baseDir, final Head head, final String branch, final List<Remote> remotes) {
         this.baseDir = baseDir;
         this.head = head;
@@ -53,43 +73,90 @@ public class Git implements JsonObject {
         this.remotes = remotes;
     }
 
+    /**
+     * Gets the base dir.
+     *
+     * @return the base dir
+     */
     public File getBaseDir() {
         return baseDir;
     }
 
+    /**
+     * Gets the head.
+     *
+     * @return the head
+     */
     public Head getHead() {
         return head;
     }
 
+    /**
+     * Gets the branch.
+     *
+     * @return the branch
+     */
     public String getBranch() {
         return branch;
     }
 
+    /**
+     * Gets the remotes.
+     *
+     * @return the remotes
+     */
     public List<Remote> getRemotes() {
         return remotes;
     }
 
+    /**
+     * The Class Head.
+     */
     public static class Head implements Serializable {
+
+        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = 1L;
 
+        /** The id. */
         @JsonProperty("id")
         private final String id;
 
+        /** The author name. */
         @JsonProperty("author_name")
         private final String authorName;
 
+        /** The author email. */
         @JsonProperty("author_email")
         private final String authorEmail;
 
+        /** The committer name. */
         @JsonProperty("committer_name")
         private final String committerName;
 
+        /** The committer email. */
         @JsonProperty("committer_email")
         private final String committerEmail;
 
+        /** The message. */
         @JsonProperty("message")
         private final String message;
 
+        /**
+         * Instantiates a new head.
+         *
+         * @param id
+         *            the id
+         * @param authorName
+         *            the author name
+         * @param authorEmail
+         *            the author email
+         * @param committerName
+         *            the committer name
+         * @param committerEmail
+         *            the committer email
+         * @param message
+         *            the message
+         */
         public Head(final String id, final String authorName, final String authorEmail, final String committerName,
                 final String committerEmail, final String message) {
             this.id = id;
@@ -100,49 +167,104 @@ public class Git implements JsonObject {
             this.message = message;
         }
 
+        /**
+         * Gets the id.
+         *
+         * @return the id
+         */
         public String getId() {
             return id;
         }
 
+        /**
+         * Gets the author name.
+         *
+         * @return the author name
+         */
         public String getAuthorName() {
             return authorName;
         }
 
+        /**
+         * Gets the author email.
+         *
+         * @return the author email
+         */
         public String getAuthorEmail() {
             return authorEmail;
         }
 
+        /**
+         * Gets the committer name.
+         *
+         * @return the committer name
+         */
         public String getCommitterName() {
             return committerName;
         }
 
+        /**
+         * Gets the committer email.
+         *
+         * @return the committer email
+         */
         public String getCommitterEmail() {
             return committerEmail;
         }
 
+        /**
+         * Gets the message.
+         *
+         * @return the message
+         */
         public String getMessage() {
             return message;
         }
     }
 
+    /**
+     * The Class Remote.
+     */
     public static class Remote implements Serializable {
+
+        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = 1L;
 
+        /** The name. */
         @JsonProperty("name")
         private final String name;
 
+        /** The url. */
         @JsonProperty("url")
         private final String url;
 
+        /**
+         * Instantiates a new remote.
+         *
+         * @param name
+         *            the name
+         * @param url
+         *            the url
+         */
         public Remote(final String name, final String url) {
             this.name = name;
             this.url = url;
         }
 
+        /**
+         * Gets the name.
+         *
+         * @return the name
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Gets the url.
+         *
+         * @return the url
+         */
         public String getUrl() {
             return url;
         }

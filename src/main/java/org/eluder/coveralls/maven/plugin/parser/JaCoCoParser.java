@@ -34,12 +34,28 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class JaCoCoParser.
+ */
 public class JaCoCoParser extends AbstractXmlEventParser {
 
+    /** The package name. */
     private String packageName;
+
+    /** The source. */
     private Source source;
+
+    /** The branch id. */
     private int branchId;
 
+    /**
+     * Instantiates a new jacoco parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     */
     public JaCoCoParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }

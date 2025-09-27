@@ -33,8 +33,14 @@ import org.eluder.coveralls.maven.plugin.domain.Git.Head;
 import org.eluder.coveralls.maven.plugin.domain.Git.Remote;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class JobTest.
+ */
 class JobTest {
 
+    /**
+     * Gets the branch with remote.
+     */
     @Test
     void getBranchWithRemote() {
         List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
@@ -44,6 +50,9 @@ class JobTest {
         assertEquals("master", job.getBranch());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         var job = new Job().withBranch("master");

@@ -38,15 +38,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class DryRunLoggerTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class DryRunLoggerTest {
 
+    /** The log mock. */
     @Mock
     Log logMock;
 
+    /** The coveralls file mock. */
     @Mock
     File coverallsFileMock;
 
+    /**
+     * Missing coveralls file.
+     */
     @Test
     void missingCoverallsFile() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -54,11 +62,17 @@ class DryRunLoggerTest {
         });
     }
 
+    /**
+     * Test get position.
+     */
     @Test
     void testGetPosition() {
         assertEquals(Position.AFTER, new DryRunLogger(true, coverallsFileMock).getPosition());
     }
 
+    /**
+     * Log dry run disabled.
+     */
     @Test
     void logDryRunDisabled() {
         new DryRunLogger(false, coverallsFileMock).log(logMock);
@@ -66,6 +80,9 @@ class DryRunLoggerTest {
         verifyNoInteractions(logMock);
     }
 
+    /**
+     * Log dry run enabled.
+     */
     @Test
     void logDryRunEnabled() {
         when(coverallsFileMock.length()).thenReturn(1024L);

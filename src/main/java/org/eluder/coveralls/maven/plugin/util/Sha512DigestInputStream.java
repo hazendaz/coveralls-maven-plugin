@@ -30,12 +30,29 @@ import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.codec.binary.Hex;
 
+/**
+ * The Class Sha512DigestInputStream.
+ */
 public class Sha512DigestInputStream extends DigestInputStream {
 
+    /**
+     * Instantiates a new sha 512 digest input stream.
+     *
+     * @param stream
+     *            the stream
+     *
+     * @throws NoSuchAlgorithmException
+     *             the no such algorithm exception
+     */
     public Sha512DigestInputStream(final InputStream stream) throws NoSuchAlgorithmException {
         super(stream, MessageDigest.getInstance("SHA-512"));
     }
 
+    /**
+     * Gets the digest hex.
+     *
+     * @return the digest hex
+     */
     public String getDigestHex() {
         return Hex.encodeHexString(getMessageDigest().digest(), false);
     }

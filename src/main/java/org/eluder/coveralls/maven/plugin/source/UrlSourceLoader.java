@@ -29,10 +29,24 @@ import java.net.URL;
 
 import org.eluder.coveralls.maven.plugin.util.UrlUtils;
 
+/**
+ * The Class UrlSourceLoader.
+ */
 public class UrlSourceLoader extends AbstractSourceLoader {
 
+    /** The source url. */
     private final URL sourceUrl;
 
+    /**
+     * Instantiates a new url source loader.
+     *
+     * @param base
+     *            the base
+     * @param sourceUrl
+     *            the source url
+     * @param sourceEncoding
+     *            the source encoding
+     */
     public UrlSourceLoader(final URL base, final URL sourceUrl, final String sourceEncoding) {
         super(UrlUtils.toUri(base), UrlUtils.toUri(sourceUrl), sourceEncoding);
         this.sourceUrl = sourceUrl;

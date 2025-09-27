@@ -29,6 +29,9 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.io.Serializable;
 
+/**
+ * The Interface JsonObject.
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public interface JsonObject extends Serializable {

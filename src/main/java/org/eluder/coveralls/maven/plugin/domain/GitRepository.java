@@ -36,14 +36,32 @@ import org.eclipse.jgit.lib.RepositoryBuilder;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
+/**
+ * The Class GitRepository.
+ */
 public class GitRepository {
 
+    /** The source directory. */
     private final File sourceDirectory;
 
+    /**
+     * Instantiates a new git repository.
+     *
+     * @param sourceDirectory
+     *            the source directory
+     */
     public GitRepository(final File sourceDirectory) {
         this.sourceDirectory = sourceDirectory;
     }
 
+    /**
+     * Load.
+     *
+     * @return the git
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public Git load() throws IOException {
         try (Repository repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {
             Git.Head head = getHead(repository);
@@ -53,6 +71,17 @@ public class GitRepository {
         }
     }
 
+    /**
+     * Gets the head.
+     *
+     * @param repository
+     *            the repository
+     *
+     * @return the head
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     // Resource is closed in load()
     @SuppressWarnings("resource")
     private Git.Head getHead(final Repository repository) throws IOException {
@@ -63,10 +92,29 @@ public class GitRepository {
                 commit.getCommitterIdent().getEmailAddress(), commit.getFullMessage());
     }
 
+    /**
+     * Gets the branch.
+     *
+     * @param repository
+     *            the repository
+     *
+     * @return the branch
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private String getBranch(final Repository repository) throws IOException {
         return repository.getBranch();
     }
 
+    /**
+     * Gets the remotes.
+     *
+     * @param repository
+     *            the repository
+     *
+     * @return the remotes
+     */
     private List<Git.Remote> getRemotes(final Repository repository) {
         Config config = repository.getConfig();
         List<Git.Remote> remotes = new ArrayList<>();

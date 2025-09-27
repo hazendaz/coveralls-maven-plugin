@@ -32,11 +32,24 @@ import java.util.Map;
  */
 public class Bamboo extends AbstractServiceSetup {
 
+    /** The Constant BAMBOO_NAME. */
     public static final String BAMBOO_NAME = "bamboo";
+
+    /** The Constant BAMBOO_BUILD_NUMBER. */
     public static final String BAMBOO_BUILD_NUMBER = "bamboo.buildNumber";
+
+    /** The Constant BAMBOO_BUILD_URL. */
     public static final String BAMBOO_BUILD_URL = "bamboo.buildResultsUrl";
+
+    /** The Constant BAMBOO_BRANCH. */
     public static final String BAMBOO_BRANCH = "bamboo.repository.git.branch";
 
+    /**
+     * Instantiates a new bamboo.
+     *
+     * @param env
+     *            the env
+     */
     public Bamboo(final Map<String, String> env) {
         super(env);
     }

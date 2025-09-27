@@ -38,21 +38,45 @@ import org.apache.maven.settings.Proxy;
 import org.eluder.coveralls.maven.plugin.util.UrlUtils;
 import org.eluder.coveralls.maven.plugin.util.Wildcards;
 
+/**
+ * A factory for creating HttpClient objects.
+ */
 class HttpClientFactory {
 
+    /** The Constant DEFAULT_CONNECTION_TIMEOUT. */
     private static final Timeout DEFAULT_CONNECTION_TIMEOUT = Timeout.of(Duration.ofSeconds(10));
+
+    /** The Constant DEFAULT_SOCKET_TIMEOUT. */
     private static final Timeout DEFAULT_SOCKET_TIMEOUT = Timeout.of(Duration.ofSeconds(60));
 
+    /** The target url. */
     private final String targetUrl;
 
+    /** The hcb. */
     private final HttpClientBuilder hcb = HttpClientBuilder.create();
+
+    /** The rcb. */
     private final RequestConfig.Builder rcb = RequestConfig.custom().setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
             .setResponseTimeout(DEFAULT_SOCKET_TIMEOUT);
 
+    /**
+     * Instantiates a new http client factory.
+     *
+     * @param targetUrl
+     *            the target url
+     */
     HttpClientFactory(final String targetUrl) {
         this.targetUrl = targetUrl;
     }
 
+    /**
+     * Proxy.
+     *
+     * @param proxy
+     *            the proxy
+     *
+     * @return the http client factory
+     */
     public HttpClientFactory proxy(final Proxy proxy) {
         if (proxy != null && isProxied(targetUrl, proxy)) {
             rcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
@@ -66,10 +90,25 @@ class HttpClientFactory {
         return this;
     }
 
+    /**
+     * Creates the.
+     *
+     * @return the closeable http client
+     */
     public CloseableHttpClient create() {
         return hcb.setDefaultRequestConfig(rcb.build()).build();
     }
 
+    /**
+     * Checks if is proxied.
+     *
+     * @param url
+     *            the url
+     * @param proxy
+     *            the proxy
+     *
+     * @return true, if is proxied
+     */
     private boolean isProxied(final String url, final Proxy proxy) {
         if (StringUtils.isNotBlank(proxy.getNonProxyHosts())) {
             String host = UrlUtils.create(url).getHost();

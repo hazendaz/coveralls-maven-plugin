@@ -30,12 +30,27 @@ import java.util.Map;
  */
 public class General extends AbstractServiceSetup {
 
+    /** The Constant CI_NAME. */
     public static final String CI_NAME = "CI_NAME";
+
+    /** The Constant CI_BUILD_NUMBER. */
     public static final String CI_BUILD_NUMBER = "CI_BUILD_NUMBER";
+
+    /** The Constant CI_BUILD_URL. */
     public static final String CI_BUILD_URL = "CI_BUILD_URL";
+
+    /** The Constant CI_BRANCH. */
     public static final String CI_BRANCH = "CI_BRANCH";
+
+    /** The Constant CI_PULL_REQUEST. */
     public static final String CI_PULL_REQUEST = "CI_PULL_REQUEST";
 
+    /**
+     * Instantiates a new general.
+     *
+     * @param env
+     *            the env
+     */
     public General(final Map<String, String> env) {
         super(env);
     }

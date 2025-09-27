@@ -34,8 +34,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class SourceTest.
+ */
 class SourceTest {
 
+    /**
+     * Test add coverage.
+     */
     @Test
     void testAddCoverage() {
         var source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
@@ -45,6 +51,9 @@ class SourceTest {
         assertArrayEquals(new Integer[] { 3, null, 3, null }, source.getCoverage());
     }
 
+    /**
+     * Test add branch coverage.
+     */
     @Test
     void testAddBranchCoverage() {
         var source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
@@ -54,6 +63,9 @@ class SourceTest {
         assertArrayEquals(new Integer[] { 2, 0, 0, 2, 2, 0, 1, 3 }, source.getBranches());
     }
 
+    /**
+     * Adds the same branch replace existing one.
+     */
     @Test
     void addSameBranchReplaceExistingOne() {
         var source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
@@ -63,6 +75,9 @@ class SourceTest {
         assertArrayEquals(new Integer[] { 2, 0, 0, 3 }, source.getBranches());
     }
 
+    /**
+     * Adds the same branch do not keep ordering.
+     */
     @Test
     void addSameBranchDoNotKeepOrdering() {
         var source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
@@ -73,6 +88,9 @@ class SourceTest {
         assertArrayEquals(new Integer[] { 2, 0, 1, 0, 2, 0, 0, 1 }, source.getBranches());
     }
 
+    /**
+     * Adds the coverage for source out of bounds.
+     */
     @Test
     void addCoverageForSourceOutOfBounds() {
         var source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
@@ -82,6 +100,9 @@ class SourceTest {
         });
     }
 
+    /**
+     * Adds the branch coverage for source out of bounds.
+     */
     @Test
     void addBranchCoverageForSourceOutOfBounds() {
         var source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
@@ -91,6 +112,9 @@ class SourceTest {
         });
     }
 
+    /**
+     * Gets the name with classifier.
+     */
     @Test
     @Disabled("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
     void getNameWithClassifier() {
@@ -101,6 +125,9 @@ class SourceTest {
         assertEquals("src/main/java/Hello.java#Inner", source.getFullName());
     }
 
+    /**
+     * Test merge.
+     */
     @Test
     void testMerge() {
         var source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
@@ -135,6 +162,9 @@ class SourceTest {
         assertEquals(Integer.valueOf(3), merged.getBranches()[7]);
     }
 
+    /**
+     * Merge different.
+     */
     @Test
     void mergeDifferent() {
         var source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
@@ -149,6 +179,9 @@ class SourceTest {
         assertArrayEquals(source1.getCoverage(), merged.getCoverage());
     }
 
+    /**
+     * Equals for null.
+     */
     @Test
     void equalsForNull() {
         var source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
@@ -156,6 +189,9 @@ class SourceTest {
         assertNotNull(source);
     }
 
+    /**
+     * Equals for different sources.
+     */
     @Test
     void equalsForDifferentSources() {
         var source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
@@ -165,6 +201,9 @@ class SourceTest {
         assertNotEquals(source1, source2);
     }
 
+    /**
+     * Test hash code.
+     */
     @Test
     void testHashCode() {
         var source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",

@@ -41,14 +41,34 @@ import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 
+/**
+ * The Class JsonWriter.
+ */
 public class JsonWriter implements SourceCallback, Closeable {
 
+    /** The Constant TIMESTAMP_FORMAT. */
     protected static final String TIMESTAMP_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
 
+    /** The job. */
     private final Job job;
+
+    /** The coveralls file. */
     private final File coverallsFile;
+
+    /** The generator. */
     private final JsonGenerator generator;
 
+    /**
+     * Instantiates a new json writer.
+     *
+     * @param job
+     *            the job
+     * @param coverallsFile
+     *            the coveralls file
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
         File directory = coverallsFile.getParentFile();
         if (!directory.exists()) {
@@ -59,10 +79,20 @@ public class JsonWriter implements SourceCallback, Closeable {
         this.generator = new MappingJsonFactory().createGenerator(coverallsFile, JsonEncoding.UTF8);
     }
 
+    /**
+     * Gets the job.
+     *
+     * @return the job
+     */
     public final Job getJob() {
         return job;
     }
 
+    /**
+     * Gets the coveralls file.
+     *
+     * @return the coveralls file
+     */
     public final File getCoverallsFile() {
         return coverallsFile;
     }
@@ -112,24 +142,68 @@ public class JsonWriter implements SourceCallback, Closeable {
         generator.close();
     }
 
+    /**
+     * Write optional string.
+     *
+     * @param field
+     *            the field
+     * @param value
+     *            the value
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private void writeOptionalString(final String field, final String value) throws IOException {
         if (StringUtils.isNotBlank(value)) {
             generator.writeStringField(field, value);
         }
     }
 
+    /**
+     * Write optional boolean.
+     *
+     * @param field
+     *            the field
+     * @param value
+     *            the value
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private void writeOptionalBoolean(final String field, final boolean value) throws IOException {
         if (value) {
             generator.writeBooleanField(field, value);
         }
     }
 
+    /**
+     * Write optional object.
+     *
+     * @param field
+     *            the field
+     * @param value
+     *            the value
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private void writeOptionalObject(final String field, final Object value) throws IOException {
         if (value != null) {
             generator.writeObjectField(field, value);
         }
     }
 
+    /**
+     * Write optional timestamp.
+     *
+     * @param field
+     *            the field
+     * @param value
+     *            the value
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private void writeOptionalTimestamp(final String field, final Long value) throws IOException {
         if (value != null) {
             SimpleDateFormat format = new SimpleDateFormat(TIMESTAMP_FORMAT);
@@ -137,6 +211,17 @@ public class JsonWriter implements SourceCallback, Closeable {
         }
     }
 
+    /**
+     * Write optional environment.
+     *
+     * @param field
+     *            the field
+     * @param properties
+     *            the properties
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private void writeOptionalEnvironment(final String field, final Properties properties) throws IOException {
         if (properties != null) {
             generator.writeObjectFieldStart(field);

@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class TravisTest.
+ */
 class TravisTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("TRAVIS", "true");
@@ -43,36 +51,57 @@ class TravisTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new Travis(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for travis.
+     */
     @Test
     void isSelectedForTravis() {
         assertTrue(new Travis(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("travis-ci", new Travis(env()).getName());
     }
 
+    /**
+     * Test get job id.
+     */
     @Test
     void testGetJobId() {
         assertEquals("job123", new Travis(env()).getJobId());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new Travis(env()).getBranch());
     }
 
+    /**
+     * Test get pull request.
+     */
     @Test
     void testGetPullRequest() {
         assertEquals("pull10", new Travis(env()).getPullRequest());
     }
 
+    /**
+     * Test get environment.
+     */
     @Test
     void testGetEnvironment() {
         var properties = new Travis(env()).getEnvironment();

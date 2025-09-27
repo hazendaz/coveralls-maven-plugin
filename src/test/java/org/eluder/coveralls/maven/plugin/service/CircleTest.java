@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class CircleTest.
+ */
 class CircleTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("CIRCLECI", "true");
@@ -43,31 +51,49 @@ class CircleTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new Circle(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for circle.
+     */
     @Test
     void isSelectedForCircle() {
         assertTrue(new Circle(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("circleci", new Circle(env()).getName());
     }
 
+    /**
+     * Test get build number.
+     */
     @Test
     void testGetBuildNumber() {
         assertEquals("build123", new Circle(env()).getBuildNumber());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new Circle(env()).getBranch());
     }
 
+    /**
+     * Test get environment.
+     */
     @Test
     void testGetEnvironment() {
         var properties = new Circle(env()).getEnvironment();

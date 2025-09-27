@@ -29,20 +29,43 @@ import java.util.List;
 
 import org.apache.maven.project.MavenProject;
 
+/**
+ * The Class MavenProjectCollector.
+ */
 public class MavenProjectCollector {
 
+    /** The root. */
     private final MavenProject root;
 
+    /**
+     * Instantiates a new maven project collector.
+     *
+     * @param root
+     *            the root
+     */
     public MavenProjectCollector(final MavenProject root) {
         this.root = root;
     }
 
+    /**
+     * Collect.
+     *
+     * @return the list
+     */
     public List<MavenProject> collect() {
         List<MavenProject> projects = new ArrayList<>();
         collect(root, projects);
         return Collections.unmodifiableList(projects);
     }
 
+    /**
+     * Collect.
+     *
+     * @param project
+     *            the project
+     * @param projects
+     *            the projects
+     */
     private void collect(final MavenProject project, final List<MavenProject> projects) {
         projects.add(project);
         for (MavenProject child : project.getCollectedProjects()) {

@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class WerckerTest.
+ */
 class WerckerTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("WERCKER", "true");
@@ -43,31 +51,49 @@ class WerckerTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new Wercker(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for wercker.
+     */
     @Test
     void isSelectedForWercker() {
         assertTrue(new Wercker(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("wercker", new Wercker(env()).getName());
     }
 
+    /**
+     * Test get job id.
+     */
     @Test
     void testGetJobId() {
         assertEquals("123456789", new Wercker(env()).getJobId());
     }
 
+    /**
+     * Test get build url.
+     */
     @Test
     void testGetBuildUrl() {
         assertEquals("https://app.wercker.com/build/123456789", new Wercker(env()).getBuildUrl());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new Wercker(env()).getBranch());

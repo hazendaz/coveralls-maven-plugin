@@ -27,8 +27,22 @@ import java.io.IOException;
 
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
+/**
+ * The Interface SourceLoader.
+ */
 public interface SourceLoader {
 
+    /**
+     * Load.
+     *
+     * @param sourceFile
+     *            the source file
+     *
+     * @return the source
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     Source load(String sourceFile) throws IOException;
 
 }

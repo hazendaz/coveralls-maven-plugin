@@ -32,8 +32,14 @@ import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class JobValidatorTest.
+ */
 class JobValidatorTest {
 
+    /**
+     * Missing job.
+     */
     @Test
     void missingJob() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -41,6 +47,9 @@ class JobValidatorTest {
         });
     }
 
+    /**
+     * Validate without repo token or travis.
+     */
     @Test
     void validateWithoutRepoTokenOrTravis() {
         var errors = new JobValidator(new Job()).validate();
@@ -48,6 +57,9 @@ class JobValidatorTest {
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
+    /**
+     * Validate without repo token or travis for dry run.
+     */
     @Test
     void validateWithoutRepoTokenOrTravisForDryRun() {
         var errors = new JobValidator(new Job().withDryRun(true)).validate();
@@ -55,6 +67,9 @@ class JobValidatorTest {
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.WARN);
     }
 
+    /**
+     * Validate with invalid travis.
+     */
     @Test
     void validateWithInvalidTravis() {
         var errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
@@ -62,18 +77,27 @@ class JobValidatorTest {
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
+    /**
+     * Validate with repo token.
+     */
     @Test
     void validateWithRepoToken() {
         var errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
+    /**
+     * Validate with travis.
+     */
     @Test
     void validateWithTravis() {
         var errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
+    /**
+     * Validate without git commit id.
+     */
     @Test
     void validateWithoutGitCommitId() {
         var git = new Git(null, new Head(null, null, null, null, null, null), null, null);
@@ -82,6 +106,9 @@ class JobValidatorTest {
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
 
+    /**
+     * Validate with git.
+     */
     @Test
     void validateWithGit() {
         var git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
@@ -89,6 +116,9 @@ class JobValidatorTest {
         Assertions.assertThat(errors).isEmpty();
     }
 
+    /**
+     * Validate with parallel.
+     */
     @Test
     void validateWithParallel() {
         var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();

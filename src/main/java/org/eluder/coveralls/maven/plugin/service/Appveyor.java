@@ -32,15 +32,36 @@ import java.util.Map;
  */
 public class Appveyor extends AbstractServiceSetup {
 
+    /** The Constant APPVEYOR_NAME. */
     public static final String APPVEYOR_NAME = "Appveyor";
+
+    /** The Constant APPVEYOR. */
     public static final String APPVEYOR = "APPVEYOR";
+
+    /** The Constant APPVEYOR_BUILD_NUMBER. */
     public static final String APPVEYOR_BUILD_NUMBER = "APPVEYOR_BUILD_NUMBER";
+
+    /** The Constant APPVEYOR_BUILD_ID. */
     public static final String APPVEYOR_BUILD_ID = "APPVEYOR_BUILD_ID";
+
+    /** The Constant APPVEYOR_BRANCH. */
     public static final String APPVEYOR_BRANCH = "APPVEYOR_REPO_BRANCH";
+
+    /** The Constant APPVEYOR_COMMIT. */
     public static final String APPVEYOR_COMMIT = "APPVEYOR_REPO_COMMIT";
+
+    /** The Constant APPVEYOR_PULL_REQUEST. */
     public static final String APPVEYOR_PULL_REQUEST = "APPVEYOR_PULL_REQUEST_NUMBER";
+
+    /** The Constant APPVEYOR_REPO_NAME. */
     public static final String APPVEYOR_REPO_NAME = "APPVEYOR_REPO_NAME";
 
+    /**
+     * Instantiates a new appveyor.
+     *
+     * @param env
+     *            the env
+     */
     public Appveyor(final Map<String, String> env) {
         super(env);
     }

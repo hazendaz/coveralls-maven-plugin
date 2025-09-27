@@ -43,6 +43,9 @@ public final class Wildcards {
         return text != null && text.matches(pattern);
     }
 
+    /**
+     * Instantiates a new wildcards.
+     */
     private Wildcards() {
         // hide constructor
     }

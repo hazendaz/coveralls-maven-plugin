@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class BambooTest.
+ */
 class BambooTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("bamboo.buildNumber", "build123");
@@ -42,31 +50,49 @@ class BambooTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new Bamboo(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for bamboo.
+     */
     @Test
     void isSelectedForBamboo() {
         assertTrue(new Bamboo(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("bamboo", new Bamboo(env()).getName());
     }
 
+    /**
+     * Test get build number.
+     */
     @Test
     void testGetBuildNumber() {
         assertEquals("build123", new Bamboo(env()).getBuildNumber());
     }
 
+    /**
+     * Test get build url.
+     */
     @Test
     void testGetBuildUrl() {
         assertEquals("http://company.com/bamboo/build123", new Bamboo(env()).getBuildUrl());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new Bamboo(env()).getBranch());

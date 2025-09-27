@@ -32,47 +32,107 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 
+/**
+ * The Class CoverageTracingLogger.
+ */
 public class CoverageTracingLogger extends ChainingSourceCallback implements Logger {
 
+    /** The files. */
     private long files;
+
+    /** The lines. */
     private long lines;
+
+    /** The relevant. */
     private long relevant;
+
+    /** The covered. */
     private long covered;
+
+    /** The branches. */
     private long branches;
+
+    /** The covered branches. */
     private long coveredBranches;
 
+    /**
+     * Instantiates a new coverage tracing logger.
+     *
+     * @param chained
+     *            the chained
+     */
     public CoverageTracingLogger(final SourceCallback chained) {
         super(chained);
     }
 
+    /**
+     * Gets the files.
+     *
+     * @return the files
+     */
     public long getFiles() {
         return files;
     }
 
+    /**
+     * Gets the lines.
+     *
+     * @return the lines
+     */
     public final long getLines() {
         return lines;
     }
 
+    /**
+     * Gets the relevant.
+     *
+     * @return the relevant
+     */
     public final long getRelevant() {
         return relevant;
     }
 
+    /**
+     * Gets the covered.
+     *
+     * @return the covered
+     */
     public final long getCovered() {
         return covered;
     }
 
+    /**
+     * Gets the missed.
+     *
+     * @return the missed
+     */
     public final long getMissed() {
         return relevant - covered;
     }
 
+    /**
+     * Gets the branches.
+     *
+     * @return the branches
+     */
     public final long getBranches() {
         return branches;
     }
 
+    /**
+     * Gets the covered branches.
+     *
+     * @return the covered branches
+     */
     public final long getCoveredBranches() {
         return coveredBranches;
     }
 
+    /**
+     * Gets the missed branches.
+     *
+     * @return the missed branches
+     */
     public final long getMissedBranches() {
         return branches - coveredBranches;
     }

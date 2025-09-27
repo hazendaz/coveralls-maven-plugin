@@ -52,20 +52,35 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * The Class JsonWriterTest.
+ */
 class JsonWriterTest {
 
+    /** The Constant TEST_TIME. */
     static final long TEST_TIME = 1357009200000L;
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.NEVER)
     Path folder;
 
+    /** The file. */
     File file;
 
+    /**
+     * Inits the.
+     */
     @BeforeEach
     void init() {
         file = folder.resolve("file").toFile();
     }
 
+    /**
+     * Sub directory creation.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void subDirectoryCreation() throws IOException {
         var f = folder.resolve("sub1").resolve("sub2");
@@ -75,6 +90,12 @@ class JsonWriterTest {
         }
     }
 
+    /**
+     * Test get job.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     @SuppressWarnings("resource")
     void testGetJob() throws IOException {
@@ -82,6 +103,12 @@ class JsonWriterTest {
         assertSame(job, new JsonWriter(job, file).getJob());
     }
 
+    /**
+     * Test get coveralls file.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     @SuppressWarnings("resource")
     void testGetCoverallsFile() throws IOException {
@@ -89,6 +116,14 @@ class JsonWriterTest {
         assertSame(file, new JsonWriter(job, file).getCoverallsFile());
     }
 
+    /**
+     * Write start and end.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ProcessingException
+     *             the processing exception
+     */
     @SuppressWarnings("rawtypes")
     @Test
     void writeStartAndEnd() throws IOException, ProcessingException {
@@ -112,6 +147,14 @@ class JsonWriterTest {
         assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
     }
 
+    /**
+     * Test on source.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ProcessingException
+     *             the processing exception
+     */
     @Test
     void testOnSource() throws IOException, ProcessingException {
         try (var writer = new JsonWriter(job(), file)) {
@@ -129,6 +172,11 @@ class JsonWriterTest {
         assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
     }
 
+    /**
+     * Job.
+     *
+     * @return the job
+     */
     Job job() {
         var head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
         var remote = new Git.Remote("origin", "git@git.com:foo.git");
@@ -140,10 +188,26 @@ class JsonWriterTest {
                 .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
 
+    /**
+     * Source.
+     *
+     * @return the source
+     */
     Source source() {
         return new Source("Foo.java", "public class Foo { }", "6E0F89B516198DC6AB743EA5FBFB3108");
     }
 
+    /**
+     * String to json map.
+     *
+     * @param content
+     *            the content
+     *
+     * @return the map
+     *
+     * @throws JsonProcessingException
+     *             the json processing exception
+     */
     Map<String, Object> stringToJsonMap(final String content) throws JsonProcessingException {
         var mapper = new ObjectMapper();
         var type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);

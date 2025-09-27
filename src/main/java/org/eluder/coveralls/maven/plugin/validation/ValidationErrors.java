@@ -29,10 +29,20 @@ import java.util.List;
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
+/**
+ * The Class ValidationErrors.
+ */
 public class ValidationErrors extends ArrayList<ValidationError> {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Throw or inform.
+     *
+     * @param log
+     *            the log
+     */
     public void throwOrInform(final Log log) {
         List<ValidationError> errors = filter(Level.ERROR);
         if (!errors.isEmpty()) {
@@ -43,6 +53,14 @@ public class ValidationErrors extends ArrayList<ValidationError> {
         }
     }
 
+    /**
+     * Filter.
+     *
+     * @param level
+     *            the level
+     *
+     * @return the list
+     */
     private List<ValidationError> filter(final Level level) {
         List<ValidationError> filtered = new ArrayList<>();
         for (ValidationError error : this) {

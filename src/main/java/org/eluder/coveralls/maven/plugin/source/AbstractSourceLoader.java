@@ -34,11 +34,27 @@ import org.apache.commons.io.IOUtils;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.Sha512DigestInputStream;
 
+/**
+ * The Class AbstractSourceLoader.
+ */
 public abstract class AbstractSourceLoader implements SourceLoader {
 
+    /** The source encoding. */
     private final Charset sourceEncoding;
+
+    /** The directory prefix. */
     private final String directoryPrefix;
 
+    /**
+     * Instantiates a new abstract source loader.
+     *
+     * @param base
+     *            the base
+     * @param sourceBase
+     *            the source base
+     * @param sourceEncoding
+     *            the source encoding
+     */
     protected AbstractSourceLoader(final URI base, final URI sourceBase, final String sourceEncoding) {
         this.sourceEncoding = Charset.forName(sourceEncoding);
         this.directoryPrefix = base.relativize(sourceBase).toString();
@@ -59,13 +75,37 @@ public abstract class AbstractSourceLoader implements SourceLoader {
         }
     }
 
+    /**
+     * Gets the source encoding.
+     *
+     * @return the source encoding
+     */
     protected Charset getSourceEncoding() {
         return sourceEncoding;
     }
 
+    /**
+     * Gets the file name.
+     *
+     * @param sourceFile
+     *            the source file
+     *
+     * @return the file name
+     */
     protected String getFileName(final String sourceFile) {
         return directoryPrefix + sourceFile;
     }
 
+    /**
+     * Locate.
+     *
+     * @param sourceFile
+     *            the source file
+     *
+     * @return the input stream
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected abstract InputStream locate(String sourceFile) throws IOException;
 }

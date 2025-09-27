@@ -66,6 +66,9 @@ import org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory;
 import org.eluder.coveralls.maven.plugin.util.SourceLoaderFactory;
 import org.eluder.coveralls.maven.plugin.util.TimestampParser;
 
+/**
+ * The Class CoverallsReportMojo.
+ */
 @Mojo(name = "report", threadSafe = false, aggregator = true)
 public class CoverallsReportMojo extends AbstractMojo {
 
@@ -418,6 +421,19 @@ public class CoverallsReportMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Submit data.
+     *
+     * @param client
+     *            the client
+     * @param coverallsFile
+     *            the coveralls file
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private void submitData(final CoverallsClient client, final File coverallsFile)
             throws ProcessingException, IOException {
         getLog().info("Submitting Coveralls data to API");
@@ -440,6 +456,21 @@ public class CoverallsReportMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Handle submission error.
+     *
+     * @param <T>
+     *            the generic type
+     * @param ex
+     *            the ex
+     * @param message
+     *            the message
+     * @param failOnException
+     *            the fail on exception
+     *
+     * @throws T
+     *             the t
+     */
     private <T extends Exception> void handleSubmissionError(final T ex, final String message,
             final boolean failOnException) throws T {
         if (failOnException) {
@@ -449,6 +480,14 @@ public class CoverallsReportMojo extends AbstractMojo {
         getLog().warn(message);
     }
 
+    /**
+     * Report.
+     *
+     * @param reporters
+     *            the reporters
+     * @param position
+     *            the position
+     */
     private void report(final List<Logger> reporters, final Position position) {
         for (Logger reporter : reporters) {
             if (position.equals(reporter.getPosition())) {

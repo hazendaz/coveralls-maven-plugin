@@ -30,10 +30,24 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * The Class DirectorySourceLoader.
+ */
 public class DirectorySourceLoader extends AbstractSourceLoader {
 
+    /** The source directory. */
     private final File sourceDirectory;
 
+    /**
+     * Instantiates a new directory source loader.
+     *
+     * @param base
+     *            the base
+     * @param sourceDirectory
+     *            the source directory
+     * @param sourceEncoding
+     *            the source encoding
+     */
     public DirectorySourceLoader(final File base, final File sourceDirectory, final String sourceEncoding) {
         super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);
         this.sourceDirectory = sourceDirectory;

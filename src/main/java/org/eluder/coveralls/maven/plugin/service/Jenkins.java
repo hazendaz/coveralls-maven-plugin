@@ -33,13 +33,30 @@ import java.util.Properties;
  */
 public class Jenkins extends AbstractServiceSetup {
 
+    /** The Constant JENKINS_NAME. */
     public static final String JENKINS_NAME = "jenkins";
+
+    /** The Constant JENKINS_URL. */
     public static final String JENKINS_URL = "JENKINS_URL";
+
+    /** The Constant JENKINS_BUILD_NUMBER. */
     public static final String JENKINS_BUILD_NUMBER = "BUILD_NUMBER";
+
+    /** The Constant JENKINS_BUILD_URL. */
     public static final String JENKINS_BUILD_URL = "BUILD_URL";
+
+    /** The Constant JENKINS_BRANCH. */
     public static final String JENKINS_BRANCH = "GIT_BRANCH";
+
+    /** The Constant JENKINS_COMMIT. */
     public static final String JENKINS_COMMIT = "GIT_COMMIT";
 
+    /**
+     * Instantiates a new jenkins.
+     *
+     * @param env
+     *            the env
+     */
     public Jenkins(final Map<String, String> env) {
         super(env);
     }

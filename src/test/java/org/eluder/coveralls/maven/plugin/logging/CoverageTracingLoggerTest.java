@@ -42,15 +42,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class CoverageTracingLoggerTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class CoverageTracingLoggerTest {
 
+    /** The log mock. */
     @Mock
     Log logMock;
 
+    /** The source callback mock. */
     @Mock
     SourceCallback sourceCallbackMock;
 
+    /**
+     * Constructor with null.
+     */
     @Test
     void constructorWithNull() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -58,11 +66,22 @@ class CoverageTracingLoggerTest {
         });
     }
 
+    /**
+     * Test get position.
+     */
     @Test
     void testGetPosition() {
         assertEquals(Position.AFTER, new CoverageTracingLogger(sourceCallbackMock).getPosition());
     }
 
+    /**
+     * Log for sources.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void logForSources() throws ProcessingException, IOException {
         var source1 = new Source("Source1.java", "public class Source1 {\n  if(true) { }\n}\n",

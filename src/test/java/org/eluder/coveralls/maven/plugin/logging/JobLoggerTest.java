@@ -43,18 +43,27 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class JobLoggerTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class JobLoggerTest {
 
+    /** The job mock. */
     @Mock
     Job jobMock;
 
+    /** The log mock. */
     @Mock
     Log logMock;
 
+    /** The json mapper mock. */
     @Mock
     ObjectMapper jsonMapperMock;
 
+    /**
+     * Missing job.
+     */
     @Test
     void missingJob() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -62,11 +71,17 @@ class JobLoggerTest {
         });
     }
 
+    /**
+     * Test get position.
+     */
     @Test
     void testGetPosition() {
         assertEquals(Position.BEFORE, new JobLogger(jobMock).getPosition());
     }
 
+    /**
+     * Log job with id.
+     */
     @Test
     void logJobWithId() {
         var git = new Git(null, new Head("ab679cf2d81ac", null, null, null, null, null), "master", null);
@@ -85,6 +100,9 @@ class JobLoggerTest {
         verifyNoMoreInteractions(logMock);
     }
 
+    /**
+     * Log with build number and url.
+     */
     @Test
     void logWithBuildNumberAndUrl() {
         when(jobMock.getServiceName()).thenReturn("service");
@@ -98,6 +116,9 @@ class JobLoggerTest {
         verifyNoMoreInteractions(logMock);
     }
 
+    /**
+     * Log dry run.
+     */
     @Test
     void logDryRun() {
         when(jobMock.isDryRun()).thenReturn(true);
@@ -109,6 +130,9 @@ class JobLoggerTest {
         verifyNoMoreInteractions(logMock);
     }
 
+    /**
+     * Log parallel.
+     */
     @Test
     void logParallel() {
         when(jobMock.isParallel()).thenReturn(true);
@@ -121,6 +145,12 @@ class JobLoggerTest {
 
     }
 
+    /**
+     * Log job with debug.
+     *
+     * @throws JsonProcessingException
+     *             the json processing exception
+     */
     @Test
     void logJobWithDebug() throws JsonProcessingException {
         when(logMock.isDebugEnabled()).thenReturn(true);
@@ -135,6 +165,12 @@ class JobLoggerTest {
         verifyNoMoreInteractions(logMock);
     }
 
+    /**
+     * Log job with error in debug.
+     *
+     * @throws JsonProcessingException
+     *             the json processing exception
+     */
     @Test
     void logJobWithErrorInDebug() throws JsonProcessingException {
         when(logMock.isDebugEnabled()).thenReturn(true);

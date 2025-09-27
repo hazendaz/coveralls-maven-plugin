@@ -37,17 +37,33 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * The Class ScanSourceLoaderTest.
+ */
 class ScanSourceLoaderTest {
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     Path folder;
 
+    /**
+     * Missing source file from directory.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void missingSourceFileFromDirectory() throws IOException {
         var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 
+    /**
+     * Invalid source file.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void invalidSourceFile() throws IOException {
         var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile();
@@ -57,6 +73,12 @@ class ScanSourceLoaderTest {
         });
     }
 
+    /**
+     * Load source.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void loadSource() throws IOException {
         var level1 = Files.createDirectory(folder.resolve("level1"));

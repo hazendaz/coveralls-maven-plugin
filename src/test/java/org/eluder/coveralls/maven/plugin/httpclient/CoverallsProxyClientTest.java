@@ -28,13 +28,22 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.apache.maven.settings.Proxy;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class CoverallsProxyClientTest.
+ */
 class CoverallsProxyClientTest {
 
+    /**
+     * Constructor without proxy.
+     */
     @Test
     void constructorWithoutProxy() {
         assertNotNull(new CoverallsProxyClient("http://test.com/coveralls", null));
     }
 
+    /**
+     * Constructor with proxy.
+     */
     @Test
     void constructorWithProxy() {
         var proxy = new Proxy();

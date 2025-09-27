@@ -31,8 +31,19 @@ import java.security.NoSuchAlgorithmException;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class Sha521DigestInputStreamTest.
+ */
 class Sha521DigestInputStreamTest {
 
+    /**
+     * Test read.
+     *
+     * @throws NoSuchAlgorithmException
+     *             the no such algorithm exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void testRead() throws NoSuchAlgorithmException, IOException {
         byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
@@ -48,6 +59,14 @@ class Sha521DigestInputStreamTest {
         }
     }
 
+    /**
+     * Read array.
+     *
+     * @throws NoSuchAlgorithmException
+     *             the no such algorithm exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void readArray() throws NoSuchAlgorithmException, IOException {
         byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };

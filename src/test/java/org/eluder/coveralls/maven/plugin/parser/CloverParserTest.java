@@ -32,6 +32,9 @@ import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.junit.jupiter.api.Disabled;
 
+/**
+ * The Class CloverParserTest.
+ */
 // TODO Needs similar support added to upstream for cobertura, jacoco, and saga
 @Disabled
 class CloverParserTest extends AbstractCoverageParserTest {

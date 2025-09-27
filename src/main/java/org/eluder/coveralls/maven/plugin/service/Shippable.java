@@ -33,14 +33,33 @@ import java.util.Properties;
  */
 public class Shippable extends AbstractServiceSetup {
 
+    /** The Constant SHIPPABLE_NAME. */
     public static final String SHIPPABLE_NAME = "shippable";
+
+    /** The Constant SHIPPABLE. */
     public static final String SHIPPABLE = "SHIPPABLE";
+
+    /** The Constant SHIPPABLE_BUILD_NUMBER. */
     public static final String SHIPPABLE_BUILD_NUMBER = "SHIPPABLE_BUILD_NUMBER";
+
+    /** The Constant SHIPPABLE_BUILD_ID. */
     public static final String SHIPPABLE_BUILD_ID = "SHIPPABLE_BUILD_ID";
+
+    /** The Constant SHIPPABLE_BRANCH. */
     public static final String SHIPPABLE_BRANCH = "BRANCH";
+
+    /** The Constant SHIPPABLE_COMMIT. */
     public static final String SHIPPABLE_COMMIT = "COMMIT";
+
+    /** The Constant SHIPPABLE_PULL_REQUEST. */
     public static final String SHIPPABLE_PULL_REQUEST = "PULL_REQUEST";
 
+    /**
+     * Instantiates a new shippable.
+     *
+     * @param env
+     *            the env
+     */
     public Shippable(final Map<String, String> env) {
         super(env);
     }

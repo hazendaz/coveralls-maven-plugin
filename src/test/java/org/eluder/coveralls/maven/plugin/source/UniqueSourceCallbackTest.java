@@ -38,12 +38,26 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class UniqueSourceCallbackTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class UniqueSourceCallbackTest {
 
+    /** The source callback mock. */
     @Mock
     private SourceCallback sourceCallbackMock;
 
+    /**
+     * On source with unique files.
+     *
+     * @throws NoSuchAlgorithmException
+     *             the no such algorithm exception
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void onSourceWithUniqueFiles() throws NoSuchAlgorithmException, ProcessingException, IOException {
         var s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
@@ -59,6 +73,16 @@ class UniqueSourceCallbackTest {
         verify(sourceCallbackMock).onComplete();
     }
 
+    /**
+     * On source with duplicate sources.
+     *
+     * @throws NoSuchAlgorithmException
+     *             the no such algorithm exception
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void onSourceWithDuplicateSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
         var s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
@@ -74,6 +98,16 @@ class UniqueSourceCallbackTest {
         verify(sourceCallbackMock).onComplete();
     }
 
+    /**
+     * On source with unique sources.
+     *
+     * @throws NoSuchAlgorithmException
+     *             the no such algorithm exception
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void onSourceWithUniqueSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
         var s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
@@ -89,10 +123,30 @@ class UniqueSourceCallbackTest {
         verify(sourceCallbackMock).onComplete();
     }
 
+    /**
+     * Creates the unique source callback.
+     *
+     * @return the unique source callback
+     */
     UniqueSourceCallback createUniqueSourceCallback() {
         return new UniqueSourceCallback(sourceCallbackMock);
     }
 
+    /**
+     * Creates the source.
+     *
+     * @param name
+     *            the name
+     * @param source
+     *            the source
+     * @param relevant
+     *            the relevant
+     *
+     * @return the source
+     *
+     * @throws NoSuchAlgorithmException
+     *             the no such algorithm exception
+     */
     Source createSource(final String name, final String source, final int... relevant) throws NoSuchAlgorithmException {
         var s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
         for (int i : relevant) {

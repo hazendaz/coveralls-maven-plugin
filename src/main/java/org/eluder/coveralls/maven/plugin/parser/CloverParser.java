@@ -34,11 +34,25 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class CloverParser.
+ */
 public class CloverParser extends AbstractXmlEventParser {
 
+    /** The source. */
     private Source source;
+
+    /** The package name. */
     private String packageName;
 
+    /**
+     * Instantiates a new clover parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     */
     public CloverParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }
@@ -72,6 +86,14 @@ public class CloverParser extends AbstractXmlEventParser {
         }
     }
 
+    /**
+     * Gets the source file.
+     *
+     * @param fileName
+     *            the file name
+     *
+     * @return the source file
+     */
     private String getSourceFile(final String fileName) {
         return this.packageName.replace('.', '/') + "/" + fileName;
     }

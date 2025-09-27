@@ -31,6 +31,9 @@ import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class JaCoCoParserTest.
+ */
 class JaCoCoParserTest extends AbstractCoverageParserTest {
 
     @Override

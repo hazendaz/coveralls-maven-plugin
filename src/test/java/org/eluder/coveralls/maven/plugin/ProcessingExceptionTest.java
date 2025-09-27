@@ -29,11 +29,20 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class ProcessingExceptionTest.
+ */
 class ProcessingExceptionTest {
 
+    /** The Constant MESSAGE. */
     static final String MESSAGE = "message";
+
+    /** The Constant CAUSE. */
     static final RuntimeException CAUSE = new RuntimeException();
 
+    /**
+     * Exception.
+     */
     @Test
     void exception() {
         var exception = new ProcessingException();
@@ -41,6 +50,9 @@ class ProcessingExceptionTest {
         assertNull(exception.getCause());
     }
 
+    /**
+     * Exception with message.
+     */
     @Test
     void exceptionWithMessage() {
         var exception = new ProcessingException(MESSAGE);
@@ -48,6 +60,9 @@ class ProcessingExceptionTest {
         assertNull(exception.getCause());
     }
 
+    /**
+     * Exception with cause.
+     */
     @Test
     void exceptionWithCause() {
         var exception = new ProcessingException(CAUSE);
@@ -55,6 +70,9 @@ class ProcessingExceptionTest {
         assertSame(CAUSE, exception.getCause());
     }
 
+    /**
+     * Exception with message and cause.
+     */
     @Test
     void exceptionWithMessageAndCause() {
         var exception = new ProcessingException(MESSAGE, CAUSE);

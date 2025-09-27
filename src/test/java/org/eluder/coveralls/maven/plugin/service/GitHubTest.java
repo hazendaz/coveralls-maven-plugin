@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class GitHubTest.
+ */
 public class GitHubTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("GITHUB_ACTIONS", "true");
@@ -45,32 +53,50 @@ public class GitHubTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new GitHub(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for jenkins.
+     */
     @Test
     void isSelectedForJenkins() {
         assertTrue(new GitHub(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("github", new GitHub(env()).getName());
     }
 
+    /**
+     * Test get build number.
+     */
     @Test
     void testGetBuildNumber() {
         assertEquals("1", new GitHub(env()).getBuildNumber());
     }
 
+    /**
+     * Test get build url.
+     */
     @Test
     void testGetBuildUrl() {
         assertEquals("https://github.com/hazendaz/coveralls-maven-plugin/actions/runs/12345",
                 new GitHub(env()).getBuildUrl());
     }
 
+    /**
+     * Test get pull request.
+     */
     @Test
     void testGetPullRequest() {
         assertEquals("1", new GitHub(env()).getPullRequest());

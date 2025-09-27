@@ -36,11 +36,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * The Class UrlSourceLoaderTest.
+ */
 class UrlSourceLoaderTest {
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     public Path folder;
 
+    /**
+     * Missing source file from url.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void missingSourceFileFromUrl() throws IOException {
         var sourceLoader = new UrlSourceLoader(folder.toUri().toURL(),
@@ -48,6 +58,12 @@ class UrlSourceLoaderTest {
         assertNull(sourceLoader.load("Foo.java"));
     }
 
+    /**
+     * Load source from url.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void loadSourceFromUrl() throws IOException {
         var scripts = Files.createDirectory(folder.resolve("scripts"));

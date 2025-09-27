@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class AppveyorTest.
+ */
 class AppveyorTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put(Appveyor.APPVEYOR, "true");
@@ -46,41 +54,65 @@ class AppveyorTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new Appveyor(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for appveyor.
+     */
     @Test
     void isSelectedForAppveyor() {
         assertTrue(new Appveyor(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("Appveyor", new Appveyor(env()).getName());
     }
 
+    /**
+     * Test get build number.
+     */
     @Test
     void testGetBuildNumber() {
         assertEquals("77", new Appveyor(env()).getBuildNumber());
     }
 
+    /**
+     * Test get build url.
+     */
     @Test
     void testGetBuildUrl() {
         assertEquals("https://ci.appveyor.com/project/owner/project/build/77", new Appveyor(env()).getBuildUrl());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new Appveyor(env()).getBranch());
     }
 
+    /**
+     * Pull request.
+     */
     @Test
     void pullRequest() {
         assertEquals("10", new Appveyor(env()).getPullRequest());
     }
 
+    /**
+     * Test get job id.
+     */
     @Test
     void testGetJobId() {
         assertEquals("54de3316c44f", new Appveyor(env()).getJobId());

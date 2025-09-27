@@ -34,23 +34,59 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The Class Source.
+ */
 public final class Source implements JsonObject {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /** The Constant NEWLINE. */
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
     // private static final String CLASSIFIER_SEPARATOR = "#";
 
+    /** The name. */
     String name;
+
+    /** The digest. */
     String digest;
+
+    /** The coverage. */
     Integer[] coverage;
+
+    /** The branches. */
     List<Branch> branches;
+
+    /** The classifier. */
     String classifier;
 
+    /**
+     * Instantiates a new source.
+     *
+     * @param name
+     *            the name
+     * @param source
+     *            the source
+     * @param digest
+     *            the digest
+     */
     public Source(final String name, final String source, final String digest) {
         this(name, getLines(source), digest, null);
     }
 
+    /**
+     * Instantiates a new source.
+     *
+     * @param name
+     *            the name
+     * @param lines
+     *            the lines
+     * @param digest
+     *            the digest
+     * @param classifier
+     *            the classifier
+     */
     public Source(final String name, final int lines, final String digest, final String classifier) {
         this.name = name;
         this.digest = digest;
@@ -59,11 +95,21 @@ public final class Source implements JsonObject {
         this.branches = new ArrayList<>();
     }
 
+    /**
+     * Gets the name.
+     *
+     * @return the name
+     */
     @JsonIgnore
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the full name.
+     *
+     * @return the full name
+     */
     @JsonProperty("name")
     public String getFullName() {
         return name;
@@ -72,16 +118,31 @@ public final class Source implements JsonObject {
         // return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
 
+    /**
+     * Gets the digest.
+     *
+     * @return the digest
+     */
     @JsonProperty("source_digest")
     public String getDigest() {
         return digest;
     }
 
+    /**
+     * Gets the coverage.
+     *
+     * @return the coverage
+     */
     @JsonProperty("coverage")
     public Integer[] getCoverage() {
         return coverage;
     }
 
+    /**
+     * Gets the branches.
+     *
+     * @return the branches
+     */
     @JsonProperty("branches")
     public Integer[] getBranches() {
         final List<Integer> branchesRaw = new ArrayList<>(branches.size() * 4);
@@ -94,19 +155,41 @@ public final class Source implements JsonObject {
         return branchesRaw.toArray(new Integer[branchesRaw.size()]);
     }
 
+    /**
+     * Gets the branches list.
+     *
+     * @return the branches list
+     */
     public List<Branch> getBranchesList() {
         return Collections.unmodifiableList(branches);
     }
 
+    /**
+     * Gets the classifier.
+     *
+     * @return the classifier
+     */
     @JsonIgnore
     public String getClassifier() {
         return classifier;
     }
 
+    /**
+     * Sets the classifier.
+     *
+     * @param classifier
+     *            the new classifier
+     */
     public void setClassifier(final String classifier) {
         this.classifier = classifier;
     }
 
+    /**
+     * Check line range.
+     *
+     * @param lineNumber
+     *            the line number
+     */
     private void checkLineRange(final int lineNumber) {
         int index = lineNumber - 1;
         if (index >= this.coverage.length) {
@@ -115,15 +198,49 @@ public final class Source implements JsonObject {
         }
     }
 
+    /**
+     * Adds the coverage.
+     *
+     * @param lineNumber
+     *            the line number
+     * @param coverage
+     *            the coverage
+     */
     public void addCoverage(final int lineNumber, final Integer coverage) {
         checkLineRange(lineNumber);
         this.coverage[lineNumber - 1] = coverage;
     }
 
+    /**
+     * Adds the branch coverage.
+     *
+     * @param lineNumber
+     *            the line number
+     * @param blockNumber
+     *            the block number
+     * @param branchNumber
+     *            the branch number
+     * @param hits
+     *            the hits
+     */
     public void addBranchCoverage(final int lineNumber, final int blockNumber, final int branchNumber, final int hits) {
         addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);
     }
 
+    /**
+     * Adds the branch coverage.
+     *
+     * @param merge
+     *            the merge
+     * @param lineNumber
+     *            the line number
+     * @param blockNumber
+     *            the block number
+     * @param branchNumber
+     *            the branch number
+     * @param hits
+     *            the hits
+     */
     private void addBranchCoverage(final boolean merge, final int lineNumber, final int blockNumber,
             final int branchNumber, final int hits) {
         checkLineRange(lineNumber);
@@ -142,6 +259,14 @@ public final class Source implements JsonObject {
         this.branches.add(new Branch(lineNumber, blockNumber, branchNumber, hitSum));
     }
 
+    /**
+     * Merge.
+     *
+     * @param source
+     *            the source
+     *
+     * @return the source
+     */
     public Source merge(final Source source) {
         Source copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);
         System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);
@@ -175,6 +300,14 @@ public final class Source implements JsonObject {
         return Objects.hash(this.name, this.digest, this.coverage.length);
     }
 
+    /**
+     * Gets the lines.
+     *
+     * @param source
+     *            the source
+     *
+     * @return the lines
+     */
     private static int getLines(final String source) {
         int lines = 1;
         Matcher matcher = NEWLINE.matcher(source);

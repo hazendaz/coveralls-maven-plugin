@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class JenkinsTest.
+ */
 class JenkinsTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("JENKINS_URL", "http://company.com/jenkins");
@@ -44,36 +52,57 @@ class JenkinsTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new Jenkins(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for jenkins.
+     */
     @Test
     void isSelectedForJenkins() {
         assertTrue(new Jenkins(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("jenkins", new Jenkins(env()).getName());
     }
 
+    /**
+     * Test get build number.
+     */
     @Test
     void testGetBuildNumber() {
         assertEquals("build123", new Jenkins(env()).getBuildNumber());
     }
 
+    /**
+     * Test get build url.
+     */
     @Test
     void testGetBuildUrl() {
         assertEquals("http://company.com/jenkins/build123", new Jenkins(env()).getBuildUrl());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new Jenkins(env()).getBranch());
     }
 
+    /**
+     * Test get environment.
+     */
     @Test
     void testGetEnvironment() {
         var properties = new Jenkins(env()).getEnvironment();

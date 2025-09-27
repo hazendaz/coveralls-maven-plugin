@@ -38,54 +38,132 @@ import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * A factory for creating CoverageParsers objects.
+ */
 public class CoverageParsersFactory {
 
+    /** The Constant JACOCO_FILE. */
     private static final String JACOCO_FILE = "/jacoco.xml";
+
+    /** The Constant JACOCO_PREFIX. */
     private static final String JACOCO_PREFIX = "/jacoco";
+
+    /** The Constant JACOCO_IT_PREFIX. */
     private static final String JACOCO_IT_PREFIX = "/jacoco-it";
 
+    /** The Constant COBERTURA_FILE. */
     private static final String COBERTURA_FILE = "/coverage.xml";
+
+    /** The Constant COBERTURA_PREFIX. */
     private static final String COBERTURA_PREFIX = "/cobertura";
 
+    /** The Constant CLOVER_FILE. */
     private static final String CLOVER_FILE = "/clover.xml";
+
+    /** The Constant CLOVER_PREFIX. */
     private static final String CLOVER_PREFIX = "/clover";
 
+    /** The Constant SAGA_FILE. */
     private static final String SAGA_FILE = "/total-coverage.xml";
+
+    /** The Constant SAGA_PREFIX. */
     private static final String SAGA_PREFIX = "/saga-coverage";
 
+    /** The project. */
     private final MavenProject project;
+
+    /** The source loader. */
     private final SourceLoader sourceLoader;
+
+    /** The jacoco reports. */
     private List<File> jacocoReports;
+
+    /** The cobertura reports. */
     private List<File> coberturaReports;
+
+    /** The saga reports. */
     private List<File> sagaReports;
+
+    /** The clover reports. */
     private List<File> cloverReports;
+
+    /** The relative report dirs. */
     private List<String> relativeReportDirs;
 
+    /**
+     * Instantiates a new coverage parsers factory.
+     *
+     * @param project
+     *            the project
+     * @param sourceLoader
+     *            the source loader
+     */
     public CoverageParsersFactory(final MavenProject project, final SourceLoader sourceLoader) {
         this.project = project;
         this.sourceLoader = sourceLoader;
     }
 
+    /**
+     * With jacoco reports.
+     *
+     * @param jacocoReports
+     *            the jacoco reports
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withJaCoCoReports(final List<File> jacocoReports) {
         this.jacocoReports = jacocoReports;
         return this;
     }
 
+    /**
+     * With cobertura reports.
+     *
+     * @param coberturaReports
+     *            the cobertura reports
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withCoberturaReports(final List<File> coberturaReports) {
         this.coberturaReports = coberturaReports;
         return this;
     }
 
+    /**
+     * With saga reports.
+     *
+     * @param sagaReports
+     *            the saga reports
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withSagaReports(final List<File> sagaReports) {
         this.sagaReports = sagaReports;
         return this;
     }
 
+    /**
+     * With relative report dirs.
+     *
+     * @param relativeReportDirs
+     *            the relative report dirs
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withRelativeReportDirs(final List<String> relativeReportDirs) {
         this.relativeReportDirs = relativeReportDirs;
         return this;
     }
 
+    /**
+     * Creates a new CoverageParsers object.
+     *
+     * @return the list of coverage parsers
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public List<CoverageParser> createParsers() throws IOException {
         List<CoverageParser> parsers = new ArrayList<>();
         List<MavenProject> projects = new MavenProjectCollector(project).collect();

@@ -36,11 +36,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
+/**
+ * The Class ExistingFilesTest.
+ */
 class ExistingFilesTest {
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     public Path folder;
 
+    /**
+     * Adds the all for null.
+     */
     @Test
     void addAllForNull() {
         var existingFiles = new ExistingFiles();
@@ -49,6 +56,9 @@ class ExistingFilesTest {
         });
     }
 
+    /**
+     * Adds the for null.
+     */
     @Test
     void addForNull() {
         var existingFiles = new ExistingFiles();
@@ -57,6 +67,12 @@ class ExistingFilesTest {
         });
     }
 
+    /**
+     * Adds the for existing.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void addForExisting() throws IOException {
         var f = Files.createFile(folder.resolve("f")).toFile();
@@ -64,6 +80,12 @@ class ExistingFilesTest {
         assertSize(iter, 1);
     }
 
+    /**
+     * Adds the for directory.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void addForDirectory() throws IOException {
         var d = Files.createDirectory(folder.resolve("d")).toFile();
@@ -71,12 +93,21 @@ class ExistingFilesTest {
         assertSize(iter, 0);
     }
 
+    /**
+     * Creates the for null.
+     */
     @Test
     void createForNull() {
         var iter = ExistingFiles.create(null).iterator();
         assertSize(iter, 0);
     }
 
+    /**
+     * Creates the for multiple files.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void createForMultipleFiles() throws IOException {
         var f1 = Files.createFile(folder.resolve("f1")).toFile();
@@ -85,6 +116,14 @@ class ExistingFilesTest {
         assertSize(iter, 2);
     }
 
+    /**
+     * Assert size.
+     *
+     * @param iter
+     *            the iter
+     * @param size
+     *            the size
+     */
     private static void assertSize(Iterator<?> iter, int size) {
         for (var i = 0; i < size; i++) {
             iter.next();

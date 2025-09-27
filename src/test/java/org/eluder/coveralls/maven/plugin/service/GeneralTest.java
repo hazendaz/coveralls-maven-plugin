@@ -32,8 +32,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class GeneralTest.
+ */
 class GeneralTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("CI_NAME", "ci_service");
@@ -44,36 +52,57 @@ class GeneralTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new General(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for ci.
+     */
     @Test
     void isSelectedForCi() {
         assertTrue(new General(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("ci_service", new General(env()).getName());
     }
 
+    /**
+     * Test get build number.
+     */
     @Test
     void testGetBuildNumber() {
         assertEquals("build123", new General(env()).getBuildNumber());
     }
 
+    /**
+     * Test get build url.
+     */
     @Test
     void testGetBuildUrl() {
         assertEquals("http://ci.com/build123", new General(env()).getBuildUrl());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new General(env()).getBranch());
     }
 
+    /**
+     * Test get pull request.
+     */
     @Test
     void testGetPullRequest() {
         assertEquals("pull10", new General(env()).getPullRequest());

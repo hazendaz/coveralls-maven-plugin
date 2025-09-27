@@ -33,8 +33,14 @@ import java.net.URL;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class UrlUtilsTest.
+ */
 class UrlUtilsTest {
 
+    /**
+     * Creates the invalid url.
+     */
     @Test
     void createInvalidUrl() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -42,11 +48,20 @@ class UrlUtilsTest {
         });
     }
 
+    /**
+     * Creates the valid url.
+     *
+     * @throws URISyntaxException
+     *             the URI syntax exception
+     */
     @Test
     void createValidUrl() throws URISyntaxException {
         assertEquals("http://example.org", UrlUtils.create("http://example.org").toURI().toASCIIString());
     }
 
+    /**
+     * Invalid url to uri.
+     */
     @Test
     void invalidUrlToUri() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -54,6 +69,14 @@ class UrlUtilsTest {
         });
     }
 
+    /**
+     * Valid url to uri.
+     *
+     * @throws MalformedURLException
+     *             the malformed URL exception
+     * @throws URISyntaxException
+     *             the URI syntax exception
+     */
     @Test
     void validUrlToUri() throws MalformedURLException, URISyntaxException {
         var uri = UrlUtils.toUri(new URL("http://google.com"));

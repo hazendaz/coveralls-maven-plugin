@@ -35,19 +35,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class MultiSourceLoaderTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class MultiSourceLoaderTest {
 
+    /** The sl 1. */
     @Mock
     SourceLoader sl1;
 
+    /** The sl 2. */
     @Mock
     SourceLoader sl2;
 
+    /** The s 1. */
     Source s1 = new Source("source", "{ 1 }", "9A0174D3A5B8D202C6E404601FC260D1");
 
+    /** The s 2. */
     Source s2 = new Source("source", "{ 2 }", "849409F24F4BCAAC904F3B142447D65D");
 
+    /**
+     * Missing source.
+     */
     @Test
     void missingSource() {
         assertThrows(IOException.class, () -> {
@@ -55,6 +65,12 @@ class MultiSourceLoaderTest {
         });
     }
 
+    /**
+     * Primary source.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void primarySource() throws IOException {
         when(sl1.load("source")).thenReturn(s1);
@@ -62,6 +78,12 @@ class MultiSourceLoaderTest {
         assertSame(s1, source);
     }
 
+    /**
+     * Secondary source.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void secondarySource() throws IOException {
         when(sl2.load("source")).thenReturn(s2);
@@ -69,6 +91,11 @@ class MultiSourceLoaderTest {
         assertSame(s2, source);
     }
 
+    /**
+     * Crea multi source loader.
+     *
+     * @return the multi source loader
+     */
     MultiSourceLoader creaMultiSourceLoader() {
         return new MultiSourceLoader().add(sl1).add(sl2);
     }

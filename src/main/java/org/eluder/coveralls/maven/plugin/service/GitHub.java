@@ -27,18 +27,41 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The Class GitHub.
+ */
 public class GitHub extends AbstractServiceSetup {
 
+    /** The Constant GITHUB_PR. */
     private static final Pattern GITHUB_PR = Pattern.compile("(\\d+)/merge");
 
+    /** The Constant GITHUB. */
     public static final String GITHUB = "github";
+
+    /** The Constant GITHUB_ACTIONS. */
     public static final String GITHUB_ACTIONS = "GITHUB_ACTIONS";
+
+    /** The Constant GITHUB_REF_NAME. */
     public static final String GITHUB_REF_NAME = "GITHUB_REF_NAME";
+
+    /** The Constant GITHUB_REPOSITORY. */
     public static final String GITHUB_REPOSITORY = "GITHUB_REPOSITORY";
+
+    /** The Constant GITHUB_RUN_ID. */
     public static final String GITHUB_RUN_ID = "GITHUB_RUN_ID";
+
+    /** The Constant GITHUB_RUN_NUMBER. */
     public static final String GITHUB_RUN_NUMBER = "GITHUB_RUN_NUMBER";
+
+    /** The Constant GITHUB_SERVER_URL. */
     public static final String GITHUB_SERVER_URL = "GITHUB_SERVER_URL";
 
+    /**
+     * Instantiates a new git hub.
+     *
+     * @param env
+     *            the env
+     */
     public GitHub(Map<String, String> env) {
         super(env);
     }

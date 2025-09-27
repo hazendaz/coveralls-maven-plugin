@@ -41,25 +41,43 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class SourceLoaderFactoryTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class SourceLoaderFactoryTest {
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     public Path folder;
 
+    /** The root. */
     @Mock
     private MavenProject root;
 
+    /** The m 1. */
     @Mock
     private MavenProject m1;
 
+    /** The m 2. */
     @Mock
     private MavenProject m2;
 
+    /** The root sources. */
     private Path rootSources;
+
+    /** The m 1 sources. */
     private Path m1Sources;
+
+    /** The m 2 sources. */
     private Path m2Sources;
 
+    /**
+     * Inits the.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @BeforeEach
     void init() throws IOException {
         rootSources = Files.createDirectory(folder.resolve("src"));
@@ -73,12 +91,21 @@ class SourceLoaderFactoryTest {
         lenient().when(m2.getCompileSourceRoots()).thenReturn(Arrays.asList(m2Sources.toFile().getAbsolutePath()));
     }
 
+    /**
+     * Test create source loader.
+     */
     @Test
     void testCreateSourceLoader() {
         var sourceLoader = createSourceLoaderFactory("UTF-8").createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
+    /**
+     * Creates the source loader with additional source directories.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void createSourceLoaderWithAdditionalSourceDirectories() throws IOException {
         var s1 = Files.createDirectory(folder.resolve("s1"));
@@ -88,12 +115,21 @@ class SourceLoaderFactoryTest {
         assertNotNull(sourceLoader);
     }
 
+    /**
+     * Creates the source loader with scan for sources.
+     */
     @Test
     void createSourceLoaderWithScanForSources() {
         var sourceLoader = createSourceLoaderFactory("UTF-8").withScanForSources(true).createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
+    /**
+     * Creates the source loader invalid directory.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void createSourceLoaderInvalidDirectory() throws IOException {
         var file = Files.createDirectory(folder.resolve("aFile")).toFile();
@@ -102,6 +138,14 @@ class SourceLoaderFactoryTest {
         assertNotNull(sourceLoader);
     }
 
+    /**
+     * Creates the source loader factory.
+     *
+     * @param sourceEncoding
+     *            the source encoding
+     *
+     * @return the source loader factory
+     */
     private SourceLoaderFactory createSourceLoaderFactory(String sourceEncoding) {
         return new SourceLoaderFactory(folder.toFile(), root, sourceEncoding);
     }

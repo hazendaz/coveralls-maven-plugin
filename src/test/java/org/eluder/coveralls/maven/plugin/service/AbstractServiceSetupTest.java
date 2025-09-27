@@ -33,14 +33,23 @@ import java.util.Properties;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class AbstractServiceSetupTest.
+ */
 class AbstractServiceSetupTest {
 
+    /**
+     * Gets the missing property.
+     */
     @Test
     void getMissingProperty() {
         var serviceSetup = create(new HashMap<>());
         assertNull(serviceSetup.getProperty("property"));
     }
 
+    /**
+     * Test get property.
+     */
     @Test
     void testGetProperty() {
         Map<String, String> env = new HashMap<>();
@@ -48,6 +57,9 @@ class AbstractServiceSetupTest {
         assertEquals("bamboo", create(env).getProperty("CI_NAME"));
     }
 
+    /**
+     * Adds the property without name.
+     */
     @Test
     void addPropertyWithoutName() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -55,6 +67,9 @@ class AbstractServiceSetupTest {
         });
     }
 
+    /**
+     * Adds the property without value.
+     */
     @Test
     void addPropertyWithoutValue() {
         var properties = new Properties();
@@ -62,6 +77,9 @@ class AbstractServiceSetupTest {
         assertNull(properties.getProperty("prop"));
     }
 
+    /**
+     * Adds the property with value.
+     */
     @Test
     void addPropertyWithValue() {
         var properties = new Properties();
@@ -69,6 +87,9 @@ class AbstractServiceSetupTest {
         assertEquals("value", properties.getProperty("prop"));
     }
 
+    /**
+     * Gets the default values.
+     */
     @Test
     void getDefaultValues() {
         var serviceSetup = create(new HashMap<>());
@@ -81,6 +102,12 @@ class AbstractServiceSetupTest {
         assertNull(serviceSetup.getEnvironment());
     }
 
+    /**
+     * Creates the.
+     *
+     * @param env
+     *            the env
+     */
     private AbstractServiceSetup create(final Map<String, String> env) {
         return new AbstractServiceSetup(env) {
             @Override

@@ -50,31 +50,48 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class CoverageParsersFactoryTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class CoverageParsersFactoryTest {
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     public Path folder;
 
+    /** The project mock. */
     @Mock
     private MavenProject projectMock;
 
+    /** The source loader mock. */
     @Mock
     private SourceLoader sourceLoaderMock;
 
+    /** The model mock. */
     @Mock
     private Model modelMock;
 
+    /** The reporting mock. */
     @Mock
     private Reporting reportingMock;
 
+    /** The build mock. */
     @Mock
     private Build buildMock;
 
+    /** The reporting dir. */
     private Path reportingDir;
 
+    /** The target dir. */
     private Path targetDir;
 
+    /**
+     * Inits the.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @BeforeEach
     void init() throws IOException {
         reportingDir = Files.createDirectory(folder.resolve("reportingDir"));
@@ -87,6 +104,9 @@ class CoverageParsersFactoryTest {
         lenient().when(buildMock.getDirectory()).thenReturn(targetDir.toFile().getAbsolutePath());
     }
 
+    /**
+     * Creates the empty parsers.
+     */
     @Test
     void createEmptyParsers() {
         assertThrows(IOException.class, () -> {
@@ -94,6 +114,12 @@ class CoverageParsersFactoryTest {
         });
     }
 
+    /**
+     * Creates the jacoco parser.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void createJaCoCoParser() throws IOException {
         var jacocoDir = Files.createDirectory(reportingDir.resolve("jacoco"));
@@ -103,6 +129,12 @@ class CoverageParsersFactoryTest {
         assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * Creates the cobertura parser.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void createCoberturaParser() throws IOException {
         var coberturaDir = Files.createDirectory(reportingDir.resolve("cobertura"));
@@ -112,6 +144,12 @@ class CoverageParsersFactoryTest {
         assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * Creates the saga parser.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void createSagaParser() throws IOException {
         var sagaDir = Files.createDirectory(targetDir.resolve("saga-coverage"));
@@ -121,6 +159,12 @@ class CoverageParsersFactoryTest {
         assertEquals(SagaParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * With jacoco report.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void withJaCoCoReport() throws IOException {
         var jacocoFile = Files.createFile(reportingDir.resolve("jacoco-report.xml")).toFile();
@@ -131,6 +175,12 @@ class CoverageParsersFactoryTest {
         assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * With cobertura report.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void withCoberturaReport() throws IOException {
         var coberturaFile = Files.createFile(reportingDir.resolve("cobertura-report.xml")).toFile();
@@ -141,6 +191,12 @@ class CoverageParsersFactoryTest {
         assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * With saga report.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void withSagaReport() throws IOException {
         var sagaFile = Files.createFile(reportingDir.resolve("saga-report.xml")).toFile();
@@ -151,6 +207,12 @@ class CoverageParsersFactoryTest {
         assertEquals(SagaParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * With relative report directory.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void withRelativeReportDirectory() throws IOException {
         var coberturaDir = Files.createDirectory(reportingDir.resolve("customdir"));
@@ -161,6 +223,12 @@ class CoverageParsersFactoryTest {
         assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * With root relative report directory.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void withRootRelativeReportDirectory() throws IOException {
         Files.createFile(reportingDir.resolve("coverage.xml")).toFile();
@@ -170,6 +238,11 @@ class CoverageParsersFactoryTest {
         assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
+    /**
+     * Creates the coverage parsers factory.
+     *
+     * @return the coverage parsers factory
+     */
     private CoverageParsersFactory createCoverageParsersFactory() {
         return new CoverageParsersFactory(projectMock, sourceLoaderMock);
     }

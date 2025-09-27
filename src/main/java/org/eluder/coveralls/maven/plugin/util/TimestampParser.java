@@ -31,14 +31,26 @@ import java.time.Instant;
 import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 
+/**
+ * The Class TimestampParser.
+ */
 public class TimestampParser {
 
+    /** The Constant EPOCH_MILLIS. */
     public static final String EPOCH_MILLIS = "EpochMillis";
 
+    /** The Constant DEFAULT_FORMAT. */
     public static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
+    /** The parser. */
     private final Parser parser;
 
+    /**
+     * Instantiates a new timestamp parser.
+     *
+     * @param format
+     *            the format
+     */
     public TimestampParser(final String format) {
         try {
             if (EPOCH_MILLIS.equalsIgnoreCase(format)) {
@@ -53,6 +65,17 @@ public class TimestampParser {
         }
     }
 
+    /**
+     * Parses the.
+     *
+     * @param timestamp
+     *            the timestamp
+     *
+     * @return the instant
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
     public Instant parse(final String timestamp) throws ProcessingException {
         if (StringUtils.isBlank(timestamp)) {
             return null;
@@ -64,14 +87,39 @@ public class TimestampParser {
         }
     }
 
+    /**
+     * The Interface Parser.
+     */
     private interface Parser {
+
+        /**
+         * Parses the.
+         *
+         * @param timestamp
+         *            the timestamp
+         *
+         * @return the instant
+         *
+         * @throws Exception
+         *             the exception
+         */
         Instant parse(String timestamp) throws Exception;
     }
 
+    /**
+     * The Class DateFormatParser.
+     */
     private static class DateFormatParser implements Parser {
 
+        /** The format. */
         final DateFormat format;
 
+        /**
+         * Instantiates a new date format parser.
+         *
+         * @param format
+         *            the format
+         */
         DateFormatParser(final String format) {
             this.format = new SimpleDateFormat(format);
         }
@@ -82,6 +130,9 @@ public class TimestampParser {
         }
     }
 
+    /**
+     * The Class EpochMillisParser.
+     */
     private static class EpochMillisParser implements Parser {
 
         @Override

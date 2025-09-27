@@ -29,11 +29,20 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class ValidationExceptionTest.
+ */
 class ValidationExceptionTest {
 
+    /** The Constant MESSAGE. */
     private static final String MESSAGE = "message";
+
+    /** The Constant CAUSE. */
     private static final RuntimeException CAUSE = new RuntimeException();
 
+    /**
+     * Exception.
+     */
     @Test
     void exception() {
         var exception = new ValidationException();
@@ -41,6 +50,9 @@ class ValidationExceptionTest {
         assertNull(exception.getCause());
     }
 
+    /**
+     * Exception with message.
+     */
     @Test
     void exceptionWithMessage() {
         var exception = new ValidationException(MESSAGE);
@@ -48,6 +60,9 @@ class ValidationExceptionTest {
         assertNull(exception.getCause());
     }
 
+    /**
+     * Exception with cause.
+     */
     @Test
     void exceptionWithCause() {
         var exception = new ValidationException(CAUSE);
@@ -55,6 +70,9 @@ class ValidationExceptionTest {
         assertSame(CAUSE, exception.getCause());
     }
 
+    /**
+     * Exception with message and cause.
+     */
     @Test
     void exceptionWithMessageAndCause() {
         var exception = new ValidationException(MESSAGE, CAUSE);

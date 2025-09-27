@@ -27,10 +27,22 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * The Class ExistingFiles.
+ */
 public class ExistingFiles implements Iterable<File> {
 
+    /** The delegate. */
     private final ArrayList<File> delegate = new ArrayList<>();
 
+    /**
+     * Adds the all.
+     *
+     * @param files
+     *            the files
+     *
+     * @return the existing files
+     */
     public ExistingFiles addAll(final Iterable<File> files) {
         if (files == null) {
             throw new NullPointerException("Files must be defined");
@@ -41,6 +53,14 @@ public class ExistingFiles implements Iterable<File> {
         return this;
     }
 
+    /**
+     * Adds the.
+     *
+     * @param file
+     *            the file
+     *
+     * @return the existing files
+     */
     public ExistingFiles add(final File file) {
         if (file == null) {
             throw new NullPointerException("File must be defined");
@@ -56,6 +76,14 @@ public class ExistingFiles implements Iterable<File> {
         return delegate.iterator();
     }
 
+    /**
+     * Creates the.
+     *
+     * @param files
+     *            the files
+     *
+     * @return the existing files
+     */
     public static ExistingFiles create(final Iterable<File> files) {
         ExistingFiles existingFiles = new ExistingFiles();
         if (files != null) {

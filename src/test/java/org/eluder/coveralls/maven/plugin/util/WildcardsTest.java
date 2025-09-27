@@ -28,29 +28,47 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class WildcardsTest.
+ */
 class WildcardsTest {
 
+    /**
+     * Matches against null.
+     */
     @Test
     void matchesAgainstNull() {
         assertFalse(Wildcards.matches(null, "*"));
     }
 
+    /**
+     * Matches against joker.
+     */
     @Test
     void matchesAgainstJoker() {
         assertTrue(Wildcards.matches("a", "?"));
     }
 
+    /**
+     * Matches against star.
+     */
     @Test
     void matchesAgainstStar() {
         assertTrue(Wildcards.matches("abc", "*"));
     }
 
+    /**
+     * Matches against wildcards.
+     */
     @Test
     void matchesAgainstWildcards() {
         assertTrue(Wildcards.matches("abcdefg", "a*d??g"));
         assertFalse(Wildcards.matches("abcdefg", "a*d?g?"));
     }
 
+    /**
+     * Matches against text.
+     */
     @Test
     void matchesAgainstText() {
         assertTrue(Wildcards.matches("abc", "abc"));

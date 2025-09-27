@@ -33,12 +33,27 @@ import java.util.Properties;
  */
 public class Travis extends AbstractServiceSetup {
 
+    /** The Constant TRAVIS_NAME. */
     public static final String TRAVIS_NAME = "travis-ci";
+
+    /** The Constant TRAVIS. */
     public static final String TRAVIS = "TRAVIS";
+
+    /** The Constant TRAVIS_JOB_ID. */
     public static final String TRAVIS_JOB_ID = "TRAVIS_JOB_ID";
+
+    /** The Constant TRAVIS_BRANCH. */
     public static final String TRAVIS_BRANCH = "TRAVIS_BRANCH";
+
+    /** The Constant TRAVIS_PULL_REQUEST. */
     public static final String TRAVIS_PULL_REQUEST = "TRAVIS_PULL_REQUEST";
 
+    /**
+     * Instantiates a new travis.
+     *
+     * @param env
+     *            the env
+     */
     public Travis(final Map<String, String> env) {
         super(env);
     }

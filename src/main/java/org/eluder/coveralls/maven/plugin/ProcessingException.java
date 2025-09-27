@@ -28,20 +28,44 @@ package org.eluder.coveralls.maven.plugin;
  */
 public class ProcessingException extends Exception {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Instantiates a new processing exception.
+     */
     public ProcessingException() {
         super();
     }
 
+    /**
+     * Instantiates a new processing exception.
+     *
+     * @param message
+     *            the message
+     */
     public ProcessingException(final String message) {
         super(message);
     }
 
+    /**
+     * Instantiates a new processing exception.
+     *
+     * @param cause
+     *            the cause
+     */
     public ProcessingException(final Throwable cause) {
         super(cause);
     }
 
+    /**
+     * Instantiates a new processing exception.
+     *
+     * @param message
+     *            the message
+     * @param cause
+     *            the cause
+     */
     public ProcessingException(final String message, final Throwable cause) {
         super(message, cause);
     }

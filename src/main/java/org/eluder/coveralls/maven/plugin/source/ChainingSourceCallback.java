@@ -34,8 +34,15 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
  */
 public abstract class ChainingSourceCallback implements SourceCallback {
 
+    /** The chained. */
     private final SourceCallback chained;
 
+    /**
+     * Instantiates a new chaining source callback.
+     *
+     * @param chained
+     *            the chained
+     */
     public ChainingSourceCallback(final SourceCallback chained) {
         if (chained == null) {
             throw new IllegalArgumentException("chained must be defined");
@@ -64,12 +71,12 @@ public abstract class ChainingSourceCallback implements SourceCallback {
     /**
      * Defaults to no-op implementation.
      *
-     * @see #onBegin()
-     *
      * @throws ProcessingException
      *             if processing fails
      * @throws IOException
      *             if an I/O error occurs
+     *
+     * @see #onBegin()
      */
     protected void onBeginInternal() throws ProcessingException, IOException {
 
@@ -93,12 +100,12 @@ public abstract class ChainingSourceCallback implements SourceCallback {
     /**
      * Defaults to no-op implementation.
      *
-     * @see #onComplete()
-     *
      * @throws ProcessingException
      *             if processing fails
      * @throws IOException
      *             if an I/O error occurs
+     *
+     * @see #onComplete()
      */
     protected void onCompleteInternal() throws ProcessingException, IOException {
 

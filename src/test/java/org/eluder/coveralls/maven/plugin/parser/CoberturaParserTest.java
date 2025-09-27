@@ -31,6 +31,9 @@ import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class CoberturaParserTest.
+ */
 class CoberturaParserTest extends AbstractCoverageParserTest {
 
     @Override

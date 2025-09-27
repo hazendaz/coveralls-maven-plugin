@@ -34,12 +34,28 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class CoberturaParser.
+ */
 public class CoberturaParser extends AbstractXmlEventParser {
 
+    /** The source. */
     protected Source source;
+
+    /** The in methods. */
     protected boolean inMethods;
+
+    /** The branch id. */
     private int branchId;
 
+    /**
+     * Instantiates a new cobertura parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     */
     public CoberturaParser(final File coverageFile, final SourceLoader sourceLoader) {
         super(coverageFile, sourceLoader);
     }

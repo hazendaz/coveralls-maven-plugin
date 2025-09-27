@@ -54,34 +54,59 @@ import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class CoverallsClientTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class CoverallsClientTest {
 
+    /** The http client mock. */
     @Mock
     CloseableHttpClient httpClientMock;
 
+    /** The http entity mock. */
     @Mock
     HttpEntity httpEntityMock;
 
+    /** The http response mock. */
     @Mock
     ClassicHttpResponse httpResponseMock;
 
+    /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
     Path folder;
 
+    /** The file. */
     File file;
 
+    /**
+     * Inits the.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @BeforeEach
     void init() throws IOException {
         file = Files.createFile(folder.resolve("coverallsClientTest.tmp")).toFile();
     }
 
+    /**
+     * Constructors.
+     */
     @Test
     void constructors() {
         assertNotNull(new CoverallsClient("http://test.com/coveralls"));
         assertNotNull(new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper()));
     }
 
+    /**
+     * Test submit.
+     *
+     * @throws UnsupportedOperationException
+     *             the unsupported operation exception
+     * @throws Exception
+     *             the exception
+     */
     @Test
     void testSubmit() throws UnsupportedOperationException, Exception {
         when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
@@ -96,6 +121,12 @@ class CoverallsClientTest {
         client.submit(file);
     }
 
+    /**
+     * Fail on service error.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void failOnServiceError() throws IOException {
         when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
@@ -111,6 +142,12 @@ class CoverallsClientTest {
         });
     }
 
+    /**
+     * Parses the invalid response.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void parseInvalidResponse() throws IOException {
         when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
@@ -129,6 +166,14 @@ class CoverallsClientTest {
         });
     }
 
+    /**
+     * Parses the errorous response.
+     *
+     * @throws UnsupportedOperationException
+     *             the unsupported operation exception
+     * @throws Exception
+     *             the exception
+     */
     @Test
     void parseErrorousResponse() throws UnsupportedOperationException, Exception {
         when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
@@ -147,6 +192,12 @@ class CoverallsClientTest {
         });
     }
 
+    /**
+     * Parses the failing entity.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void parseFailingEntity() throws IOException {
         when(httpClientMock.execute(any(HttpUriRequest.class), any(HttpClientResponseHandler.class)))
@@ -163,6 +214,17 @@ class CoverallsClientTest {
         });
     }
 
+    /**
+     * Coveralls response.
+     *
+     * @param coverallsResponse
+     *            the coveralls response
+     *
+     * @return the input stream
+     *
+     * @throws JsonProcessingException
+     *             the json processing exception
+     */
     InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
         var content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));

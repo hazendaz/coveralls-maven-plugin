@@ -34,30 +34,73 @@ import org.eluder.coveralls.maven.plugin.source.MultiSourceLoader;
 import org.eluder.coveralls.maven.plugin.source.ScanSourceLoader;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * A factory for creating SourceLoader objects.
+ */
 public class SourceLoaderFactory {
 
+    /** The base dir. */
     private final File baseDir;
+
+    /** The project. */
     private final MavenProject project;
+
+    /** The source encoding. */
     private final String sourceEncoding;
+
+    /** The source directories. */
     private List<File> sourceDirectories;
+
+    /** The scan for sources. */
     private boolean scanForSources;
 
+    /**
+     * Instantiates a new source loader factory.
+     *
+     * @param baseDir
+     *            the base dir
+     * @param project
+     *            the project
+     * @param sourceEncoding
+     *            the source encoding
+     */
     public SourceLoaderFactory(final File baseDir, final MavenProject project, final String sourceEncoding) {
         this.baseDir = baseDir;
         this.project = project;
         this.sourceEncoding = sourceEncoding;
     }
 
+    /**
+     * With source directories.
+     *
+     * @param sourceDirectories
+     *            the source directories
+     *
+     * @return the source loader factory
+     */
     public SourceLoaderFactory withSourceDirectories(final List<File> sourceDirectories) {
         this.sourceDirectories = sourceDirectories;
         return this;
     }
 
+    /**
+     * With scan for sources.
+     *
+     * @param scanForSources
+     *            the scan for sources
+     *
+     * @return the source loader factory
+     */
     public SourceLoaderFactory withScanForSources(final boolean scanForSources) {
         this.scanForSources = scanForSources;
         return this;
     }
 
+    /**
+     * Creates a new SourceLoader object.
+     *
+     * @return the source loader
+     */
     public SourceLoader createSourceLoader() {
         MultiSourceLoader multiSourceLoader = new MultiSourceLoader();
         List<File> directories = new ArrayList<>();

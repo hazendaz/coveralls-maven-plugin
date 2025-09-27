@@ -33,9 +33,20 @@ import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
  */
 public final class Environment {
 
+    /** The mojo. */
     private final CoverallsReportMojo mojo;
+
+    /** The services. */
     private final Iterable<ServiceSetup> services;
 
+    /**
+     * Instantiates a new environment.
+     *
+     * @param mojo
+     *            the mojo
+     * @param services
+     *            the services
+     */
     public Environment(final CoverallsReportMojo mojo, final Iterable<ServiceSetup> services) {
         if (mojo == null) {
             throw new IllegalArgumentException("mojo must be defined");
@@ -47,11 +58,17 @@ public final class Environment {
         this.services = services;
     }
 
+    /**
+     * Setup.
+     */
     public void setup() {
         setupService();
         verify();
     }
 
+    /**
+     * Verify.
+     */
     private void verify() {
         if (mojo.sourceEncoding == null) {
             throw new IllegalArgumentException(
@@ -59,6 +76,9 @@ public final class Environment {
         }
     }
 
+    /**
+     * Setup service.
+     */
     private void setupService() {
         for (ServiceSetup service : services) {
             if (service.isSelected()) {
@@ -68,6 +88,12 @@ public final class Environment {
         }
     }
 
+    /**
+     * Sets the up environment.
+     *
+     * @param service
+     *            the new up environment
+     */
     private void setupEnvironment(final ServiceSetup service) {
         String name = service.getName();
         if (StringUtils.isBlank(mojo.serviceName) && StringUtils.isNotBlank(name)) {

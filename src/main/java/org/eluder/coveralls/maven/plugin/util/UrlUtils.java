@@ -28,8 +28,19 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+/**
+ * The Class UrlUtils.
+ */
 public final class UrlUtils {
 
+    /**
+     * Creates the.
+     *
+     * @param url
+     *            the url
+     *
+     * @return the url
+     */
     public static URL create(final String url) {
         try {
             return new URI(url).toURL();
@@ -38,6 +49,14 @@ public final class UrlUtils {
         }
     }
 
+    /**
+     * To uri.
+     *
+     * @param url
+     *            the url
+     *
+     * @return the uri
+     */
     public static URI toUri(final URL url) {
         try {
             return url.toURI();
@@ -46,6 +65,9 @@ public final class UrlUtils {
         }
     }
 
+    /**
+     * Instantiates a new url utils.
+     */
     private UrlUtils() {
         // hide constructor
     }

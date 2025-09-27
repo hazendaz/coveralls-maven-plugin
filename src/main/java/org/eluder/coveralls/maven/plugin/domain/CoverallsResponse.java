@@ -26,13 +26,33 @@ package org.eluder.coveralls.maven.plugin.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The Class CoverallsResponse.
+ */
 public final class CoverallsResponse implements JsonObject {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
+
+    /** The message. */
     private final String message;
+
+    /** The error. */
     private final boolean error;
+
+    /** The url. */
     private final String url;
 
+    /**
+     * Instantiates a new coveralls response.
+     *
+     * @param message
+     *            the message
+     * @param error
+     *            the error
+     * @param url
+     *            the url
+     */
     @JsonCreator
     public CoverallsResponse(@JsonProperty("message") final String message, @JsonProperty("error") final boolean error,
             @JsonProperty("url") final String url) {
@@ -41,14 +61,29 @@ public final class CoverallsResponse implements JsonObject {
         this.url = url;
     }
 
+    /**
+     * Gets the message.
+     *
+     * @return the message
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * Checks if is error.
+     *
+     * @return true, if is error
+     */
     public boolean isError() {
         return error;
     }
 
+    /**
+     * Gets the url.
+     *
+     * @return the url
+     */
     public String getUrl() {
         return url;
     }

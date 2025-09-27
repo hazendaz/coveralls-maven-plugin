@@ -27,11 +27,25 @@ import java.io.File;
 
 import org.apache.maven.plugin.logging.Log;
 
+/**
+ * The Class DryRunLogger.
+ */
 public class DryRunLogger implements Logger {
 
+    /** The dry run. */
     private final boolean dryRun;
+
+    /** The coveralls file. */
     private final File coverallsFile;
 
+    /**
+     * Instantiates a new dry run logger.
+     *
+     * @param dryRun
+     *            the dry run
+     * @param coverallsFile
+     *            the coveralls file
+     */
     public DryRunLogger(final boolean dryRun, final File coverallsFile) {
         if (coverallsFile == null) {
             throw new IllegalArgumentException("coverallsFile must be defined");

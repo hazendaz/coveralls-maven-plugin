@@ -25,13 +25,20 @@ package org.eluder.coveralls.maven.plugin.logging;
 
 import org.apache.maven.plugin.logging.Log;
 
+/**
+ * The Interface Logger.
+ */
 public interface Logger {
 
     /**
      * Position of the log output.
      */
     enum Position {
-        BEFORE, AFTER
+
+        /** The before. */
+        BEFORE,
+        /** The after. */
+        AFTER
     }
 
     /**

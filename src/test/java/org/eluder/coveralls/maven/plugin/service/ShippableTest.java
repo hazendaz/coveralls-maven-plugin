@@ -33,8 +33,16 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class ShippableTest.
+ */
 class ShippableTest {
 
+    /**
+     * Env.
+     *
+     * @return the map
+     */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put(Shippable.SHIPPABLE, "true");
@@ -46,41 +54,65 @@ class ShippableTest {
         return env;
     }
 
+    /**
+     * Checks if is selected for nothing.
+     */
     @Test
     void isSelectedForNothing() {
         assertFalse(new Shippable(new HashMap<>()).isSelected());
     }
 
+    /**
+     * Checks if is selected for shippable.
+     */
     @Test
     void isSelectedForShippable() {
         assertTrue(new Shippable(env()).isSelected());
     }
 
+    /**
+     * Test get name.
+     */
     @Test
     void testGetName() {
         assertEquals("shippable", new Shippable(env()).getName());
     }
 
+    /**
+     * Test get build number.
+     */
     @Test
     void testGetBuildNumber() {
         assertEquals("431.1", new Shippable(env()).getBuildNumber());
     }
 
+    /**
+     * Test get build url.
+     */
     @Test
     void testGetBuildUrl() {
         assertEquals("https://app.shippable.com/builds/54de3316c44f", new Shippable(env()).getBuildUrl());
     }
 
+    /**
+     * Test get branch.
+     */
     @Test
     void testGetBranch() {
         assertEquals("master", new Shippable(env()).getBranch());
     }
 
+    /**
+     * Pull request.
+     */
     @Test
     void pullRequest() {
         assertEquals("10", new Shippable(env()).getPullRequest());
     }
 
+    /**
+     * Pull request false.
+     */
     @Test
     void pullRequestFalse() {
         var env = env();
@@ -88,6 +120,9 @@ class ShippableTest {
         assertNull(new Shippable(env).getPullRequest());
     }
 
+    /**
+     * Test get environment.
+     */
     @Test
     void testGetEnvironment() {
         var properties = new Shippable(env()).getEnvironment();

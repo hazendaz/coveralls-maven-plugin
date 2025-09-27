@@ -29,10 +29,22 @@ import java.util.List;
 
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
+/**
+ * The Class MultiSourceLoader.
+ */
 public class MultiSourceLoader implements SourceLoader {
 
+    /** The source loaders. */
     private final List<SourceLoader> sourceLoaders = new ArrayList<>();
 
+    /**
+     * Adds the.
+     *
+     * @param sourceLoader
+     *            the source loader
+     *
+     * @return the multi source loader
+     */
     public MultiSourceLoader add(final SourceLoader sourceLoader) {
         this.sourceLoaders.add(sourceLoader);
         return this;

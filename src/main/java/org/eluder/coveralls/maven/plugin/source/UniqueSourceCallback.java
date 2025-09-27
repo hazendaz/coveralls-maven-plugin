@@ -37,9 +37,18 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
  */
 public class UniqueSourceCallback implements SourceCallback {
 
+    /** The cache. */
     private final Map<Source, Source> cache;
+
+    /** The delegate. */
     private final SourceCallback delegate;
 
+    /**
+     * Instantiates a new unique source callback.
+     *
+     * @param delegate
+     *            the delegate
+     */
     public UniqueSourceCallback(final SourceCallback delegate) {
         this.cache = new LinkedHashMap<>();
         this.delegate = delegate;

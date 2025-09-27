@@ -44,20 +44,30 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * The Class EnvironmentTest.
+ */
 @ExtendWith(MockitoExtension.class)
 class EnvironmentTest {
 
+    /** The mojo. */
     CoverallsReportMojo mojo;
 
+    /** The coverage parser mock. */
     @Mock
     CoverageParser coverageParserMock;
 
+    /** The log mock. */
     @Mock
     Log logMock;
 
+    /** The service mock. */
     @Mock
     ServiceSetup serviceMock;
 
+    /**
+     * Inits the.
+     */
     @BeforeEach
     void init() {
         mojo = new CoverallsReportMojo() {
@@ -76,6 +86,9 @@ class EnvironmentTest {
         lenient().when(serviceMock.isSelected()).thenReturn(true);
     }
 
+    /**
+     * Missing mojo.
+     */
     @Test
     void missingMojo() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -83,6 +96,9 @@ class EnvironmentTest {
         });
     }
 
+    /**
+     * Missing services.
+     */
     @Test
     void missingServices() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -90,12 +106,18 @@ class EnvironmentTest {
         });
     }
 
+    /**
+     * Setup without services.
+     */
     @Test
     void setupWithoutServices() {
         create(Collections.<ServiceSetup> emptyList()).setup();
         assertEquals("service", mojo.serviceName);
     }
 
+    /**
+     * Setup without source encoding.
+     */
     @Test
     void setupWithoutSourceEncoding() {
         mojo.sourceEncoding = null;
@@ -104,6 +126,9 @@ class EnvironmentTest {
         });
     }
 
+    /**
+     * Setup with incomplete job.
+     */
     @Test
     void setupWithIncompleteJob() {
         when(serviceMock.getJobId()).thenReturn("");
@@ -119,6 +144,9 @@ class EnvironmentTest {
         assertNull(mojo.serviceEnvironment);
     }
 
+    /**
+     * Setup with complete job.
+     */
     @Test
     void setupWithCompleteJob() {
         mojo.serviceName = null;
@@ -142,6 +170,9 @@ class EnvironmentTest {
         assertEquals("true", mojo.serviceEnvironment.get("env"));
     }
 
+    /**
+     * Setup without job override.
+     */
     @Test
     void setupWithoutJobOverride() {
         var environment = new Properties();
@@ -173,6 +204,14 @@ class EnvironmentTest {
         assertEquals("setProperty", mojo.serviceEnvironment.get("env"));
     }
 
+    /**
+     * Creates the.
+     *
+     * @param services
+     *            the services
+     *
+     * @return the environment
+     */
     Environment create(final Iterable<ServiceSetup> services) {
         return new Environment(mojo, services);
     }

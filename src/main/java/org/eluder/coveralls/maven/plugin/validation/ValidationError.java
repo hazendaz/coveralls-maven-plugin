@@ -23,15 +23,36 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
+/**
+ * The Class ValidationError.
+ */
 public final class ValidationError {
 
+    /**
+     * The Enum Level.
+     */
     public enum Level {
-        WARN, ERROR
+
+        /** The warn. */
+        WARN,
+        /** The error. */
+        ERROR
     }
 
+    /** The level. */
     private final Level level;
+
+    /** The message. */
     private final String message;
 
+    /**
+     * Instantiates a new validation error.
+     *
+     * @param level
+     *            the level
+     * @param message
+     *            the message
+     */
     public ValidationError(final Level level, final String message) {
         if (level == null) {
             throw new IllegalArgumentException("level must be defined");
@@ -43,10 +64,20 @@ public final class ValidationError {
         this.message = message;
     }
 
+    /**
+     * Gets the level.
+     *
+     * @return the level
+     */
     public Level getLevel() {
         return level;
     }
 
+    /**
+     * Gets the message.
+     *
+     * @return the message
+     */
     public String getMessage() {
         return message;
     }

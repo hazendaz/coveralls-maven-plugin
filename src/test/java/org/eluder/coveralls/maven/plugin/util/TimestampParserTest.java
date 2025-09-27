@@ -33,8 +33,14 @@ import java.util.Date;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class TimestampParserTest.
+ */
 class TimestampParserTest {
 
+    /**
+     * Invalid format.
+     */
     @Test
     void invalidFormat() {
         assertThrows(IllegalArgumentException.class, () -> {
@@ -42,6 +48,12 @@ class TimestampParserTest {
         });
     }
 
+    /**
+     * Parses the epoch millis.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
     @Test
     void parseEpochMillis() throws ProcessingException {
         var format = TimestampParser.EPOCH_MILLIS;
@@ -51,6 +63,12 @@ class TimestampParserTest {
         assertEquals(time, parsed.toEpochMilli());
     }
 
+    /**
+     * Parses the simple format.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
     @Test
     void parseSimpleFormat() throws ProcessingException {
         var format = "yyyy-MM-dd";
@@ -60,6 +78,12 @@ class TimestampParserTest {
         assertEquals("2015-08-20", formatted);
     }
 
+    /**
+     * Parses the default format.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
     @Test
     void parseDefaultFormat() throws ProcessingException {
         var format = TimestampParser.DEFAULT_FORMAT;
@@ -69,6 +93,12 @@ class TimestampParserTest {
         assertEquals("2015-08-20T20:10:00Z", formatted);
     }
 
+    /**
+     * Parses the null.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
     @Test
     void parseNull() throws ProcessingException {
         var parsed = new TimestampParser(null).parse(null);
@@ -76,6 +106,9 @@ class TimestampParserTest {
         assertNull(parsed);
     }
 
+    /**
+     * Parses the invalid timestamp.
+     */
     @Test
     void parseInvalidTimestamp() {
         assertThrows(ProcessingException.class, () -> {

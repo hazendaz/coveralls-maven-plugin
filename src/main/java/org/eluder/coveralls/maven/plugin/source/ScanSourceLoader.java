@@ -36,12 +36,27 @@ import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.SelectorUtils;
 
+/**
+ * The Class ScanSourceLoader.
+ */
 public class ScanSourceLoader extends AbstractSourceLoader {
 
+    /** The cache. */
     private final Map<String, String[]> cache = new HashMap<>();
 
+    /** The source directory. */
     private final File sourceDirectory;
 
+    /**
+     * Instantiates a new scan source loader.
+     *
+     * @param base
+     *            the base
+     * @param sourceDirectory
+     *            the source directory
+     * @param sourceEncoding
+     *            the source encoding
+     */
     public ScanSourceLoader(final File base, final File sourceDirectory, final String sourceEncoding) {
         super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);
         this.sourceDirectory = sourceDirectory;
@@ -60,6 +75,14 @@ public class ScanSourceLoader extends AbstractSourceLoader {
         return null;
     }
 
+    /**
+     * Scan for.
+     *
+     * @param extension
+     *            the extension
+     *
+     * @return the string[]
+     */
     private String[] scanFor(final String extension) {
         if (!cache.containsKey(extension)) {
             DirectoryScanner scanner = new DirectoryScanner();

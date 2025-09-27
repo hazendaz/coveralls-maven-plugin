@@ -33,8 +33,15 @@ import org.apache.commons.lang3.StringUtils;
  */
 public abstract class AbstractServiceSetup implements ServiceSetup {
 
+    /** The env. */
     private final Map<String, String> env;
 
+    /**
+     * Instantiates a new abstract service setup.
+     *
+     * @param env
+     *            the env
+     */
     protected AbstractServiceSetup(final Map<String, String> env) {
         this.env = env;
     }
@@ -69,10 +76,28 @@ public abstract class AbstractServiceSetup implements ServiceSetup {
         return null;
     }
 
+    /**
+     * Gets the property.
+     *
+     * @param name
+     *            the name
+     *
+     * @return the property
+     */
     protected final String getProperty(final String name) {
         return env.get(name);
     }
 
+    /**
+     * Adds the property.
+     *
+     * @param properties
+     *            the properties
+     * @param name
+     *            the name
+     * @param value
+     *            the value
+     */
     protected final void addProperty(final Properties properties, final String name, final String value) {
         if (StringUtils.isBlank(name)) {
             throw new IllegalArgumentException("name must be defined");

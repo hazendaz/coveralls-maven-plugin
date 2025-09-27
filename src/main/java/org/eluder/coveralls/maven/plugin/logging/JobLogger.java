@@ -32,17 +32,38 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 
+/**
+ * The Class JobLogger.
+ */
 public class JobLogger implements Logger {
 
+    /** The Constant ABBREV. */
     private static final int ABBREV = 7;
 
+    /** The job. */
     private final Job job;
+
+    /** The json mapper. */
     private final ObjectMapper jsonMapper;
 
+    /**
+     * Instantiates a new job logger.
+     *
+     * @param job
+     *            the job
+     */
     public JobLogger(final Job job) {
         this(job, null);
     }
 
+    /**
+     * Instantiates a new job logger.
+     *
+     * @param job
+     *            the job
+     * @param jsonMapper
+     *            the json mapper
+     */
     public JobLogger(final Job job, final ObjectMapper jsonMapper) {
         if (job == null) {
             throw new IllegalArgumentException("job must be defined");
@@ -98,6 +119,11 @@ public class JobLogger implements Logger {
         }
     }
 
+    /**
+     * Creates the default json mapper.
+     *
+     * @return the object mapper
+     */
     private ObjectMapper createDefaultJsonMapper() {
         return JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)
                 .configure(SerializationFeature.INDENT_OUTPUT, true)

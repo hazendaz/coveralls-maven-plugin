@@ -57,19 +57,33 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
+/**
+ * The Class AbstractCoverageParserTest.
+ */
 @ExtendWith(MockitoExtension.class)
 public abstract class AbstractCoverageParserTest {
 
+    /** The source loader mock. */
     @Mock
     SourceLoader sourceLoaderMock;
 
+    /** The source callback mock. */
     @Mock
     SourceCallback sourceCallbackMock;
 
+    /**
+     * Instantiates a new abstract coverage parser test.
+     */
     public AbstractCoverageParserTest() {
         // Do Nothing
     }
 
+    /**
+     * Inits the.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @BeforeEach
     void init() throws IOException {
         for (String[] coverageFile : getCoverageFixture()) {
@@ -79,14 +93,40 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
+    /**
+     * Source name.
+     *
+     * @param coverageFile
+     *            the coverage file
+     *
+     * @return the string
+     */
     String sourceName(final String coverageFile) {
         return coverageFile;
     }
 
+    /**
+     * Source answer.
+     *
+     * @param name
+     *            the name
+     * @param content
+     *            the content
+     *
+     * @return the answer
+     */
     Answer<Source> sourceAnswer(final String name, final String content) {
         return invocation -> new Source(name, content, TestIoUtil.getSha512DigestHex(content));
     }
 
+    /**
+     * Parses the coverage.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @Test
     void parseCoverage() throws ProcessingException, IOException {
         for (String coverageResource : getCoverageResources()) {
@@ -115,12 +155,40 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
+    /**
+     * Creates the coverage parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     *
+     * @return the coverage parser
+     */
     protected abstract CoverageParser createCoverageParser(File coverageFile, SourceLoader sourceLoader);
 
+    /**
+     * Gets the coverage resources.
+     *
+     * @return the coverage resources
+     */
     protected abstract List<String> getCoverageResources();
 
+    /**
+     * Gets the coverage fixture.
+     *
+     * @return the coverage fixture
+     */
     protected abstract String[][] getCoverageFixture();
 
+    /**
+     * To integer set.
+     *
+     * @param commaSeparated
+     *            the comma separated
+     *
+     * @return the sets the
+     */
     Set<Integer> toIntegerSet(final String commaSeparated) {
         if (commaSeparated.isEmpty()) {
             return Collections.emptySet();
@@ -133,8 +201,12 @@ public abstract class AbstractCoverageParserTest {
         return values;
     }
 
+    /**
+     * The Class SourceCollector.
+     */
     static class SourceCollector implements SourceCallback {
 
+        /** The sources. */
         private List<Source> sources = new ArrayList<>();
 
         @Override
@@ -153,8 +225,17 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
+    /**
+     * The Class ClassifierRemover.
+     */
     static class ClassifierRemover extends ChainingSourceCallback {
 
+        /**
+         * Instantiates a new classifier remover.
+         *
+         * @param chained
+         *            the chained
+         */
         public ClassifierRemover(SourceCallback chained) {
             super(chained);
         }
@@ -165,6 +246,24 @@ public abstract class AbstractCoverageParserTest {
         }
     }
 
+    /**
+     * Assert coverage.
+     *
+     * @param sources
+     *            the sources
+     * @param name
+     *            the name
+     * @param lines
+     *            the lines
+     * @param coveredLines
+     *            the covered lines
+     * @param missedLines
+     *            the missed lines
+     * @param coveredBranches
+     *            the covered branches
+     * @param missedBranches
+     *            the missed branches
+     */
     static void assertCoverage(final Collection<Source> sources, final String name, final int lines,
             final Set<Integer> coveredLines, final Set<Integer> missedLines, final Set<Integer> coveredBranches,
             final Set<Integer> missedBranches) {

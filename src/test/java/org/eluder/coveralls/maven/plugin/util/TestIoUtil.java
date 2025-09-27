@@ -37,20 +37,53 @@ import java.util.Locale;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 
+/**
+ * The Class TestIoUtil.
+ */
 public final class TestIoUtil {
 
+    /**
+     * Write file content.
+     *
+     * @param content
+     *            the content
+     * @param file
+     *            the file
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public static void writeFileContent(final String content, final File file) throws IOException {
         try (var writer = new PrintWriter(file, StandardCharsets.UTF_8)) {
             writer.write(content);
         }
     }
 
+    /**
+     * Read file content.
+     *
+     * @param file
+     *            the file
+     *
+     * @return the string
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public static String readFileContent(final File file) throws IOException {
         try (var reader = new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8)) {
             return IOUtils.toString(reader);
         }
     }
 
+    /**
+     * Gets the file.
+     *
+     * @param resource
+     *            the resource
+     *
+     * @return the file
+     */
     public static File getFile(final String resource) {
         try {
             var local = resource;
@@ -66,14 +99,33 @@ public final class TestIoUtil {
         }
     }
 
+    /**
+     * Gets the sha 512 digest hex.
+     *
+     * @param content
+     *            the content
+     *
+     * @return the sha 512 digest hex
+     */
     public static String getSha512DigestHex(final String content) {
         return DigestUtils.sha512Hex(content).toUpperCase(Locale.ENGLISH);
     }
 
+    /**
+     * Gets the resource url.
+     *
+     * @param resource
+     *            the resource
+     *
+     * @return the resource url
+     */
     private static URL getResourceUrl(final String resource) {
         return TestIoUtil.class.getResource(resource);
     }
 
+    /**
+     * Instantiates a new test io util.
+     */
     private TestIoUtil() {
         // Do Nothing
     }

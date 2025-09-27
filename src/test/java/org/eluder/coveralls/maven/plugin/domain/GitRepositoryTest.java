@@ -30,6 +30,9 @@ import java.io.IOException;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
 import org.junit.jupiter.api.Test;
 
+/**
+ * The Class GitRepositoryTest.
+ */
 class GitRepositoryTest {
 
     /**

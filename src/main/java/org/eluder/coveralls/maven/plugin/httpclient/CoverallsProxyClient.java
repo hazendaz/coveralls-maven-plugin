@@ -27,8 +27,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.maven.settings.Proxy;
 
+/**
+ * The Class CoverallsProxyClient.
+ */
 public class CoverallsProxyClient extends CoverallsClient {
 
+    /**
+     * Instantiates a new coveralls proxy client.
+     *
+     * @param coverallsUrl
+     *            the coveralls url
+     * @param proxy
+     *            the proxy
+     */
     public CoverallsProxyClient(final String coverallsUrl, final Proxy proxy) {
         super(coverallsUrl, new HttpClientFactory(coverallsUrl).proxy(proxy).create(), new ObjectMapper());
     }

@@ -30,10 +30,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
+/**
+ * The Class JobValidator.
+ */
 public class JobValidator {
 
+    /** The job. */
     private final Job job;
 
+    /**
+     * Instantiates a new job validator.
+     *
+     * @param job
+     *            the job
+     */
     public JobValidator(final Job job) {
         if (job == null) {
             throw new IllegalArgumentException("job must be defined");
@@ -41,6 +51,11 @@ public class JobValidator {
         this.job = job;
     }
 
+    /**
+     * Validate.
+     *
+     * @return the validation errors
+     */
     public ValidationErrors validate() {
         ValidationErrors errors = new ValidationErrors();
         errors.addAll(repoTokenOrTravis());
@@ -48,6 +63,11 @@ public class JobValidator {
         return errors;
     }
 
+    /**
+     * Repo token or travis.
+     *
+     * @return the list
+     */
     private List<ValidationError> repoTokenOrTravis() {
         if (hasValue(job.getRepoToken()) || (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId()))) {
             return Collections.emptyList();
@@ -57,6 +77,11 @@ public class JobValidator {
         return Collections.singletonList(new ValidationError(level, message));
     }
 
+    /**
+     * Git.
+     *
+     * @return the list
+     */
     private List<ValidationError> git() {
         if (job.getGit() == null || hasValue(job.getGit().getHead().getId())) {
             return Collections.emptyList();
@@ -64,6 +89,14 @@ public class JobValidator {
         return Collections.singletonList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));
     }
 
+    /**
+     * Checks for value.
+     *
+     * @param value
+     *            the value
+     *
+     * @return true, if successful
+     */
     private boolean hasValue(final String value) {
         return StringUtils.isNotBlank(value);
     }

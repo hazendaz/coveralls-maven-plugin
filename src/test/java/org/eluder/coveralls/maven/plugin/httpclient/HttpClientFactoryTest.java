@@ -42,22 +42,40 @@ import org.apache.maven.settings.Proxy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
+/**
+ * The Class HttpClientFactoryTest.
+ */
 class HttpClientFactoryTest {
 
+    /** The Constant PROXY_PORT. */
     static final int PROXY_PORT = 9797;
+
+    /** The Constant TARGET_PORT. */
     static final int TARGET_PORT = 9696;
+
+    /** The Constant TARGET_URL. */
     static final String TARGET_URL = "http://localhost:" + TARGET_PORT;
 
+    /** The target server. */
     @RegisterExtension
     static WireMockExtension targetServer = WireMockExtension.newInstance()
             .options(WireMockConfiguration.wireMockConfig().port(TARGET_PORT).dynamicHttpsPort())
             .configureStaticDsl(true).build();
 
+    /** The proxy server. */
     @RegisterExtension
     static WireMockExtension proxyServer = WireMockExtension.newInstance()
             .options(WireMockConfiguration.wireMockConfig().port(PROXY_PORT).dynamicHttpsPort())
             .configureStaticDsl(true).build();
 
+    /**
+     * Simple request.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *             the parse exception
+     */
     @Test
     void simpleRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
@@ -68,6 +86,14 @@ class HttpClientFactoryTest {
         assertEquals("Hello World!", body);
     }
 
+    /**
+     * Un authorized proxy request.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *             the parse exception
+     */
     @Test
     void unAuthorizedProxyRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
@@ -85,6 +111,14 @@ class HttpClientFactoryTest {
         assertEquals("Hello Proxy!", body);
     }
 
+    /**
+     * Authorixed proxy request.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *             the parse exception
+     */
     @Test
     void authorixedProxyRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
@@ -107,6 +141,14 @@ class HttpClientFactoryTest {
         assertEquals("Hello Proxy!", body);
     }
 
+    /**
+     * Non proxied host request.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ParseException
+     *             the parse exception
+     */
     @Test
     void nonProxiedHostRequest() throws IOException, ParseException {
         targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));

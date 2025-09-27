@@ -46,6 +46,9 @@ import org.apache.hc.core5.http.HttpStatus;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
+/**
+ * The Class CoverallsClient.
+ */
 public class CoverallsClient {
 
     static {
@@ -56,17 +59,41 @@ public class CoverallsClient {
         }
     }
 
+    /** The Constant FILE_NAME. */
     private static final String FILE_NAME = "coveralls.json";
+
+    /** The Constant MIME_TYPE. */
     private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", StandardCharsets.UTF_8);
 
+    /** The coveralls url. */
     private final String coverallsUrl;
+
+    /** The http client. */
     private final CloseableHttpClient httpClient;
+
+    /** The object mapper. */
     private final ObjectMapper objectMapper;
 
+    /**
+     * Instantiates a new coveralls client.
+     *
+     * @param coverallsUrl
+     *            the coveralls url
+     */
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
     }
 
+    /**
+     * Instantiates a new coveralls client.
+     *
+     * @param coverallsUrl
+     *            the coveralls url
+     * @param httpClient
+     *            the http client
+     * @param objectMapper
+     *            the object mapper
+     */
     public CoverallsClient(final String coverallsUrl, final CloseableHttpClient httpClient,
             final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
@@ -74,6 +101,19 @@ public class CoverallsClient {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * Submit.
+     *
+     * @param file
+     *            the file
+     *
+     * @return the coveralls response
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
         HttpEntity entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
                 .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
@@ -107,6 +147,16 @@ public class CoverallsClient {
         return result.response;
     }
 
+    /**
+     * Gets the response error message.
+     *
+     * @param response
+     *            the response
+     * @param message
+     *            the message
+     *
+     * @return the response error message
+     */
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
         int status = response.getCode();
         String reason = response.getReasonPhrase();
@@ -121,16 +171,42 @@ public class CoverallsClient {
         return errorMessage.toString();
     }
 
+    /**
+     * The Class SubmitResult.
+     */
     private static class SubmitResult {
+
+        /**
+         * The Enum ErrorType.
+         */
         enum ErrorType {
-            NONE, IO, PROCESSING
+
+            /** The none. */
+            NONE,
+            /** The io. */
+            IO,
+            /** The processing. */
+            PROCESSING
         }
 
+        /** The response. */
         final CoverallsResponse response;
+
+        /** The error message. */
         final String errorMessage;
+
+        /** The error cause. */
         final Throwable errorCause;
+
+        /** The error type. */
         final ErrorType errorType;
 
+        /**
+         * Instantiates a new submit result.
+         *
+         * @param response
+         *            the response
+         */
         SubmitResult(CoverallsResponse response) {
             this.response = response;
             this.errorMessage = null;
@@ -138,6 +214,14 @@ public class CoverallsClient {
             this.errorType = ErrorType.NONE;
         }
 
+        /**
+         * Instantiates a new submit result.
+         *
+         * @param errorMessage
+         *            the error message
+         * @param errorType
+         *            the error type
+         */
         SubmitResult(String errorMessage, ErrorType errorType) {
             this.response = null;
             this.errorMessage = errorMessage;
@@ -145,6 +229,16 @@ public class CoverallsClient {
             this.errorType = errorType;
         }
 
+        /**
+         * Instantiates a new submit result.
+         *
+         * @param errorMessage
+         *            the error message
+         * @param errorCause
+         *            the error cause
+         * @param errorType
+         *            the error type
+         */
         SubmitResult(String errorMessage, Throwable errorCause, ErrorType errorType) {
             this.response = null;
             this.errorMessage = errorMessage;
