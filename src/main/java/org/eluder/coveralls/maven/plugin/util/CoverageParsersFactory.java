@@ -44,31 +44,31 @@ import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 public class CoverageParsersFactory {
 
     /** The Constant JACOCO_FILE. */
-    private static final String JACOCO_FILE = "/jacoco.xml";
+    private static final String JACOCO_FILE = "jacoco.xml";
 
-    /** The Constant JACOCO_PREFIX. */
-    private static final String JACOCO_PREFIX = "/jacoco";
+    /** The Constant JACOCO_DIRECTORY. */
+    private static final String JACOCO_DIRECTORY = "jacoco";
 
-    /** The Constant JACOCO_IT_PREFIX. */
-    private static final String JACOCO_IT_PREFIX = "/jacoco-it";
+    /** The Constant JACOCO_IT_DIRECTORY. */
+    private static final String JACOCO_IT_DIRECTORY = "jacoco-it";
 
     /** The Constant COBERTURA_FILE. */
-    private static final String COBERTURA_FILE = "/coverage.xml";
+    private static final String COBERTURA_FILE = "coverage.xml";
 
-    /** The Constant COBERTURA_PREFIX. */
-    private static final String COBERTURA_PREFIX = "/cobertura";
+    /** The Constant COBERTURA_DIRECTORY. */
+    private static final String COBERTURA_DIRECTORY = "cobertura";
 
     /** The Constant CLOVER_FILE. */
-    private static final String CLOVER_FILE = "/clover.xml";
+    private static final String CLOVER_FILE = "clover.xml";
 
-    /** The Constant CLOVER_PREFIX. */
-    private static final String CLOVER_PREFIX = "/clover";
+    /** The Constant CLOVER_DIRECTORY. */
+    private static final String CLOVER_DIRECTORY = "clover";
 
     /** The Constant SAGA_FILE. */
-    private static final String SAGA_FILE = "/total-coverage.xml";
+    private static final String SAGA_FILE = "total-coverage.xml";
 
-    /** The Constant SAGA_PREFIX. */
-    private static final String SAGA_PREFIX = "/saga-coverage";
+    /** The Constant SAGA_DIRECTORY. */
+    private static final String SAGA_DIRECTORY = "saga-coverage";
 
     /** The project. */
     private final MavenProject project;
@@ -176,29 +176,29 @@ public class CoverageParsersFactory {
             Path reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
             Path buildDirectory = Path.of(p.getBuild().getDirectory());
 
-            jacocoFiles.add(Path.of(reportingDirectory.toString(), JACOCO_PREFIX + JACOCO_FILE).toFile());
-            jacocoFiles.add(Path.of(reportingDirectory.toString(), JACOCO_IT_PREFIX + JACOCO_FILE).toFile());
-            coberturaFiles.add(Path.of(reportingDirectory.toString(), COBERTURA_PREFIX + COBERTURA_FILE).toFile());
-            sagaFiles.add(Path.of(buildDirectory.toString(), SAGA_PREFIX + SAGA_FILE).toFile());
-            cloverFiles.add(Path.of(reportingDirectory.toString(), CLOVER_PREFIX + CLOVER_FILE).toFile());
+            jacocoFiles.add(reportingDirectory.resolve(JACOCO_DIRECTORY).resolve(JACOCO_FILE).toFile());
+            jacocoFiles.add(reportingDirectory.resolve(JACOCO_IT_DIRECTORY).resolve(JACOCO_FILE).toFile());
+            coberturaFiles.add(reportingDirectory.resolve(COBERTURA_DIRECTORY).resolve(COBERTURA_FILE).toFile());
+            sagaFiles.add(buildDirectory.resolve(SAGA_DIRECTORY).resolve(SAGA_FILE).toFile());
+            cloverFiles.add(reportingDirectory.resolve(CLOVER_DIRECTORY).resolve(CLOVER_FILE).toFile());
 
             if (relativeReportDirs != null) {
                 for (String relativeReportPath : relativeReportDirs) {
                     Path relativeReportingDirectory = reportingDirectory;
                     Path relativeBuildDirectory = buildDirectory;
                     if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
-                        relativeReportingDirectory = Path.of(reportingDirectory.toString(), relativeReportPath);
-                        relativeBuildDirectory = Path.of(buildDirectory.toString(), relativeReportPath);
+                        relativeReportingDirectory = reportingDirectory.resolve(relativeReportPath);
+                        relativeBuildDirectory = buildDirectory.resolve(relativeReportPath);
                     }
 
-                    jacocoFiles.add(Path.of(relativeReportingDirectory.toString(), JACOCO_FILE).toFile());
-                    jacocoFiles.add(Path.of(relativeBuildDirectory.toString(), JACOCO_FILE).toFile());
-                    coberturaFiles.add(Path.of(relativeReportingDirectory.toString(), COBERTURA_FILE).toFile());
-                    coberturaFiles.add(Path.of(relativeBuildDirectory.toString(), COBERTURA_FILE).toFile());
-                    sagaFiles.add(Path.of(relativeReportingDirectory.toString(), SAGA_FILE).toFile());
-                    sagaFiles.add(Path.of(relativeBuildDirectory.toString(), SAGA_FILE).toFile());
-                    cloverFiles.add(Path.of(relativeReportingDirectory.toString(), CLOVER_FILE).toFile());
-                    cloverFiles.add(Path.of(relativeBuildDirectory.toString(), CLOVER_FILE).toFile());
+                    jacocoFiles.add(relativeReportingDirectory.resolve(JACOCO_FILE).toFile());
+                    jacocoFiles.add(relativeBuildDirectory.resolve(JACOCO_FILE).toFile());
+                    coberturaFiles.add(relativeReportingDirectory.resolve(COBERTURA_FILE).toFile());
+                    coberturaFiles.add(relativeBuildDirectory.resolve(COBERTURA_FILE).toFile());
+                    sagaFiles.add(relativeReportingDirectory.resolve(SAGA_FILE).toFile());
+                    sagaFiles.add(relativeBuildDirectory.resolve(SAGA_FILE).toFile());
+                    cloverFiles.add(relativeReportingDirectory.resolve(CLOVER_FILE).toFile());
+                    cloverFiles.add(relativeBuildDirectory.resolve(CLOVER_FILE).toFile());
                 }
             }
         }
