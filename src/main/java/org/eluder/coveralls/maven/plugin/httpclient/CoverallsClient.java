@@ -39,7 +39,6 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpResponse;
@@ -80,27 +79,32 @@ public class CoverallsClient {
                 .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
         HttpPost post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
-        CloseableHttpResponse response = httpClient.execute(post);
-        return parseResponse(response);
-    }
-
-    private CoverallsResponse parseResponse(final CloseableHttpResponse response)
-            throws ProcessingException, IOException {
-        HttpEntity entity = response.getEntity();
-        if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-            throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
-        }
-
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8))) {
-            CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
-            if (cr.isError()) {
-                throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
+        SubmitResult result = httpClient.execute(post, response -> {
+            HttpEntity responseEntity = response.getEntity();
+            if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+                return new SubmitResult(getResponseErrorMessage(response, "Coveralls API internal error"),
+                        SubmitResult.ErrorType.IO);
             }
-            return cr;
-        } catch (JsonProcessingException ex) {
-            throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);
+
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(responseEntity.getContent(), StandardCharsets.UTF_8))) {
+                CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
+                if (cr.isError()) {
+                    return new SubmitResult(getResponseErrorMessage(response, cr.getMessage()),
+                            SubmitResult.ErrorType.PROCESSING);
+                }
+                return new SubmitResult(cr);
+            } catch (JsonProcessingException ex) {
+                return new SubmitResult(getResponseErrorMessage(response, ex.getMessage()), ex,
+                        SubmitResult.ErrorType.PROCESSING);
+            }
+        });
+        if (result.errorType == SubmitResult.ErrorType.PROCESSING) {
+            throw new ProcessingException(result.errorMessage, result.errorCause);
+        } else if (result.errorType == SubmitResult.ErrorType.IO) {
+            throw new IOException(result.errorMessage);
         }
+        return result.response;
     }
 
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
@@ -116,4 +120,37 @@ public class CoverallsClient {
         }
         return errorMessage.toString();
     }
+
+    private static class SubmitResult {
+        enum ErrorType {
+            NONE, IO, PROCESSING
+        }
+
+        final CoverallsResponse response;
+        final String errorMessage;
+        final Throwable errorCause;
+        final ErrorType errorType;
+
+        SubmitResult(CoverallsResponse response) {
+            this.response = response;
+            this.errorMessage = null;
+            this.errorCause = null;
+            this.errorType = ErrorType.NONE;
+        }
+
+        SubmitResult(String errorMessage, ErrorType errorType) {
+            this.response = null;
+            this.errorMessage = errorMessage;
+            this.errorCause = null;
+            this.errorType = errorType;
+        }
+
+        SubmitResult(String errorMessage, Throwable errorCause, ErrorType errorType) {
+            this.response = null;
+            this.errorMessage = errorMessage;
+            this.errorCause = errorCause;
+            this.errorType = errorType;
+        }
+    }
+
 }
