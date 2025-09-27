@@ -203,18 +203,11 @@ public class CoverageParsersFactory {
             }
         }
 
-        for (File jacocoFile : jacocoFiles) {
-            parsers.add(new JaCoCoParser(jacocoFile, sourceLoader));
-        }
-        for (File coberturaFile : coberturaFiles) {
-            parsers.add(new CoberturaParser(coberturaFile, sourceLoader));
-        }
-        for (File sagaFile : sagaFiles) {
-            parsers.add(new SagaParser(sagaFile, sourceLoader));
-        }
-        for (File cloverFile : cloverFiles) {
-            parsers.add(new CloverParser(cloverFile, sourceLoader));
-        }
+        // Use ExistingFiles.toParsers to create parser instances
+        parsers.addAll(jacocoFiles.toParsers(file -> new JaCoCoParser(file, sourceLoader)));
+        parsers.addAll(coberturaFiles.toParsers(file -> new CoberturaParser(file, sourceLoader)));
+        parsers.addAll(sagaFiles.toParsers(file -> new SagaParser(file, sourceLoader)));
+        parsers.addAll(cloverFiles.toParsers(file -> new CloverParser(file, sourceLoader)));
 
         if (parsers.isEmpty()) {
             throw new IOException("No coverage report files found");
@@ -222,4 +215,5 @@ public class CoverageParsersFactory {
 
         return Collections.unmodifiableList(parsers);
     }
+
 }

@@ -26,6 +26,10 @@ package org.eluder.coveralls.maven.plugin.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
+
+import org.eluder.coveralls.maven.plugin.CoverageParser;
 
 /**
  * The Class ExistingFiles.
@@ -90,5 +94,21 @@ public class ExistingFiles implements Iterable<File> {
             existingFiles.addAll(files);
         }
         return existingFiles;
+    }
+
+    /**
+     * Converts existing files to a list of CoverageParser using the provided function.
+     *
+     * @param parserFunction
+     *            function to convert File to CoverageParser
+     *
+     * @return list of CoverageParser for valid files
+     */
+    public List<CoverageParser> toParsers(Function<File, CoverageParser> parserFunction) {
+        List<CoverageParser> parsers = new ArrayList<>();
+        for (File file : delegate) {
+            parsers.add(parserFunction.apply(file));
+        }
+        return parsers;
     }
 }
