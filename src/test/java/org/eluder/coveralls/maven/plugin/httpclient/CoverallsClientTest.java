@@ -23,6 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -118,7 +119,9 @@ class CoverallsClientTest {
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
         var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
-        client.submit(file);
+        assertDoesNotThrow(() -> {
+            client.submit(file);
+        });
     }
 
     /**
