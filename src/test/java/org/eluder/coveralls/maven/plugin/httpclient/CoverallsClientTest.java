@@ -93,7 +93,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void failOnServiceError() throws ClientProtocolException, IOException {
+    void failOnServiceError() throws IOException {
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getCode()).thenReturn(500);
         when(httpResponseMock.getReasonPhrase()).thenReturn("Internal Error");
@@ -104,7 +104,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void parseInvalidResponse() throws ClientProtocolException, IOException {
+    void parseInvalidResponse() throws IOException {
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getCode()).thenReturn(200);
         when(httpResponseMock.getReasonPhrase()).thenReturn("OK");
@@ -132,7 +132,7 @@ class CoverallsClientTest {
     }
 
     @Test
-    void parseFailingEntity() throws ClientProtocolException, IOException {
+    void parseFailingEntity() throws IOException {
         when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
         when(httpResponseMock.getCode()).thenReturn(200);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
