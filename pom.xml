@@ -403,6 +403,7 @@
 
                 <!-- Java 11 plugins and enhancements -->
                 <error-prone.version>2.31.0</error-prone.version>
+                <hibernate-validator.version>8.0.3.Final</hibernate-validator.version>
             </properties>
         </profile>
     </profiles>
