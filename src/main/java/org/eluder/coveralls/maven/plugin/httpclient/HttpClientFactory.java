@@ -23,8 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
-import java.time.Duration;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.auth.AuthScope;
 import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
@@ -44,10 +42,10 @@ import org.eluder.coveralls.maven.plugin.util.Wildcards;
 class HttpClientFactory {
 
     /** The Constant DEFAULT_CONNECTION_REQUEST_TIMEOUT. */
-    private static final Timeout DEFAULT_CONNECTION_REQUEST_TIMEOUT = Timeout.of(Duration.ofSeconds(10));
+    private static final Timeout DEFAULT_CONNECTION_REQUEST_TIMEOUT = Timeout.ofSeconds(10);
 
     /** The Constant DEFAULT_SOCKET_TIMEOUT. */
-    private static final Timeout DEFAULT_SOCKET_TIMEOUT = Timeout.of(Duration.ofSeconds(60));
+    private static final Timeout DEFAULT_SOCKET_TIMEOUT = Timeout.ofSeconds(60);
 
     /** The target url. */
     private final String targetUrl;
