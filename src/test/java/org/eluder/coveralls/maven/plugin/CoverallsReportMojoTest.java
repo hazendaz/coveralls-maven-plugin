@@ -237,7 +237,8 @@ class CoverallsReportMojoTest {
     }
 
     @Test
-    void successfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void successfulSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException,
+            InterruptedException {
         when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         var json = TestIoUtil.readFileContent(coverallsFile);
@@ -248,11 +249,12 @@ class CoverallsReportMojoTest {
             assertTrue(json.contains(coverageFile[0]));
         }
 
-        verifySuccessfullSubmit(logMock, fixture);
+        verifySuccessfulSubmit(logMock, fixture);
     }
 
     @Test
-    void failWithProcessingException() throws ProcessingException, IOException, MojoExecutionException {
+    void failWithProcessingException()
+            throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
             mojo.execute();
@@ -264,7 +266,7 @@ class CoverallsReportMojoTest {
 
     @Test
     void processingExceptionWithAllowedServiceFailure()
-            throws ProcessingException, IOException, MojoExecutionException {
+            throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
         try {
@@ -276,7 +278,7 @@ class CoverallsReportMojoTest {
     }
 
     @Test
-    void failWithIOException() throws ProcessingException, IOException, MojoExecutionException {
+    void failWithIOException() throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         try {
             mojo.execute();
@@ -287,8 +289,8 @@ class CoverallsReportMojoTest {
     }
 
     @Test
-    void iOExceptionWithAllowedServiceFailure()
-            throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void iOExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException,
+            MojoFailureException, InterruptedException {
         mojo.failOnServiceError = false;
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
         mojo.execute();
@@ -296,7 +298,8 @@ class CoverallsReportMojoTest {
     }
 
     @Test
-    void failWithNullPointerException() throws ProcessingException, IOException, MojoFailureException {
+    void failWithNullPointerException()
+            throws ProcessingException, IOException, MojoFailureException, InterruptedException {
         when(coverallsClientMock.submit(any(File.class))).thenThrow(new NullPointerException());
         try {
             mojo.execute();
@@ -314,7 +317,7 @@ class CoverallsReportMojoTest {
         verifyNoInteractions(jobMock);
     }
 
-    static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
+    static void verifySuccessfulSubmit(Log logMock, String[][] fixture) {
         verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                 + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");

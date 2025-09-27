@@ -26,24 +26,22 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.hc.client5.http.ClientProtocolException;
-import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.core5.http.HttpEntity;
+import org.apache.commons.io.IOUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,18 +56,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class CoverallsClientTest {
 
     @Mock
-    CloseableHttpClient httpClientMock;
+    private HttpClient httpClientMock;
 
     @Mock
-    CloseableHttpResponse httpResponseMock;
-
-    @Mock
-    HttpEntity httpEntityMock;
+    private HttpResponse<InputStream> httpResponseMock;
 
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
-    Path folder;
+    private Path folder;
 
-    File file;
+    private File file;
 
     @BeforeEach
     void init() throws IOException {
@@ -83,67 +78,59 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testSubmit() throws UnsupportedOperationException, Exception {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
-        when(httpResponseMock.getCode()).thenReturn(200);
-        when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
+    void testSubmit() throws Exception {
+        when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        when(httpResponseMock.statusCode()).thenReturn(200);
+        when(httpResponseMock.body()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
         var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
         client.submit(file);
     }
 
     @Test
-    void failOnServiceError() throws ClientProtocolException, IOException {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
-        when(httpResponseMock.getCode()).thenReturn(500);
-        when(httpResponseMock.getReasonPhrase()).thenReturn("Internal Error");
+    void failOnServiceError() throws Exception {
+        when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        when(httpResponseMock.statusCode()).thenReturn(500);
         var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
-        assertThrows(IOException.class, () -> {
-            client.submit(file);
-        });
+        assertThrows(IOException.class, () -> client.submit(file));
     }
 
     @Test
-    void parseInvalidResponse() throws ClientProtocolException, IOException {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
-        when(httpResponseMock.getCode()).thenReturn(200);
-        when(httpResponseMock.getReasonPhrase()).thenReturn("OK");
-        when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        when(httpEntityMock.getContent())
-                .thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
+    void parseInvalidResponse() throws Exception {
+        when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        when(httpResponseMock.statusCode()).thenReturn(200);
+        when(httpResponseMock.body()).thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
         var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
-        assertThrows(ProcessingException.class, () -> {
-            client.submit(file);
-        });
+        assertThrows(ProcessingException.class, () -> client.submit(file));
     }
 
     @Test
-    void parseErrorousResponse() throws UnsupportedOperationException, Exception {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
-        when(httpResponseMock.getCode()).thenReturn(400);
-        when(httpResponseMock.getReasonPhrase()).thenReturn("Bad Request");
-        when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        when(httpEntityMock.getContent())
+    void parseErrorousResponse() throws Exception {
+        when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        when(httpResponseMock.statusCode()).thenReturn(400);
+        when(httpResponseMock.body())
                 .thenReturn(coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
         var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
-        assertThrows(ProcessingException.class, () -> {
-            client.submit(file);
-        });
+        assertThrows(ProcessingException.class, () -> client.submit(file));
     }
 
     @Test
-    void parseFailingEntity() throws ClientProtocolException, IOException {
-        when(httpClientMock.execute(any(HttpUriRequest.class))).thenReturn(httpResponseMock);
-        when(httpResponseMock.getCode()).thenReturn(200);
-        when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
-        when(httpEntityMock.getContent()).thenThrow(IOException.class);
-        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
-        assertThrows(IOException.class, () -> {
-            client.submit(file);
-        });
+    void parseFailingEntity() throws Exception {
+        when(httpClientMock.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
+                .thenReturn(httpResponseMock);
+        when(httpResponseMock.statusCode()).thenReturn(200);
+        when(httpResponseMock.body()).thenReturn(IOUtils.toInputStream("{}", StandardCharsets.UTF_8));
+        final ObjectMapper mockMapper = mock(ObjectMapper.class); // Jackson's object mapper can potentially throw
+                                                                  // exception
+        when(mockMapper.readValue(any(BufferedReader.class), eq(CoverallsResponse.class))).thenThrow(IOException.class);
+        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, mockMapper);
+        assertThrows(ProcessingException.class, () -> client.submit(file));
     }
 
-    InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
+    private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
         var content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }
