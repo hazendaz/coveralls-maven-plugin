@@ -43,8 +43,8 @@ import org.eluder.coveralls.maven.plugin.util.Wildcards;
  */
 class HttpClientFactory {
 
-    /** The Constant DEFAULT_CONNECTION_TIMEOUT. */
-    private static final Timeout DEFAULT_CONNECTION_TIMEOUT = Timeout.of(Duration.ofSeconds(10));
+    /** The Constant DEFAULT_CONNECTION_REQUEST_TIMEOUT. */
+    private static final Timeout DEFAULT_CONNECTION_REQUEST_TIMEOUT = Timeout.of(Duration.ofSeconds(10));
 
     /** The Constant DEFAULT_SOCKET_TIMEOUT. */
     private static final Timeout DEFAULT_SOCKET_TIMEOUT = Timeout.of(Duration.ofSeconds(60));
@@ -56,8 +56,8 @@ class HttpClientFactory {
     private final HttpClientBuilder hcb = HttpClientBuilder.create();
 
     /** The rcb. */
-    private final RequestConfig.Builder rcb = RequestConfig.custom().setConnectTimeout(DEFAULT_CONNECTION_TIMEOUT)
-            .setResponseTimeout(DEFAULT_SOCKET_TIMEOUT);
+    private final RequestConfig.Builder rcb = RequestConfig.custom()
+            .setConnectionRequestTimeout(DEFAULT_CONNECTION_REQUEST_TIMEOUT).setResponseTimeout(DEFAULT_SOCKET_TIMEOUT);
 
     /**
      * Instantiates a new http client factory.
