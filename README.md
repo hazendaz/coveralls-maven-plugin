@@ -21,7 +21,7 @@ To build
 
 To run
 
-* java 11 for 4.8.0 onwards.
+* java 11 for 5.0.0 onwards.
 * Maven 3.6.3 or newer.
 
 
@@ -51,7 +51,7 @@ Set up the Coveralls maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>com.github.hazendaz.maven</groupId>
     <artifactId>coveralls-maven-plugin</artifactId>
-    <version>4.7.0</version>
+    <version>5.0.0</version>
     <configuration>
         <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
     </configuration>
@@ -282,7 +282,7 @@ service environment will not override it.
 | `branch` | `String` | Git branch name. If not provided the supported service environments are used. |
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
 | `timestampFormat` | `String` | **Default: ${maven.build.timestamp}**<br>Build timestamp format. Must be in format supported by DateTimeFormatter. |
-| `timestamp` | `String` | **Default: ${timestamp}**<br>Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in default timestamp format yyyy-MM-dd'T'HH:mm:ss'Z'. |
+| `timestamp` | `String` | **Default: ${timestamp}**<br>Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in default timestamp format yyyy-MM-dd'T'HH:mm:ssX. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `failOnServiceError` | `boolean` | **Default: true**<br> Fail build if Coveralls service is not available or submission fails for internal errors. |
 | `scanForSources` | `boolean` | **Default: false**<br>Scan subdirectories for source files. |
@@ -372,10 +372,11 @@ See [releases](https://github.com/hazendaz/coveralls-maven-plugin/releases) for 
 * For Java 6 support up to 3.x versions
 * For Java 7 support in 4.x to 4.3 versions.
 * Version 4.4 not released but was set to require java 8 from original codeline
-* Version 4.4.1 was released on a fork still requring java 7 from https://github.com/jwtk/coveralls-maven-plugin which was work to release from https://github.com/dogeared/coveralls-maven-plugin
+* Version 4.4.1 was released on a fork still requiring java 7 from https://github.com/jwtk/coveralls-maven-plugin which was work to release from https://github.com/dogeared/coveralls-maven-plugin
 * Version 4.5.0 requires java 8.
 * Version 4.6.0 requires java 11.
 * Version 4.7.0 requires java 17.
+* Version 5.0.0 restored java 11, dropped jgit to 6.x, full java 8 time usage (no legacy), modernized httpclient logic, finalized clover support
 
 
 ### Migration
@@ -394,9 +395,9 @@ See [migration](MIGRATION.md) documentation for more information.
 
 ### Continuous integration
 
-Github CI builds the plugin with Oracle JDK 17+. All successfully built snapshots are deployed to
+Github CI builds the plugin with JDK 17+. All successfully built snapshots are deployed to
 Sonatype OSS repository. Jacoco is used to gather coverage metrics and the report is submitted
-to Coveralls with this plugin.
+to Coveralls with this plugin.  Project master runs the current master head on all builds to coveralls.
 
 
 ### Using test versions

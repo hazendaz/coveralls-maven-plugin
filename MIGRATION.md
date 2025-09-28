@@ -3,6 +3,10 @@
 Changes marked with bold affect the plugin usage. Other changes are only related to development
 and codebase.
 
+## 5.x
+
+- Any date formats must follow java time apis.
+
 
 ## 2.x to 3.x
 
