@@ -87,8 +87,8 @@ public class GitHub extends AbstractServiceSetup {
 
     @Override
     public String getBuildUrl() {
-        return String.format("%s/%s/actions/runs/%s", getProperty(GitHub.GITHUB_SERVER_URL), getProperty(GitHub.GITHUB_REPOSITORY),
-                getProperty(GitHub.GITHUB_RUN_ID));
+        return String.format("%s/%s/actions/runs/%s", getProperty(GitHub.GITHUB_SERVER_URL),
+                getProperty(GitHub.GITHUB_REPOSITORY), getProperty(GitHub.GITHUB_RUN_ID));
     }
 
     @Override

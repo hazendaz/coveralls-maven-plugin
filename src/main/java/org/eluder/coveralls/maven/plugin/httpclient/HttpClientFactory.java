@@ -55,7 +55,8 @@ class HttpClientFactory {
 
     /** The rcb. */
     private final RequestConfig.Builder rcb = RequestConfig.custom()
-            .setConnectionRequestTimeout(HttpClientFactory.DEFAULT_CONNECTION_REQUEST_TIMEOUT).setResponseTimeout(HttpClientFactory.DEFAULT_SOCKET_TIMEOUT);
+            .setConnectionRequestTimeout(HttpClientFactory.DEFAULT_CONNECTION_REQUEST_TIMEOUT)
+            .setResponseTimeout(HttpClientFactory.DEFAULT_SOCKET_TIMEOUT);
 
     /**
      * Instantiates a new http client factory.

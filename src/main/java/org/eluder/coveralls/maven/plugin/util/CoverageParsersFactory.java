@@ -189,12 +189,18 @@ public class CoverageParsersFactory {
             final var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
             final var buildDirectory = Path.of(p.getBuild().getDirectory());
 
-            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_DIRECTORY).resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
-            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_IT_DIRECTORY).resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
-            coberturaFiles.add(reportingDirectory.resolve(CoverageParsersFactory.COBERTURA_DIRECTORY).resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
-            sagaFiles.add(buildDirectory.resolve(CoverageParsersFactory.SAGA_DIRECTORY).resolve(CoverageParsersFactory.SAGA_FILE).toFile());
-            cloverFiles.add(reportingDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY).resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
-            cloverFiles.add(buildDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY).resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
+            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_DIRECTORY)
+                    .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_IT_DIRECTORY)
+                    .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+            coberturaFiles.add(reportingDirectory.resolve(CoverageParsersFactory.COBERTURA_DIRECTORY)
+                    .resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
+            sagaFiles.add(buildDirectory.resolve(CoverageParsersFactory.SAGA_DIRECTORY)
+                    .resolve(CoverageParsersFactory.SAGA_FILE).toFile());
+            cloverFiles.add(reportingDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY)
+                    .resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
+            cloverFiles.add(buildDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY)
+                    .resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
 
             if (relativeReportDirs != null) {
                 for (final String relativeReportPath : relativeReportDirs) {
@@ -207,7 +213,8 @@ public class CoverageParsersFactory {
 
                     jacocoFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
                     jacocoFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
-                    coberturaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
+                    coberturaFiles
+                            .add(relativeReportingDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
                     coberturaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
                     sagaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
                     sagaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
