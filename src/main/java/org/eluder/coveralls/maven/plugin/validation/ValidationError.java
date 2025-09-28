@@ -32,7 +32,6 @@ public final class ValidationError {
      * The Enum Level.
      */
     public enum Level {
-
         /** The warn. */
         WARN,
         /** The error. */

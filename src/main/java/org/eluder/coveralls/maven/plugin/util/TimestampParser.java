@@ -103,7 +103,7 @@ public class TimestampParser {
          * @throws Exception
          *             the exception
          */
-        Instant parse(String timestamp) throws Exception;
+        Instant parse(String timestamp) throws ParseException;
     }
 
     /**
