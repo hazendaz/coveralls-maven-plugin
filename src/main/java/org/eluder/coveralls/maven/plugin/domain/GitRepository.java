@@ -61,10 +61,10 @@ public class GitRepository {
      *             Signals that an I/O exception has occurred.
      */
     public Git load() throws IOException {
-        try (var repository = new RepositoryBuilder().findGitDir(sourceDirectory).build()) {
-            var head = getHead(repository);
-            var branch = getBranch(repository);
-            var remotes = getRemotes(repository);
+        try (var repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {
+            final var head = getHead(repository);
+            final var branch = getBranch(repository);
+            final var remotes = getRemotes(repository);
             return new Git(repository.getWorkTree(), head, branch, remotes);
         }
     }
@@ -83,8 +83,8 @@ public class GitRepository {
     // Resource is closed in load()
     @SuppressWarnings("resource")
     private Git.Head getHead(final Repository repository) throws IOException {
-        var revision = repository.resolve(Constants.HEAD);
-        var commit = new RevWalk(repository).parseCommit(revision);
+        final var revision = repository.resolve(Constants.HEAD);
+        final var commit = new RevWalk(repository).parseCommit(revision);
         return new Git.Head(revision.getName(), commit.getAuthorIdent().getName(),
                 commit.getAuthorIdent().getEmailAddress(), commit.getCommitterIdent().getName(),
                 commit.getCommitterIdent().getEmailAddress(), commit.getFullMessage());
@@ -114,10 +114,10 @@ public class GitRepository {
      * @return the remotes
      */
     private List<Git.Remote> getRemotes(final Repository repository) {
-        Config config = repository.getConfig();
-        List<Git.Remote> remotes = new ArrayList<>();
-        for (String remote : config.getSubsections("remote")) {
-            var url = config.getString("remote", remote, "url");
+        final Config config = repository.getConfig();
+        final List<Git.Remote> remotes = new ArrayList<>();
+        for (final String remote : config.getSubsections("remote")) {
+            final var url = config.getString("remote", remote, "url");
             remotes.add(new Git.Remote(remote, url));
         }
         return remotes;

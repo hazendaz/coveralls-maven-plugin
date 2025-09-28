@@ -51,7 +51,7 @@ public class ExistingFiles implements Iterable<File> {
         if (files == null) {
             throw new NullPointerException("Files must be defined");
         }
-        for (File file : files) {
+        for (final File file : files) {
             add(file);
         }
         return this;
@@ -89,7 +89,7 @@ public class ExistingFiles implements Iterable<File> {
      * @return the existing files
      */
     public static ExistingFiles create(final Iterable<File> files) {
-        var existingFiles = new ExistingFiles();
+        final var existingFiles = new ExistingFiles();
         if (files != null) {
             existingFiles.addAll(files);
         }
@@ -105,8 +105,8 @@ public class ExistingFiles implements Iterable<File> {
      * @return list of CoverageParser for valid files
      */
     public List<CoverageParser> toParsers(Function<File, CoverageParser> parserFunction) {
-        List<CoverageParser> parsers = new ArrayList<>();
-        for (File file : delegate) {
+        final List<CoverageParser> parsers = new ArrayList<>();
+        for (final File file : delegate) {
             parsers.add(parserFunction.apply(file));
         }
         return parsers;

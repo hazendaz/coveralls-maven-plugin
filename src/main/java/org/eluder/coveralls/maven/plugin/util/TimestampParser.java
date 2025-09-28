@@ -56,14 +56,14 @@ public class TimestampParser {
      */
     public TimestampParser(final String format) {
         try {
-            if (EPOCH_MILLIS.equalsIgnoreCase(format)) {
+            if (TimestampParser.EPOCH_MILLIS.equalsIgnoreCase(format)) {
                 this.parser = new EpochMillisParser();
             } else if (format != null && !format.isBlank()) {
                 this.parser = new DateTimeFormatterParser(format);
             } else {
-                this.parser = new DateTimeFormatterParser(DEFAULT_FORMAT);
+                this.parser = new DateTimeFormatterParser(TimestampParser.DEFAULT_FORMAT);
             }
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             throw new IllegalArgumentException("Invalid timestamp format \"" + format + "\"", ex);
         }
     }
@@ -85,7 +85,7 @@ public class TimestampParser {
         }
         try {
             return parser.parse(timestamp);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new ProcessingException("Unable to parse timestamp \"" + timestamp + "\"", ex);
         }
     }
@@ -140,16 +140,16 @@ public class TimestampParser {
             if (hasZone) {
                 try {
                     return ZonedDateTime.parse(timestamp, formatter).toInstant();
-                } catch (DateTimeParseException ex) {
+                } catch (final DateTimeParseException ex) {
                     return OffsetDateTime.parse(timestamp, formatter).toInstant();
                 }
-            } else if (dateOnly) {
+            }
+            if (dateOnly) {
                 // Parse as LocalDate and set time to midnight UTC
                 return LocalDate.parse(timestamp, formatter).atStartOfDay(ZoneOffset.UTC).toInstant();
-            } else {
-                // Parse as LocalDateTime and assume UTC
-                return LocalDateTime.parse(timestamp, formatter).toInstant(ZoneOffset.UTC);
             }
+            // Parse as LocalDateTime and assume UTC
+            return LocalDateTime.parse(timestamp, formatter).toInstant(ZoneOffset.UTC);
         }
     }
 

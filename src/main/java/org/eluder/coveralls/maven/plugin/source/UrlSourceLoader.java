@@ -55,11 +55,11 @@ public class UrlSourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        var url = new URL(sourceUrl, sourceFile);
+        final var url = new URL(sourceUrl, sourceFile);
         // Checkstyle OFF: EmptyBlock
         try {
             return url.openStream();
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             // not found from url
         }
         // Checkstyle ON: EmptyBlock

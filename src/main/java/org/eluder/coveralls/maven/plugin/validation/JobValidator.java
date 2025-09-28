@@ -56,7 +56,7 @@ public class JobValidator {
      * @return the validation errors
      */
     public ValidationErrors validate() {
-        var errors = new ValidationErrors();
+        final var errors = new ValidationErrors();
         errors.addAll(repoTokenOrTravis());
         errors.addAll(git());
         return errors;
@@ -71,8 +71,8 @@ public class JobValidator {
         if (hasValue(job.getRepoToken()) || (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId()))) {
             return Collections.emptyList();
         }
-        var level = job.isDryRun() ? Level.WARN : Level.ERROR;
-        var message = "Either repository token or service with job id must be defined";
+        final var level = job.isDryRun() ? Level.WARN : Level.ERROR;
+        final var message = "Either repository token or service with job id must be defined";
         return Collections.singletonList(new ValidationError(level, message));
     }
 

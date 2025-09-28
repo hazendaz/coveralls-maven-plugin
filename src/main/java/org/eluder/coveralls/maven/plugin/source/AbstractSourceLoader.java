@@ -59,12 +59,12 @@ public abstract class AbstractSourceLoader implements SourceLoader {
 
     @Override
     public Source load(final String sourceFile) throws IOException {
-        var stream = locate(sourceFile);
+        final var stream = locate(sourceFile);
         if (stream == null) {
             return null;
         }
         try (var ds = new Sha512DigestInputStream(stream)) {
-            var source = new String(ds.readAllBytes(), getSourceEncoding());
+            final var source = new String(ds.readAllBytes(), getSourceEncoding());
             return new Source(getFileName(sourceFile), source, ds.getDigestHex());
         }
     }

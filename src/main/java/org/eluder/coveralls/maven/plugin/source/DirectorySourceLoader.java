@@ -56,7 +56,7 @@ public class DirectorySourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        var path = Path.of(sourceDirectory.toString(), sourceFile);
+        final var path = Path.of(sourceDirectory.toString(), sourceFile);
         if (Files.exists(path)) {
             if (!Files.isRegularFile(path)) {
                 throw new IllegalArgumentException(path.toAbsolutePath() + " is not file");

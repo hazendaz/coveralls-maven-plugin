@@ -63,36 +63,36 @@ public class Jenkins extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return getProperty(JENKINS_URL) != null;
+        return getProperty(Jenkins.JENKINS_URL) != null;
     }
 
     @Override
     public String getName() {
-        return JENKINS_NAME;
+        return Jenkins.JENKINS_NAME;
     }
 
     @Override
     public String getBuildNumber() {
-        return getProperty(JENKINS_BUILD_NUMBER);
+        return getProperty(Jenkins.JENKINS_BUILD_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return getProperty(JENKINS_BUILD_URL);
+        return getProperty(Jenkins.JENKINS_BUILD_URL);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(JENKINS_BRANCH);
+        return getProperty(Jenkins.JENKINS_BRANCH);
     }
 
     @Override
     public Properties getEnvironment() {
-        Properties environment = new Properties();
-        addProperty(environment, "jenkins_build_num", getProperty(JENKINS_BUILD_NUMBER));
-        addProperty(environment, "jenkins_build_url", getProperty(JENKINS_BUILD_URL));
-        addProperty(environment, "branch", getProperty(JENKINS_BRANCH));
-        addProperty(environment, "commit_sha", getProperty(JENKINS_COMMIT));
+        final var environment = new Properties();
+        addProperty(environment, "jenkins_build_num", getProperty(Jenkins.JENKINS_BUILD_NUMBER));
+        addProperty(environment, "jenkins_build_url", getProperty(Jenkins.JENKINS_BUILD_URL));
+        addProperty(environment, "branch", getProperty(Jenkins.JENKINS_BRANCH));
+        addProperty(environment, "commit_sha", getProperty(Jenkins.JENKINS_COMMIT));
         return environment;
     }
 }

@@ -24,7 +24,6 @@
 package org.eluder.coveralls.maven.plugin.service;
 
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -68,33 +67,33 @@ public class GitHub extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(GITHUB_ACTIONS));
+        return Boolean.parseBoolean(getProperty(GitHub.GITHUB_ACTIONS));
     }
 
     @Override
     public String getName() {
-        return GITHUB;
+        return GitHub.GITHUB;
     }
 
     @Override
     public String getJobId() {
-        return getProperty(GITHUB_RUN_ID);
+        return getProperty(GitHub.GITHUB_RUN_ID);
     }
 
     @Override
     public String getBuildNumber() {
-        return getProperty(GITHUB_RUN_NUMBER);
+        return getProperty(GitHub.GITHUB_RUN_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return String.format("%s/%s/actions/runs/%s", getProperty(GITHUB_SERVER_URL), getProperty(GITHUB_REPOSITORY),
-                getProperty(GITHUB_RUN_ID));
+        return String.format("%s/%s/actions/runs/%s", getProperty(GitHub.GITHUB_SERVER_URL), getProperty(GitHub.GITHUB_REPOSITORY),
+                getProperty(GitHub.GITHUB_RUN_ID));
     }
 
     @Override
     public String getPullRequest() {
-        Matcher matcher = GITHUB_PR.matcher(getProperty(GITHUB_REF_NAME));
+        final var matcher = GitHub.GITHUB_PR.matcher(getProperty(GitHub.GITHUB_REF_NAME));
         return matcher.matches() ? matcher.group(1) : null;
     }
 }

@@ -60,7 +60,7 @@ public final class UrlUtils {
     public static URI toUri(final URL url) {
         try {
             return url.toURI();
-        } catch (URISyntaxException ex) {
+        } catch (final URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
     }

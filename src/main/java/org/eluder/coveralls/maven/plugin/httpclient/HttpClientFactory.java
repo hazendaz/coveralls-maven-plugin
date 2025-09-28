@@ -55,7 +55,7 @@ class HttpClientFactory {
 
     /** The rcb. */
     private final RequestConfig.Builder rcb = RequestConfig.custom()
-            .setConnectionRequestTimeout(DEFAULT_CONNECTION_REQUEST_TIMEOUT).setResponseTimeout(DEFAULT_SOCKET_TIMEOUT);
+            .setConnectionRequestTimeout(HttpClientFactory.DEFAULT_CONNECTION_REQUEST_TIMEOUT).setResponseTimeout(HttpClientFactory.DEFAULT_SOCKET_TIMEOUT);
 
     /**
      * Instantiates a new http client factory.
@@ -79,7 +79,7 @@ class HttpClientFactory {
         if (proxy != null && isProxied(targetUrl, proxy)) {
             hcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
             if (StringUtils.isNotBlank(proxy.getUsername())) {
-                var cp = new BasicCredentialsProvider();
+                final var cp = new BasicCredentialsProvider();
                 cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
                         new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword().toCharArray()));
                 hcb.setDefaultCredentialsProvider(cp);
@@ -109,9 +109,9 @@ class HttpClientFactory {
      */
     private boolean isProxied(final String url, final Proxy proxy) {
         if (StringUtils.isNotBlank(proxy.getNonProxyHosts())) {
-            var host = UrlUtils.create(url).getHost();
-            var excludes = proxy.getNonProxyHosts().split("\\|", -1);
-            for (String exclude : excludes) {
+            final var host = UrlUtils.create(url).getHost();
+            final var excludes = proxy.getNonProxyHosts().split("\\|", -1);
+            for (final String exclude : excludes) {
                 if (exclude != null && !exclude.isBlank() && Wildcards.matches(host, exclude.trim())) {
                     return false;
                 }

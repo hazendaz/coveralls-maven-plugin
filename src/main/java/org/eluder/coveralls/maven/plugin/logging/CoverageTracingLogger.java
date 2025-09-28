@@ -158,7 +158,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
     protected void onSourceInternal(final Source source) throws ProcessingException, IOException {
         files++;
         lines += source.getCoverage().length;
-        for (Integer coverage : source.getCoverage()) {
+        for (final Integer coverage : source.getCoverage()) {
             if (coverage != null) {
                 relevant++;
                 if (coverage > 0) {

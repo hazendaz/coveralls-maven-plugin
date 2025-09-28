@@ -71,7 +71,7 @@ public final class Source implements JsonObject {
      *            the digest
      */
     public Source(final String name, final String source, final String digest) {
-        this(name, getLines(source), digest, null);
+        this(name, Source.getLines(source), digest, null);
     }
 
     /**
@@ -273,7 +273,7 @@ public final class Source implements JsonObject {
         if (copy.equals(source)) {
             for (var i = 0; i < copy.coverage.length; i++) {
                 if (source.coverage[i] != null) {
-                    var base = copy.coverage[i] != null ? copy.coverage[i] : 0;
+                    final var base = copy.coverage[i] != null ? copy.coverage[i] : 0;
                     copy.coverage[i] = base + source.coverage[i];
                 }
             }
@@ -309,7 +309,7 @@ public final class Source implements JsonObject {
      */
     private static int getLines(final String source) {
         var lines = 1;
-        var matcher = Source.NEWLINE.matcher(source);
+        final var matcher = Source.NEWLINE.matcher(source);
         while (matcher.find()) {
             lines++;
         }

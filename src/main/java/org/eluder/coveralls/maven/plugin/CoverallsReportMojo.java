@@ -243,23 +243,23 @@ public class CoverallsReportMojo extends AbstractMojo {
         try {
             createEnvironment().setup();
 
-            var job = createJob();
+            final var job = createJob();
             job.validate().throwOrInform(getLog());
 
-            var sourceLoader = createSourceLoader(job);
+            final var sourceLoader = createSourceLoader(job);
 
-            var parsers = createCoverageParsers(sourceLoader);
+            final var parsers = createCoverageParsers(sourceLoader);
 
-            var client = createCoverallsClient();
+            final var client = createCoverallsClient();
 
-            List<Logger> reporters = new ArrayList<>();
+            final List<Logger> reporters = new ArrayList<>();
             reporters.add(new JobLogger(job));
 
             try (var writer = createJsonWriter(job)) {
                 // For tests (its the same instance as in writer)
                 coverallsFile = writer.getCoverallsFile();
 
-                var sourceCallback = createSourceCallbackChain(writer, reporters);
+                final var sourceCallback = createSourceCallbackChain(writer, reporters);
                 reporters.add(new DryRunLogger(job.isDryRun(), coverallsFile));
 
                 report(reporters, Position.BEFORE);
@@ -270,11 +270,11 @@ public class CoverallsReportMojo extends AbstractMojo {
             if (!job.isDryRun()) {
                 submitData(client, coverallsFile);
             }
-        } catch (ProcessingException ex) {
+        } catch (final ProcessingException ex) {
             throw new MojoFailureException("Processing of input or output data failed", ex);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new MojoFailureException("I/O operation failed", ex);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new MojoExecutionException("Build error", ex);
         }
     }
@@ -324,8 +324,8 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return list of available continuous integration services
      */
     protected List<ServiceSetup> getServices() {
-        var env = System.getenv();
-        List<ServiceSetup> services = new ArrayList<>();
+        final var env = System.getenv();
+        final List<ServiceSetup> services = new ArrayList<>();
         services.add(new GitHub(env));
         services.add(new Shippable(env));
         services.add(new Travis(env));
@@ -349,8 +349,8 @@ public class CoverallsReportMojo extends AbstractMojo {
      *             if an I/O error occurs
      */
     protected Job createJob() throws ProcessingException, IOException {
-        var git = new GitRepository(basedir).load();
-        var time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).toEpochMilli();
+        final var git = new GitRepository(basedir).load();
+        final var time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).toEpochMilli();
         return new Job().withRepoToken(repoToken).withServiceName(serviceName).withServiceJobId(serviceJobId)
                 .withServiceBuildNumber(serviceBuildNumber).withServiceBuildUrl(serviceBuildUrl).withParallel(parallel)
                 .withServiceEnvironment(serviceEnvironment).withDryRun(dryRun).withBranch(branch)
@@ -394,7 +394,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
         SourceCallback chain = writer;
         if (getLog().isInfoEnabled()) {
-            var coverageTracingReporter = new CoverageTracingLogger(chain);
+            final var coverageTracingReporter = new CoverageTracingLogger(chain);
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
         }
@@ -419,14 +419,14 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback,
             final List<CoverageParser> parsers) throws ProcessingException, IOException {
         getLog().info("Writing Coveralls data to " + coverallsFile.getAbsolutePath() + "...");
-        var now = System.currentTimeMillis();
+        final var now = System.currentTimeMillis();
         sourceCallback.onBegin();
-        for (CoverageParser parser : parsers) {
+        for (final CoverageParser parser : parsers) {
             getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
             parser.parse(sourceCallback);
         }
         sourceCallback.onComplete();
-        var duration = System.currentTimeMillis() - now;
+        final var duration = System.currentTimeMillis() - now;
         getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
     }
 
@@ -446,21 +446,21 @@ public class CoverallsReportMojo extends AbstractMojo {
     private void submitData(final CoverallsClient client, final File coverallsFile)
             throws ProcessingException, IOException {
         getLog().info("Submitting Coveralls data to API");
-        var now = System.currentTimeMillis();
+        final var now = System.currentTimeMillis();
         try {
-            var response = client.submit(coverallsFile);
-            var duration = System.currentTimeMillis() - now;
+            final var response = client.submit(coverallsFile);
+            final var duration = System.currentTimeMillis() - now;
             getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             getLog().info(response.getUrl());
             getLog().info("*** Coverage results are usually available immediately on Coveralls.");
             getLog().info("    If you see question marks or missing data, please allow some time for processing.");
-        } catch (ProcessingException ex) {
-            var duration = System.currentTimeMillis() - now;
-            var message = "Submission failed in " + duration + "ms while processing data";
+        } catch (final ProcessingException ex) {
+            final var duration = System.currentTimeMillis() - now;
+            final var message = "Submission failed in " + duration + "ms while processing data";
             handleSubmissionError(ex, message, true);
-        } catch (IOException ex) {
-            var duration = System.currentTimeMillis() - now;
-            var message = "Submission failed in " + duration + "ms while handling I/O operations";
+        } catch (final IOException ex) {
+            final var duration = System.currentTimeMillis() - now;
+            final var message = "Submission failed in " + duration + "ms while handling I/O operations";
             handleSubmissionError(ex, message, failOnServiceError);
         }
     }
@@ -498,7 +498,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      *            the position
      */
     private void report(final List<Logger> reporters, final Position position) {
-        for (Logger reporter : reporters) {
+        for (final Logger reporter : reporters) {
             if (position.equals(reporter.getPosition())) {
                 reporter.log(getLog());
             }

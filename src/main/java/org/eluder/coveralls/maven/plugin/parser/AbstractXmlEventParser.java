@@ -75,7 +75,7 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
                 xml.next();
                 onEvent(xml, callback);
             }
-        } catch (XMLStreamException ex) {
+        } catch (final XMLStreamException ex) {
             throw new ProcessingException(ex);
         } finally {
             close(xml);
@@ -100,15 +100,15 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
      */
     protected XMLStreamReader createEventReader(final InputStream inputStream) throws ProcessingException {
         try {
-            var xmlif = XMLInputFactory.newInstance();
+            final var xmlif = XMLInputFactory.newInstance();
             xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
             xmlif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
             xmlif.setProperty(XMLInputFactory.IS_VALIDATING, false);
             xmlif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
             return xmlif.createXMLStreamReader(inputStream);
-        } catch (FactoryConfigurationError ex) {
+        } catch (final FactoryConfigurationError ex) {
             throw new IllegalArgumentException(ex);
-        } catch (XMLStreamException ex) {
+        } catch (final XMLStreamException ex) {
             throw new ProcessingException(ex);
         }
     }
@@ -126,7 +126,7 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
         if (xml != null) {
             try {
                 xml.close();
-            } catch (XMLStreamException ex) {
+            } catch (final XMLStreamException ex) {
                 throw new ProcessingException(ex);
             }
         }

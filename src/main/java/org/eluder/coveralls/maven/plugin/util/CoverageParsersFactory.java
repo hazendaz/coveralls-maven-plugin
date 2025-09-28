@@ -178,26 +178,26 @@ public class CoverageParsersFactory {
      *             Signals that an I/O exception has occurred.
      */
     public List<CoverageParser> createParsers() throws IOException {
-        List<CoverageParser> parsers = new ArrayList<>();
-        var projects = new MavenProjectCollector(project).collect();
+        final List<CoverageParser> parsers = new ArrayList<>();
+        final var projects = new MavenProjectCollector(project).collect();
 
-        var jacocoFiles = ExistingFiles.create(jacocoReports);
-        var coberturaFiles = ExistingFiles.create(coberturaReports);
-        var sagaFiles = ExistingFiles.create(sagaReports);
-        var cloverFiles = ExistingFiles.create(cloverReports);
-        for (MavenProject p : projects) {
-            var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
-            var buildDirectory = Path.of(p.getBuild().getDirectory());
+        final var jacocoFiles = ExistingFiles.create(jacocoReports);
+        final var coberturaFiles = ExistingFiles.create(coberturaReports);
+        final var sagaFiles = ExistingFiles.create(sagaReports);
+        final var cloverFiles = ExistingFiles.create(cloverReports);
+        for (final MavenProject p : projects) {
+            final var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
+            final var buildDirectory = Path.of(p.getBuild().getDirectory());
 
-            jacocoFiles.add(reportingDirectory.resolve(JACOCO_DIRECTORY).resolve(JACOCO_FILE).toFile());
-            jacocoFiles.add(reportingDirectory.resolve(JACOCO_IT_DIRECTORY).resolve(JACOCO_FILE).toFile());
-            coberturaFiles.add(reportingDirectory.resolve(COBERTURA_DIRECTORY).resolve(COBERTURA_FILE).toFile());
-            sagaFiles.add(buildDirectory.resolve(SAGA_DIRECTORY).resolve(SAGA_FILE).toFile());
-            cloverFiles.add(reportingDirectory.resolve(CLOVER_DIRECTORY).resolve(CLOVER_FILE).toFile());
-            cloverFiles.add(buildDirectory.resolve(CLOVER_DIRECTORY).resolve(CLOVER_FILE).toFile());
+            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_DIRECTORY).resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_IT_DIRECTORY).resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+            coberturaFiles.add(reportingDirectory.resolve(CoverageParsersFactory.COBERTURA_DIRECTORY).resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
+            sagaFiles.add(buildDirectory.resolve(CoverageParsersFactory.SAGA_DIRECTORY).resolve(CoverageParsersFactory.SAGA_FILE).toFile());
+            cloverFiles.add(reportingDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY).resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
+            cloverFiles.add(buildDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY).resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
 
             if (relativeReportDirs != null) {
-                for (String relativeReportPath : relativeReportDirs) {
+                for (final String relativeReportPath : relativeReportDirs) {
                     var relativeReportingDirectory = reportingDirectory;
                     var relativeBuildDirectory = buildDirectory;
                     if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
@@ -205,14 +205,14 @@ public class CoverageParsersFactory {
                         relativeBuildDirectory = buildDirectory.resolve(relativeReportPath);
                     }
 
-                    jacocoFiles.add(relativeReportingDirectory.resolve(JACOCO_FILE).toFile());
-                    jacocoFiles.add(relativeBuildDirectory.resolve(JACOCO_FILE).toFile());
-                    coberturaFiles.add(relativeReportingDirectory.resolve(COBERTURA_FILE).toFile());
-                    coberturaFiles.add(relativeBuildDirectory.resolve(COBERTURA_FILE).toFile());
-                    sagaFiles.add(relativeReportingDirectory.resolve(SAGA_FILE).toFile());
-                    sagaFiles.add(relativeBuildDirectory.resolve(SAGA_FILE).toFile());
-                    cloverFiles.add(relativeReportingDirectory.resolve(CLOVER_FILE).toFile());
-                    cloverFiles.add(relativeBuildDirectory.resolve(CLOVER_FILE).toFile());
+                    jacocoFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+                    jacocoFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+                    coberturaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
+                    coberturaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
+                    sagaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
+                    sagaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
+                    cloverFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
+                    cloverFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
                 }
             }
         }

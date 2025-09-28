@@ -39,7 +39,6 @@ import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.HttpStatus;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
@@ -51,7 +50,7 @@ import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 public class CoverallsClient {
 
     static {
-        for (Provider provider : Security.getProviders()) {
+        for (final Provider provider : Security.getProviders()) {
             if (provider.getName().startsWith("SunPKCS11")) {
                 Security.removeProvider(provider.getName());
             }
@@ -114,33 +113,34 @@ public class CoverallsClient {
      *             Signals that an I/O exception has occurred.
      */
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-        HttpEntity entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
-                .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
-        HttpPost post = new HttpPost(coverallsUrl);
+        final var entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
+                .addBinaryBody("json_file", file, CoverallsClient.MIME_TYPE, CoverallsClient.FILE_NAME).build();
+        final var post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
-        var result = httpClient.execute(post, response -> {
-            HttpEntity responseEntity = response.getEntity();
+        final var result = httpClient.execute(post, response -> {
+            final var responseEntity = response.getEntity();
             if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
                 return new SubmitResult(getResponseErrorMessage(response, "Coveralls API internal error"),
                         SubmitResult.ErrorType.IO);
             }
 
-            try (BufferedReader reader = new BufferedReader(
+            try (var reader = new BufferedReader(
                     new InputStreamReader(responseEntity.getContent(), StandardCharsets.UTF_8))) {
-                CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
+                final var cr = objectMapper.readValue(reader, CoverallsResponse.class);
                 if (cr.isError()) {
                     return new SubmitResult(getResponseErrorMessage(response, cr.getMessage()),
                             SubmitResult.ErrorType.PROCESSING);
                 }
                 return new SubmitResult(cr);
-            } catch (JsonProcessingException ex) {
+            } catch (final JsonProcessingException ex) {
                 return new SubmitResult(getResponseErrorMessage(response, ex.getMessage()), ex,
                         SubmitResult.ErrorType.PROCESSING);
             }
         });
         if (result.errorType == SubmitResult.ErrorType.PROCESSING) {
             throw new ProcessingException(result.errorMessage, result.errorCause);
-        } else if (result.errorType == SubmitResult.ErrorType.IO) {
+        }
+        if (result.errorType == SubmitResult.ErrorType.IO) {
             throw new IOException(result.errorMessage);
         }
         return result.response;
@@ -157,9 +157,9 @@ public class CoverallsClient {
      * @return the response error message
      */
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
-        var status = response.getCode();
-        var reason = response.getReasonPhrase();
-        var errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
+        final var status = response.getCode();
+        final var reason = response.getReasonPhrase();
+        final var errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
                 .append(status).append(":");
         if (reason != null && !reason.isBlank()) {
             errorMessage.append(" ").append(reason);

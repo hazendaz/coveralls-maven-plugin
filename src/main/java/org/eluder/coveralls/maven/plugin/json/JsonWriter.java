@@ -71,7 +71,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      *             Signals that an I/O exception has occurred.
      */
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
-        var directory = coverallsFile.getParentFile();
+        final var directory = coverallsFile.getParentFile();
         if (!directory.exists()) {
             directory.mkdirs();
         }
@@ -114,7 +114,7 @@ public class JsonWriter implements SourceCallback, Closeable {
             writeOptionalEnvironment("environment", job.getServiceEnvironment());
             writeOptionalObject("git", job.getGit());
             generator.writeArrayFieldStart("source_files");
-        } catch (JsonProcessingException ex) {
+        } catch (final JsonProcessingException ex) {
             throw new ProcessingException(ex);
         }
     }
@@ -123,7 +123,7 @@ public class JsonWriter implements SourceCallback, Closeable {
     public void onSource(final Source source) throws ProcessingException, IOException {
         try {
             generator.writeObject(source);
-        } catch (JsonProcessingException ex) {
+        } catch (final JsonProcessingException ex) {
             throw new ProcessingException(ex);
         }
     }
@@ -133,7 +133,7 @@ public class JsonWriter implements SourceCallback, Closeable {
         try {
             generator.writeEndArray();
             generator.writeEndObject();
-        } catch (JsonProcessingException ex) {
+        } catch (final JsonProcessingException ex) {
             throw new ProcessingException(ex);
         }
     }
@@ -207,7 +207,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      */
     private void writeOptionalTimestamp(final String field, final Long value) throws IOException {
         if (value != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT)
+            final var formatter = DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT)
                     .withZone(ZoneId.systemDefault());
             writeOptionalString(field, formatter.format(Instant.ofEpochMilli(value)));
         }
@@ -227,7 +227,7 @@ public class JsonWriter implements SourceCallback, Closeable {
     private void writeOptionalEnvironment(final String field, final Properties properties) throws IOException {
         if (properties != null) {
             generator.writeObjectFieldStart(field);
-            for (Entry<Object, Object> property : properties.entrySet()) {
+            for (final Entry<Object, Object> property : properties.entrySet()) {
                 writeOptionalString(property.getKey().toString(), property.getValue().toString());
             }
             generator.writeEndObject();

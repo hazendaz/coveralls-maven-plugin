@@ -61,13 +61,13 @@ public class UniqueSourceCallback implements SourceCallback {
 
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
-        var merged = source.merge(cache.get(source));
+        final var merged = source.merge(cache.get(source));
         cache.put(merged, merged);
     }
 
     @Override
     public void onComplete() throws ProcessingException, IOException {
-        for (Source source : cache.values()) {
+        for (final Source source : cache.values()) {
             delegate.onSource(source);
         }
         delegate.onComplete();

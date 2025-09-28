@@ -66,32 +66,32 @@ public class Shippable extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(SHIPPABLE));
+        return Boolean.parseBoolean(getProperty(Shippable.SHIPPABLE));
     }
 
     @Override
     public String getName() {
-        return SHIPPABLE_NAME;
+        return Shippable.SHIPPABLE_NAME;
     }
 
     @Override
     public String getBuildNumber() {
-        return getProperty(SHIPPABLE_BUILD_NUMBER);
+        return getProperty(Shippable.SHIPPABLE_BUILD_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return "https://app.shippable.com/builds/" + getProperty(SHIPPABLE_BUILD_ID);
+        return "https://app.shippable.com/builds/" + getProperty(Shippable.SHIPPABLE_BUILD_ID);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(SHIPPABLE_BRANCH);
+        return getProperty(Shippable.SHIPPABLE_BRANCH);
     }
 
     @Override
     public String getPullRequest() {
-        var pullRequest = getProperty(Shippable.SHIPPABLE_PULL_REQUEST);
+        final var pullRequest = getProperty(Shippable.SHIPPABLE_PULL_REQUEST);
         if ("false".equals(pullRequest)) {
             return null;
         }
@@ -100,12 +100,12 @@ public class Shippable extends AbstractServiceSetup {
 
     @Override
     public Properties getEnvironment() {
-        Properties environment = new Properties();
-        addProperty(environment, "shippable_build_number", getProperty(SHIPPABLE_BUILD_NUMBER));
-        addProperty(environment, "shippable_build_id", getProperty(SHIPPABLE_BUILD_ID));
+        final var environment = new Properties();
+        addProperty(environment, "shippable_build_number", getProperty(Shippable.SHIPPABLE_BUILD_NUMBER));
+        addProperty(environment, "shippable_build_id", getProperty(Shippable.SHIPPABLE_BUILD_ID));
         addProperty(environment, "shippable_build_url", getBuildUrl());
-        addProperty(environment, "branch", getProperty(SHIPPABLE_BRANCH));
-        addProperty(environment, "commit_sha", getProperty(SHIPPABLE_COMMIT));
+        addProperty(environment, "branch", getProperty(Shippable.SHIPPABLE_BRANCH));
+        addProperty(environment, "commit_sha", getProperty(Shippable.SHIPPABLE_COMMIT));
         return environment;
     }
 

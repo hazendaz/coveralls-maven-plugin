@@ -59,26 +59,26 @@ public class Wercker extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(WERCKER));
+        return Boolean.parseBoolean(getProperty(Wercker.WERCKER));
     }
 
     @Override
     public String getName() {
-        return WERCKER_NAME;
+        return Wercker.WERCKER_NAME;
     }
 
     @Override
     public String getJobId() {
-        return getProperty(WERCKER_BUILD_ID);
+        return getProperty(Wercker.WERCKER_BUILD_ID);
     }
 
     @Override
     public String getBuildUrl() {
-        return getProperty(WERCKER_BUILD_URL);
+        return getProperty(Wercker.WERCKER_BUILD_URL);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(WERCKER_BRANCH);
+        return getProperty(Wercker.WERCKER_BRANCH);
     }
 }

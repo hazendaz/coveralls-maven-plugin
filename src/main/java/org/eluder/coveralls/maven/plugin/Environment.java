@@ -78,7 +78,7 @@ public final class Environment {
      * Setup service.
      */
     private void setupService() {
-        for (ServiceSetup service : services) {
+        for (final ServiceSetup service : services) {
             if (service.isSelected()) {
                 setupEnvironment(service);
                 break;
@@ -93,37 +93,37 @@ public final class Environment {
      *            the new up environment
      */
     private void setupEnvironment(final ServiceSetup service) {
-        var name = service.getName();
+        final var name = service.getName();
         if (StringUtils.isBlank(mojo.serviceName) && StringUtils.isNotBlank(name)) {
             mojo.serviceName = name;
         }
 
-        var jobId = service.getJobId();
+        final var jobId = service.getJobId();
         if (StringUtils.isBlank(mojo.serviceJobId) && StringUtils.isNotBlank(jobId)) {
             mojo.serviceJobId = jobId;
         }
 
-        var buildNumber = service.getBuildNumber();
+        final var buildNumber = service.getBuildNumber();
         if (StringUtils.isBlank(mojo.serviceBuildNumber) && StringUtils.isNotBlank(buildNumber)) {
             mojo.serviceBuildNumber = buildNumber;
         }
 
-        var buildUrl = service.getBuildUrl();
+        final var buildUrl = service.getBuildUrl();
         if (StringUtils.isBlank(mojo.serviceBuildUrl) && StringUtils.isNotBlank(buildUrl)) {
             mojo.serviceBuildUrl = buildUrl;
         }
 
-        var branch = service.getBranch();
+        final var branch = service.getBranch();
         if (StringUtils.isBlank(mojo.branch) && StringUtils.isNotBlank(branch)) {
             mojo.branch = branch;
         }
 
-        var pullRequest = service.getPullRequest();
+        final var pullRequest = service.getPullRequest();
         if (StringUtils.isBlank(mojo.pullRequest) && StringUtils.isNotBlank(pullRequest)) {
             mojo.pullRequest = pullRequest;
         }
 
-        var environment = service.getEnvironment();
+        final var environment = service.getEnvironment();
         if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty()) && environment != null
                 && !environment.isEmpty()) {
             mojo.serviceEnvironment = environment;

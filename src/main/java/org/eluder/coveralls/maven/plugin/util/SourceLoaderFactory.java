@@ -103,29 +103,29 @@ public class SourceLoaderFactory {
      * @return the source loader
      */
     public SourceLoader createSourceLoader() {
-        var multiSourceLoader = new MultiSourceLoader();
-        List<File> directories = new ArrayList<>();
-        var modules = new MavenProjectCollector(project).collect();
-        for (MavenProject module : modules) {
-            for (String sourceRoot : module.getCompileSourceRoots()) {
-                var sourceDirectory = Path.of(sourceRoot);
+        final var multiSourceLoader = new MultiSourceLoader();
+        final List<File> directories = new ArrayList<>();
+        final var modules = new MavenProjectCollector(project).collect();
+        for (final MavenProject module : modules) {
+            for (final String sourceRoot : module.getCompileSourceRoots()) {
+                final var sourceDirectory = Path.of(sourceRoot);
                 directories.add(sourceDirectory.toFile());
             }
         }
         if (sourceDirectories != null) {
             directories.addAll(sourceDirectories);
         }
-        for (File directory : directories) {
+        for (final File directory : directories) {
             if (directory.exists() && directory.isDirectory()) {
-                var moduleSourceLoader = new DirectorySourceLoader(baseDir, directory, sourceEncoding);
+                final var moduleSourceLoader = new DirectorySourceLoader(baseDir, directory, sourceEncoding);
                 multiSourceLoader.add(moduleSourceLoader);
             }
         }
 
         if (scanForSources) {
-            for (File directory : directories) {
+            for (final File directory : directories) {
                 if (directory.exists() && directory.isDirectory()) {
-                    var scanSourceLoader = new ScanSourceLoader(baseDir, directory, sourceEncoding);
+                    final var scanSourceLoader = new ScanSourceLoader(baseDir, directory, sourceEncoding);
                     multiSourceLoader.add(scanSourceLoader);
                 }
             }

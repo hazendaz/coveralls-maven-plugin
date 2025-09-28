@@ -42,13 +42,13 @@ public class Sha512DigestInputStream extends DigestInputStream {
      *            the stream
      */
     public Sha512DigestInputStream(final InputStream stream) {
-        super(stream, getSha512Digest());
+        super(stream, Sha512DigestInputStream.getSha512Digest());
     }
 
     private static MessageDigest getSha512Digest() {
         try {
             return MessageDigest.getInstance("SHA-512");
-        } catch (NoSuchAlgorithmException e) {
+        } catch (final NoSuchAlgorithmException e) {
             // SHA-512 is guaranteed to be available in all Java SE implementations
             throw new AssertionError("SHA-512 algorithm not available", e);
         }

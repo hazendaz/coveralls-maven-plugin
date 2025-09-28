@@ -57,31 +57,31 @@ public class General extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return getProperty(CI_NAME) != null;
+        return getProperty(General.CI_NAME) != null;
     }
 
     @Override
     public String getName() {
-        return getProperty(CI_NAME);
+        return getProperty(General.CI_NAME);
     }
 
     @Override
     public String getBuildNumber() {
-        return getProperty(CI_BUILD_NUMBER);
+        return getProperty(General.CI_BUILD_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return getProperty(CI_BUILD_URL);
+        return getProperty(General.CI_BUILD_URL);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(CI_BRANCH);
+        return getProperty(General.CI_BRANCH);
     }
 
     @Override
     public String getPullRequest() {
-        return getProperty(CI_PULL_REQUEST);
+        return getProperty(General.CI_PULL_REQUEST);
     }
 }

@@ -79,7 +79,7 @@ public class JobLogger implements Logger {
 
     @Override
     public void log(final Log log) {
-        var starting = new StringBuilder("Starting Coveralls job");
+        final var starting = new StringBuilder("Starting Coveralls job");
         if (job.getServiceName() != null) {
             starting.append(" for ").append(job.getServiceName());
             if (job.getServiceJobId() != null) {
@@ -105,15 +105,15 @@ public class JobLogger implements Logger {
         }
 
         if (job.getGit() != null) {
-            String commit = job.getGit().getHead().getId();
-            String branch = job.getBranch() != null ? job.getBranch() : job.getGit().getBranch();
-            log.info("Git commit " + commit.substring(0, ABBREV) + " in " + branch);
+            final var commit = job.getGit().getHead().getId();
+            final var branch = job.getBranch() != null ? job.getBranch() : job.getGit().getBranch();
+            log.info("Git commit " + commit.substring(0, JobLogger.ABBREV) + " in " + branch);
         }
 
         if (log.isDebugEnabled()) {
             try {
                 log.debug("Complete Job description:\n" + jsonMapper.writeValueAsString(job));
-            } catch (JsonProcessingException e) {
+            } catch (final JsonProcessingException e) {
                 throw new IllegalStateException("FAiled to serialize job to JSON", e);
             }
         }

@@ -53,7 +53,7 @@ public class MavenProjectCollector {
      * @return the list
      */
     public List<MavenProject> collect() {
-        List<MavenProject> projects = new ArrayList<>();
+        final List<MavenProject> projects = new ArrayList<>();
         collect(root, projects);
         return Collections.unmodifiableList(projects);
     }
@@ -68,7 +68,7 @@ public class MavenProjectCollector {
      */
     private void collect(final MavenProject project, final List<MavenProject> projects) {
         projects.add(project);
-        for (MavenProject child : project.getCollectedProjects()) {
+        for (final MavenProject child : project.getCollectedProjects()) {
             collect(child, projects);
         }
     }

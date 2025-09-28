@@ -321,7 +321,7 @@ public class Job {
      */
     public String getBranch() {
         if (branch != null && getGit() != null && getGit().getRemotes() != null) {
-            for (Remote remote : getGit().getRemotes()) {
+            for (final Remote remote : getGit().getRemotes()) {
                 if (branch.startsWith(remote.getName() + "/")) {
                     return branch.substring(remote.getName().length() + 1);
                 }
@@ -354,7 +354,7 @@ public class Job {
      * @return the validation errors
      */
     public ValidationErrors validate() {
-        var validator = new JobValidator(this);
+        final var validator = new JobValidator(this);
         return validator.validate();
     }
 }

@@ -60,30 +60,30 @@ public class Circle extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return getProperty(CIRCLE) != null;
+        return getProperty(Circle.CIRCLE) != null;
     }
 
     @Override
     public String getName() {
-        return CIRCLE_NAME;
+        return Circle.CIRCLE_NAME;
     }
 
     @Override
     public String getBuildNumber() {
-        return getProperty(CIRCLE_BUILD_NUMBER);
+        return getProperty(Circle.CIRCLE_BUILD_NUMBER);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(CIRCLE_BRANCH);
+        return getProperty(Circle.CIRCLE_BRANCH);
     }
 
     @Override
     public Properties getEnvironment() {
-        Properties environment = new Properties();
-        addProperty(environment, "circleci_build_num", getProperty(CIRCLE_BUILD_NUMBER));
-        addProperty(environment, "branch", getProperty(CIRCLE_BRANCH));
-        addProperty(environment, "commit_sha", getProperty(CIRCLE_COMMIT));
+        final var environment = new Properties();
+        addProperty(environment, "circleci_build_num", getProperty(Circle.CIRCLE_BUILD_NUMBER));
+        addProperty(environment, "branch", getProperty(Circle.CIRCLE_BRANCH));
+        addProperty(environment, "commit_sha", getProperty(Circle.CIRCLE_COMMIT));
         return environment;
     }
 }
