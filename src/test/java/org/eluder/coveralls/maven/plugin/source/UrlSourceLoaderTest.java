@@ -54,7 +54,7 @@ class UrlSourceLoaderTest {
     @Test
     void missingSourceFileFromUrl() throws IOException {
         var sourceLoader = new UrlSourceLoader(folder.toUri().toURL(),
-                new URL("http://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
+                new URL("https://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
         assertNull(sourceLoader.load("Foo.java"));
     }
 

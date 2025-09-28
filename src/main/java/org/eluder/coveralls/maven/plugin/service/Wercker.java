@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Service implementation for Wercker CI.
  * <p>
- * http://wercker.com/
+ * https://wercker.com/
  */
 public class Wercker extends AbstractServiceSetup {
 

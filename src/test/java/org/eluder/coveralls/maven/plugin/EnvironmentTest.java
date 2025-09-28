@@ -155,7 +155,7 @@ class EnvironmentTest {
         when(serviceMock.getName()).thenReturn("defined service");
         when(serviceMock.getJobId()).thenReturn("123");
         when(serviceMock.getBuildNumber()).thenReturn("456");
-        when(serviceMock.getBuildUrl()).thenReturn("http://ci.com/project");
+        when(serviceMock.getBuildUrl()).thenReturn("https://ci.com/project");
         when(serviceMock.getBranch()).thenReturn("master");
         when(serviceMock.getPullRequest()).thenReturn("111");
         when(serviceMock.getEnvironment()).thenReturn(environment);
@@ -164,7 +164,7 @@ class EnvironmentTest {
         assertEquals("defined service", mojo.serviceName);
         assertEquals("123", mojo.serviceJobId);
         assertEquals("456", mojo.serviceBuildNumber);
-        assertEquals("http://ci.com/project", mojo.serviceBuildUrl);
+        assertEquals("https://ci.com/project", mojo.serviceBuildUrl);
         assertEquals("master", mojo.branch);
         assertEquals("111", mojo.pullRequest);
         assertEquals("true", mojo.serviceEnvironment.get("env"));
@@ -182,7 +182,7 @@ class EnvironmentTest {
         when(serviceMock.getName()).thenReturn("defined service");
         when(serviceMock.getJobId()).thenReturn("123");
         when(serviceMock.getBuildNumber()).thenReturn("456");
-        when(serviceMock.getBuildUrl()).thenReturn("http://ci.com/project");
+        when(serviceMock.getBuildUrl()).thenReturn("https://ci.com/project");
         when(serviceMock.getBranch()).thenReturn("master");
         when(serviceMock.getPullRequest()).thenReturn("111");
         when(serviceMock.getEnvironment()).thenReturn(environment);

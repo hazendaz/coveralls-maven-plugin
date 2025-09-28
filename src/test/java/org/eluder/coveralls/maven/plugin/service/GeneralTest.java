@@ -46,7 +46,7 @@ class GeneralTest {
         Map<String, String> env = new HashMap<>();
         env.put("CI_NAME", "ci_service");
         env.put("CI_BUILD_NUMBER", "build123");
-        env.put("CI_BUILD_URL", "http://ci.com/build123");
+        env.put("CI_BUILD_URL", "https://ci.com/build123");
         env.put("CI_BRANCH", "master");
         env.put("CI_PULL_REQUEST", "pull10");
         return env;
@@ -89,7 +89,7 @@ class GeneralTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("http://ci.com/build123", new General(env()).getBuildUrl());
+        assertEquals("https://ci.com/build123", new General(env()).getBuildUrl());
     }
 
     /**

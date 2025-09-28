@@ -29,7 +29,7 @@ import java.util.Properties;
 /**
  * Service implementation for Jenkins.
  * <p>
- * http://jenkins-ci.org/
+ * https://jenkins-ci.org/
  */
 public class Jenkins extends AbstractServiceSetup {
 

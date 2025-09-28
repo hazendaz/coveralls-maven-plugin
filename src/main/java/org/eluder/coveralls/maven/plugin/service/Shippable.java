@@ -29,7 +29,7 @@ import java.util.Properties;
 /**
  * Service implementation for Shippable.
  * <p>
- * http://shippable.com/
+ * https://shippable.com/
  */
 public class Shippable extends AbstractServiceSetup {
 

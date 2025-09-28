@@ -107,11 +107,11 @@ class JobLoggerTest {
     void logWithBuildNumberAndUrl() {
         when(jobMock.getServiceName()).thenReturn("service");
         when(jobMock.getServiceBuildNumber()).thenReturn("10");
-        when(jobMock.getServiceBuildUrl()).thenReturn("http://ci.com/build/10");
+        when(jobMock.getServiceBuildUrl()).thenReturn("https://ci.com/build/10");
 
         new JobLogger(jobMock).log(logMock);
 
-        verify(logMock).info("Starting Coveralls job for service (10 / http://ci.com/build/10)");
+        verify(logMock).info("Starting Coveralls job for service (10 / https://ci.com/build/10)");
         verify(logMock).isDebugEnabled();
         verifyNoMoreInteractions(logMock);
     }

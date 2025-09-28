@@ -96,8 +96,8 @@ class CoverallsClientTest {
      */
     @Test
     void constructors() {
-        assertNotNull(new CoverallsClient("http://test.com/coveralls"));
-        assertNotNull(new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper()));
+        assertNotNull(new CoverallsClient("https://test.com/coveralls"));
+        assertNotNull(new CoverallsClient("https://test.com/coveralls", httpClientMock, new ObjectMapper()));
     }
 
     /**
@@ -118,7 +118,7 @@ class CoverallsClientTest {
         when(httpResponseMock.getCode()).thenReturn(200);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenReturn(coverallsResponse(new CoverallsResponse("success", false, "")));
-        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("https://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertDoesNotThrow(() -> {
             client.submit(file);
         });
@@ -139,7 +139,7 @@ class CoverallsClientTest {
                 });
         when(httpResponseMock.getCode()).thenReturn(500);
         when(httpResponseMock.getReasonPhrase()).thenReturn("Internal Error");
-        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("https://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(IOException.class, () -> {
             client.submit(file);
         });
@@ -163,7 +163,7 @@ class CoverallsClientTest {
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent())
                 .thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
-        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("https://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
             client.submit(file);
         });
@@ -189,7 +189,7 @@ class CoverallsClientTest {
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent())
                 .thenReturn(coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
-        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("https://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(ProcessingException.class, () -> {
             client.submit(file);
         });
@@ -211,7 +211,7 @@ class CoverallsClientTest {
         when(httpResponseMock.getCode()).thenReturn(200);
         when(httpResponseMock.getEntity()).thenReturn(httpEntityMock);
         when(httpEntityMock.getContent()).thenThrow(IOException.class);
-        var client = new CoverallsClient("http://test.com/coveralls", httpClientMock, new ObjectMapper());
+        var client = new CoverallsClient("https://test.com/coveralls", httpClientMock, new ObjectMapper());
         assertThrows(IOException.class, () -> {
             client.submit(file);
         });

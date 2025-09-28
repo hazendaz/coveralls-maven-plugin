@@ -140,7 +140,7 @@ class JsonWriterTest {
         assertEquals("service", jsonMap.get("service_name"));
         assertEquals("job123", jsonMap.get("service_job_id"));
         assertEquals("build5", jsonMap.get("service_number"));
-        assertEquals("http://ci.com/build5", jsonMap.get("service_build_url"));
+        assertEquals("https://ci.com/build5", jsonMap.get("service_build_url"));
         assertEquals("foobar", ((Map) jsonMap.get("environment")).get("custom_property"));
         assertEquals("master", jsonMap.get("service_branch"));
         assertEquals("pull10", jsonMap.get("service_pull_request"));
@@ -187,7 +187,7 @@ class JsonWriterTest {
         var environment = new Properties();
         environment.setProperty("custom_property", "foobar");
         return new Job().withServiceName("service").withServiceJobId("job123").withServiceBuildNumber("build5")
-                .withServiceBuildUrl("http://ci.com/build5").withServiceEnvironment(environment).withBranch("master")
+                .withServiceBuildUrl("https://ci.com/build5").withServiceEnvironment(environment).withBranch("master")
                 .withPullRequest("pull10").withTimestamp(TEST_TIME)
                 .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }

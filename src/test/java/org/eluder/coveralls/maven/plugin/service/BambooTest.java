@@ -45,7 +45,7 @@ class BambooTest {
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
         env.put("bamboo.buildNumber", "build123");
-        env.put("bamboo.buildResultsUrl", "http://company.com/bamboo/build123");
+        env.put("bamboo.buildResultsUrl", "https://company.com/bamboo/build123");
         env.put("bamboo.repository.git.branch", "master");
         return env;
     }
@@ -87,7 +87,7 @@ class BambooTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("http://company.com/bamboo/build123", new Bamboo(env()).getBuildUrl());
+        assertEquals("https://company.com/bamboo/build123", new Bamboo(env()).getBuildUrl());
     }
 
     /**

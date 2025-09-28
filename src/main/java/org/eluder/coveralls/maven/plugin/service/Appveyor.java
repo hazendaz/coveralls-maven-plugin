@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * Service implementation for Appveyor.
  * <p>
- * http://appveyor.com/
+ * https://appveyor.com/
  */
 public class Appveyor extends AbstractServiceSetup {
 

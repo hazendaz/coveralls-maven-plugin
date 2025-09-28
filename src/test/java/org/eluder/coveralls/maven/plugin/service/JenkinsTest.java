@@ -44,9 +44,9 @@ class JenkinsTest {
      */
     Map<String, String> env() {
         Map<String, String> env = new HashMap<>();
-        env.put("JENKINS_URL", "http://company.com/jenkins");
+        env.put("JENKINS_URL", "https://company.com/jenkins");
         env.put("BUILD_NUMBER", "build123");
-        env.put("BUILD_URL", "http://company.com/jenkins/build123");
+        env.put("BUILD_URL", "https://company.com/jenkins/build123");
         env.put("GIT_BRANCH", "master");
         env.put("GIT_COMMIT", "a3562fgcd2");
         return env;
@@ -89,7 +89,7 @@ class JenkinsTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("http://company.com/jenkins/build123", new Jenkins(env()).getBuildUrl());
+        assertEquals("https://company.com/jenkins/build123", new Jenkins(env()).getBuildUrl());
     }
 
     /**
@@ -108,7 +108,7 @@ class JenkinsTest {
         var properties = new Jenkins(env()).getEnvironment();
         assertEquals(4, properties.size());
         assertEquals("build123", properties.getProperty("jenkins_build_num"));
-        assertEquals("http://company.com/jenkins/build123", properties.getProperty("jenkins_build_url"));
+        assertEquals("https://company.com/jenkins/build123", properties.getProperty("jenkins_build_url"));
         assertEquals("master", properties.getProperty("branch"));
         assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
     }

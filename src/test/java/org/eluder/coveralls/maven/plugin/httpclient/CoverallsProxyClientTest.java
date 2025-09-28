@@ -38,7 +38,7 @@ class CoverallsProxyClientTest {
      */
     @Test
     void constructorWithoutProxy() {
-        assertNotNull(new CoverallsProxyClient("http://test.com/coveralls", null));
+        assertNotNull(new CoverallsProxyClient("https://test.com/coveralls", null));
     }
 
     /**
@@ -51,7 +51,7 @@ class CoverallsProxyClientTest {
         proxy.setPort(8080);
         proxy.setProtocol("http");
 
-        assertNotNull(new CoverallsProxyClient("http://test.com/coveralls", proxy));
+        assertNotNull(new CoverallsProxyClient("https://test.com/coveralls", proxy));
     }
 
 }

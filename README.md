@@ -28,19 +28,19 @@ To run
 ### Features
 
 * Supports
-  [Cobertura](http://mojo.codehaus.org/cobertura-maven-plugin/),
-  [JaCoCo](http://www.eclemma.org/jacoco/trunk/doc/maven.html),
-  [Saga](http://timurstrekalov.github.io/saga/) coverage tools and
-  [Clover](http://openclover.org/)
+  [Cobertura](https://www.mojohaus.org/cobertura-maven-plugin/),
+  [JaCoCo](https://www.eclemma.org/jacoco/trunk/doc/maven.html),
+  [Saga](https://timurstrekalov.github.io/saga/) coverage tools and
+  [Clover](https://openclover.org/)
 * Multi-module report aggregation
 * Built-in support for [Travis CI](https://travis-ci.org/), [Circle](https://circleci.com/),
-  [Codeship](https://www.codeship.io/), [Github](https://github.com/), [Jenkins](http://jenkins-ci.org/),
+  [Codeship](https://www.codeship.io/), [Github](https://github.com/), [Jenkins](https://jenkins-ci.org/),
   [Bamboo](https://www.atlassian.com/software/bamboo/), [Shippable](https://www.shippable.com/)
-  and [Appveyor](http://www.appveyor.com/) continuous integration services
+  and [Appveyor](https://www.appveyor.com/) continuous integration services
 * Fully streaming implementation for fast report generation and small memory footprint
 * Provides clean interfaces to allow easy extending to different coverage tools
 * Convention over configuration for almost zero configuration usage
-* Applies [semantic versioning](http://semver.org/)
+* Applies [semantic versioning](https://semver.org/)
 
 
 ### Usage
@@ -257,7 +257,7 @@ after_success:
 
 Configuration can be changed by the configuration section of plugin's definition in POM or with
 Java virtual machine system properties using the syntax `-Dparameter=value`. See
-[Maven plugin guide](http://maven.apache.org/guides/plugin/guide-java-plugin-development.html#Configuring_Parameters_in_a_Project)
+[Maven plugin guide](https://maven.apache.org/guides/plugin/guide-java-plugin-development.html#Configuring_Parameters_in_a_Project)
 how different types are mapped in the configuration XML. Some of the optional parameters are set
 by the built-in service environment setups. Note that if a parameter is explicitly defined, the
 service environment will not override it.
