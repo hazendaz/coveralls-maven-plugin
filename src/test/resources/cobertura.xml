@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE coverage SYSTEM "https://cobertura.sourceforge.net/xml/coverage-04.dtd">
+<!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/gcovr/gcovr/refs/heads/main/tests/cobertura.coverage-04.dtd">
 
 <coverage line-rate="0.7727272727272727" branch-rate="0.5" lines-covered="17" lines-valid="22" branches-covered="1" branches-valid="2" complexity="1.125" version="2.1.1" timestamp="1440358747916">
     <sources>
