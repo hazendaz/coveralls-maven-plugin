@@ -454,8 +454,8 @@ public class CoverallsReportMojo extends AbstractMojo {
             long duration = System.currentTimeMillis() - now;
             getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             getLog().info(response.getUrl());
-            getLog().info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
-            getLog().info("    If you see question marks in the report, please be patient");
+            getLog().info("*** Coverage results are usually available immediately on Coveralls.");
+            getLog().info("    If you see question marks or missing data, please allow some time for processing.");
         } catch (ProcessingException ex) {
             long duration = System.currentTimeMillis() - now;
             String message = "Submission failed in " + duration + "ms while processing data";
