@@ -63,7 +63,7 @@ public class CoverallsClient {
     private static final String FILE_NAME = "coveralls.json";
 
     /** The Constant MIME_TYPE. */
-    private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", StandardCharsets.UTF_8);
+    private static final ContentType MIME_TYPE = ContentType.create("application/json", StandardCharsets.UTF_8);
 
     /** The coveralls url. */
     private final String coverallsUrl;
