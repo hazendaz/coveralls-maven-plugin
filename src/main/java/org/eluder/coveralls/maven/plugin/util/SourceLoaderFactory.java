@@ -117,8 +117,7 @@ public class SourceLoaderFactory {
         }
         for (File directory : directories) {
             if (directory.exists() && directory.isDirectory()) {
-                var moduleSourceLoader = new DirectorySourceLoader(baseDir, directory,
-                        sourceEncoding);
+                var moduleSourceLoader = new DirectorySourceLoader(baseDir, directory, sourceEncoding);
                 multiSourceLoader.add(moduleSourceLoader);
             }
         }
