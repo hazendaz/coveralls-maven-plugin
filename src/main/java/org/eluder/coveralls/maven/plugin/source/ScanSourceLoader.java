@@ -85,16 +85,14 @@ public class ScanSourceLoader extends AbstractSourceLoader {
      * @return the string[]
      */
     private String[] scanFor(final String extension) {
-        if (!cache.containsKey(extension)) {
+        return cache.computeIfAbsent(extension, ext -> {
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir(sourceDirectory);
             scanner.addDefaultExcludes();
-            scanner.setIncludes(new String[] { "**/*." + extension });
+            scanner.setIncludes(new String[] { "**/*." + ext });
             scanner.scan();
-
-            cache.put(extension, scanner.getIncludedFiles());
-        }
-        return cache.get(extension);
+            return scanner.getIncludedFiles();
+        });
     }
 
     @Override
