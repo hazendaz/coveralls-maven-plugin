@@ -101,4 +101,13 @@ class GitHubTest {
     void testGetPullRequest() {
         assertEquals("1", new GitHub(env()).getPullRequest());
     }
+
+    /**
+     * Test get job id.
+     */
+    @Test
+    void testGetJobId() {
+        assertEquals("12345", new GitHub(env()).getJobId());
+    }
+
 }

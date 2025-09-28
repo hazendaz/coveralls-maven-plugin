@@ -39,13 +39,37 @@ import org.junit.jupiter.api.Test;
 class UrlUtilsTest {
 
     /**
-     * Creates the invalid url.
+     * Creates the illegal argument exception.
      */
     @Test
-    void createInvalidUrl() {
+    void createIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.create("sdfds");
         });
+    }
+
+    /**
+     * Creates the malformed url exception.
+     */
+    @Test
+    void createMalformedUrlException() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            UrlUtils.create("abc://example.org");
+        });
+        // Assert that the cause is MalformedURLException
+        assertEquals(MalformedURLException.class, thrown.getCause().getClass());
+    }
+
+    /**
+     * Creates the uri syntax exception.
+     */
+    @Test
+    void createUriSynatxException() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            UrlUtils.create("https://invalid|url");
+        });
+        // Assert that the cause is URISyntaxException
+        assertEquals(URISyntaxException.class, thrown.getCause().getClass());
     }
 
     /**
@@ -56,16 +80,20 @@ class UrlUtilsTest {
      */
     @Test
     void createValidUrl() throws URISyntaxException {
-        assertEquals("http://example.org", UrlUtils.create("http://example.org").toURI().toASCIIString());
+        assertEquals("https://example.org", UrlUtils.create("https://example.org").toURI().toASCIIString());
     }
 
     /**
      * Invalid url to uri.
+     *
+     * @throws MalformedURLException
+     *             the malformed URL exception
      */
     @Test
-    void invalidUrlToUri() {
+    void invalidUrlToUri() throws MalformedURLException {
+        URL url = new URL("https://google.com?q=s|r");
         assertThrows(IllegalArgumentException.class, () -> {
-            UrlUtils.toUri(new URL("http://google.com?q=s|r"));
+            UrlUtils.toUri(url);
         });
     }
 
@@ -79,7 +107,7 @@ class UrlUtilsTest {
      */
     @Test
     void validUrlToUri() throws MalformedURLException, URISyntaxException {
-        var uri = UrlUtils.toUri(new URL("http://google.com"));
-        assertEquals(new URI("http://google.com"), uri);
+        var uri = UrlUtils.toUri(new URL("https://google.com"));
+        assertEquals(new URI("https://google.com"), uri);
     }
 }
