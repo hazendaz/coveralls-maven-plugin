@@ -23,36 +23,38 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
+import java.util.List;
+
 /**
  * The Class CoverageFixture.
  */
 public final class CoverageFixture {
 
     /** The java files. */
-    public static final String[][] JAVA_FILES = {
-            // file lines covered lines missed lines covered branches missed branches
-            { "org/eluder/coverage/sample/SimpleCoverage.java", "14", "3,6", "10,11", "", "" },
-            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31", "3,6,9,10,12,13,16,19,22", "26,27", "", "" },
-            { "org/eluder/coverage/sample/PartialCoverage.java", "14", "3,6,7,11", "9", "6", "6" } };
+    public static final List<List<String>> JAVA_FILES = List
+            .of(List.of("org/eluder/coverage/sample/SimpleCoverage.java", "14", "3,6", "10,11", "", ""),
+                    List.of("org/eluder/coverage/sample/InnerClassCoverage.java", "31", "3,6,9,10,12,13,16,19,22",
+                            "26,27", "", ""),
+                    List.of("org/eluder/coverage/sample/PartialCoverage.java", "14", "3,6,7,11", "9", "6", "6"));
 
     /** The java files it. */
-    public static final String[][] JAVA_FILES_IT = {
-            // file lines covered lines missed lines covered branches missed branches
-            { "org/eluder/coverage/sample/SimpleCoverage.java", "14", "3,6", "10,11", "", "" },
-            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31", "3,6,9,10,12,13,16,19,22", "26,27", "", "" },
-            { "org/eluder/coverage/sample/PartialCoverage.java", "14", "3,6,7,9,11", "", "6", "6" } };
+    public static final List<List<String>> JAVA_FILES_IT = List
+            .of(List.of("org/eluder/coverage/sample/SimpleCoverage.java", "14", "3,6", "10,11", "", ""),
+                    List.of("org/eluder/coverage/sample/InnerClassCoverage.java", "31", "3,6,9,10,12,13,16,19,22",
+                            "26,27", "", ""),
+                    List.of("org/eluder/coverage/sample/PartialCoverage.java", "14", "3,6,7,9,11", "", "6", "6"));
 
     /** The java files clover. */
-    public static final String[][] JAVA_FILES_CLOVER = {
-            // file lines covered lines missed lines
-            { "org/eluder/coverage/sample/SimpleCoverage.java", "14", "5,6", "9,10", "", "" },
-            { "org/eluder/coverage/sample/InnerClassCoverage.java", "31", "5,6,7,9,12,15,16,21,22", "25,26", "", "" },
-            { "org/eluder/coverage/sample/PartialCoverage.java", "14", "5,6,7,9", "", "6", "6" } };
+    public static final List<List<String>> JAVA_FILES_CLOVER = List
+            .of(List.of("org/eluder/coverage/sample/SimpleCoverage.java", "14", "5,6", "9,10", "", ""),
+                    List.of("org/eluder/coverage/sample/InnerClassCoverage.java", "31", "5,6,7,9,12,15,16,21,22",
+                            "25,26", "", ""),
+                    List.of("org/eluder/coverage/sample/PartialCoverage.java", "14", "5,6,7,9", "", "6", "6"));
 
     /** The javascript files. */
-    public static final String[][] JAVASCRIPT_FILES = {
-            // file lines covered lines missed lines covered branches missed branches
-            { "Localization.js", "18", "1,2,4,5,9,13", "6,10", "", "" }, { "Components.js", "5", "1,2", "", "", "" } };
+    public static final List<List<String>> JAVASCRIPT_FILES = List.of(
+            List.of("Localization.js", "18", "1,2,4,5,9,13", "6,10", "", ""),
+            List.of("Components.js", "5", "1,2", "", "", ""));
 
     /**
      * Gets the total lines.
@@ -62,10 +64,10 @@ public final class CoverageFixture {
      *
      * @return the total lines
      */
-    public static int getTotalLines(String[][] fixture) {
+    public static int getTotalLines(List<List<String>> fixture) {
         var lines = 0;
-        for (String[] file : fixture) {
-            lines += Integer.parseInt(file[1]);
+        for (List<String> file : fixture) {
+            lines += Integer.parseInt(file.get(1));
         }
         return lines;
     }
@@ -78,8 +80,8 @@ public final class CoverageFixture {
      *
      * @return the total files
      */
-    public static int getTotalFiles(String[][] fixture) {
-        return fixture.length;
+    public static int getTotalFiles(List<List<String>> fixture) {
+        return fixture.size();
     }
 
     /**

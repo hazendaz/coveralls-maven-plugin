@@ -297,8 +297,8 @@ class CoverallsReportMojoTest {
         assertNotNull(json);
 
         var fixture = CoverageFixture.JAVA_FILES;
-        for (String[] coverageFile : fixture) {
-            assertTrue(json.contains(coverageFile[0]));
+        for (List<String> coverageFile : fixture) {
+            assertTrue(json.contains(coverageFile.get(0)));
         }
 
         verifySuccessfullSubmit(logMock, fixture);
@@ -435,7 +435,7 @@ class CoverallsReportMojoTest {
      * @param fixture
      *            the fixture
      */
-    static void verifySuccessfullSubmit(Log logMock, String[][] fixture) {
+    static void verifySuccessfullSubmit(Log logMock, List<List<String>> fixture) {
         verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                 + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");

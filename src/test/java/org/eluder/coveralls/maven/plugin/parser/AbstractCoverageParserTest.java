@@ -87,8 +87,8 @@ public abstract class AbstractCoverageParserTest {
      */
     @BeforeEach
     void init() throws IOException {
-        for (String[] coverageFile : getCoverageFixture()) {
-            final var name = sourceName(coverageFile[0]);
+        for (List<String> coverageFile : getCoverageFixture()) {
+            final var name = sourceName(coverageFile.get(0));
             final var content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
             lenient().when(sourceLoaderMock.load(name)).then(sourceAnswer(name, content));
         }
@@ -149,10 +149,10 @@ public abstract class AbstractCoverageParserTest {
         }
         classifierRemover.onComplete();
 
-        for (String[] coverageFile : fixture) {
-            assertCoverage(sourceCollector.sources, coverageFile[0], Integer.parseInt(coverageFile[1]),
-                    toIntegerSet(coverageFile[2]), toIntegerSet(coverageFile[3]), toIntegerSet(coverageFile[4]),
-                    toIntegerSet(coverageFile[5]));
+        for (List<String> coverageFile : fixture) {
+            assertCoverage(sourceCollector.sources, coverageFile.get(0), Integer.parseInt(coverageFile.get(1)),
+                    toIntegerSet(coverageFile.get(2)), toIntegerSet(coverageFile.get(3)),
+                    toIntegerSet(coverageFile.get(4)), toIntegerSet(coverageFile.get(5)));
         }
     }
 
@@ -180,7 +180,7 @@ public abstract class AbstractCoverageParserTest {
      *
      * @return the coverage fixture
      */
-    protected abstract String[][] getCoverageFixture();
+    protected abstract List<List<String>> getCoverageFixture();
 
     /**
      * To integer set.
