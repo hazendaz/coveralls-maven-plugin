@@ -23,9 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
@@ -36,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -60,17 +58,17 @@ class UniqueSourceCallbackTest {
      */
     @Test
     void onSourceWithUniqueFiles() throws NoSuchAlgorithmException, ProcessingException, IOException {
-        var s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
-        var s2 = createSource("Bar.java", "{\n  bar();\n}\n", 2);
+        final var s1 = this.createSource("Foo.java", "{\n  void();\n}\n", 2);
+        final var s2 = this.createSource("Bar.java", "{\n  bar();\n}\n", 2);
 
-        var cb = createUniqueSourceCallback();
+        final var cb = this.createUniqueSourceCallback();
         cb.onBegin();
         cb.onSource(s1);
         cb.onSource(s2);
         cb.onComplete();
-        verify(sourceCallbackMock).onBegin();
-        verify(sourceCallbackMock, times(2)).onSource(ArgumentMatchers.any(Source.class));
-        verify(sourceCallbackMock).onComplete();
+        Mockito.verify(this.sourceCallbackMock).onBegin();
+        Mockito.verify(this.sourceCallbackMock, Mockito.times(2)).onSource(ArgumentMatchers.any(Source.class));
+        Mockito.verify(this.sourceCallbackMock).onComplete();
     }
 
     /**
@@ -85,17 +83,17 @@ class UniqueSourceCallbackTest {
      */
     @Test
     void onSourceWithDuplicateSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
-        var s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
-        var s2 = createSource("Foo.java", "{\n  void();\n}\n", 2);
+        final var s1 = this.createSource("Foo.java", "{\n  void();\n}\n", 2);
+        final var s2 = this.createSource("Foo.java", "{\n  void();\n}\n", 2);
 
-        var cb = createUniqueSourceCallback();
+        final var cb = this.createUniqueSourceCallback();
         cb.onBegin();
         cb.onSource(s1);
         cb.onSource(s2);
         cb.onComplete();
-        verify(sourceCallbackMock).onBegin();
-        verify(sourceCallbackMock, times(1)).onSource(ArgumentMatchers.any(Source.class));
-        verify(sourceCallbackMock).onComplete();
+        Mockito.verify(this.sourceCallbackMock).onBegin();
+        Mockito.verify(this.sourceCallbackMock, Mockito.times(1)).onSource(ArgumentMatchers.any(Source.class));
+        Mockito.verify(this.sourceCallbackMock).onComplete();
     }
 
     /**
@@ -110,17 +108,17 @@ class UniqueSourceCallbackTest {
      */
     @Test
     void onSourceWithUniqueSources() throws NoSuchAlgorithmException, ProcessingException, IOException {
-        var s1 = createSource("Foo.java", "{\n  void();\n}\n", 2);
-        var s2 = createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
+        final var s1 = this.createSource("Foo.java", "{\n  void();\n}\n", 2);
+        final var s2 = this.createSource("Foo.java", "{\n  void();\n  func();\n}\n", 2, 3);
 
-        var cb = createUniqueSourceCallback();
+        final var cb = this.createUniqueSourceCallback();
         cb.onBegin();
         cb.onSource(s1);
         cb.onSource(s2);
         cb.onComplete();
-        verify(sourceCallbackMock).onBegin();
-        verify(sourceCallbackMock, times(2)).onSource(ArgumentMatchers.any(Source.class));
-        verify(sourceCallbackMock).onComplete();
+        Mockito.verify(this.sourceCallbackMock).onBegin();
+        Mockito.verify(this.sourceCallbackMock, Mockito.times(2)).onSource(ArgumentMatchers.any(Source.class));
+        Mockito.verify(this.sourceCallbackMock).onComplete();
     }
 
     /**
@@ -129,7 +127,7 @@ class UniqueSourceCallbackTest {
      * @return the unique source callback
      */
     UniqueSourceCallback createUniqueSourceCallback() {
-        return new UniqueSourceCallback(sourceCallbackMock);
+        return new UniqueSourceCallback(this.sourceCallbackMock);
     }
 
     /**
@@ -148,8 +146,8 @@ class UniqueSourceCallbackTest {
      *             the no such algorithm exception
      */
     Source createSource(final String name, final String source, final int... relevant) throws NoSuchAlgorithmException {
-        var s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
-        for (int i : relevant) {
+        final var s = new Source(name, source, TestIoUtil.getSha512DigestHex(source));
+        for (final int i : relevant) {
             s.addCoverage(i, 1);
         }
         return s;

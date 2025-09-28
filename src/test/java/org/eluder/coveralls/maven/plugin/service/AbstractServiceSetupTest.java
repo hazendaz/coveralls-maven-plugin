@@ -23,14 +23,11 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,8 +40,8 @@ class AbstractServiceSetupTest {
      */
     @Test
     void getMissingProperty() {
-        var serviceSetup = create(new HashMap<>());
-        assertNull(serviceSetup.getProperty("property"));
+        final var serviceSetup = this.create(new HashMap<>());
+        Assertions.assertNull(serviceSetup.getProperty("property"));
     }
 
     /**
@@ -52,9 +49,9 @@ class AbstractServiceSetupTest {
      */
     @Test
     void testGetProperty() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("CI_NAME", "bamboo");
-        assertEquals("bamboo", create(env).getProperty("CI_NAME"));
+        Assertions.assertEquals("bamboo", this.create(env).getProperty("CI_NAME"));
     }
 
     /**
@@ -62,9 +59,9 @@ class AbstractServiceSetupTest {
      */
     @Test
     void addPropertyWithoutName() {
-        var setup = create(new HashMap<>());
-        var properties = new Properties();
-        assertThrows(IllegalArgumentException.class, () -> {
+        final var setup = this.create(new HashMap<>());
+        final var properties = new Properties();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             setup.addProperty(properties, null, "value");
         });
     }
@@ -74,9 +71,9 @@ class AbstractServiceSetupTest {
      */
     @Test
     void addPropertyWithoutValue() {
-        var properties = new Properties();
-        create(new HashMap<>()).addProperty(properties, "prop", " ");
-        assertNull(properties.getProperty("prop"));
+        final var properties = new Properties();
+        this.create(new HashMap<>()).addProperty(properties, "prop", " ");
+        Assertions.assertNull(properties.getProperty("prop"));
     }
 
     /**
@@ -84,9 +81,9 @@ class AbstractServiceSetupTest {
      */
     @Test
     void addPropertyWithValue() {
-        var properties = new Properties();
-        create(new HashMap<>()).addProperty(properties, "prop", "value");
-        assertEquals("value", properties.getProperty("prop"));
+        final var properties = new Properties();
+        this.create(new HashMap<>()).addProperty(properties, "prop", "value");
+        Assertions.assertEquals("value", properties.getProperty("prop"));
     }
 
     /**
@@ -94,14 +91,14 @@ class AbstractServiceSetupTest {
      */
     @Test
     void getDefaultValues() {
-        var serviceSetup = create(new HashMap<>());
-        assertNull(serviceSetup.getName());
-        assertNull(serviceSetup.getJobId());
-        assertNull(serviceSetup.getBuildNumber());
-        assertNull(serviceSetup.getBuildUrl());
-        assertNull(serviceSetup.getBranch());
-        assertNull(serviceSetup.getPullRequest());
-        assertNull(serviceSetup.getEnvironment());
+        final var serviceSetup = this.create(new HashMap<>());
+        Assertions.assertNull(serviceSetup.getName());
+        Assertions.assertNull(serviceSetup.getJobId());
+        Assertions.assertNull(serviceSetup.getBuildNumber());
+        Assertions.assertNull(serviceSetup.getBuildUrl());
+        Assertions.assertNull(serviceSetup.getBranch());
+        Assertions.assertNull(serviceSetup.getPullRequest());
+        Assertions.assertNull(serviceSetup.getEnvironment());
     }
 
     /**
@@ -119,7 +116,7 @@ class AbstractServiceSetupTest {
 
             @Override
             public String getName() {
-                return getProperty("CI_NAME");
+                return this.getProperty("CI_NAME");
             }
         };
     }

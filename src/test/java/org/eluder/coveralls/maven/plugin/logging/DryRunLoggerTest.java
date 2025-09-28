@@ -23,19 +23,15 @@
  */
 package org.eluder.coveralls.maven.plugin.logging;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-
 import java.io.File;
 
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.logging.Logger.Position;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -57,7 +53,7 @@ class DryRunLoggerTest {
      */
     @Test
     void missingCoverallsFile() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new DryRunLogger(true, null);
         });
     }
@@ -67,7 +63,7 @@ class DryRunLoggerTest {
      */
     @Test
     void testGetPosition() {
-        assertEquals(Position.AFTER, new DryRunLogger(true, coverallsFileMock).getPosition());
+        Assertions.assertEquals(Position.AFTER, new DryRunLogger(true, this.coverallsFileMock).getPosition());
     }
 
     /**
@@ -75,9 +71,9 @@ class DryRunLoggerTest {
      */
     @Test
     void logDryRunDisabled() {
-        new DryRunLogger(false, coverallsFileMock).log(logMock);
+        new DryRunLogger(false, this.coverallsFileMock).log(this.logMock);
 
-        verifyNoInteractions(logMock);
+        Mockito.verifyNoInteractions(this.logMock);
     }
 
     /**
@@ -85,12 +81,12 @@ class DryRunLoggerTest {
      */
     @Test
     void logDryRunEnabled() {
-        when(coverallsFileMock.length()).thenReturn(1024L);
-        when(coverallsFileMock.getAbsolutePath()).thenReturn("/target/coveralls.json");
+        Mockito.when(this.coverallsFileMock.length()).thenReturn(1024L);
+        Mockito.when(this.coverallsFileMock.getAbsolutePath()).thenReturn("/target/coveralls.json");
 
-        new DryRunLogger(true, coverallsFileMock).log(logMock);
+        new DryRunLogger(true, this.coverallsFileMock).log(this.logMock);
 
-        verify(logMock).info("Dry run enabled, Coveralls report will NOT be submitted to API");
-        verify(logMock).info("1024 bytes of data was recorded in /target/coveralls.json");
+        Mockito.verify(this.logMock).info("Dry run enabled, Coveralls report will NOT be submitted to API");
+        Mockito.verify(this.logMock).info("1024 bytes of data was recorded in /target/coveralls.json");
     }
 }

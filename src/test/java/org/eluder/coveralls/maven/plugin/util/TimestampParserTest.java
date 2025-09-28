@@ -23,14 +23,11 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class TimestampParserTest {
      */
     @Test
     void invalidFormat() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new TimestampParser("scsscdfsd");
         });
     }
@@ -56,11 +53,11 @@ class TimestampParserTest {
      */
     @Test
     void parseEpochMillis() throws ProcessingException {
-        var format = TimestampParser.EPOCH_MILLIS;
-        var time = System.currentTimeMillis();
-        var parsed = new TimestampParser(format).parse(String.valueOf(time));
+        final var format = TimestampParser.EPOCH_MILLIS;
+        final var time = System.currentTimeMillis();
+        final var parsed = new TimestampParser(format).parse(String.valueOf(time));
 
-        assertEquals(time, parsed.toEpochMilli());
+        Assertions.assertEquals(time, parsed.toEpochMilli());
     }
 
     /**
@@ -71,11 +68,11 @@ class TimestampParserTest {
      */
     @Test
     void parseSimpleFormat() throws ProcessingException {
-        var format = "yyyy-MM-dd";
-        var parsed = new TimestampParser(format).parse("2015-08-20");
-        var formatted = DateTimeFormatter.ofPattern(format).withZone(ZoneOffset.UTC).format(parsed);
+        final var format = "yyyy-MM-dd";
+        final var parsed = new TimestampParser(format).parse("2015-08-20");
+        final var formatted = DateTimeFormatter.ofPattern(format).withZone(ZoneOffset.UTC).format(parsed);
 
-        assertEquals("2015-08-20", formatted);
+        Assertions.assertEquals("2015-08-20", formatted);
     }
 
     /**
@@ -86,11 +83,11 @@ class TimestampParserTest {
      */
     @Test
     void parseDefaultFormat() throws ProcessingException {
-        var format = TimestampParser.DEFAULT_FORMAT;
-        var parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
-        var formatted = DateTimeFormatter.ofPattern(format).withZone(ZoneOffset.UTC).format(parsed);
+        final var format = TimestampParser.DEFAULT_FORMAT;
+        final var parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
+        final var formatted = DateTimeFormatter.ofPattern(format).withZone(ZoneOffset.UTC).format(parsed);
 
-        assertEquals("2015-08-20T20:10:00Z", formatted);
+        Assertions.assertEquals("2015-08-20T20:10:00Z", formatted);
     }
 
     /**
@@ -101,9 +98,9 @@ class TimestampParserTest {
      */
     @Test
     void parseNull() throws ProcessingException {
-        var parsed = new TimestampParser(null).parse(null);
+        final var parsed = new TimestampParser(null).parse(null);
 
-        assertNull(parsed);
+        Assertions.assertNull(parsed);
     }
 
     /**
@@ -111,7 +108,7 @@ class TimestampParserTest {
      */
     @Test
     void parseInvalidTimestamp() {
-        assertThrows(ProcessingException.class, () -> {
+        Assertions.assertThrows(ProcessingException.class, () -> {
             new TimestampParser(null).parse("2015-08-20");
         });
     }

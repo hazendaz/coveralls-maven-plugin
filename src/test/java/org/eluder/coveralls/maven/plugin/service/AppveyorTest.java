@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class AppveyorTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put(Appveyor.APPVEYOR, "true");
         env.put(Appveyor.APPVEYOR_BUILD_ID, "54de3316c44f");
         env.put(Appveyor.APPVEYOR_BUILD_NUMBER, "77");
@@ -59,7 +56,7 @@ class AppveyorTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Appveyor(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new Appveyor(new HashMap<>()).isSelected());
     }
 
     /**
@@ -67,7 +64,7 @@ class AppveyorTest {
      */
     @Test
     void isSelectedForAppveyor() {
-        assertTrue(new Appveyor(env()).isSelected());
+        Assertions.assertTrue(new Appveyor(this.env()).isSelected());
     }
 
     /**
@@ -75,7 +72,7 @@ class AppveyorTest {
      */
     @Test
     void testGetName() {
-        assertEquals("Appveyor", new Appveyor(env()).getName());
+        Assertions.assertEquals("Appveyor", new Appveyor(this.env()).getName());
     }
 
     /**
@@ -83,7 +80,7 @@ class AppveyorTest {
      */
     @Test
     void testGetBuildNumber() {
-        assertEquals("77", new Appveyor(env()).getBuildNumber());
+        Assertions.assertEquals("77", new Appveyor(this.env()).getBuildNumber());
     }
 
     /**
@@ -91,7 +88,8 @@ class AppveyorTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("https://ci.appveyor.com/project/owner/project/build/77", new Appveyor(env()).getBuildUrl());
+        Assertions.assertEquals("https://ci.appveyor.com/project/owner/project/build/77",
+                new Appveyor(this.env()).getBuildUrl());
     }
 
     /**
@@ -99,7 +97,7 @@ class AppveyorTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new Appveyor(env()).getBranch());
+        Assertions.assertEquals("master", new Appveyor(this.env()).getBranch());
     }
 
     /**
@@ -107,7 +105,7 @@ class AppveyorTest {
      */
     @Test
     void pullRequest() {
-        assertEquals("10", new Appveyor(env()).getPullRequest());
+        Assertions.assertEquals("10", new Appveyor(this.env()).getPullRequest());
     }
 
     /**
@@ -115,6 +113,6 @@ class AppveyorTest {
      */
     @Test
     void testGetJobId() {
-        assertEquals("54de3316c44f", new Appveyor(env()).getJobId());
+        Assertions.assertEquals("54de3316c44f", new Appveyor(this.env()).getJobId());
     }
 }

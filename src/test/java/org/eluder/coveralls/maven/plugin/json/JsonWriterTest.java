@@ -23,10 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.json;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -48,6 +44,7 @@ import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
@@ -73,7 +70,7 @@ class JsonWriterTest {
      */
     @BeforeEach
     void init() {
-        file = folder.resolve("file").toFile();
+        this.file = this.folder.resolve("file").toFile();
     }
 
     /**
@@ -84,10 +81,10 @@ class JsonWriterTest {
      */
     @Test
     void subDirectoryCreation() throws IOException {
-        var f = folder.resolve("sub1").resolve("sub2");
-        var job = job();
+        final var f = this.folder.resolve("sub1").resolve("sub2");
+        final var job = this.job();
         try (var writer = new JsonWriter(job, f.toFile())) {
-            assertTrue(writer.getCoverallsFile().getParentFile().isDirectory());
+            Assertions.assertTrue(writer.getCoverallsFile().getParentFile().isDirectory());
         }
     }
 
@@ -100,9 +97,9 @@ class JsonWriterTest {
     @Test
     @SuppressWarnings("resource")
     void testGetJob() throws IOException {
-        var job = job();
-        try (var writer = new JsonWriter(job, file)) {
-            assertSame(job, writer.getJob());
+        final var job = this.job();
+        try (var writer = new JsonWriter(job, this.file)) {
+            Assertions.assertSame(job, writer.getJob());
         }
     }
 
@@ -115,9 +112,9 @@ class JsonWriterTest {
     @Test
     @SuppressWarnings("resource")
     void testGetCoverallsFile() throws IOException {
-        var job = job();
-        try (var writer = new JsonWriter(job, file)) {
-            assertSame(file, writer.getCoverallsFile());
+        final var job = this.job();
+        try (var writer = new JsonWriter(job, this.file)) {
+            Assertions.assertSame(this.file, writer.getCoverallsFile());
         }
     }
 
@@ -132,27 +129,27 @@ class JsonWriterTest {
     @SuppressWarnings("rawtypes")
     @Test
     void writeStartAndEnd() throws IOException, ProcessingException {
-        try (var writer = new JsonWriter(job(), file)) {
+        try (var writer = new JsonWriter(this.job(), this.file)) {
             writer.onBegin();
             writer.onComplete();
         }
-        var content = TestIoUtil.readFileContent(file);
-        var jsonMap = stringToJsonMap(content);
-        assertEquals("service", jsonMap.get("service_name"));
-        assertEquals("job123", jsonMap.get("service_job_id"));
-        assertEquals("build5", jsonMap.get("service_number"));
-        assertEquals("https://ci.com/build5", jsonMap.get("service_build_url"));
-        assertEquals("foobar", ((Map) jsonMap.get("environment")).get("custom_property"));
-        assertEquals("master", jsonMap.get("service_branch"));
-        assertEquals("pull10", jsonMap.get("service_pull_request"));
+        final var content = TestIoUtil.readFileContent(this.file);
+        final var jsonMap = this.stringToJsonMap(content);
+        Assertions.assertEquals("service", jsonMap.get("service_name"));
+        Assertions.assertEquals("job123", jsonMap.get("service_job_id"));
+        Assertions.assertEquals("build5", jsonMap.get("service_number"));
+        Assertions.assertEquals("https://ci.com/build5", jsonMap.get("service_build_url"));
+        Assertions.assertEquals("foobar", ((Map) jsonMap.get("environment")).get("custom_property"));
+        Assertions.assertEquals("master", jsonMap.get("service_branch"));
+        Assertions.assertEquals("pull10", jsonMap.get("service_pull_request"));
 
-        var formatter = DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT).withZone(ZoneId.systemDefault());
-        var expectedRunAt = formatter.format(Instant.ofEpochMilli(TEST_TIME));
-        assertEquals(expectedRunAt, jsonMap.get("run_at"));
+        final var formatter = DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT).withZone(ZoneId.systemDefault());
+        final var expectedRunAt = formatter.format(Instant.ofEpochMilli(JsonWriterTest.TEST_TIME));
+        Assertions.assertEquals(expectedRunAt, jsonMap.get("run_at"));
 
-        assertEquals("af456fge34acd", ((Map) jsonMap.get("git")).get("branch"));
-        assertEquals("aefg837fge", ((Map) ((Map) jsonMap.get("git")).get("head")).get("id"));
-        assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
+        Assertions.assertEquals("af456fge34acd", ((Map) jsonMap.get("git")).get("branch"));
+        Assertions.assertEquals("aefg837fge", ((Map) ((Map) jsonMap.get("git")).get("head")).get("id"));
+        Assertions.assertEquals(0, ((Collection<?>) jsonMap.get("source_files")).size());
     }
 
     /**
@@ -165,19 +162,19 @@ class JsonWriterTest {
      */
     @Test
     void testOnSource() throws IOException, ProcessingException {
-        try (var writer = new JsonWriter(job(), file)) {
+        try (var writer = new JsonWriter(this.job(), this.file)) {
             writer.onBegin();
-            writer.onSource(source());
+            writer.onSource(this.source());
             writer.onComplete();
         }
-        var content = TestIoUtil.readFileContent(file);
-        var jsonMap = stringToJsonMap(content);
+        final var content = TestIoUtil.readFileContent(this.file);
+        var jsonMap = this.stringToJsonMap(content);
         if (jsonMap.get("source_files") instanceof List) {
             jsonMap = ((List<Map<String, Object>>) jsonMap.get("source_files")).get(0);
         }
-        assertEquals("Foo.java", jsonMap.get("name"));
-        assertEquals("6E0F89B516198DC6AB743EA5FBFB3108", jsonMap.get("source_digest"));
-        assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
+        Assertions.assertEquals("Foo.java", jsonMap.get("name"));
+        Assertions.assertEquals("6E0F89B516198DC6AB743EA5FBFB3108", jsonMap.get("source_digest"));
+        Assertions.assertEquals(1, ((Collection<?>) jsonMap.get("coverage")).size());
     }
 
     /**
@@ -186,13 +183,13 @@ class JsonWriterTest {
      * @return the job
      */
     Job job() {
-        var head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
-        var remote = new Git.Remote("origin", "git@git.com:foo.git");
-        var environment = new Properties();
+        final var head = new Git.Head("aefg837fge", "john", "john@mail.com", "john", "john@mail.com", "test commit");
+        final var remote = new Git.Remote("origin", "git@git.com:foo.git");
+        final var environment = new Properties();
         environment.setProperty("custom_property", "foobar");
         return new Job().withServiceName("service").withServiceJobId("job123").withServiceBuildNumber("build5")
                 .withServiceBuildUrl("https://ci.com/build5").withServiceEnvironment(environment).withBranch("master")
-                .withPullRequest("pull10").withTimestamp(TEST_TIME)
+                .withPullRequest("pull10").withTimestamp(JsonWriterTest.TEST_TIME)
                 .withGit(new Git(null, head, "af456fge34acd", Arrays.asList(remote)));
     }
 
@@ -217,8 +214,8 @@ class JsonWriterTest {
      *             the json processing exception
      */
     Map<String, Object> stringToJsonMap(final String content) throws JsonProcessingException {
-        var mapper = new ObjectMapper();
-        var type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
+        final var mapper = new ObjectMapper();
+        final var type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
         return mapper.readValue(content, type);
     }
 }

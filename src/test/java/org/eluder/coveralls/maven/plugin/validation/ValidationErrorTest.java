@@ -23,10 +23,8 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,7 +37,7 @@ class ValidationErrorTest {
      */
     @Test
     void missingLevel() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new ValidationError(null, "message");
         });
     }
@@ -49,7 +47,7 @@ class ValidationErrorTest {
      */
     @Test
     void missingMessage() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new ValidationError(Level.ERROR, null);
         });
     }
@@ -59,7 +57,7 @@ class ValidationErrorTest {
      */
     @Test
     void testToString() {
-        var error = new ValidationError(Level.WARN, "message");
-        assertEquals("WARN: message", error.toString());
+        final var error = new ValidationError(Level.WARN, "message");
+        Assertions.assertEquals("WARN: message", error.toString());
     }
 }

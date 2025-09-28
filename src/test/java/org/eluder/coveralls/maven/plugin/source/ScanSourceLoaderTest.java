@@ -23,10 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -34,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
@@ -55,8 +52,9 @@ class ScanSourceLoaderTest {
      */
     @Test
     void missingSourceFileFromDirectory() throws IOException {
-        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
-        assertNull(sourceLoader.load("Foo.java"));
+        final var sourceLoader = new ScanSourceLoader(this.folder.toFile(), this.folder.toFile(),
+                StandardCharsets.UTF_8);
+        Assertions.assertNull(sourceLoader.load("Foo.java"));
     }
 
     /**
@@ -67,10 +65,11 @@ class ScanSourceLoaderTest {
      */
     @Test
     void invalidSourceFile() throws IOException {
-        var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile();
-        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
-        var subFolderName = subFolder.getName();
-        assertThrows(IllegalArgumentException.class, () -> {
+        final var subFolder = Files.createDirectory(this.folder.resolve("subFolder")).toFile();
+        final var sourceLoader = new ScanSourceLoader(this.folder.toFile(), this.folder.toFile(),
+                StandardCharsets.UTF_8);
+        final var subFolderName = subFolder.getName();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             sourceLoader.load(subFolderName);
         });
     }
@@ -83,27 +82,30 @@ class ScanSourceLoaderTest {
      */
     @Test
     void loadSource() throws IOException {
-        var level1 = Files.createDirectory(folder.resolve("level1"));
-        var level2 = Files.createDirectory(level1.resolve("level2"));
-        var level3 = Files.createDirectory(level2.resolve("level3"));
-        var fileA = Files.createFile(level3.resolve("AFile.java")).toFile();
-        var fileB = Files.createFile(level3.resolve("BFile.java")).toFile();
+        final var level1 = Files.createDirectory(this.folder.resolve("level1"));
+        final var level2 = Files.createDirectory(level1.resolve("level2"));
+        final var level3 = Files.createDirectory(level2.resolve("level3"));
+        final var fileA = Files.createFile(level3.resolve("AFile.java")).toFile();
+        final var fileB = Files.createFile(level3.resolve("BFile.java")).toFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileA);
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileB);
-        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
-        var sourceA = sourceLoader.load(fileA.getName());
-        assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "AFile.java",
+        final var sourceLoader = new ScanSourceLoader(this.folder.toFile(), this.folder.toFile(),
+                StandardCharsets.UTF_8);
+        final var sourceA = sourceLoader.load(fileA.getName());
+        Assertions.assertEquals(
+                "level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "AFile.java",
                 sourceA.getName());
-        assertEquals(
+        Assertions.assertEquals(
                 "27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6",
                 sourceA.getDigest());
-        assertEquals(4, sourceA.getCoverage().length);
-        var sourceB = sourceLoader.load(fileB.getName());
-        assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "BFile.java",
+        Assertions.assertEquals(4, sourceA.getCoverage().length);
+        final var sourceB = sourceLoader.load(fileB.getName());
+        Assertions.assertEquals(
+                "level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "BFile.java",
                 sourceB.getName());
-        assertEquals(
+        Assertions.assertEquals(
                 "27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6",
                 sourceB.getDigest());
-        assertEquals(4, sourceB.getCoverage().length);
+        Assertions.assertEquals(4, sourceB.getCoverage().length);
     }
 }

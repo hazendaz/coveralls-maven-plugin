@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class BambooTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("bamboo.buildNumber", "build123");
         env.put("bamboo.buildResultsUrl", "https://company.com/bamboo/build123");
         env.put("bamboo.repository.git.branch", "master");
@@ -55,7 +52,7 @@ class BambooTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Bamboo(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new Bamboo(new HashMap<>()).isSelected());
     }
 
     /**
@@ -63,7 +60,7 @@ class BambooTest {
      */
     @Test
     void isSelectedForBamboo() {
-        assertTrue(new Bamboo(env()).isSelected());
+        Assertions.assertTrue(new Bamboo(this.env()).isSelected());
     }
 
     /**
@@ -71,7 +68,7 @@ class BambooTest {
      */
     @Test
     void testGetName() {
-        assertEquals("bamboo", new Bamboo(env()).getName());
+        Assertions.assertEquals("bamboo", new Bamboo(this.env()).getName());
     }
 
     /**
@@ -79,7 +76,7 @@ class BambooTest {
      */
     @Test
     void testGetBuildNumber() {
-        assertEquals("build123", new Bamboo(env()).getBuildNumber());
+        Assertions.assertEquals("build123", new Bamboo(this.env()).getBuildNumber());
     }
 
     /**
@@ -87,7 +84,7 @@ class BambooTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("https://company.com/bamboo/build123", new Bamboo(env()).getBuildUrl());
+        Assertions.assertEquals("https://company.com/bamboo/build123", new Bamboo(this.env()).getBuildUrl());
     }
 
     /**
@@ -95,7 +92,7 @@ class BambooTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new Bamboo(env()).getBranch());
+        Assertions.assertEquals("master", new Bamboo(this.env()).getBranch());
     }
 
 }

@@ -23,16 +23,14 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
 import java.io.IOException;
 
 import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -60,8 +58,8 @@ class MultiSourceLoaderTest {
      */
     @Test
     void missingSource() {
-        assertThrows(IOException.class, () -> {
-            creaMultiSourceLoader().load("source");
+        Assertions.assertThrows(IOException.class, () -> {
+            this.creaMultiSourceLoader().load("source");
         });
     }
 
@@ -73,9 +71,9 @@ class MultiSourceLoaderTest {
      */
     @Test
     void primarySource() throws IOException {
-        when(sl1.load("source")).thenReturn(s1);
-        var source = creaMultiSourceLoader().load("source");
-        assertSame(s1, source);
+        Mockito.when(this.sl1.load("source")).thenReturn(this.s1);
+        final var source = this.creaMultiSourceLoader().load("source");
+        Assertions.assertSame(this.s1, source);
     }
 
     /**
@@ -86,9 +84,9 @@ class MultiSourceLoaderTest {
      */
     @Test
     void secondarySource() throws IOException {
-        when(sl2.load("source")).thenReturn(s2);
-        var source = creaMultiSourceLoader().load("source");
-        assertSame(s2, source);
+        Mockito.when(this.sl2.load("source")).thenReturn(this.s2);
+        final var source = this.creaMultiSourceLoader().load("source");
+        Assertions.assertSame(this.s2, source);
     }
 
     /**
@@ -97,6 +95,6 @@ class MultiSourceLoaderTest {
      * @return the multi source loader
      */
     MultiSourceLoader creaMultiSourceLoader() {
-        return new MultiSourceLoader().add(sl1).add(sl2);
+        return new MultiSourceLoader().add(this.sl1).add(this.sl2);
     }
 }

@@ -23,9 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.lenient;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -35,12 +32,14 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import org.apache.maven.project.MavenProject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -82,15 +81,18 @@ class SourceLoaderFactoryTest {
      */
     @BeforeEach
     void init() throws IOException {
-        rootSources = Files.createDirectory(folder.resolve("src"));
-        m1Sources = Files.createDirectory(rootSources.resolve("m1"));
-        m2Sources = Files.createDirectory(m1Sources.resolve("m2"));
-        lenient().when(root.getCollectedProjects()).thenReturn(Arrays.asList(m1, m2));
-        lenient().when(m1.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
-        lenient().when(m2.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
-        lenient().when(root.getCompileSourceRoots()).thenReturn(Arrays.asList(rootSources.toFile().getAbsolutePath()));
-        lenient().when(m1.getCompileSourceRoots()).thenReturn(Arrays.asList(m1Sources.toFile().getAbsolutePath()));
-        lenient().when(m2.getCompileSourceRoots()).thenReturn(Arrays.asList(m2Sources.toFile().getAbsolutePath()));
+        this.rootSources = Files.createDirectory(this.folder.resolve("src"));
+        this.m1Sources = Files.createDirectory(this.rootSources.resolve("m1"));
+        this.m2Sources = Files.createDirectory(this.m1Sources.resolve("m2"));
+        Mockito.lenient().when(this.root.getCollectedProjects()).thenReturn(Arrays.asList(this.m1, this.m2));
+        Mockito.lenient().when(this.m1.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
+        Mockito.lenient().when(this.m2.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
+        Mockito.lenient().when(this.root.getCompileSourceRoots())
+                .thenReturn(Arrays.asList(this.rootSources.toFile().getAbsolutePath()));
+        Mockito.lenient().when(this.m1.getCompileSourceRoots())
+                .thenReturn(Arrays.asList(this.m1Sources.toFile().getAbsolutePath()));
+        Mockito.lenient().when(this.m2.getCompileSourceRoots())
+                .thenReturn(Arrays.asList(this.m2Sources.toFile().getAbsolutePath()));
     }
 
     /**
@@ -98,8 +100,8 @@ class SourceLoaderFactoryTest {
      */
     @Test
     void testCreateSourceLoader() {
-        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8).createSourceLoader();
-        assertNotNull(sourceLoader);
+        final var sourceLoader = this.createSourceLoaderFactory(StandardCharsets.UTF_8).createSourceLoader();
+        Assertions.assertNotNull(sourceLoader);
     }
 
     /**
@@ -110,11 +112,11 @@ class SourceLoaderFactoryTest {
      */
     @Test
     void createSourceLoaderWithAdditionalSourceDirectories() throws IOException {
-        var s1 = Files.createDirectory(folder.resolve("s1"));
-        var s2 = Files.createDirectory(folder.resolve("s2"));
-        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8)
+        final var s1 = Files.createDirectory(this.folder.resolve("s1"));
+        final var s2 = Files.createDirectory(this.folder.resolve("s2"));
+        final var sourceLoader = this.createSourceLoaderFactory(StandardCharsets.UTF_8)
                 .withSourceDirectories(Arrays.asList(s1.toFile(), s2.toFile())).createSourceLoader();
-        assertNotNull(sourceLoader);
+        Assertions.assertNotNull(sourceLoader);
     }
 
     /**
@@ -122,9 +124,9 @@ class SourceLoaderFactoryTest {
      */
     @Test
     void createSourceLoaderWithScanForSources() {
-        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8).withScanForSources(true)
+        final var sourceLoader = this.createSourceLoaderFactory(StandardCharsets.UTF_8).withScanForSources(true)
                 .createSourceLoader();
-        assertNotNull(sourceLoader);
+        Assertions.assertNotNull(sourceLoader);
     }
 
     /**
@@ -135,10 +137,10 @@ class SourceLoaderFactoryTest {
      */
     @Test
     void createSourceLoaderInvalidDirectory() throws IOException {
-        var file = Files.createDirectory(folder.resolve("aFile")).toFile();
-        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8).withSourceDirectories(Arrays.asList(file))
-                .withScanForSources(true).createSourceLoader();
-        assertNotNull(sourceLoader);
+        final var file = Files.createDirectory(this.folder.resolve("aFile")).toFile();
+        final var sourceLoader = this.createSourceLoaderFactory(StandardCharsets.UTF_8)
+                .withSourceDirectories(Arrays.asList(file)).withScanForSources(true).createSourceLoader();
+        Assertions.assertNotNull(sourceLoader);
     }
 
     /**
@@ -150,6 +152,6 @@ class SourceLoaderFactoryTest {
      * @return the source loader factory
      */
     private SourceLoaderFactory createSourceLoaderFactory(Charset sourceEncoding) {
-        return new SourceLoaderFactory(folder.toFile(), root, sourceEncoding);
+        return new SourceLoaderFactory(this.folder.toFile(), this.root, sourceEncoding);
     }
 }

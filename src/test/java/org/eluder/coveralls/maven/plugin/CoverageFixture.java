@@ -66,7 +66,7 @@ public final class CoverageFixture {
      */
     public static int getTotalLines(List<List<String>> fixture) {
         var lines = 0;
-        for (List<String> file : fixture) {
+        for (final List<String> file : fixture) {
             lines += Integer.parseInt(file.get(1));
         }
         return lines;

@@ -23,8 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.assertj.core.api.Assertions;
 import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.Git.Head;
@@ -42,7 +40,7 @@ class JobValidatorTest {
      */
     @Test
     void missingJob() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new JobValidator(null);
         });
     }
@@ -52,7 +50,7 @@ class JobValidatorTest {
      */
     @Test
     void validateWithoutRepoTokenOrTravis() {
-        var errors = new JobValidator(new Job()).validate();
+        final var errors = new JobValidator(new Job()).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
@@ -62,7 +60,7 @@ class JobValidatorTest {
      */
     @Test
     void validateWithoutRepoTokenOrTravisForDryRun() {
-        var errors = new JobValidator(new Job().withDryRun(true)).validate();
+        final var errors = new JobValidator(new Job().withDryRun(true)).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.WARN);
     }
@@ -72,7 +70,7 @@ class JobValidatorTest {
      */
     @Test
     void validateWithInvalidTravis() {
-        var errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
+        final var errors = new JobValidator(new Job().withServiceName("travis-ci")).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
@@ -82,7 +80,7 @@ class JobValidatorTest {
      */
     @Test
     void validateWithRepoToken() {
-        var errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
+        final var errors = new JobValidator(new Job().withRepoToken("ad3fg5")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
@@ -91,7 +89,7 @@ class JobValidatorTest {
      */
     @Test
     void validateWithTravis() {
-        var errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
+        final var errors = new JobValidator(new Job().withServiceName("travis-ci").withServiceJobId("123")).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
@@ -100,8 +98,8 @@ class JobValidatorTest {
      */
     @Test
     void validateWithoutGitCommitId() {
-        var git = new Git(null, new Head(null, null, null, null, null, null), null, null);
-        var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        final var git = new Git(null, new Head(null, null, null, null, null, null), null, null);
+        final var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         Assertions.assertThat(errors).hasSize(1);
         Assertions.assertThat(errors.get(0).getLevel()).isEqualByComparingTo(Level.ERROR);
     }
@@ -111,8 +109,8 @@ class JobValidatorTest {
      */
     @Test
     void validateWithGit() {
-        var git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
-        var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
+        final var git = new Git(null, new Head("bc23af5", null, null, null, null, null), null, null);
+        final var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withGit(git)).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 
@@ -121,7 +119,7 @@ class JobValidatorTest {
      */
     @Test
     void validateWithParallel() {
-        var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();
+        final var errors = new JobValidator(new Job().withRepoToken("ad3fg5").withParallel(true)).validate();
         Assertions.assertThat(errors).isEmpty();
     }
 

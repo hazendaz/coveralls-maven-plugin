@@ -89,8 +89,8 @@ public final class TestIoUtil {
             if (!local.startsWith("/")) {
                 local = "/" + local;
             }
-            return Path.of(getResourceUrl(local).toURI()).toFile();
-        } catch (URISyntaxException ex) {
+            return Path.of(TestIoUtil.getResourceUrl(local).toURI()).toFile();
+        } catch (final URISyntaxException ex) {
             throw new IllegalArgumentException(ex);
         }
     }

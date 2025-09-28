@@ -23,15 +23,13 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
@@ -50,8 +48,8 @@ class ExistingFilesTest {
      */
     @Test
     void addAllForNull() {
-        var existingFiles = new ExistingFiles();
-        assertThrows(NullPointerException.class, () -> {
+        final var existingFiles = new ExistingFiles();
+        Assertions.assertThrows(NullPointerException.class, () -> {
             existingFiles.addAll(null);
         });
     }
@@ -61,8 +59,8 @@ class ExistingFilesTest {
      */
     @Test
     void addForNull() {
-        var existingFiles = new ExistingFiles();
-        assertThrows(NullPointerException.class, () -> {
+        final var existingFiles = new ExistingFiles();
+        Assertions.assertThrows(NullPointerException.class, () -> {
             existingFiles.add(null);
         });
     }
@@ -75,9 +73,9 @@ class ExistingFilesTest {
      */
     @Test
     void addForExisting() throws IOException {
-        var f = Files.createFile(folder.resolve("f")).toFile();
-        var iter = new ExistingFiles().add(f).add(f).iterator();
-        assertSize(iter, 1);
+        final var f = Files.createFile(this.folder.resolve("f")).toFile();
+        final var iter = new ExistingFiles().add(f).add(f).iterator();
+        ExistingFilesTest.assertSize(iter, 1);
     }
 
     /**
@@ -88,9 +86,9 @@ class ExistingFilesTest {
      */
     @Test
     void addForDirectory() throws IOException {
-        var d = Files.createDirectory(folder.resolve("d")).toFile();
-        var iter = new ExistingFiles().add(d).iterator();
-        assertSize(iter, 0);
+        final var d = Files.createDirectory(this.folder.resolve("d")).toFile();
+        final var iter = new ExistingFiles().add(d).iterator();
+        ExistingFilesTest.assertSize(iter, 0);
     }
 
     /**
@@ -98,8 +96,8 @@ class ExistingFilesTest {
      */
     @Test
     void createForNull() {
-        var iter = ExistingFiles.create(null).iterator();
-        assertSize(iter, 0);
+        final var iter = ExistingFiles.create(null).iterator();
+        ExistingFilesTest.assertSize(iter, 0);
     }
 
     /**
@@ -110,10 +108,10 @@ class ExistingFilesTest {
      */
     @Test
     void createForMultipleFiles() throws IOException {
-        var f1 = Files.createFile(folder.resolve("f1")).toFile();
-        var f2 = Files.createFile(folder.resolve("f2")).toFile();
-        var iter = ExistingFiles.create(Arrays.asList(f1, f2)).iterator();
-        assertSize(iter, 2);
+        final var f1 = Files.createFile(this.folder.resolve("f1")).toFile();
+        final var f2 = Files.createFile(this.folder.resolve("f2")).toFile();
+        final var iter = ExistingFiles.create(Arrays.asList(f1, f2)).iterator();
+        ExistingFilesTest.assertSize(iter, 2);
     }
 
     /**
@@ -128,6 +126,6 @@ class ExistingFilesTest {
         for (var i = 0; i < size; i++) {
             iter.next();
         }
-        assertFalse(iter.hasNext());
+        Assertions.assertFalse(iter.hasNext());
     }
 }

@@ -23,10 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -42,9 +39,9 @@ class ProcessingExceptionTest {
      */
     @Test
     void exception() {
-        var exception = new ProcessingException();
-        assertNull(exception.getMessage());
-        assertNull(exception.getCause());
+        final var exception = new ProcessingException();
+        Assertions.assertNull(exception.getMessage());
+        Assertions.assertNull(exception.getCause());
     }
 
     /**
@@ -52,9 +49,9 @@ class ProcessingExceptionTest {
      */
     @Test
     void exceptionWithMessage() {
-        var exception = new ProcessingException(MESSAGE);
-        assertEquals(MESSAGE, exception.getMessage());
-        assertNull(exception.getCause());
+        final var exception = new ProcessingException(ProcessingExceptionTest.MESSAGE);
+        Assertions.assertEquals(ProcessingExceptionTest.MESSAGE, exception.getMessage());
+        Assertions.assertNull(exception.getCause());
     }
 
     /**
@@ -62,10 +59,10 @@ class ProcessingExceptionTest {
      */
     @Test
     void exceptionWithCause() {
-        var cause = new RuntimeException("cause message");
-        var exception = new ProcessingException(cause);
-        assertEquals(cause.toString(), exception.getMessage());
-        assertSame(cause, exception.getCause());
+        final var cause = new RuntimeException("cause message");
+        final var exception = new ProcessingException(cause);
+        Assertions.assertEquals(cause.toString(), exception.getMessage());
+        Assertions.assertSame(cause, exception.getCause());
     }
 
     /**
@@ -73,10 +70,10 @@ class ProcessingExceptionTest {
      */
     @Test
     void exceptionWithMessageAndCause() {
-        var cause = new RuntimeException("cause message");
-        var exception = new ProcessingException(MESSAGE, cause);
-        assertEquals(MESSAGE, exception.getMessage());
-        assertSame(cause, exception.getCause());
+        final var cause = new RuntimeException("cause message");
+        final var exception = new ProcessingException(ProcessingExceptionTest.MESSAGE, cause);
+        Assertions.assertEquals(ProcessingExceptionTest.MESSAGE, exception.getMessage());
+        Assertions.assertSame(cause, exception.getCause());
     }
 
 }

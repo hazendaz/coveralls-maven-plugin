@@ -23,14 +23,13 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eluder.coveralls.maven.plugin.domain.Git.Head;
 import org.eluder.coveralls.maven.plugin.domain.Git.Remote;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,11 +42,11 @@ class JobTest {
      */
     @Test
     void getBranchWithRemote() {
-        List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
-        var git = new Git(Path.of(".").toFile(), new Head(null, null, null, null, null, null), "master", remotes);
-        var job = new Job().withBranch("origin/master").withGit(git);
-        assertEquals(".", git.getBaseDir().getPath());
-        assertEquals("master", job.getBranch());
+        final List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
+        final var git = new Git(Path.of(".").toFile(), new Head(null, null, null, null, null, null), "master", remotes);
+        final var job = new Job().withBranch("origin/master").withGit(git);
+        Assertions.assertEquals(".", git.getBaseDir().getPath());
+        Assertions.assertEquals("master", job.getBranch());
     }
 
     /**
@@ -55,7 +54,7 @@ class JobTest {
      */
     @Test
     void testGetBranch() {
-        var job = new Job().withBranch("master");
-        assertEquals("master", job.getBranch());
+        final var job = new Job().withBranch("master");
+        Assertions.assertEquals("master", job.getBranch());
     }
 }

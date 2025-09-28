@@ -23,16 +23,13 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
@@ -54,8 +51,9 @@ class DirectorySourceLoaderTest {
      */
     @Test
     void missingSourceFileFromDirectory() throws IOException {
-        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
-        assertNull(sourceLoader.load("Foo.java"));
+        final var sourceLoader = new DirectorySourceLoader(this.folder.toFile(), this.folder.toFile(),
+                StandardCharsets.UTF_8);
+        Assertions.assertNull(sourceLoader.load("Foo.java"));
     }
 
     /**
@@ -66,9 +64,10 @@ class DirectorySourceLoaderTest {
      */
     @Test
     void invalidSourceFile() throws IOException {
-        var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile().getName();
-        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
-        assertThrows(IllegalArgumentException.class, () -> {
+        final var subFolder = Files.createDirectory(this.folder.resolve("subFolder")).toFile().getName();
+        final var sourceLoader = new DirectorySourceLoader(this.folder.toFile(), this.folder.toFile(),
+                StandardCharsets.UTF_8);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             sourceLoader.load(subFolder);
         });
     }
@@ -81,15 +80,16 @@ class DirectorySourceLoaderTest {
      */
     @Test
     void loadSource() throws IOException {
-        var file = Files.createFile(folder.resolve("newFile")).toFile();
+        final var file = Files.createFile(this.folder.resolve("newFile")).toFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
-        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
-        var source = sourceLoader.load(file.getName());
-        assertEquals(file.getName(), source.getName());
-        assertEquals(
+        final var sourceLoader = new DirectorySourceLoader(this.folder.toFile(), this.folder.toFile(),
+                StandardCharsets.UTF_8);
+        final var source = sourceLoader.load(file.getName());
+        Assertions.assertEquals(file.getName(), source.getName());
+        Assertions.assertEquals(
                 "27F0B29785725F4946DBD05F7963E507B8DB735C2803BBB80C93ECB02291B2E2F9B03CBF27526DB68B6A862F1C6541275CD413A1CCD3E07209B9CAE0C04163C6",
                 source.getDigest());
-        assertEquals(4, source.getCoverage().length);
+        Assertions.assertEquals(4, source.getCoverage().length);
     }
 
 }

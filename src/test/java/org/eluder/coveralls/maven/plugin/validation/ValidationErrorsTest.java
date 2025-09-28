@@ -23,20 +23,18 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import static com.googlecode.catchexception.CatchException.catchException;
-import static com.googlecode.catchexception.CatchException.caughtException;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import com.googlecode.catchexception.CatchException;
 
 import java.util.Collections;
 
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -54,9 +52,9 @@ class ValidationErrorsTest {
      */
     @Test
     void throwOrInformWithError() {
-        var errors = createValidationErrors(new ValidationError(Level.ERROR, "message"));
-        catchException(() -> errors.throwOrInform(logMock));
-        assertTrue(caughtException() instanceof ValidationException);
+        final var errors = this.createValidationErrors(new ValidationError(Level.ERROR, "message"));
+        CatchException.catchException(() -> errors.throwOrInform(this.logMock));
+        Assertions.assertTrue(CatchException.caughtException() instanceof ValidationException);
     }
 
     /**
@@ -64,9 +62,9 @@ class ValidationErrorsTest {
      */
     @Test
     void throwOrInformWithWarnings() {
-        createValidationErrors(new ValidationError(Level.WARN, "error1"), new ValidationError(Level.WARN, "error2"))
-                .throwOrInform(logMock);
-        verify(logMock, times(2)).warn(any(CharSequence.class));
+        this.createValidationErrors(new ValidationError(Level.WARN, "error1"),
+                new ValidationError(Level.WARN, "error2")).throwOrInform(this.logMock);
+        Mockito.verify(this.logMock, Mockito.times(2)).warn(ArgumentMatchers.any(CharSequence.class));
     }
 
     /**
@@ -78,7 +76,7 @@ class ValidationErrorsTest {
      * @return the validation errors
      */
     private ValidationErrors createValidationErrors(final ValidationError... errors) {
-        var validationErrors = new ValidationErrors();
+        final var validationErrors = new ValidationErrors();
         Collections.addAll(validationErrors, errors);
         return validationErrors;
     }

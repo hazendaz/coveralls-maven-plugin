@@ -23,14 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.verify;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,11 +42,13 @@ import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 import org.eluder.coveralls.maven.plugin.source.UniqueSourceCallback;
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
@@ -87,10 +81,10 @@ public abstract class AbstractCoverageParserTest {
      */
     @BeforeEach
     void init() throws IOException {
-        for (List<String> coverageFile : getCoverageFixture()) {
-            final var name = sourceName(coverageFile.get(0));
+        for (final List<String> coverageFile : this.getCoverageFixture()) {
+            final var name = this.sourceName(coverageFile.get(0));
             final var content = TestIoUtil.readFileContent(TestIoUtil.getFile(name));
-            lenient().when(sourceLoaderMock.load(name)).then(sourceAnswer(name, content));
+            Mockito.lenient().when(this.sourceLoaderMock.load(name)).then(this.sourceAnswer(name, content));
         }
     }
 
@@ -130,29 +124,31 @@ public abstract class AbstractCoverageParserTest {
      */
     @Test
     void parseCoverage() throws ProcessingException, IOException {
-        for (String coverageResource : getCoverageResources()) {
-            var parser = createCoverageParser(TestIoUtil.getFile(coverageResource), sourceLoaderMock);
-            parser.parse(sourceCallbackMock);
+        for (final String coverageResource : this.getCoverageResources()) {
+            final var parser = this.createCoverageParser(TestIoUtil.getFile(coverageResource), this.sourceLoaderMock);
+            parser.parse(this.sourceCallbackMock);
         }
 
-        var fixture = getCoverageFixture();
+        final var fixture = this.getCoverageFixture();
 
-        ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
-        verify(sourceCallbackMock, atLeast(CoverageFixture.getTotalFiles(fixture))).onSource(captor.capture());
+        final ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
+        Mockito.verify(this.sourceCallbackMock, Mockito.atLeast(CoverageFixture.getTotalFiles(fixture)))
+                .onSource(captor.capture());
 
-        var sourceCollector = new SourceCollector();
-        var uniqueSourceCallback = new UniqueSourceCallback(sourceCollector);
-        var classifierRemover = new ClassifierRemover(uniqueSourceCallback);
+        final var sourceCollector = new SourceCollector();
+        final var uniqueSourceCallback = new UniqueSourceCallback(sourceCollector);
+        final var classifierRemover = new ClassifierRemover(uniqueSourceCallback);
         classifierRemover.onBegin();
-        for (Source source : captor.getAllValues()) {
+        for (final Source source : captor.getAllValues()) {
             classifierRemover.onSource(source);
         }
         classifierRemover.onComplete();
 
-        for (List<String> coverageFile : fixture) {
-            assertCoverage(sourceCollector.sources, coverageFile.get(0), Integer.parseInt(coverageFile.get(1)),
-                    toIntegerSet(coverageFile.get(2)), toIntegerSet(coverageFile.get(3)),
-                    toIntegerSet(coverageFile.get(4)), toIntegerSet(coverageFile.get(5)));
+        for (final List<String> coverageFile : fixture) {
+            AbstractCoverageParserTest.assertCoverage(sourceCollector.sources, coverageFile.get(0),
+                    Integer.parseInt(coverageFile.get(1)), this.toIntegerSet(coverageFile.get(2)),
+                    this.toIntegerSet(coverageFile.get(3)), this.toIntegerSet(coverageFile.get(4)),
+                    this.toIntegerSet(coverageFile.get(5)));
         }
     }
 
@@ -194,9 +190,9 @@ public abstract class AbstractCoverageParserTest {
         if (commaSeparated.isEmpty()) {
             return Collections.emptySet();
         }
-        var split = commaSeparated.split(",", -1);
-        Set<Integer> values = new HashSet<>();
-        for (String value : split) {
+        final var split = commaSeparated.split(",", -1);
+        final Set<Integer> values = new HashSet<>();
+        for (final String value : split) {
             values.add(Integer.valueOf(value));
         }
         return values;
@@ -208,7 +204,7 @@ public abstract class AbstractCoverageParserTest {
     static class SourceCollector implements SourceCallback {
 
         /** The sources. */
-        private List<Source> sources = new ArrayList<>();
+        private final List<Source> sources = new ArrayList<>();
 
         @Override
         public void onBegin() {
@@ -217,7 +213,7 @@ public abstract class AbstractCoverageParserTest {
 
         @Override
         public void onSource(Source source) {
-            sources.add(source);
+            this.sources.add(source);
         }
 
         @Override
@@ -270,35 +266,35 @@ public abstract class AbstractCoverageParserTest {
             final Set<Integer> missedBranches) {
 
         Source tested = null;
-        for (Source source : sources) {
+        for (final Source source : sources) {
             if (source.getName().endsWith(name)) {
                 tested = source;
                 break;
             }
         }
         if (tested == null) {
-            fail("Expected source " + name + " not found from coverage report");
+            Assertions.fail("Expected source " + name + " not found from coverage report");
         }
         if (tested.getCoverage().length != lines) {
-            fail("Expected " + lines + " lines for " + name + " was " + tested.getCoverage().length);
+            Assertions.fail("Expected " + lines + " lines for " + name + " was " + tested.getCoverage().length);
         }
         for (var i = 0; i < tested.getCoverage().length; i++) {
-            int lineNumber = i + 1;
-            var message = name + " line " + lineNumber + " coverage";
+            final var lineNumber = i + 1;
+            final var message = name + " line " + lineNumber + " coverage";
             if (coveredLines.contains(lineNumber)) {
-                assertTrue(tested.getCoverage()[i] > 0, message);
+                Assertions.assertTrue(tested.getCoverage()[i] > 0, message);
             } else if (missedLines.contains(lineNumber)) {
-                assertEquals(0, tested.getCoverage()[i], message);
+                Assertions.assertEquals(0, tested.getCoverage()[i], message);
             } else {
-                assertNull(tested.getCoverage()[i], message);
+                Assertions.assertNull(tested.getCoverage()[i], message);
             }
         }
         for (final Branch b : tested.getBranchesList()) {
             final var message = name + " branch " + b.getBranchNumber() + " coverage in line " + b.getLineNumber();
             if (b.getHits() > 0) {
-                assertTrue(coveredBranches.contains(b.getLineNumber()), message);
+                Assertions.assertTrue(coveredBranches.contains(b.getLineNumber()), message);
             } else {
-                assertTrue(missedBranches.contains(b.getLineNumber()), message);
+                Assertions.assertTrue(missedBranches.contains(b.getLineNumber()), message);
             }
         }
     }

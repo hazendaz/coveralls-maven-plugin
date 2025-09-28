@@ -23,10 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -42,9 +39,9 @@ class ValidationExceptionTest {
      */
     @Test
     void exception() {
-        var exception = new ValidationException();
-        assertNull(exception.getMessage());
-        assertNull(exception.getCause());
+        final var exception = new ValidationException();
+        Assertions.assertNull(exception.getMessage());
+        Assertions.assertNull(exception.getCause());
     }
 
     /**
@@ -52,9 +49,9 @@ class ValidationExceptionTest {
      */
     @Test
     void exceptionWithMessage() {
-        var exception = new ValidationException(MESSAGE);
-        assertEquals(MESSAGE, exception.getMessage());
-        assertNull(exception.getCause());
+        final var exception = new ValidationException(ValidationExceptionTest.MESSAGE);
+        Assertions.assertEquals(ValidationExceptionTest.MESSAGE, exception.getMessage());
+        Assertions.assertNull(exception.getCause());
     }
 
     /**
@@ -62,10 +59,10 @@ class ValidationExceptionTest {
      */
     @Test
     void exceptionWithCause() {
-        var cause = new RuntimeException("cause message");
-        var exception = new ValidationException(cause);
-        assertEquals(cause.toString(), exception.getMessage());
-        assertSame(cause, exception.getCause());
+        final var cause = new RuntimeException("cause message");
+        final var exception = new ValidationException(cause);
+        Assertions.assertEquals(cause.toString(), exception.getMessage());
+        Assertions.assertSame(cause, exception.getCause());
     }
 
     /**
@@ -73,9 +70,9 @@ class ValidationExceptionTest {
      */
     @Test
     void exceptionWithMessageAndCause() {
-        var cause = new RuntimeException("cause message");
-        var exception = new ValidationException(MESSAGE, cause);
-        assertEquals(MESSAGE, exception.getMessage());
-        assertSame(cause, exception.getCause());
+        final var cause = new RuntimeException("cause message");
+        final var exception = new ValidationException(ValidationExceptionTest.MESSAGE, cause);
+        Assertions.assertEquals(ValidationExceptionTest.MESSAGE, exception.getMessage());
+        Assertions.assertSame(cause, exception.getCause());
     }
 }

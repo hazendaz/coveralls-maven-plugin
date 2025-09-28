@@ -23,9 +23,8 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.apache.maven.settings.Proxy;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,7 +37,7 @@ class CoverallsProxyClientTest {
      */
     @Test
     void constructorWithoutProxy() {
-        assertNotNull(new CoverallsProxyClient("https://test.com/coveralls", null));
+        Assertions.assertNotNull(new CoverallsProxyClient("https://test.com/coveralls", null));
     }
 
     /**
@@ -46,12 +45,12 @@ class CoverallsProxyClientTest {
      */
     @Test
     void constructorWithProxy() {
-        var proxy = new Proxy();
+        final var proxy = new Proxy();
         proxy.setHost("localhost");
         proxy.setPort(8080);
         proxy.setProtocol("http");
 
-        assertNotNull(new CoverallsProxyClient("https://test.com/coveralls", proxy));
+        Assertions.assertNotNull(new CoverallsProxyClient("https://test.com/coveralls", proxy));
     }
 
 }

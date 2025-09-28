@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class GitHubTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("GITHUB_ACTIONS", "true");
         env.put("GITHUB_REPOSITORY", "hazendaz/coveralls-maven-plugin");
         env.put("GITHUB_REF_NAME", "1/merge");
@@ -58,7 +55,7 @@ class GitHubTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new GitHub(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new GitHub(new HashMap<>()).isSelected());
     }
 
     /**
@@ -66,7 +63,7 @@ class GitHubTest {
      */
     @Test
     void isSelectedForJenkins() {
-        assertTrue(new GitHub(env()).isSelected());
+        Assertions.assertTrue(new GitHub(this.env()).isSelected());
     }
 
     /**
@@ -74,7 +71,7 @@ class GitHubTest {
      */
     @Test
     void testGetName() {
-        assertEquals("github", new GitHub(env()).getName());
+        Assertions.assertEquals("github", new GitHub(this.env()).getName());
     }
 
     /**
@@ -82,7 +79,7 @@ class GitHubTest {
      */
     @Test
     void testGetBuildNumber() {
-        assertEquals("1", new GitHub(env()).getBuildNumber());
+        Assertions.assertEquals("1", new GitHub(this.env()).getBuildNumber());
     }
 
     /**
@@ -90,8 +87,8 @@ class GitHubTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("https://github.com/hazendaz/coveralls-maven-plugin/actions/runs/12345",
-                new GitHub(env()).getBuildUrl());
+        Assertions.assertEquals("https://github.com/hazendaz/coveralls-maven-plugin/actions/runs/12345",
+                new GitHub(this.env()).getBuildUrl());
     }
 
     /**
@@ -99,7 +96,7 @@ class GitHubTest {
      */
     @Test
     void testGetPullRequest() {
-        assertEquals("1", new GitHub(env()).getPullRequest());
+        Assertions.assertEquals("1", new GitHub(this.env()).getPullRequest());
     }
 
     /**
@@ -107,7 +104,7 @@ class GitHubTest {
      */
     @Test
     void testGetJobId() {
-        assertEquals("12345", new GitHub(env()).getJobId());
+        Assertions.assertEquals("12345", new GitHub(this.env()).getJobId());
     }
 
 }

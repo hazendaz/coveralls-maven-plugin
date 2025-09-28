@@ -23,14 +23,12 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +41,7 @@ class UrlUtilsTest {
      */
     @Test
     void createIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.create("sdfds");
         });
     }
@@ -53,11 +51,11 @@ class UrlUtilsTest {
      */
     @Test
     void createMalformedUrlException() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        final var thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.create("abc://example.org");
         });
         // Assert that the cause is MalformedURLException
-        assertEquals(MalformedURLException.class, thrown.getCause().getClass());
+        Assertions.assertEquals(MalformedURLException.class, thrown.getCause().getClass());
     }
 
     /**
@@ -65,11 +63,11 @@ class UrlUtilsTest {
      */
     @Test
     void createUriSynatxException() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        final var thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.create("https://invalid|url");
         });
         // Assert that the cause is URISyntaxException
-        assertEquals(URISyntaxException.class, thrown.getCause().getClass());
+        Assertions.assertEquals(URISyntaxException.class, thrown.getCause().getClass());
     }
 
     /**
@@ -80,7 +78,7 @@ class UrlUtilsTest {
      */
     @Test
     void createValidUrl() throws URISyntaxException {
-        assertEquals("https://example.org", UrlUtils.create("https://example.org").toURI().toASCIIString());
+        Assertions.assertEquals("https://example.org", UrlUtils.create("https://example.org").toURI().toASCIIString());
     }
 
     /**
@@ -91,8 +89,8 @@ class UrlUtilsTest {
      */
     @Test
     void invalidUrlToUri() throws MalformedURLException {
-        URL url = new URL("https://google.com?q=s|r");
-        assertThrows(IllegalArgumentException.class, () -> {
+        final var url = new URL("https://google.com?q=s|r");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             UrlUtils.toUri(url);
         });
     }
@@ -107,7 +105,7 @@ class UrlUtilsTest {
      */
     @Test
     void validUrlToUri() throws MalformedURLException, URISyntaxException {
-        var uri = UrlUtils.toUri(new URL("https://google.com"));
-        assertEquals(new URI("https://google.com"), uri);
+        final var uri = UrlUtils.toUri(new URL("https://google.com"));
+        Assertions.assertEquals(new URI("https://google.com"), uri);
     }
 }

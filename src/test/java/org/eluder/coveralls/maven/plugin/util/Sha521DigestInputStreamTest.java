@@ -23,12 +23,11 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -46,14 +45,14 @@ class Sha521DigestInputStreamTest {
      */
     @Test
     void testRead() throws NoSuchAlgorithmException, IOException {
-        byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
+        final byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
         try (var is = new Sha512DigestInputStream(new ByteArrayInputStream(data))) {
-            assertEquals(0xAA, is.read());
-            assertEquals(0xBB, is.read());
-            assertEquals(0xCC, is.read());
-            assertEquals(0xDD, is.read());
-            assertEquals(-1, is.read());
-            assertEquals(
+            Assertions.assertEquals(0xAA, is.read());
+            Assertions.assertEquals(0xBB, is.read());
+            Assertions.assertEquals(0xCC, is.read());
+            Assertions.assertEquals(0xDD, is.read());
+            Assertions.assertEquals(-1, is.read());
+            Assertions.assertEquals(
                     "48E218B30D4EA16305096FE35E84002A0D262EB3853131309423492228980C60238F9EED238285036F22E37C4662E40C80A461000A7AA9A03FB3CB6E4223E83B",
                     is.getDigestHex());
         }
@@ -69,15 +68,15 @@ class Sha521DigestInputStreamTest {
      */
     @Test
     void readArray() throws NoSuchAlgorithmException, IOException {
-        byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
+        final byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
         try (var is = new Sha512DigestInputStream(new ByteArrayInputStream(data))) {
-            var buff = new byte[5];
-            assertEquals(4, is.read(buff));
-            assertEquals(-1, is.read());
+            final var buff = new byte[5];
+            Assertions.assertEquals(4, is.read(buff));
+            Assertions.assertEquals(-1, is.read());
             for (var i = 0; i < data.length; i++) {
-                assertEquals(data[i], buff[i]);
+                Assertions.assertEquals(data[i], buff[i]);
             }
-            assertEquals(
+            Assertions.assertEquals(
                     "48E218B30D4EA16305096FE35E84002A0D262EB3853131309423492228980C60238F9EED238285036F22E37C4662E40C80A461000A7AA9A03FB3CB6E4223E83B",
                     is.getDigestHex());
         }

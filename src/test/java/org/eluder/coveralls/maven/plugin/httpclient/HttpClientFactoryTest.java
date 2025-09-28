@@ -23,13 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.any;
-import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.matching;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
@@ -39,6 +33,7 @@ import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.maven.settings.Proxy;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
@@ -54,18 +49,18 @@ class HttpClientFactoryTest {
     static final int TARGET_PORT = 9696;
 
     /** The Constant TARGET_URL. */
-    static final String TARGET_URL = "http://localhost:" + TARGET_PORT;
+    static final String TARGET_URL = "http://localhost:" + HttpClientFactoryTest.TARGET_PORT;
 
     /** The target server. */
     @RegisterExtension
     static WireMockExtension targetServer = WireMockExtension.newInstance()
-            .options(WireMockConfiguration.wireMockConfig().port(TARGET_PORT).dynamicHttpsPort())
+            .options(WireMockConfiguration.wireMockConfig().port(HttpClientFactoryTest.TARGET_PORT).dynamicHttpsPort())
             .configureStaticDsl(true).build();
 
     /** The proxy server. */
     @RegisterExtension
     static WireMockExtension proxyServer = WireMockExtension.newInstance()
-            .options(WireMockConfiguration.wireMockConfig().port(PROXY_PORT).dynamicHttpsPort())
+            .options(WireMockConfiguration.wireMockConfig().port(HttpClientFactoryTest.PROXY_PORT).dynamicHttpsPort())
             .configureStaticDsl(true).build();
 
     /**
@@ -78,12 +73,14 @@ class HttpClientFactoryTest {
      */
     @Test
     void simpleRequest() throws IOException, ParseException {
-        targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
+        HttpClientFactoryTest.targetServer.stubFor(
+                WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
-        var client = new HttpClientFactory(TARGET_URL).create();
-        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
+        final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).create();
+        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
+                response -> EntityUtils.toString(response.getEntity()));
 
-        assertEquals("Hello World!", body);
+        Assertions.assertEquals("Hello World!", body);
     }
 
     /**
@@ -96,19 +93,22 @@ class HttpClientFactoryTest {
      */
     @Test
     void unAuthorizedProxyRequest() throws IOException, ParseException {
-        targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
+        HttpClientFactoryTest.targetServer.stubFor(
+                WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
-        proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
+        HttpClientFactoryTest.proxyServer.stubFor(
+                WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello Proxy!")));
 
-        var proxy = new Proxy();
+        final var proxy = new Proxy();
         proxy.setHost("localhost");
-        proxy.setPort(PROXY_PORT);
+        proxy.setPort(HttpClientFactoryTest.PROXY_PORT);
         proxy.setProtocol("http");
 
-        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
+        final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
+        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
+                response -> EntityUtils.toString(response.getEntity()));
 
-        assertEquals("Hello Proxy!", body);
+        Assertions.assertEquals("Hello Proxy!", body);
     }
 
     /**
@@ -121,24 +121,28 @@ class HttpClientFactoryTest {
      */
     @Test
     void authorixedProxyRequest() throws IOException, ParseException {
-        targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
+        HttpClientFactoryTest.targetServer.stubFor(
+                WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
-        proxyServer.stubFor(get(urlMatching(".*")).withHeader("Proxy-Authorization", matching("Basic Zm9vOmJhcg=="))
-                .willReturn(aResponse().withBody("Hello Proxy!")).atPriority(1));
-        proxyServer.stubFor(any(urlMatching(".*"))
-                .willReturn(aResponse().withStatus(407).withHeader("Proxy-Authenticate", "Basic")).atPriority(2));
+        HttpClientFactoryTest.proxyServer.stubFor(WireMock.get(WireMock.urlMatching(".*"))
+                .withHeader("Proxy-Authorization", WireMock.matching("Basic Zm9vOmJhcg=="))
+                .willReturn(WireMock.aResponse().withBody("Hello Proxy!")).atPriority(1));
+        HttpClientFactoryTest.proxyServer.stubFor(WireMock.any(WireMock.urlMatching(".*"))
+                .willReturn(WireMock.aResponse().withStatus(407).withHeader("Proxy-Authenticate", "Basic"))
+                .atPriority(2));
 
-        var proxy = new Proxy();
+        final var proxy = new Proxy();
         proxy.setHost("localhost");
-        proxy.setPort(PROXY_PORT);
+        proxy.setPort(HttpClientFactoryTest.PROXY_PORT);
         proxy.setProtocol("http");
         proxy.setUsername("foo");
         proxy.setPassword("bar");
 
-        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
+        final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
+        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
+                response -> EntityUtils.toString(response.getEntity()));
 
-        assertEquals("Hello Proxy!", body);
+        Assertions.assertEquals("Hello Proxy!", body);
     }
 
     /**
@@ -151,19 +155,22 @@ class HttpClientFactoryTest {
      */
     @Test
     void nonProxiedHostRequest() throws IOException, ParseException {
-        targetServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello World!")));
+        HttpClientFactoryTest.targetServer.stubFor(
+                WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
-        proxyServer.stubFor(get(urlMatching(".*")).willReturn(aResponse().withBody("Hello Proxy!")));
+        HttpClientFactoryTest.proxyServer.stubFor(
+                WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello Proxy!")));
 
-        var proxy = new Proxy();
+        final var proxy = new Proxy();
         proxy.setHost("localhost");
-        proxy.setPort(PROXY_PORT);
+        proxy.setPort(HttpClientFactoryTest.PROXY_PORT);
         proxy.setProtocol("http");
         proxy.setNonProxyHosts("localhost|example.com");
 
-        var client = new HttpClientFactory(TARGET_URL).proxy(proxy).create();
-        var body = client.execute(new HttpGet(TARGET_URL), response -> EntityUtils.toString(response.getEntity()));
+        final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
+        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
+                response -> EntityUtils.toString(response.getEntity()));
 
-        assertEquals("Hello World!", body);
+        Assertions.assertEquals("Hello World!", body);
     }
 }

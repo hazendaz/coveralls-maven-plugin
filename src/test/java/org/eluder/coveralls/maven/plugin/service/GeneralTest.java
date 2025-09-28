@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class GeneralTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("CI_NAME", "ci_service");
         env.put("CI_BUILD_NUMBER", "build123");
         env.put("CI_BUILD_URL", "https://ci.com/build123");
@@ -57,7 +54,7 @@ class GeneralTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new General(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new General(new HashMap<>()).isSelected());
     }
 
     /**
@@ -65,7 +62,7 @@ class GeneralTest {
      */
     @Test
     void isSelectedForCi() {
-        assertTrue(new General(env()).isSelected());
+        Assertions.assertTrue(new General(this.env()).isSelected());
     }
 
     /**
@@ -73,7 +70,7 @@ class GeneralTest {
      */
     @Test
     void testGetName() {
-        assertEquals("ci_service", new General(env()).getName());
+        Assertions.assertEquals("ci_service", new General(this.env()).getName());
     }
 
     /**
@@ -81,7 +78,7 @@ class GeneralTest {
      */
     @Test
     void testGetBuildNumber() {
-        assertEquals("build123", new General(env()).getBuildNumber());
+        Assertions.assertEquals("build123", new General(this.env()).getBuildNumber());
     }
 
     /**
@@ -89,7 +86,7 @@ class GeneralTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("https://ci.com/build123", new General(env()).getBuildUrl());
+        Assertions.assertEquals("https://ci.com/build123", new General(this.env()).getBuildUrl());
     }
 
     /**
@@ -97,7 +94,7 @@ class GeneralTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new General(env()).getBranch());
+        Assertions.assertEquals("master", new General(this.env()).getBranch());
     }
 
     /**
@@ -105,6 +102,6 @@ class GeneralTest {
      */
     @Test
     void testGetPullRequest() {
-        assertEquals("pull10", new General(env()).getPullRequest());
+        Assertions.assertEquals("pull10", new General(this.env()).getPullRequest());
     }
 }

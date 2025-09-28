@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class CircleTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("CIRCLECI", "true");
         env.put("CIRCLE_BUILD_NUM", "build123");
         env.put("CIRCLE_BRANCH", "master");
@@ -56,7 +53,7 @@ class CircleTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Circle(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new Circle(new HashMap<>()).isSelected());
     }
 
     /**
@@ -64,7 +61,7 @@ class CircleTest {
      */
     @Test
     void isSelectedForCircle() {
-        assertTrue(new Circle(env()).isSelected());
+        Assertions.assertTrue(new Circle(this.env()).isSelected());
     }
 
     /**
@@ -72,7 +69,7 @@ class CircleTest {
      */
     @Test
     void testGetName() {
-        assertEquals("circleci", new Circle(env()).getName());
+        Assertions.assertEquals("circleci", new Circle(this.env()).getName());
     }
 
     /**
@@ -80,7 +77,7 @@ class CircleTest {
      */
     @Test
     void testGetBuildNumber() {
-        assertEquals("build123", new Circle(env()).getBuildNumber());
+        Assertions.assertEquals("build123", new Circle(this.env()).getBuildNumber());
     }
 
     /**
@@ -88,7 +85,7 @@ class CircleTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new Circle(env()).getBranch());
+        Assertions.assertEquals("master", new Circle(this.env()).getBranch());
     }
 
     /**
@@ -96,10 +93,10 @@ class CircleTest {
      */
     @Test
     void testGetEnvironment() {
-        var properties = new Circle(env()).getEnvironment();
-        assertEquals(3, properties.size());
-        assertEquals("build123", properties.getProperty("circleci_build_num"));
-        assertEquals("master", properties.getProperty("branch"));
-        assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
+        final var properties = new Circle(this.env()).getEnvironment();
+        Assertions.assertEquals(3, properties.size());
+        Assertions.assertEquals("build123", properties.getProperty("circleci_build_num"));
+        Assertions.assertEquals("master", properties.getProperty("branch"));
+        Assertions.assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
     }
 }

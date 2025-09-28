@@ -23,9 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -33,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
@@ -54,9 +52,9 @@ class UrlSourceLoaderTest {
      */
     @Test
     void missingSourceFileFromUrl() throws IOException {
-        var sourceLoader = new UrlSourceLoader(folder.toUri().toURL(),
+        final var sourceLoader = new UrlSourceLoader(this.folder.toUri().toURL(),
                 new URL("https://domainthatreallydoesnotexistsdfsmshjsfsj.com"), StandardCharsets.UTF_8);
-        assertNull(sourceLoader.load("Foo.java"));
+        Assertions.assertNull(sourceLoader.load("Foo.java"));
     }
 
     /**
@@ -67,21 +65,21 @@ class UrlSourceLoaderTest {
      */
     @Test
     void loadSourceFromUrl() throws IOException {
-        var scripts = Files.createDirectory(folder.resolve("scripts"));
-        var file = Files.createFile(scripts.resolve("file.coffee")).toFile();
+        final var scripts = Files.createDirectory(this.folder.resolve("scripts"));
+        final var file = Files.createFile(scripts.resolve("file.coffee")).toFile();
 
         TestIoUtil.writeFileContent("math =\n  root:   Math.sqrt\n  square: square", file);
 
-        var fileName = "scripts/file.coffee";
-        var sourceUrl = folder.toUri().toURL();
-        var sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), sourceUrl, StandardCharsets.UTF_8);
-        var source = sourceLoader.load(fileName);
+        final var fileName = "scripts/file.coffee";
+        final var sourceUrl = this.folder.toUri().toURL();
+        final var sourceLoader = new UrlSourceLoader(this.folder.toUri().toURL(), sourceUrl, StandardCharsets.UTF_8);
+        final var source = sourceLoader.load(fileName);
 
-        assertEquals(fileName, source.getName());
-        assertEquals(
+        Assertions.assertEquals(fileName, source.getName());
+        Assertions.assertEquals(
                 "259AEA51FD9A0FB9529BDDDECDD3FCAE41BFA7C5C8C79555D61E4FB2910D08363814EC6C02DA1FBF6FF539DCEB7DC180B5043E980651049C24497BDA1CA47DAA",
                 source.getDigest());
-        assertEquals(3, source.getCoverage().length);
+        Assertions.assertEquals(3, source.getCoverage().length);
     }
 
 }

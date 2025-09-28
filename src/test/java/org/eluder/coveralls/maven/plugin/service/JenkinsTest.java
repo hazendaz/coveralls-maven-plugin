@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class JenkinsTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("JENKINS_URL", "https://company.com/jenkins");
         env.put("BUILD_NUMBER", "build123");
         env.put("BUILD_URL", "https://company.com/jenkins/build123");
@@ -57,7 +54,7 @@ class JenkinsTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Jenkins(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new Jenkins(new HashMap<>()).isSelected());
     }
 
     /**
@@ -65,7 +62,7 @@ class JenkinsTest {
      */
     @Test
     void isSelectedForJenkins() {
-        assertTrue(new Jenkins(env()).isSelected());
+        Assertions.assertTrue(new Jenkins(this.env()).isSelected());
     }
 
     /**
@@ -73,7 +70,7 @@ class JenkinsTest {
      */
     @Test
     void testGetName() {
-        assertEquals("jenkins", new Jenkins(env()).getName());
+        Assertions.assertEquals("jenkins", new Jenkins(this.env()).getName());
     }
 
     /**
@@ -81,7 +78,7 @@ class JenkinsTest {
      */
     @Test
     void testGetBuildNumber() {
-        assertEquals("build123", new Jenkins(env()).getBuildNumber());
+        Assertions.assertEquals("build123", new Jenkins(this.env()).getBuildNumber());
     }
 
     /**
@@ -89,7 +86,7 @@ class JenkinsTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("https://company.com/jenkins/build123", new Jenkins(env()).getBuildUrl());
+        Assertions.assertEquals("https://company.com/jenkins/build123", new Jenkins(this.env()).getBuildUrl());
     }
 
     /**
@@ -97,7 +94,7 @@ class JenkinsTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new Jenkins(env()).getBranch());
+        Assertions.assertEquals("master", new Jenkins(this.env()).getBranch());
     }
 
     /**
@@ -105,11 +102,11 @@ class JenkinsTest {
      */
     @Test
     void testGetEnvironment() {
-        var properties = new Jenkins(env()).getEnvironment();
-        assertEquals(4, properties.size());
-        assertEquals("build123", properties.getProperty("jenkins_build_num"));
-        assertEquals("https://company.com/jenkins/build123", properties.getProperty("jenkins_build_url"));
-        assertEquals("master", properties.getProperty("branch"));
-        assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
+        final var properties = new Jenkins(this.env()).getEnvironment();
+        Assertions.assertEquals(4, properties.size());
+        Assertions.assertEquals("build123", properties.getProperty("jenkins_build_num"));
+        Assertions.assertEquals("https://company.com/jenkins/build123", properties.getProperty("jenkins_build_url"));
+        Assertions.assertEquals("master", properties.getProperty("branch"));
+        Assertions.assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
     }
 }

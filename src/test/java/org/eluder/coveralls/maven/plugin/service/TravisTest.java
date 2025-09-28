@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class TravisTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("TRAVIS", "true");
         env.put("TRAVIS_JOB_ID", "job123");
         env.put("TRAVIS_BRANCH", "master");
@@ -56,7 +53,7 @@ class TravisTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Travis(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new Travis(new HashMap<>()).isSelected());
     }
 
     /**
@@ -64,7 +61,7 @@ class TravisTest {
      */
     @Test
     void isSelectedForTravis() {
-        assertTrue(new Travis(env()).isSelected());
+        Assertions.assertTrue(new Travis(this.env()).isSelected());
     }
 
     /**
@@ -72,7 +69,7 @@ class TravisTest {
      */
     @Test
     void testGetName() {
-        assertEquals("travis-ci", new Travis(env()).getName());
+        Assertions.assertEquals("travis-ci", new Travis(this.env()).getName());
     }
 
     /**
@@ -80,7 +77,7 @@ class TravisTest {
      */
     @Test
     void testGetJobId() {
-        assertEquals("job123", new Travis(env()).getJobId());
+        Assertions.assertEquals("job123", new Travis(this.env()).getJobId());
     }
 
     /**
@@ -88,7 +85,7 @@ class TravisTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new Travis(env()).getBranch());
+        Assertions.assertEquals("master", new Travis(this.env()).getBranch());
     }
 
     /**
@@ -96,7 +93,7 @@ class TravisTest {
      */
     @Test
     void testGetPullRequest() {
-        assertEquals("pull10", new Travis(env()).getPullRequest());
+        Assertions.assertEquals("pull10", new Travis(this.env()).getPullRequest());
     }
 
     /**
@@ -104,10 +101,10 @@ class TravisTest {
      */
     @Test
     void testGetEnvironment() {
-        var properties = new Travis(env()).getEnvironment();
-        assertEquals(2, properties.size());
-        assertEquals("job123", properties.getProperty("travis_job_id"));
-        assertEquals("pull10", properties.getProperty("travis_pull_request"));
+        final var properties = new Travis(this.env()).getEnvironment();
+        Assertions.assertEquals(2, properties.size());
+        Assertions.assertEquals("job123", properties.getProperty("travis_job_id"));
+        Assertions.assertEquals("pull10", properties.getProperty("travis_pull_request"));
     }
 
 }

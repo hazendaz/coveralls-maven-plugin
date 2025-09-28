@@ -23,10 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.lenient;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,12 +39,14 @@ import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
 import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -95,14 +93,16 @@ class CoverageParsersFactoryTest {
      */
     @BeforeEach
     void init() throws IOException {
-        reportingDir = Files.createDirectory(folder.resolve("reportingDir"));
-        targetDir = Files.createDirectory(folder.resolve("targetDir"));
-        lenient().when(projectMock.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
-        lenient().when(projectMock.getModel()).thenReturn(modelMock);
-        lenient().when(projectMock.getBuild()).thenReturn(buildMock);
-        lenient().when(modelMock.getReporting()).thenReturn(reportingMock);
-        lenient().when(reportingMock.getOutputDirectory()).thenReturn(reportingDir.toFile().getAbsolutePath());
-        lenient().when(buildMock.getDirectory()).thenReturn(targetDir.toFile().getAbsolutePath());
+        this.reportingDir = Files.createDirectory(this.folder.resolve("reportingDir"));
+        this.targetDir = Files.createDirectory(this.folder.resolve("targetDir"));
+        Mockito.lenient().when(this.projectMock.getCollectedProjects())
+                .thenReturn(Collections.<MavenProject> emptyList());
+        Mockito.lenient().when(this.projectMock.getModel()).thenReturn(this.modelMock);
+        Mockito.lenient().when(this.projectMock.getBuild()).thenReturn(this.buildMock);
+        Mockito.lenient().when(this.modelMock.getReporting()).thenReturn(this.reportingMock);
+        Mockito.lenient().when(this.reportingMock.getOutputDirectory())
+                .thenReturn(this.reportingDir.toFile().getAbsolutePath());
+        Mockito.lenient().when(this.buildMock.getDirectory()).thenReturn(this.targetDir.toFile().getAbsolutePath());
     }
 
     /**
@@ -110,8 +110,8 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createEmptyParsers() {
-        assertThrows(IOException.class, () -> {
-            createCoverageParsersFactory().createParsers();
+        Assertions.assertThrows(IOException.class, () -> {
+            this.createCoverageParsersFactory().createParsers();
         });
     }
 
@@ -123,11 +123,11 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createJaCoCoParser() throws IOException {
-        var jacocoDir = Files.createDirectory(reportingDir.resolve("jacoco"));
+        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve("jacoco"));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
-        var parsers = createCoverageParsersFactory().createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
+        final var parsers = this.createCoverageParsersFactory().createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -138,11 +138,11 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createCoberturaParser() throws IOException {
-        var coberturaDir = Files.createDirectory(reportingDir.resolve("cobertura"));
+        final var coberturaDir = Files.createDirectory(this.reportingDir.resolve("cobertura"));
         Files.createFile(coberturaDir.resolve("coverage.xml"));
-        var parsers = createCoverageParsersFactory().createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(CoberturaParser.class, parsers.get(0).getClass());
+        final var parsers = this.createCoverageParsersFactory().createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -153,11 +153,11 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createSagaParser() throws IOException {
-        var sagaDir = Files.createDirectory(targetDir.resolve("saga-coverage"));
+        final var sagaDir = Files.createDirectory(this.targetDir.resolve("saga-coverage"));
         Files.createFile(sagaDir.resolve("total-coverage.xml"));
-        var parsers = createCoverageParsersFactory().createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(SagaParser.class, parsers.get(0).getClass());
+        final var parsers = this.createCoverageParsersFactory().createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(SagaParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -168,11 +168,11 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createCloverParser() throws IOException {
-        var cloverDir = Files.createDirectory(targetDir.resolve("clover"));
+        final var cloverDir = Files.createDirectory(this.targetDir.resolve("clover"));
         Files.createFile(cloverDir.resolve("clover.xml"));
-        var parsers = createCoverageParsersFactory().createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(CloverParser.class, parsers.get(0).getClass());
+        final var parsers = this.createCoverageParsersFactory().createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(CloverParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -183,12 +183,12 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withJaCoCoReport() throws IOException {
-        var jacocoFile = Files.createFile(reportingDir.resolve("jacoco-report.xml")).toFile();
+        final var jacocoFile = Files.createFile(this.reportingDir.resolve("jacoco-report.xml")).toFile();
         jacocoFile.createNewFile();
-        var factory = createCoverageParsersFactory().withJaCoCoReports(Arrays.asList(jacocoFile));
-        var parsers = factory.createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
+        final var factory = this.createCoverageParsersFactory().withJaCoCoReports(Arrays.asList(jacocoFile));
+        final var parsers = factory.createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -199,12 +199,12 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withCoberturaReport() throws IOException {
-        var coberturaFile = Files.createFile(reportingDir.resolve("cobertura-report.xml")).toFile();
+        final var coberturaFile = Files.createFile(this.reportingDir.resolve("cobertura-report.xml")).toFile();
         coberturaFile.createNewFile();
-        var factory = createCoverageParsersFactory().withCoberturaReports(Arrays.asList(coberturaFile));
-        var parsers = factory.createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(CoberturaParser.class, parsers.get(0).getClass());
+        final var factory = this.createCoverageParsersFactory().withCoberturaReports(Arrays.asList(coberturaFile));
+        final var parsers = factory.createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -215,12 +215,12 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withSagaReport() throws IOException {
-        var sagaFile = Files.createFile(reportingDir.resolve("saga-report.xml")).toFile();
+        final var sagaFile = Files.createFile(this.reportingDir.resolve("saga-report.xml")).toFile();
         sagaFile.createNewFile();
-        var factory = createCoverageParsersFactory().withSagaReports(Arrays.asList(sagaFile));
-        var parsers = factory.createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(SagaParser.class, parsers.get(0).getClass());
+        final var factory = this.createCoverageParsersFactory().withSagaReports(Arrays.asList(sagaFile));
+        final var parsers = factory.createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(SagaParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -231,12 +231,12 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withCloverReport() throws IOException {
-        var cloverFile = Files.createFile(reportingDir.resolve("clover-report.xml")).toFile();
+        final var cloverFile = Files.createFile(this.reportingDir.resolve("clover-report.xml")).toFile();
         cloverFile.createNewFile();
-        var factory = createCoverageParsersFactory().withCloverReports(Arrays.asList(cloverFile));
-        var parsers = factory.createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(CloverParser.class, parsers.get(0).getClass());
+        final var factory = this.createCoverageParsersFactory().withCloverReports(Arrays.asList(cloverFile));
+        final var parsers = factory.createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(CloverParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -247,12 +247,12 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withRelativeReportDirectory() throws IOException {
-        var coberturaDir = Files.createDirectory(reportingDir.resolve("customdir"));
+        final var coberturaDir = Files.createDirectory(this.reportingDir.resolve("customdir"));
         Files.createFile(coberturaDir.resolve("coverage.xml"));
-        var factory = createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList("customdir"));
-        var parsers = factory.createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(CoberturaParser.class, parsers.get(0).getClass());
+        final var factory = this.createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList("customdir"));
+        final var parsers = factory.createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -263,11 +263,11 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withRootRelativeReportDirectory() throws IOException {
-        Files.createFile(reportingDir.resolve("coverage.xml")).toFile();
-        var factory = createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList(File.separator));
-        var parsers = factory.createParsers();
-        assertEquals(1, parsers.size());
-        assertEquals(CoberturaParser.class, parsers.get(0).getClass());
+        Files.createFile(this.reportingDir.resolve("coverage.xml")).toFile();
+        final var factory = this.createCoverageParsersFactory().withRelativeReportDirs(Arrays.asList(File.separator));
+        final var parsers = factory.createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(CoberturaParser.class, parsers.get(0).getClass());
     }
 
     /**
@@ -276,6 +276,6 @@ class CoverageParsersFactoryTest {
      * @return the coverage parsers factory
      */
     private CoverageParsersFactory createCoverageParsersFactory() {
-        return new CoverageParsersFactory(projectMock, sourceLoaderMock);
+        return new CoverageParsersFactory(this.projectMock, this.sourceLoaderMock);
     }
 }

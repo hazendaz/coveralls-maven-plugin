@@ -23,9 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,7 +36,7 @@ class WildcardsTest {
      */
     @Test
     void matchesAgainstNull() {
-        assertFalse(Wildcards.matches(null, "*"));
+        Assertions.assertFalse(Wildcards.matches(null, "*"));
     }
 
     /**
@@ -46,7 +44,7 @@ class WildcardsTest {
      */
     @Test
     void matchesAgainstJoker() {
-        assertTrue(Wildcards.matches("a", "?"));
+        Assertions.assertTrue(Wildcards.matches("a", "?"));
     }
 
     /**
@@ -54,7 +52,7 @@ class WildcardsTest {
      */
     @Test
     void matchesAgainstStar() {
-        assertTrue(Wildcards.matches("abc", "*"));
+        Assertions.assertTrue(Wildcards.matches("abc", "*"));
     }
 
     /**
@@ -62,8 +60,8 @@ class WildcardsTest {
      */
     @Test
     void matchesAgainstWildcards() {
-        assertTrue(Wildcards.matches("abcdefg", "a*d??g"));
-        assertFalse(Wildcards.matches("abcdefg", "a*d?g?"));
+        Assertions.assertTrue(Wildcards.matches("abcdefg", "a*d??g"));
+        Assertions.assertFalse(Wildcards.matches("abcdefg", "a*d?g?"));
     }
 
     /**
@@ -71,8 +69,8 @@ class WildcardsTest {
      */
     @Test
     void matchesAgainstText() {
-        assertTrue(Wildcards.matches("abc", "abc"));
-        assertFalse(Wildcards.matches("abc", "cba"));
+        Assertions.assertTrue(Wildcards.matches("abc", "abc"));
+        Assertions.assertFalse(Wildcards.matches("abc", "cba"));
     }
 
 }

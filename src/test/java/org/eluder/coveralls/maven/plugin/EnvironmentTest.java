@@ -23,13 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -38,10 +31,12 @@ import java.util.Properties;
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -70,20 +65,20 @@ class EnvironmentTest {
      */
     @BeforeEach
     void init() {
-        mojo = new CoverallsReportMojo() {
+        this.mojo = new CoverallsReportMojo() {
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) {
-                return Arrays.asList(coverageParserMock);
+                return Arrays.asList(EnvironmentTest.this.coverageParserMock);
             }
 
             @Override
             public Log getLog() {
-                return logMock;
+                return EnvironmentTest.this.logMock;
             }
         };
-        mojo.serviceName = "service";
-        mojo.sourceEncoding = "UTF-8";
-        lenient().when(serviceMock.isSelected()).thenReturn(true);
+        this.mojo.serviceName = "service";
+        this.mojo.sourceEncoding = "UTF-8";
+        Mockito.lenient().when(this.serviceMock.isSelected()).thenReturn(true);
     }
 
     /**
@@ -91,8 +86,8 @@ class EnvironmentTest {
      */
     @Test
     void missingMojo() {
-        var mockList = Arrays.asList(serviceMock);
-        assertThrows(IllegalArgumentException.class, () -> {
+        final var mockList = Arrays.asList(this.serviceMock);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new Environment(null, mockList);
         });
     }
@@ -102,8 +97,8 @@ class EnvironmentTest {
      */
     @Test
     void missingServices() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            new Environment(mojo, null);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new Environment(this.mojo, null);
         });
     }
 
@@ -112,8 +107,8 @@ class EnvironmentTest {
      */
     @Test
     void setupWithoutServices() {
-        create(Collections.<ServiceSetup> emptyList()).setup();
-        assertEquals("service", mojo.serviceName);
+        this.create(Collections.<ServiceSetup> emptyList()).setup();
+        Assertions.assertEquals("service", this.mojo.serviceName);
     }
 
     /**
@@ -121,10 +116,10 @@ class EnvironmentTest {
      */
     @Test
     void setupWithoutSourceEncoding() {
-        mojo.sourceEncoding = null;
-        var list = Arrays.asList(serviceMock);
-        var environment = create(list);
-        assertThrows(IllegalArgumentException.class, environment::setup);
+        this.mojo.sourceEncoding = null;
+        final var list = Arrays.asList(this.serviceMock);
+        final var environment = this.create(list);
+        Assertions.assertThrows(IllegalArgumentException.class, environment::setup);
     }
 
     /**
@@ -132,17 +127,17 @@ class EnvironmentTest {
      */
     @Test
     void setupWithIncompleteJob() {
-        when(serviceMock.getJobId()).thenReturn("");
-        when(serviceMock.getBuildUrl()).thenReturn("  ");
+        Mockito.when(this.serviceMock.getJobId()).thenReturn("");
+        Mockito.when(this.serviceMock.getBuildUrl()).thenReturn("  ");
 
-        create(Arrays.asList(serviceMock)).setup();
-        assertEquals("service", mojo.serviceName);
-        assertNull(mojo.serviceJobId);
-        assertNull(mojo.serviceBuildNumber);
-        assertNull(mojo.serviceBuildUrl);
-        assertNull(mojo.branch);
-        assertNull(mojo.pullRequest);
-        assertNull(mojo.serviceEnvironment);
+        this.create(Arrays.asList(this.serviceMock)).setup();
+        Assertions.assertEquals("service", this.mojo.serviceName);
+        Assertions.assertNull(this.mojo.serviceJobId);
+        Assertions.assertNull(this.mojo.serviceBuildNumber);
+        Assertions.assertNull(this.mojo.serviceBuildUrl);
+        Assertions.assertNull(this.mojo.branch);
+        Assertions.assertNull(this.mojo.pullRequest);
+        Assertions.assertNull(this.mojo.serviceEnvironment);
     }
 
     /**
@@ -150,25 +145,25 @@ class EnvironmentTest {
      */
     @Test
     void setupWithCompleteJob() {
-        mojo.serviceName = null;
-        var environment = new Properties();
+        this.mojo.serviceName = null;
+        final var environment = new Properties();
         environment.setProperty("env", "true");
-        when(serviceMock.getName()).thenReturn("defined service");
-        when(serviceMock.getJobId()).thenReturn("123");
-        when(serviceMock.getBuildNumber()).thenReturn("456");
-        when(serviceMock.getBuildUrl()).thenReturn("https://ci.com/project");
-        when(serviceMock.getBranch()).thenReturn("master");
-        when(serviceMock.getPullRequest()).thenReturn("111");
-        when(serviceMock.getEnvironment()).thenReturn(environment);
+        Mockito.when(this.serviceMock.getName()).thenReturn("defined service");
+        Mockito.when(this.serviceMock.getJobId()).thenReturn("123");
+        Mockito.when(this.serviceMock.getBuildNumber()).thenReturn("456");
+        Mockito.when(this.serviceMock.getBuildUrl()).thenReturn("https://ci.com/project");
+        Mockito.when(this.serviceMock.getBranch()).thenReturn("master");
+        Mockito.when(this.serviceMock.getPullRequest()).thenReturn("111");
+        Mockito.when(this.serviceMock.getEnvironment()).thenReturn(environment);
 
-        create(Arrays.asList(mock(ServiceSetup.class), serviceMock)).setup();
-        assertEquals("defined service", mojo.serviceName);
-        assertEquals("123", mojo.serviceJobId);
-        assertEquals("456", mojo.serviceBuildNumber);
-        assertEquals("https://ci.com/project", mojo.serviceBuildUrl);
-        assertEquals("master", mojo.branch);
-        assertEquals("111", mojo.pullRequest);
-        assertEquals("true", mojo.serviceEnvironment.get("env"));
+        this.create(Arrays.asList(Mockito.mock(ServiceSetup.class), this.serviceMock)).setup();
+        Assertions.assertEquals("defined service", this.mojo.serviceName);
+        Assertions.assertEquals("123", this.mojo.serviceJobId);
+        Assertions.assertEquals("456", this.mojo.serviceBuildNumber);
+        Assertions.assertEquals("https://ci.com/project", this.mojo.serviceBuildUrl);
+        Assertions.assertEquals("master", this.mojo.branch);
+        Assertions.assertEquals("111", this.mojo.pullRequest);
+        Assertions.assertEquals("true", this.mojo.serviceEnvironment.get("env"));
     }
 
     /**
@@ -176,33 +171,33 @@ class EnvironmentTest {
      */
     @Test
     void setupWithoutJobOverride() {
-        var environment = new Properties();
+        final var environment = new Properties();
         environment.setProperty("env", "true");
-        var serviceEnvironment = new Properties();
+        final var serviceEnvironment = new Properties();
         serviceEnvironment.setProperty("env", "setProperty");
-        when(serviceMock.getName()).thenReturn("defined service");
-        when(serviceMock.getJobId()).thenReturn("123");
-        when(serviceMock.getBuildNumber()).thenReturn("456");
-        when(serviceMock.getBuildUrl()).thenReturn("https://ci.com/project");
-        when(serviceMock.getBranch()).thenReturn("master");
-        when(serviceMock.getPullRequest()).thenReturn("111");
-        when(serviceMock.getEnvironment()).thenReturn(environment);
-        mojo.serviceJobId = "setJobId";
-        mojo.serviceBuildNumber = "setBuildNumber";
-        mojo.serviceBuildUrl = "setBuildUrl";
-        mojo.serviceEnvironment = serviceEnvironment;
-        mojo.branch = "setBranch";
-        mojo.pullRequest = "setPullRequest";
+        Mockito.when(this.serviceMock.getName()).thenReturn("defined service");
+        Mockito.when(this.serviceMock.getJobId()).thenReturn("123");
+        Mockito.when(this.serviceMock.getBuildNumber()).thenReturn("456");
+        Mockito.when(this.serviceMock.getBuildUrl()).thenReturn("https://ci.com/project");
+        Mockito.when(this.serviceMock.getBranch()).thenReturn("master");
+        Mockito.when(this.serviceMock.getPullRequest()).thenReturn("111");
+        Mockito.when(this.serviceMock.getEnvironment()).thenReturn(environment);
+        this.mojo.serviceJobId = "setJobId";
+        this.mojo.serviceBuildNumber = "setBuildNumber";
+        this.mojo.serviceBuildUrl = "setBuildUrl";
+        this.mojo.serviceEnvironment = serviceEnvironment;
+        this.mojo.branch = "setBranch";
+        this.mojo.pullRequest = "setPullRequest";
 
-        create(Arrays.asList(serviceMock)).setup();
+        this.create(Arrays.asList(this.serviceMock)).setup();
 
-        assertEquals("service", mojo.serviceName);
-        assertEquals("setJobId", mojo.serviceJobId);
-        assertEquals("setBuildNumber", mojo.serviceBuildNumber);
-        assertEquals("setBuildUrl", mojo.serviceBuildUrl);
-        assertEquals("setBranch", mojo.branch);
-        assertEquals("setPullRequest", mojo.pullRequest);
-        assertEquals("setProperty", mojo.serviceEnvironment.get("env"));
+        Assertions.assertEquals("service", this.mojo.serviceName);
+        Assertions.assertEquals("setJobId", this.mojo.serviceJobId);
+        Assertions.assertEquals("setBuildNumber", this.mojo.serviceBuildNumber);
+        Assertions.assertEquals("setBuildUrl", this.mojo.serviceBuildUrl);
+        Assertions.assertEquals("setBranch", this.mojo.branch);
+        Assertions.assertEquals("setPullRequest", this.mojo.pullRequest);
+        Assertions.assertEquals("setProperty", this.mojo.serviceEnvironment.get("env"));
     }
 
     /**
@@ -214,6 +209,6 @@ class EnvironmentTest {
      * @return the environment
      */
     Environment create(final Iterable<ServiceSetup> services) {
-        return new Environment(mojo, services);
+        return new Environment(this.mojo, services);
     }
 }

@@ -23,13 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -43,7 +40,7 @@ class WerckerTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put("WERCKER", "true");
         env.put("WERCKER_BUILD_URL", "https://app.wercker.com/build/123456789");
         env.put("WERCKER_BUILD_ID", "123456789");
@@ -56,7 +53,7 @@ class WerckerTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Wercker(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new Wercker(new HashMap<>()).isSelected());
     }
 
     /**
@@ -64,7 +61,7 @@ class WerckerTest {
      */
     @Test
     void isSelectedForWercker() {
-        assertTrue(new Wercker(env()).isSelected());
+        Assertions.assertTrue(new Wercker(this.env()).isSelected());
     }
 
     /**
@@ -72,7 +69,7 @@ class WerckerTest {
      */
     @Test
     void testGetName() {
-        assertEquals("wercker", new Wercker(env()).getName());
+        Assertions.assertEquals("wercker", new Wercker(this.env()).getName());
     }
 
     /**
@@ -80,7 +77,7 @@ class WerckerTest {
      */
     @Test
     void testGetJobId() {
-        assertEquals("123456789", new Wercker(env()).getJobId());
+        Assertions.assertEquals("123456789", new Wercker(this.env()).getJobId());
     }
 
     /**
@@ -88,7 +85,7 @@ class WerckerTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("https://app.wercker.com/build/123456789", new Wercker(env()).getBuildUrl());
+        Assertions.assertEquals("https://app.wercker.com/build/123456789", new Wercker(this.env()).getBuildUrl());
     }
 
     /**
@@ -96,6 +93,6 @@ class WerckerTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new Wercker(env()).getBranch());
+        Assertions.assertEquals("master", new Wercker(this.env()).getBranch());
     }
 }

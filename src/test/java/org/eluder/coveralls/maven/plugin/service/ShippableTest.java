@@ -23,14 +23,10 @@
  */
 package org.eluder.coveralls.maven.plugin.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -44,7 +40,7 @@ class ShippableTest {
      * @return the map
      */
     Map<String, String> env() {
-        Map<String, String> env = new HashMap<>();
+        final Map<String, String> env = new HashMap<>();
         env.put(Shippable.SHIPPABLE, "true");
         env.put(Shippable.SHIPPABLE_BUILD_ID, "54de3316c44f");
         env.put(Shippable.SHIPPABLE_BUILD_NUMBER, "431.1");
@@ -59,7 +55,7 @@ class ShippableTest {
      */
     @Test
     void isSelectedForNothing() {
-        assertFalse(new Shippable(new HashMap<>()).isSelected());
+        Assertions.assertFalse(new Shippable(new HashMap<>()).isSelected());
     }
 
     /**
@@ -67,7 +63,7 @@ class ShippableTest {
      */
     @Test
     void isSelectedForShippable() {
-        assertTrue(new Shippable(env()).isSelected());
+        Assertions.assertTrue(new Shippable(this.env()).isSelected());
     }
 
     /**
@@ -75,7 +71,7 @@ class ShippableTest {
      */
     @Test
     void testGetName() {
-        assertEquals("shippable", new Shippable(env()).getName());
+        Assertions.assertEquals("shippable", new Shippable(this.env()).getName());
     }
 
     /**
@@ -83,7 +79,7 @@ class ShippableTest {
      */
     @Test
     void testGetBuildNumber() {
-        assertEquals("431.1", new Shippable(env()).getBuildNumber());
+        Assertions.assertEquals("431.1", new Shippable(this.env()).getBuildNumber());
     }
 
     /**
@@ -91,7 +87,8 @@ class ShippableTest {
      */
     @Test
     void testGetBuildUrl() {
-        assertEquals("https://app.shippable.com/builds/54de3316c44f", new Shippable(env()).getBuildUrl());
+        Assertions.assertEquals("https://app.shippable.com/builds/54de3316c44f",
+                new Shippable(this.env()).getBuildUrl());
     }
 
     /**
@@ -99,7 +96,7 @@ class ShippableTest {
      */
     @Test
     void testGetBranch() {
-        assertEquals("master", new Shippable(env()).getBranch());
+        Assertions.assertEquals("master", new Shippable(this.env()).getBranch());
     }
 
     /**
@@ -107,7 +104,7 @@ class ShippableTest {
      */
     @Test
     void pullRequest() {
-        assertEquals("10", new Shippable(env()).getPullRequest());
+        Assertions.assertEquals("10", new Shippable(this.env()).getPullRequest());
     }
 
     /**
@@ -115,9 +112,9 @@ class ShippableTest {
      */
     @Test
     void pullRequestFalse() {
-        var env = env();
+        final var env = this.env();
         env.put(Shippable.SHIPPABLE_PULL_REQUEST, "false");
-        assertNull(new Shippable(env).getPullRequest());
+        Assertions.assertNull(new Shippable(env).getPullRequest());
     }
 
     /**
@@ -125,12 +122,13 @@ class ShippableTest {
      */
     @Test
     void testGetEnvironment() {
-        var properties = new Shippable(env()).getEnvironment();
-        assertEquals(5, properties.size());
-        assertEquals("431.1", properties.getProperty("shippable_build_number"));
-        assertEquals("54de3316c44f", properties.getProperty("shippable_build_id"));
-        assertEquals("https://app.shippable.com/builds/54de3316c44f", properties.getProperty("shippable_build_url"));
-        assertEquals("master", properties.getProperty("branch"));
-        assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
+        final var properties = new Shippable(this.env()).getEnvironment();
+        Assertions.assertEquals(5, properties.size());
+        Assertions.assertEquals("431.1", properties.getProperty("shippable_build_number"));
+        Assertions.assertEquals("54de3316c44f", properties.getProperty("shippable_build_id"));
+        Assertions.assertEquals("https://app.shippable.com/builds/54de3316c44f",
+                properties.getProperty("shippable_build_url"));
+        Assertions.assertEquals("master", properties.getProperty("branch"));
+        Assertions.assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
     }
 }
