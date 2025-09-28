@@ -104,6 +104,7 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
             xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
             xmlif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
             xmlif.setProperty(XMLInputFactory.IS_VALIDATING, false);
+            xmlif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
             return xmlif.createXMLStreamReader(reader);
         } catch (FactoryConfigurationError ex) {
             throw new IllegalArgumentException(ex);
