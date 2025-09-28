@@ -121,8 +121,9 @@ class EnvironmentTest {
     @Test
     void setupWithoutSourceEncoding() {
         mojo.sourceEncoding = null;
+        List<ServiceSetup> list = Arrays.asList(serviceMock);
         assertThrows(IllegalArgumentException.class, () -> {
-            create(Arrays.asList(serviceMock)).setup();
+            create(list).setup();
         });
     }
 
