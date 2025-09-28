@@ -397,7 +397,7 @@
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>org.wiremock</groupId>
+                    <groupId>com.github.tomakehurst</groupId>
                     <artifactId>wiremock</artifactId>
                     <version>2.35.1</version>
                     <scope>test</scope>
