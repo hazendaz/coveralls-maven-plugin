@@ -292,8 +292,8 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) throws IOException {
         return new CoverageParsersFactory(this.project, sourceLoader).withJaCoCoReports(this.jacocoReports)
-                .withCoberturaReports(this.coberturaReports).withSagaReports(this.sagaReports).withCloverReports(this.cloverReports)
-                .withRelativeReportDirs(this.relativeReportDirs).createParsers();
+                .withCoberturaReports(this.coberturaReports).withSagaReports(this.sagaReports)
+                .withCloverReports(this.cloverReports).withRelativeReportDirs(this.relativeReportDirs).createParsers();
     }
 
     /**
@@ -306,7 +306,8 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected SourceLoader createSourceLoader(final Job job) {
         return new SourceLoaderFactory(job.getGit().getBaseDir(), this.project, Charset.forName(this.sourceEncoding))
-                .withSourceDirectories(this.sourceDirectories).withScanForSources(this.scanForSources).createSourceLoader();
+                .withSourceDirectories(this.sourceDirectories).withScanForSources(this.scanForSources)
+                .createSourceLoader();
     }
 
     /**
@@ -352,8 +353,9 @@ public class CoverallsReportMojo extends AbstractMojo {
         final var git = new GitRepository(this.basedir).load();
         final var time = this.timestamp == null ? null
                 : new TimestampParser(this.timestampFormat).parse(this.timestamp).toEpochMilli();
-        return new Job().withRepoToken(this.repoToken).withServiceName(this.serviceName).withServiceJobId(this.serviceJobId)
-                .withServiceBuildNumber(this.serviceBuildNumber).withServiceBuildUrl(this.serviceBuildUrl).withParallel(this.parallel)
+        return new Job().withRepoToken(this.repoToken).withServiceName(this.serviceName)
+                .withServiceJobId(this.serviceJobId).withServiceBuildNumber(this.serviceBuildNumber)
+                .withServiceBuildUrl(this.serviceBuildUrl).withParallel(this.parallel)
                 .withServiceEnvironment(this.serviceEnvironment).withDryRun(this.dryRun).withBranch(this.branch)
                 .withPullRequest(this.pullRequest).withTimestamp(time).withGit(git);
     }
@@ -451,7 +453,8 @@ public class CoverallsReportMojo extends AbstractMojo {
         try {
             final var response = client.submit(coverallsFile);
             final var duration = System.currentTimeMillis() - now;
-            this.getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
+            this.getLog()
+                    .info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             this.getLog().info(response.getUrl());
             this.getLog().info("*** Coverage results are usually available immediately on Coveralls.");
             this.getLog().info("    If you see question marks or missing data, please allow some time for processing.");

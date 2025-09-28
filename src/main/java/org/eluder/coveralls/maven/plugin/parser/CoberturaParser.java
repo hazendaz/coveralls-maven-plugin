@@ -73,19 +73,19 @@ public class CoberturaParser extends AbstractXmlEventParser {
             this.branchId = 0;
         } else
 
-        if (isStartElement(xml, "methods") && source != null) {
-            inMethods = true;
+        if (this.isStartElement(xml, "methods") && this.source != null) {
+            this.inMethods = true;
         } else
 
-        if (isEndElement(xml, "methods") && source != null) {
-            inMethods = false;
+        if (this.isEndElement(xml, "methods") && this.source != null) {
+            this.inMethods = false;
         } else
 
-        if (isStartElement(xml, "line") && !inMethods && source != null) {
-            final int nr = Integer.parseInt(xml.getAttributeValue(null, "number"));
-            source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, "hits")));
+        if (this.isStartElement(xml, "line") && !this.inMethods && this.source != null) {
+            final var nr = Integer.parseInt(xml.getAttributeValue(null, "number"));
+            this.source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, "hits")));
             if (Boolean.parseBoolean(xml.getAttributeValue(null, "branch"))) {
-                final String value = xml.getAttributeValue(null, "condition-coverage");
+                final var value = xml.getAttributeValue(null, "condition-coverage");
 
                 // Is "condition-coverage" attribute always here?
                 if (value == null) {
@@ -93,31 +93,31 @@ public class CoberturaParser extends AbstractXmlEventParser {
                 }
 
                 // C'mon Cobertura, human readable format for XML ?
-                final String[] values = value // 50% (2/4)
+                final var values = value // 50% (2/4)
                         .replace(" ", "") // 50%(2/4)
                         .replace("%", "/") // 50/(2/4)
                         .replace("(", "") // 50/2/4)
                         .replace(")", "") // 50/2/4
                         .split("/", -1);
 
-                final int cb = Integer.parseInt(values[1]);
-                final int tb = Integer.parseInt(values[2]);
-                final int mb = tb - cb;
+                final var cb = Integer.parseInt(values[1]);
+                final var tb = Integer.parseInt(values[2]);
+                final var mb = tb - cb;
 
                 // add branches. unfortunately, there is NO block number and
                 // branch number will NOT be unique between coverage changes.
-                for (int b = 0; b < cb; b++) {
+                for (var b = 0; b < cb; b++) {
                     this.source.addBranchCoverage(nr, 0, this.branchId++, 1);
                 }
-                for (int b = 0; b < mb; b++) {
+                for (var b = 0; b < mb; b++) {
                     this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
                 }
             }
         } else
 
-        if (isEndElement(xml, "class") && source != null) {
-            callback.onSource(source);
-            source = null;
+        if (this.isEndElement(xml, "class") && this.source != null) {
+            callback.onSource(this.source);
+            this.source = null;
         }
     }
 

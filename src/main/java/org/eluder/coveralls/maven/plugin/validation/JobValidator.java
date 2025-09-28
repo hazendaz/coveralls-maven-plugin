@@ -68,7 +68,8 @@ public class JobValidator {
      * @return the list
      */
     private List<ValidationError> repoTokenOrTravis() {
-        if (this.hasValue(this.job.getRepoToken()) || (this.hasValue(this.job.getServiceName()) && this.hasValue(this.job.getServiceJobId()))) {
+        if (this.hasValue(this.job.getRepoToken())
+                || this.hasValue(this.job.getServiceName()) && this.hasValue(this.job.getServiceJobId())) {
             return Collections.emptyList();
         }
         final var level = this.job.isDryRun() ? Level.WARN : Level.ERROR;

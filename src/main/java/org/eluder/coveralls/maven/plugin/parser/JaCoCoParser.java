@@ -67,37 +67,37 @@ public class JaCoCoParser extends AbstractXmlEventParser {
             this.packageName = xml.getAttributeValue(null, "name");
         } else
 
-        if (isStartElement(xml, "sourcefile") && packageName != null) {
-            String sourceFile = this.packageName + "/" + xml.getAttributeValue(null, "name");
-            this.source = loadSource(sourceFile);
+        if (this.isStartElement(xml, "sourcefile") && this.packageName != null) {
+            final var sourceFile = this.packageName + "/" + xml.getAttributeValue(null, "name");
+            this.source = this.loadSource(sourceFile);
             this.branchId = 0;
         } else
 
-        if (isStartElement(xml, "line") && this.source != null) {
-            int ci = Integer.parseInt(xml.getAttributeValue(null, "ci"));
-            int cb = Integer.parseInt(xml.getAttributeValue(null, "cb"));
-            int mb = Integer.parseInt(xml.getAttributeValue(null, "mb"));
-            int nr = Integer.parseInt(xml.getAttributeValue(null, "nr"));
+        if (this.isStartElement(xml, "line") && this.source != null) {
+            final var ci = Integer.parseInt(xml.getAttributeValue(null, "ci"));
+            final var cb = Integer.parseInt(xml.getAttributeValue(null, "cb"));
+            final var mb = Integer.parseInt(xml.getAttributeValue(null, "mb"));
+            final var nr = Integer.parseInt(xml.getAttributeValue(null, "nr"));
 
             // jacoco does not count hits. this is why hits is always 0 or 1
             this.source.addCoverage(nr, ci == 0 ? 0 : 1);
 
             // add branches. unfortunately, there is NO block number and
             // branch number will NOT be unique between coverage changes.
-            for (int b = 0; b < cb; b++) {
+            for (var b = 0; b < cb; b++) {
                 this.source.addBranchCoverage(nr, 0, this.branchId++, 1);
             }
-            for (int b = 0; b < mb; b++) {
+            for (var b = 0; b < mb; b++) {
                 this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
             }
         } else
 
-        if (isEndElement(xml, "sourcefile") && this.source != null) {
+        if (this.isEndElement(xml, "sourcefile") && this.source != null) {
             callback.onSource(this.source);
             this.source = null;
         } else
 
-        if (isEndElement(xml, "package")) {
+        if (this.isEndElement(xml, "package")) {
             this.packageName = null;
         }
     }

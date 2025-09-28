@@ -63,7 +63,8 @@ public class DryRunLogger implements Logger {
     public void log(final Log log) {
         if (this.dryRun) {
             log.info("Dry run enabled, Coveralls report will NOT be submitted to API");
-            log.info(this.coverallsFile.length() + " bytes of data was recorded in " + this.coverallsFile.getAbsolutePath());
+            log.info(this.coverallsFile.length() + " bytes of data was recorded in "
+                    + this.coverallsFile.getAbsolutePath());
         }
     }
 
