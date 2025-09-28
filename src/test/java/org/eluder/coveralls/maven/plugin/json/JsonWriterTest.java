@@ -146,9 +146,9 @@ class JsonWriterTest {
         assertEquals("master", jsonMap.get("service_branch"));
         assertEquals("pull10", jsonMap.get("service_pull_request"));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT)
+        var formatter = DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT)
                 .withZone(ZoneId.systemDefault());
-        String expectedRunAt = formatter.format(Instant.ofEpochMilli(TEST_TIME));
+        var expectedRunAt = formatter.format(Instant.ofEpochMilli(TEST_TIME));
         assertEquals(expectedRunAt, jsonMap.get("run_at"));
 
         assertEquals("af456fge34acd", ((Map) jsonMap.get("git")).get("branch"));
