@@ -83,7 +83,7 @@ public abstract class AbstractServiceSetup implements ServiceSetup {
      * @return the property
      */
     protected final String getProperty(final String name) {
-        return env.get(name);
+        return this.env.get(name);
     }
 
     /**

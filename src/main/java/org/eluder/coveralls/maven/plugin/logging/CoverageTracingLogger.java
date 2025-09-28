@@ -71,7 +71,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the files
      */
     public long getFiles() {
-        return files;
+        return this.files;
     }
 
     /**
@@ -80,7 +80,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the lines
      */
     public final long getLines() {
-        return lines;
+        return this.lines;
     }
 
     /**
@@ -89,7 +89,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the relevant
      */
     public final long getRelevant() {
-        return relevant;
+        return this.relevant;
     }
 
     /**
@@ -98,7 +98,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the covered
      */
     public final long getCovered() {
-        return covered;
+        return this.covered;
     }
 
     /**
@@ -107,7 +107,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the missed
      */
     public final long getMissed() {
-        return relevant - covered;
+        return this.relevant - this.covered;
     }
 
     /**
@@ -116,7 +116,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the branches
      */
     public final long getBranches() {
-        return branches;
+        return this.branches;
     }
 
     /**
@@ -125,7 +125,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the covered branches
      */
     public final long getCoveredBranches() {
-        return coveredBranches;
+        return this.coveredBranches;
     }
 
     /**
@@ -134,7 +134,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
      * @return the missed branches
      */
     public final long getMissedBranches() {
-        return branches - coveredBranches;
+        return this.branches - this.coveredBranches;
     }
 
     @Override
@@ -144,25 +144,25 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
 
     @Override
     public void log(final Log log) {
-        log.info("Gathered code coverage metrics for " + getFiles() + " source files with " + getLines()
-                + " lines of code:");
-        log.info("- " + getRelevant() + " relevant lines");
-        log.info("- " + getCovered() + " covered lines");
-        log.info("- " + getMissed() + " missed lines");
-        log.info("- " + getBranches() + " branches");
-        log.info("- " + getCoveredBranches() + " covered branches");
-        log.info("- " + getMissedBranches() + " missed branches");
+        log.info("Gathered code coverage metrics for " + this.getFiles() + " source files with " + this.getLines()
+        + " lines of code:");
+        log.info("- " + this.getRelevant() + " relevant lines");
+        log.info("- " + this.getCovered() + " covered lines");
+        log.info("- " + this.getMissed() + " missed lines");
+        log.info("- " + this.getBranches() + " branches");
+        log.info("- " + this.getCoveredBranches() + " covered branches");
+        log.info("- " + this.getMissedBranches() + " missed branches");
     }
 
     @Override
     protected void onSourceInternal(final Source source) throws ProcessingException, IOException {
-        files++;
-        lines += source.getCoverage().length;
+        this.files++;
+        this.lines += source.getCoverage().length;
         for (final Integer coverage : source.getCoverage()) {
             if (coverage != null) {
-                relevant++;
+                this.relevant++;
                 if (coverage > 0) {
-                    covered++;
+                    this.covered++;
                 }
             }
         }
@@ -170,7 +170,7 @@ public class CoverageTracingLogger extends ChainingSourceCallback implements Log
         this.branches += source.getBranchesList().size();
         for (final Branch b : source.getBranchesList()) {
             if (b.getHits() > 0) {
-                coveredBranches++;
+                this.coveredBranches++;
             }
         }
     }

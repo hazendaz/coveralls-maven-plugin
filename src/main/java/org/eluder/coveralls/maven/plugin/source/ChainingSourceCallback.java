@@ -52,20 +52,20 @@ public abstract class ChainingSourceCallback implements SourceCallback {
 
     @Override
     public final void onBegin() throws ProcessingException, IOException {
-        onBeginInternal();
-        chained.onBegin();
+        this.onBeginInternal();
+        this.chained.onBegin();
     }
 
     @Override
     public final void onSource(final Source source) throws ProcessingException, IOException {
-        onSourceInternal(source);
-        chained.onSource(source);
+        this.onSourceInternal(source);
+        this.chained.onSource(source);
     }
 
     @Override
     public final void onComplete() throws ProcessingException, IOException {
-        onCompleteInternal();
-        chained.onComplete();
+        this.onCompleteInternal();
+        this.chained.onComplete();
     }
 
     /**

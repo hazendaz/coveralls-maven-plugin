@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -101,7 +100,7 @@ public final class Source implements JsonObject {
      */
     @JsonIgnore
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -111,7 +110,7 @@ public final class Source implements JsonObject {
      */
     @JsonProperty("name")
     public String getFullName() {
-        return name;
+        return this.name;
 
         // #45: cannot use identifier due to unfetchable source files
         // return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
@@ -124,7 +123,7 @@ public final class Source implements JsonObject {
      */
     @JsonProperty("source_digest")
     public String getDigest() {
-        return digest;
+        return this.digest;
     }
 
     /**
@@ -134,7 +133,7 @@ public final class Source implements JsonObject {
      */
     @JsonProperty("coverage")
     public Integer[] getCoverage() {
-        return coverage;
+        return this.coverage;
     }
 
     /**
@@ -144,8 +143,8 @@ public final class Source implements JsonObject {
      */
     @JsonProperty("branches")
     public Integer[] getBranches() {
-        final List<Integer> branchesRaw = new ArrayList<>(branches.size() * 4);
-        for (final Branch b : branches) {
+        final List<Integer> branchesRaw = new ArrayList<>(this.branches.size() * 4);
+        for (final Branch b : this.branches) {
             branchesRaw.add(b.getLineNumber());
             branchesRaw.add(b.getBlockNumber());
             branchesRaw.add(b.getBranchNumber());
@@ -160,7 +159,7 @@ public final class Source implements JsonObject {
      * @return the branches list
      */
     public List<Branch> getBranchesList() {
-        return Collections.unmodifiableList(branches);
+        return Collections.unmodifiableList(this.branches);
     }
 
     /**
@@ -170,7 +169,7 @@ public final class Source implements JsonObject {
      */
     @JsonIgnore
     public String getClassifier() {
-        return classifier;
+        return this.classifier;
     }
 
     /**
@@ -190,10 +189,10 @@ public final class Source implements JsonObject {
      *            the line number
      */
     private void checkLineRange(final int lineNumber) {
-        int index = lineNumber - 1;
+        final var index = lineNumber - 1;
         if (index >= this.coverage.length) {
             throw new IllegalArgumentException(
-                    "Line number " + lineNumber + " is greater than the source file " + name + " size");
+                    "Line number " + lineNumber + " is greater than the source file " + this.name + " size");
         }
     }
 
@@ -206,7 +205,7 @@ public final class Source implements JsonObject {
      *            the coverage
      */
     public void addCoverage(final int lineNumber, final Integer coverage) {
-        checkLineRange(lineNumber);
+        this.checkLineRange(lineNumber);
         this.coverage[lineNumber - 1] = coverage;
     }
 
@@ -223,7 +222,7 @@ public final class Source implements JsonObject {
      *            the hits
      */
     public void addBranchCoverage(final int lineNumber, final int blockNumber, final int branchNumber, final int hits) {
-        addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);
+        this.addBranchCoverage(false, lineNumber, blockNumber, branchNumber, hits);
     }
 
     /**
@@ -242,9 +241,9 @@ public final class Source implements JsonObject {
      */
     private void addBranchCoverage(final boolean merge, final int lineNumber, final int blockNumber,
             final int branchNumber, final int hits) {
-        checkLineRange(lineNumber);
-        int hitSum = hits;
-        final ListIterator<Branch> it = this.branches.listIterator();
+        this.checkLineRange(lineNumber);
+        var hitSum = hits;
+        final var it = this.branches.listIterator();
         while (it.hasNext()) {
             final var b = it.next();
             if (b.getLineNumber() == lineNumber && b.getBlockNumber() == blockNumber
@@ -267,7 +266,7 @@ public final class Source implements JsonObject {
      * @return the source
      */
     public Source merge(final Source source) {
-        Source copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);
+        final var copy = new Source(this.name, this.coverage.length, this.digest, this.classifier);
         System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);
         copy.branches.addAll(this.branches);
         if (copy.equals(source)) {

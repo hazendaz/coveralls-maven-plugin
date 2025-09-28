@@ -65,7 +65,7 @@ public class Branch {
      * @return the line number
      */
     public int getLineNumber() {
-        return lineNumber;
+        return this.lineNumber;
     }
 
     /**
@@ -74,7 +74,7 @@ public class Branch {
      * @return the block number
      */
     public int getBlockNumber() {
-        return blockNumber;
+        return this.blockNumber;
     }
 
     /**
@@ -83,7 +83,7 @@ public class Branch {
      * @return the branch number
      */
     public int getBranchNumber() {
-        return branchNumber;
+        return this.branchNumber;
     }
 
     /**
@@ -92,7 +92,7 @@ public class Branch {
      * @return the hits
      */
     public int getHits() {
-        return hits;
+        return this.hits;
     }
 
 }

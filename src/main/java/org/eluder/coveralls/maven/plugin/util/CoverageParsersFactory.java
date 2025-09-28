@@ -179,12 +179,12 @@ public class CoverageParsersFactory {
      */
     public List<CoverageParser> createParsers() throws IOException {
         final List<CoverageParser> parsers = new ArrayList<>();
-        final var projects = new MavenProjectCollector(project).collect();
+        final var projects = new MavenProjectCollector(this.project).collect();
 
-        final var jacocoFiles = ExistingFiles.create(jacocoReports);
-        final var coberturaFiles = ExistingFiles.create(coberturaReports);
-        final var sagaFiles = ExistingFiles.create(sagaReports);
-        final var cloverFiles = ExistingFiles.create(cloverReports);
+        final var jacocoFiles = ExistingFiles.create(this.jacocoReports);
+        final var coberturaFiles = ExistingFiles.create(this.coberturaReports);
+        final var sagaFiles = ExistingFiles.create(this.sagaReports);
+        final var cloverFiles = ExistingFiles.create(this.cloverReports);
         for (final MavenProject p : projects) {
             final var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
             final var buildDirectory = Path.of(p.getBuild().getDirectory());
@@ -202,8 +202,8 @@ public class CoverageParsersFactory {
             cloverFiles.add(buildDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY)
                     .resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
 
-            if (relativeReportDirs != null) {
-                for (final String relativeReportPath : relativeReportDirs) {
+            if (this.relativeReportDirs != null) {
+                for (final String relativeReportPath : this.relativeReportDirs) {
                     var relativeReportingDirectory = reportingDirectory;
                     var relativeBuildDirectory = buildDirectory;
                     if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
@@ -225,10 +225,10 @@ public class CoverageParsersFactory {
         }
 
         // Use ExistingFiles.toParsers to create parser instances
-        parsers.addAll(jacocoFiles.toParsers(file -> new JaCoCoParser(file, sourceLoader)));
-        parsers.addAll(coberturaFiles.toParsers(file -> new CoberturaParser(file, sourceLoader)));
-        parsers.addAll(sagaFiles.toParsers(file -> new SagaParser(file, sourceLoader)));
-        parsers.addAll(cloverFiles.toParsers(file -> new CloverParser(file, sourceLoader)));
+        parsers.addAll(jacocoFiles.toParsers(file -> new JaCoCoParser(file, this.sourceLoader)));
+        parsers.addAll(coberturaFiles.toParsers(file -> new CoberturaParser(file, this.sourceLoader)));
+        parsers.addAll(sagaFiles.toParsers(file -> new SagaParser(file, this.sourceLoader)));
+        parsers.addAll(cloverFiles.toParsers(file -> new CloverParser(file, this.sourceLoader)));
 
         if (parsers.isEmpty()) {
             throw new IOException("No coverage report files found");

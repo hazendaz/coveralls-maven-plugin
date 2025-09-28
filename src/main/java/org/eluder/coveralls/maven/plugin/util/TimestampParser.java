@@ -84,7 +84,7 @@ public class TimestampParser {
             return null;
         }
         try {
-            return parser.parse(timestamp);
+            return this.parser.parse(timestamp);
         } catch (final Exception ex) {
             throw new ProcessingException("Unable to parse timestamp \"" + timestamp + "\"", ex);
         }
@@ -137,19 +137,19 @@ public class TimestampParser {
 
         @Override
         public Instant parse(final String timestamp) throws DateTimeParseException {
-            if (hasZone) {
+            if (this.hasZone) {
                 try {
-                    return ZonedDateTime.parse(timestamp, formatter).toInstant();
+                    return ZonedDateTime.parse(timestamp, this.formatter).toInstant();
                 } catch (final DateTimeParseException ex) {
-                    return OffsetDateTime.parse(timestamp, formatter).toInstant();
+                    return OffsetDateTime.parse(timestamp, this.formatter).toInstant();
                 }
             }
-            if (dateOnly) {
+            if (this.dateOnly) {
                 // Parse as LocalDate and set time to midnight UTC
-                return LocalDate.parse(timestamp, formatter).atStartOfDay(ZoneOffset.UTC).toInstant();
+                return LocalDate.parse(timestamp, this.formatter).atStartOfDay(ZoneOffset.UTC).toInstant();
             }
             // Parse as LocalDateTime and assume UTC
-            return LocalDateTime.parse(timestamp, formatter).toInstant(ZoneOffset.UTC);
+            return LocalDateTime.parse(timestamp, this.formatter).toInstant(ZoneOffset.UTC);
         }
     }
 

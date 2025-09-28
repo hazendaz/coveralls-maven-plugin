@@ -63,6 +63,6 @@ public class Sha512DigestInputStream extends DigestInputStream {
      * @return the digest hex
      */
     public String getDigestHex() {
-        return Hex.encodeHexString(getMessageDigest().digest(), false);
+        return Hex.encodeHexString(this.getMessageDigest().digest(), false);
     }
 }

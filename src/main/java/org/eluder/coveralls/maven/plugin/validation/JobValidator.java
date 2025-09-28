@@ -57,8 +57,8 @@ public class JobValidator {
      */
     public ValidationErrors validate() {
         final var errors = new ValidationErrors();
-        errors.addAll(repoTokenOrTravis());
-        errors.addAll(git());
+        errors.addAll(this.repoTokenOrTravis());
+        errors.addAll(this.git());
         return errors;
     }
 
@@ -68,10 +68,10 @@ public class JobValidator {
      * @return the list
      */
     private List<ValidationError> repoTokenOrTravis() {
-        if (hasValue(job.getRepoToken()) || (hasValue(job.getServiceName()) && hasValue(job.getServiceJobId()))) {
+        if (this.hasValue(this.job.getRepoToken()) || (this.hasValue(this.job.getServiceName()) && this.hasValue(this.job.getServiceJobId()))) {
             return Collections.emptyList();
         }
-        final var level = job.isDryRun() ? Level.WARN : Level.ERROR;
+        final var level = this.job.isDryRun() ? Level.WARN : Level.ERROR;
         final var message = "Either repository token or service with job id must be defined";
         return Collections.singletonList(new ValidationError(level, message));
     }
@@ -82,7 +82,7 @@ public class JobValidator {
      * @return the list
      */
     private List<ValidationError> git() {
-        if (job.getGit() == null || hasValue(job.getGit().getHead().getId())) {
+        if (this.job.getGit() == null || this.hasValue(this.job.getGit().getHead().getId())) {
             return Collections.emptyList();
         }
         return Collections.singletonList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));

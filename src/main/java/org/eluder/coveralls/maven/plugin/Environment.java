@@ -60,15 +60,15 @@ public final class Environment {
      * Setup.
      */
     public void setup() {
-        setupService();
-        verify();
+        this.setupService();
+        this.verify();
     }
 
     /**
      * Verify.
      */
     private void verify() {
-        if (mojo.sourceEncoding == null) {
+        if (this.mojo.sourceEncoding == null) {
             throw new IllegalArgumentException(
                     "Source encoding not set, use <sourceEncoding> configuration option or set project wide property <project.build.sourceEncoding>");
         }
@@ -78,9 +78,9 @@ public final class Environment {
      * Setup service.
      */
     private void setupService() {
-        for (final ServiceSetup service : services) {
+        for (final ServiceSetup service : this.services) {
             if (service.isSelected()) {
-                setupEnvironment(service);
+                this.setupEnvironment(service);
                 break;
             }
         }
@@ -94,39 +94,39 @@ public final class Environment {
      */
     private void setupEnvironment(final ServiceSetup service) {
         final var name = service.getName();
-        if (StringUtils.isBlank(mojo.serviceName) && StringUtils.isNotBlank(name)) {
-            mojo.serviceName = name;
+        if (StringUtils.isBlank(this.mojo.serviceName) && StringUtils.isNotBlank(name)) {
+            this.mojo.serviceName = name;
         }
 
         final var jobId = service.getJobId();
-        if (StringUtils.isBlank(mojo.serviceJobId) && StringUtils.isNotBlank(jobId)) {
-            mojo.serviceJobId = jobId;
+        if (StringUtils.isBlank(this.mojo.serviceJobId) && StringUtils.isNotBlank(jobId)) {
+            this.mojo.serviceJobId = jobId;
         }
 
         final var buildNumber = service.getBuildNumber();
-        if (StringUtils.isBlank(mojo.serviceBuildNumber) && StringUtils.isNotBlank(buildNumber)) {
-            mojo.serviceBuildNumber = buildNumber;
+        if (StringUtils.isBlank(this.mojo.serviceBuildNumber) && StringUtils.isNotBlank(buildNumber)) {
+            this.mojo.serviceBuildNumber = buildNumber;
         }
 
         final var buildUrl = service.getBuildUrl();
-        if (StringUtils.isBlank(mojo.serviceBuildUrl) && StringUtils.isNotBlank(buildUrl)) {
-            mojo.serviceBuildUrl = buildUrl;
+        if (StringUtils.isBlank(this.mojo.serviceBuildUrl) && StringUtils.isNotBlank(buildUrl)) {
+            this.mojo.serviceBuildUrl = buildUrl;
         }
 
         final var branch = service.getBranch();
-        if (StringUtils.isBlank(mojo.branch) && StringUtils.isNotBlank(branch)) {
-            mojo.branch = branch;
+        if (StringUtils.isBlank(this.mojo.branch) && StringUtils.isNotBlank(branch)) {
+            this.mojo.branch = branch;
         }
 
         final var pullRequest = service.getPullRequest();
-        if (StringUtils.isBlank(mojo.pullRequest) && StringUtils.isNotBlank(pullRequest)) {
-            mojo.pullRequest = pullRequest;
+        if (StringUtils.isBlank(this.mojo.pullRequest) && StringUtils.isNotBlank(pullRequest)) {
+            this.mojo.pullRequest = pullRequest;
         }
 
         final var environment = service.getEnvironment();
-        if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty()) && environment != null
+        if ((this.mojo.serviceEnvironment == null || this.mojo.serviceEnvironment.isEmpty()) && environment != null
                 && !environment.isEmpty()) {
-            mojo.serviceEnvironment = environment;
+            this.mojo.serviceEnvironment = environment;
         }
     }
 }

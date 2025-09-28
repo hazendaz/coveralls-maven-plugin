@@ -44,11 +44,11 @@ public class ValidationErrors extends ArrayList<ValidationError> {
      *            the log
      */
     public void throwOrInform(final Log log) {
-        final var errors = filter(Level.ERROR);
+        final var errors = this.filter(Level.ERROR);
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.get(0).getMessage());
         }
-        for (final ValidationError error : filter(Level.WARN)) {
+        for (final ValidationError error : this.filter(Level.WARN)) {
             log.warn(error.getMessage());
         }
     }

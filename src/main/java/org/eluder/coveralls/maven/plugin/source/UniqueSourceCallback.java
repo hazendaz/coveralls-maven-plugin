@@ -56,20 +56,20 @@ public class UniqueSourceCallback implements SourceCallback {
 
     @Override
     public void onBegin() throws ProcessingException, IOException {
-        delegate.onBegin();
+        this.delegate.onBegin();
     }
 
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
-        final var merged = source.merge(cache.get(source));
-        cache.put(merged, merged);
+        final var merged = source.merge(this.cache.get(source));
+        this.cache.put(merged, merged);
     }
 
     @Override
     public void onComplete() throws ProcessingException, IOException {
-        for (final Source source : cache.values()) {
-            delegate.onSource(source);
+        for (final Source source : this.cache.values()) {
+            this.delegate.onSource(source);
         }
-        delegate.onComplete();
+        this.delegate.onComplete();
     }
 }

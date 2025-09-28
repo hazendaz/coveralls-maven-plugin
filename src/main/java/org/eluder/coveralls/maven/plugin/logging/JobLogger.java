@@ -69,7 +69,7 @@ public class JobLogger implements Logger {
             throw new IllegalArgumentException("job must be defined");
         }
         this.job = job;
-        this.jsonMapper = jsonMapper != null ? jsonMapper : createDefaultJsonMapper();
+        this.jsonMapper = jsonMapper != null ? jsonMapper : this.createDefaultJsonMapper();
     }
 
     @Override
@@ -80,39 +80,39 @@ public class JobLogger implements Logger {
     @Override
     public void log(final Log log) {
         final var starting = new StringBuilder("Starting Coveralls job");
-        if (job.getServiceName() != null) {
-            starting.append(" for ").append(job.getServiceName());
-            if (job.getServiceJobId() != null) {
-                starting.append(" (").append(job.getServiceJobId()).append(")");
-            } else if (job.getServiceBuildNumber() != null) {
-                starting.append(" (").append(job.getServiceBuildNumber());
-                if (job.getServiceBuildUrl() != null) {
-                    starting.append(" / ").append(job.getServiceBuildUrl());
+        if (this.job.getServiceName() != null) {
+            starting.append(" for ").append(this.job.getServiceName());
+            if (this.job.getServiceJobId() != null) {
+                starting.append(" (").append(this.job.getServiceJobId()).append(")");
+            } else if (this.job.getServiceBuildNumber() != null) {
+                starting.append(" (").append(this.job.getServiceBuildNumber());
+                if (this.job.getServiceBuildUrl() != null) {
+                    starting.append(" / ").append(this.job.getServiceBuildUrl());
                 }
                 starting.append(")");
             }
         }
-        if (job.isDryRun()) {
+        if (this.job.isDryRun()) {
             starting.append(" in dry run mode");
         }
-        if (job.isParallel()) {
+        if (this.job.isParallel()) {
             starting.append(" with parallel option enabled");
         }
         log.info(starting.toString());
 
-        if (job.getRepoToken() != null) {
+        if (this.job.getRepoToken() != null) {
             log.info("Using repository token <secret>");
         }
 
-        if (job.getGit() != null) {
-            final var commit = job.getGit().getHead().getId();
-            final var branch = job.getBranch() != null ? job.getBranch() : job.getGit().getBranch();
+        if (this.job.getGit() != null) {
+            final var commit = this.job.getGit().getHead().getId();
+            final var branch = this.job.getBranch() != null ? this.job.getBranch() : this.job.getGit().getBranch();
             log.info("Git commit " + commit.substring(0, JobLogger.ABBREV) + " in " + branch);
         }
 
         if (log.isDebugEnabled()) {
             try {
-                log.debug("Complete Job description:\n" + jsonMapper.writeValueAsString(job));
+                log.debug("Complete Job description:\n" + this.jsonMapper.writeValueAsString(this.job));
             } catch (final JsonProcessingException e) {
                 throw new IllegalStateException("FAiled to serialize job to JSON", e);
             }

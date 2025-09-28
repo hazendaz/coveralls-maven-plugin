@@ -53,9 +53,9 @@ public class SagaParser extends CoberturaParser {
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback)
             throws XMLStreamException, ProcessingException, IOException {
-        if (isStartElement(xml, "class")) {
+        if (this.isStartElement(xml, "class")) {
             final var name = xml.getAttributeValue(null, "name");
-            source = loadSource(name);
+            this.source = this.loadSource(name);
         } else {
             super.onEvent(xml, callback);
         }

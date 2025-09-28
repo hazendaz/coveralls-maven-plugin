@@ -60,7 +60,7 @@ public class Travis extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(Travis.TRAVIS));
+        return Boolean.parseBoolean(this.getProperty(Travis.TRAVIS));
     }
 
     @Override
@@ -70,24 +70,24 @@ public class Travis extends AbstractServiceSetup {
 
     @Override
     public String getJobId() {
-        return getProperty(Travis.TRAVIS_JOB_ID);
+        return this.getProperty(Travis.TRAVIS_JOB_ID);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(Travis.TRAVIS_BRANCH);
+        return this.getProperty(Travis.TRAVIS_BRANCH);
     }
 
     @Override
     public String getPullRequest() {
-        return getProperty(Travis.TRAVIS_PULL_REQUEST);
+        return this.getProperty(Travis.TRAVIS_PULL_REQUEST);
     }
 
     @Override
     public Properties getEnvironment() {
         final var environment = new Properties();
-        addProperty(environment, "travis_job_id", getProperty(Travis.TRAVIS_JOB_ID));
-        addProperty(environment, "travis_pull_request", getProperty(Travis.TRAVIS_PULL_REQUEST));
+        this.addProperty(environment, "travis_job_id", this.getProperty(Travis.TRAVIS_JOB_ID));
+        this.addProperty(environment, "travis_pull_request", this.getProperty(Travis.TRAVIS_PULL_REQUEST));
         return environment;
     }
 }

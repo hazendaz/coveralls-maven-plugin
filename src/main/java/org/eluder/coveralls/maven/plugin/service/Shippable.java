@@ -66,7 +66,7 @@ public class Shippable extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(Shippable.SHIPPABLE));
+        return Boolean.parseBoolean(this.getProperty(Shippable.SHIPPABLE));
     }
 
     @Override
@@ -76,22 +76,22 @@ public class Shippable extends AbstractServiceSetup {
 
     @Override
     public String getBuildNumber() {
-        return getProperty(Shippable.SHIPPABLE_BUILD_NUMBER);
+        return this.getProperty(Shippable.SHIPPABLE_BUILD_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return "https://app.shippable.com/builds/" + getProperty(Shippable.SHIPPABLE_BUILD_ID);
+        return "https://app.shippable.com/builds/" + this.getProperty(Shippable.SHIPPABLE_BUILD_ID);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(Shippable.SHIPPABLE_BRANCH);
+        return this.getProperty(Shippable.SHIPPABLE_BRANCH);
     }
 
     @Override
     public String getPullRequest() {
-        final var pullRequest = getProperty(Shippable.SHIPPABLE_PULL_REQUEST);
+        final var pullRequest = this.getProperty(Shippable.SHIPPABLE_PULL_REQUEST);
         if ("false".equals(pullRequest)) {
             return null;
         }
@@ -101,11 +101,11 @@ public class Shippable extends AbstractServiceSetup {
     @Override
     public Properties getEnvironment() {
         final var environment = new Properties();
-        addProperty(environment, "shippable_build_number", getProperty(Shippable.SHIPPABLE_BUILD_NUMBER));
-        addProperty(environment, "shippable_build_id", getProperty(Shippable.SHIPPABLE_BUILD_ID));
-        addProperty(environment, "shippable_build_url", getBuildUrl());
-        addProperty(environment, "branch", getProperty(Shippable.SHIPPABLE_BRANCH));
-        addProperty(environment, "commit_sha", getProperty(Shippable.SHIPPABLE_COMMIT));
+        this.addProperty(environment, "shippable_build_number", this.getProperty(Shippable.SHIPPABLE_BUILD_NUMBER));
+        this.addProperty(environment, "shippable_build_id", this.getProperty(Shippable.SHIPPABLE_BUILD_ID));
+        this.addProperty(environment, "shippable_build_url", this.getBuildUrl());
+        this.addProperty(environment, "branch", this.getProperty(Shippable.SHIPPABLE_BRANCH));
+        this.addProperty(environment, "commit_sha", this.getProperty(Shippable.SHIPPABLE_COMMIT));
         return environment;
     }
 

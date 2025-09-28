@@ -86,7 +86,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      * @return the job
      */
     public final Job getJob() {
-        return job;
+        return this.job;
     }
 
     /**
@@ -95,25 +95,25 @@ public class JsonWriter implements SourceCallback, Closeable {
      * @return the coveralls file
      */
     public final File getCoverallsFile() {
-        return coverallsFile;
+        return this.coverallsFile;
     }
 
     @Override
     public void onBegin() throws ProcessingException, IOException {
         try {
-            generator.writeStartObject();
-            writeOptionalString("repo_token", job.getRepoToken());
-            writeOptionalString("service_name", job.getServiceName());
-            writeOptionalString("service_job_id", job.getServiceJobId());
-            writeOptionalString("service_number", job.getServiceBuildNumber());
-            writeOptionalString("service_build_url", job.getServiceBuildUrl());
-            writeOptionalString("service_branch", job.getBranch());
-            writeOptionalString("service_pull_request", job.getPullRequest());
-            writeOptionalBoolean("parallel", job.isParallel());
-            writeOptionalTimestamp("run_at", job.getTimestamp());
-            writeOptionalEnvironment("environment", job.getServiceEnvironment());
-            writeOptionalObject("git", job.getGit());
-            generator.writeArrayFieldStart("source_files");
+            this.generator.writeStartObject();
+            this.writeOptionalString("repo_token", this.job.getRepoToken());
+            this.writeOptionalString("service_name", this.job.getServiceName());
+            this.writeOptionalString("service_job_id", this.job.getServiceJobId());
+            this.writeOptionalString("service_number", this.job.getServiceBuildNumber());
+            this.writeOptionalString("service_build_url", this.job.getServiceBuildUrl());
+            this.writeOptionalString("service_branch", this.job.getBranch());
+            this.writeOptionalString("service_pull_request", this.job.getPullRequest());
+            this.writeOptionalBoolean("parallel", this.job.isParallel());
+            this.writeOptionalTimestamp("run_at", this.job.getTimestamp());
+            this.writeOptionalEnvironment("environment", this.job.getServiceEnvironment());
+            this.writeOptionalObject("git", this.job.getGit());
+            this.generator.writeArrayFieldStart("source_files");
         } catch (final JsonProcessingException ex) {
             throw new ProcessingException(ex);
         }
@@ -122,7 +122,7 @@ public class JsonWriter implements SourceCallback, Closeable {
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
         try {
-            generator.writeObject(source);
+            this.generator.writeObject(source);
         } catch (final JsonProcessingException ex) {
             throw new ProcessingException(ex);
         }
@@ -131,8 +131,8 @@ public class JsonWriter implements SourceCallback, Closeable {
     @Override
     public void onComplete() throws ProcessingException, IOException {
         try {
-            generator.writeEndArray();
-            generator.writeEndObject();
+            this.generator.writeEndArray();
+            this.generator.writeEndObject();
         } catch (final JsonProcessingException ex) {
             throw new ProcessingException(ex);
         }
@@ -140,7 +140,7 @@ public class JsonWriter implements SourceCallback, Closeable {
 
     @Override
     public void close() throws IOException {
-        generator.close();
+        this.generator.close();
     }
 
     /**
@@ -156,7 +156,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      */
     private void writeOptionalString(final String field, final String value) throws IOException {
         if (value != null && !value.isBlank()) {
-            generator.writeStringField(field, value);
+            this.generator.writeStringField(field, value);
         }
     }
 
@@ -173,7 +173,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      */
     private void writeOptionalBoolean(final String field, final boolean value) throws IOException {
         if (value) {
-            generator.writeBooleanField(field, value);
+            this.generator.writeBooleanField(field, value);
         }
     }
 
@@ -190,7 +190,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      */
     private void writeOptionalObject(final String field, final Object value) throws IOException {
         if (value != null) {
-            generator.writeObjectField(field, value);
+            this.generator.writeObjectField(field, value);
         }
     }
 
@@ -209,7 +209,7 @@ public class JsonWriter implements SourceCallback, Closeable {
         if (value != null) {
             final var formatter = DateTimeFormatter.ofPattern(JsonWriter.TIMESTAMP_FORMAT)
                     .withZone(ZoneId.systemDefault());
-            writeOptionalString(field, formatter.format(Instant.ofEpochMilli(value)));
+            this.writeOptionalString(field, formatter.format(Instant.ofEpochMilli(value)));
         }
     }
 
@@ -226,11 +226,11 @@ public class JsonWriter implements SourceCallback, Closeable {
      */
     private void writeOptionalEnvironment(final String field, final Properties properties) throws IOException {
         if (properties != null) {
-            generator.writeObjectFieldStart(field);
+            this.generator.writeObjectFieldStart(field);
             for (final Entry<Object, Object> property : properties.entrySet()) {
-                writeOptionalString(property.getKey().toString(), property.getValue().toString());
+                this.writeOptionalString(property.getKey().toString(), property.getValue().toString());
             }
-            generator.writeEndObject();
+            this.generator.writeEndObject();
         }
     }
 }

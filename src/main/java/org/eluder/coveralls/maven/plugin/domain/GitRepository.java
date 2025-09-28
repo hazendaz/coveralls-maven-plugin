@@ -62,9 +62,9 @@ public class GitRepository {
      */
     public Git load() throws IOException {
         try (var repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {
-            final var head = getHead(repository);
-            final var branch = getBranch(repository);
-            final var remotes = getRemotes(repository);
+            final var head = this.getHead(repository);
+            final var branch = this.getBranch(repository);
+            final var remotes = this.getRemotes(repository);
             return new Git(repository.getWorkTree(), head, branch, remotes);
         }
     }

@@ -56,7 +56,7 @@ public class Bamboo extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return getProperty(Bamboo.BAMBOO_BUILD_NUMBER) != null;
+        return this.getProperty(Bamboo.BAMBOO_BUILD_NUMBER) != null;
     }
 
     @Override
@@ -66,16 +66,16 @@ public class Bamboo extends AbstractServiceSetup {
 
     @Override
     public String getBuildNumber() {
-        return getProperty(Bamboo.BAMBOO_BUILD_NUMBER);
+        return this.getProperty(Bamboo.BAMBOO_BUILD_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return getProperty(Bamboo.BAMBOO_BUILD_URL);
+        return this.getProperty(Bamboo.BAMBOO_BUILD_URL);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(Bamboo.BAMBOO_BRANCH);
+        return this.getProperty(Bamboo.BAMBOO_BRANCH);
     }
 }

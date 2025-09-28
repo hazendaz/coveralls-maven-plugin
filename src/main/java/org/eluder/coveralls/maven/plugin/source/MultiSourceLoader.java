@@ -52,7 +52,7 @@ public class MultiSourceLoader implements SourceLoader {
 
     @Override
     public Source load(final String sourceFile) throws IOException {
-        for (final SourceLoader sourceLoader : sourceLoaders) {
+        for (final SourceLoader sourceLoader : this.sourceLoaders) {
             final var source = sourceLoader.load(sourceFile);
             if (source != null) {
                 return source;

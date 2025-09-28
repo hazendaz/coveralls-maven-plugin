@@ -115,25 +115,25 @@ public class CoverallsClient {
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
         final var entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
                 .addBinaryBody("json_file", file, CoverallsClient.MIME_TYPE, CoverallsClient.FILE_NAME).build();
-        final var post = new HttpPost(coverallsUrl);
+        final var post = new HttpPost(this.coverallsUrl);
         post.setEntity(entity);
-        final var result = httpClient.execute(post, response -> {
+        final var result = this.httpClient.execute(post, response -> {
             final var responseEntity = response.getEntity();
             if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                return new SubmitResult(getResponseErrorMessage(response, "Coveralls API internal error"),
+                return new SubmitResult(this.getResponseErrorMessage(response, "Coveralls API internal error"),
                         SubmitResult.ErrorType.IO);
             }
 
             try (var reader = new BufferedReader(
                     new InputStreamReader(responseEntity.getContent(), StandardCharsets.UTF_8))) {
-                final var cr = objectMapper.readValue(reader, CoverallsResponse.class);
+                final var cr = this.objectMapper.readValue(reader, CoverallsResponse.class);
                 if (cr.isError()) {
-                    return new SubmitResult(getResponseErrorMessage(response, cr.getMessage()),
+                    return new SubmitResult(this.getResponseErrorMessage(response, cr.getMessage()),
                             SubmitResult.ErrorType.PROCESSING);
                 }
                 return new SubmitResult(cr);
             } catch (final JsonProcessingException ex) {
-                return new SubmitResult(getResponseErrorMessage(response, ex.getMessage()), ex,
+                return new SubmitResult(this.getResponseErrorMessage(response, ex.getMessage()), ex,
                         SubmitResult.ErrorType.PROCESSING);
             }
         });

@@ -69,7 +69,7 @@ public final class ValidationError {
      * @return the level
      */
     public Level getLevel() {
-        return level;
+        return this.level;
     }
 
     /**
@@ -78,11 +78,11 @@ public final class ValidationError {
      * @return the message
      */
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     @Override
     public String toString() {
-        return level + ": " + message;
+        return this.level + ": " + this.message;
     }
 }

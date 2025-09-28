@@ -68,23 +68,23 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
     @Override
     public final void parse(final SourceCallback callback) throws ProcessingException, IOException {
         XMLStreamReader xml = null;
-        try (var is = Files.newInputStream(coverageFile.toPath());
+        try (var is = Files.newInputStream(this.coverageFile.toPath());
                 var bis = new BufferedInputStream(is)) {
-            xml = createEventReader(bis);
+            xml = this.createEventReader(bis);
             while (xml.hasNext()) {
                 xml.next();
-                onEvent(xml, callback);
+                this.onEvent(xml, callback);
             }
         } catch (final XMLStreamException ex) {
             throw new ProcessingException(ex);
         } finally {
-            close(xml);
+            this.close(xml);
         }
     }
 
     @Override
     public final File getCoverageFile() {
-        return coverageFile;
+        return this.coverageFile;
     }
 
     /**
@@ -162,7 +162,7 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
      *             Signals that an I/O exception has occurred.
      */
     protected final Source loadSource(final String sourceFile) throws IOException {
-        return sourceLoader.load(sourceFile);
+        return this.sourceLoader.load(sourceFile);
     }
 
     /**

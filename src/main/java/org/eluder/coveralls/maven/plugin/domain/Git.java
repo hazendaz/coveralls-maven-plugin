@@ -79,7 +79,7 @@ public class Git implements JsonObject {
      * @return the base dir
      */
     public File getBaseDir() {
-        return baseDir;
+        return this.baseDir;
     }
 
     /**
@@ -88,7 +88,7 @@ public class Git implements JsonObject {
      * @return the head
      */
     public Head getHead() {
-        return head;
+        return this.head;
     }
 
     /**
@@ -97,7 +97,7 @@ public class Git implements JsonObject {
      * @return the branch
      */
     public String getBranch() {
-        return branch;
+        return this.branch;
     }
 
     /**
@@ -106,7 +106,7 @@ public class Git implements JsonObject {
      * @return the remotes
      */
     public List<Remote> getRemotes() {
-        return remotes;
+        return this.remotes;
     }
 
     /**
@@ -173,7 +173,7 @@ public class Git implements JsonObject {
          * @return the id
          */
         public String getId() {
-            return id;
+            return this.id;
         }
 
         /**
@@ -182,7 +182,7 @@ public class Git implements JsonObject {
          * @return the author name
          */
         public String getAuthorName() {
-            return authorName;
+            return this.authorName;
         }
 
         /**
@@ -191,7 +191,7 @@ public class Git implements JsonObject {
          * @return the author email
          */
         public String getAuthorEmail() {
-            return authorEmail;
+            return this.authorEmail;
         }
 
         /**
@@ -200,7 +200,7 @@ public class Git implements JsonObject {
          * @return the committer name
          */
         public String getCommitterName() {
-            return committerName;
+            return this.committerName;
         }
 
         /**
@@ -209,7 +209,7 @@ public class Git implements JsonObject {
          * @return the committer email
          */
         public String getCommitterEmail() {
-            return committerEmail;
+            return this.committerEmail;
         }
 
         /**
@@ -218,7 +218,7 @@ public class Git implements JsonObject {
          * @return the message
          */
         public String getMessage() {
-            return message;
+            return this.message;
         }
     }
 
@@ -257,7 +257,7 @@ public class Git implements JsonObject {
          * @return the name
          */
         public String getName() {
-            return name;
+            return this.name;
         }
 
         /**
@@ -266,7 +266,7 @@ public class Git implements JsonObject {
          * @return the url
          */
         public String getUrl() {
-            return url;
+            return this.url;
         }
     }
 }

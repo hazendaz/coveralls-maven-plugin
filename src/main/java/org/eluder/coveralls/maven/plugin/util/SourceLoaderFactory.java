@@ -105,27 +105,27 @@ public class SourceLoaderFactory {
     public SourceLoader createSourceLoader() {
         final var multiSourceLoader = new MultiSourceLoader();
         final List<File> directories = new ArrayList<>();
-        final var modules = new MavenProjectCollector(project).collect();
+        final var modules = new MavenProjectCollector(this.project).collect();
         for (final MavenProject module : modules) {
             for (final String sourceRoot : module.getCompileSourceRoots()) {
                 final var sourceDirectory = Path.of(sourceRoot);
                 directories.add(sourceDirectory.toFile());
             }
         }
-        if (sourceDirectories != null) {
-            directories.addAll(sourceDirectories);
+        if (this.sourceDirectories != null) {
+            directories.addAll(this.sourceDirectories);
         }
         for (final File directory : directories) {
             if (directory.exists() && directory.isDirectory()) {
-                final var moduleSourceLoader = new DirectorySourceLoader(baseDir, directory, sourceEncoding);
+                final var moduleSourceLoader = new DirectorySourceLoader(this.baseDir, directory, this.sourceEncoding);
                 multiSourceLoader.add(moduleSourceLoader);
             }
         }
 
-        if (scanForSources) {
+        if (this.scanForSources) {
             for (final File directory : directories) {
                 if (directory.exists() && directory.isDirectory()) {
-                    final var scanSourceLoader = new ScanSourceLoader(baseDir, directory, sourceEncoding);
+                    final var scanSourceLoader = new ScanSourceLoader(this.baseDir, directory, this.sourceEncoding);
                     multiSourceLoader.add(scanSourceLoader);
                 }
             }

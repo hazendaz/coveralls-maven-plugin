@@ -67,7 +67,7 @@ public class GitHub extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(GitHub.GITHUB_ACTIONS));
+        return Boolean.parseBoolean(this.getProperty(GitHub.GITHUB_ACTIONS));
     }
 
     @Override
@@ -77,23 +77,23 @@ public class GitHub extends AbstractServiceSetup {
 
     @Override
     public String getJobId() {
-        return getProperty(GitHub.GITHUB_RUN_ID);
+        return this.getProperty(GitHub.GITHUB_RUN_ID);
     }
 
     @Override
     public String getBuildNumber() {
-        return getProperty(GitHub.GITHUB_RUN_NUMBER);
+        return this.getProperty(GitHub.GITHUB_RUN_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return String.format("%s/%s/actions/runs/%s", getProperty(GitHub.GITHUB_SERVER_URL),
-                getProperty(GitHub.GITHUB_REPOSITORY), getProperty(GitHub.GITHUB_RUN_ID));
+        return String.format("%s/%s/actions/runs/%s", this.getProperty(GitHub.GITHUB_SERVER_URL),
+                this.getProperty(GitHub.GITHUB_REPOSITORY), this.getProperty(GitHub.GITHUB_RUN_ID));
     }
 
     @Override
     public String getPullRequest() {
-        final var matcher = GitHub.GITHUB_PR.matcher(getProperty(GitHub.GITHUB_REF_NAME));
+        final var matcher = GitHub.GITHUB_PR.matcher(this.getProperty(GitHub.GITHUB_REF_NAME));
         return matcher.matches() ? matcher.group(1) : null;
     }
 }

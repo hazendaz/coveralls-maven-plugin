@@ -77,13 +77,13 @@ class HttpClientFactory {
      * @return the http client factory
      */
     public HttpClientFactory proxy(final Proxy proxy) {
-        if (proxy != null && isProxied(targetUrl, proxy)) {
-            hcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
+        if (proxy != null && this.isProxied(this.targetUrl, proxy)) {
+            this.hcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
             if (StringUtils.isNotBlank(proxy.getUsername())) {
                 final var cp = new BasicCredentialsProvider();
                 cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
                         new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword().toCharArray()));
-                hcb.setDefaultCredentialsProvider(cp);
+                this.hcb.setDefaultCredentialsProvider(cp);
             }
         }
         return this;
@@ -95,7 +95,7 @@ class HttpClientFactory {
      * @return the closeable http client
      */
     public CloseableHttpClient create() {
-        return hcb.setDefaultRequestConfig(rcb.build()).build();
+        return this.hcb.setDefaultRequestConfig(this.rcb.build()).build();
     }
 
     /**

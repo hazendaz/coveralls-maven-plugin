@@ -239,7 +239,7 @@ public class Job {
      * @return the repo token
      */
     public String getRepoToken() {
-        return repoToken;
+        return this.repoToken;
     }
 
     /**
@@ -248,7 +248,7 @@ public class Job {
      * @return the service name
      */
     public String getServiceName() {
-        return serviceName;
+        return this.serviceName;
     }
 
     /**
@@ -257,7 +257,7 @@ public class Job {
      * @return the service job id
      */
     public String getServiceJobId() {
-        return serviceJobId;
+        return this.serviceJobId;
     }
 
     /**
@@ -266,7 +266,7 @@ public class Job {
      * @return the service build number
      */
     public String getServiceBuildNumber() {
-        return serviceBuildNumber;
+        return this.serviceBuildNumber;
     }
 
     /**
@@ -275,7 +275,7 @@ public class Job {
      * @return the service build url
      */
     public String getServiceBuildUrl() {
-        return serviceBuildUrl;
+        return this.serviceBuildUrl;
     }
 
     /**
@@ -284,7 +284,7 @@ public class Job {
      * @return the service environment
      */
     public Properties getServiceEnvironment() {
-        return serviceEnvironment;
+        return this.serviceEnvironment;
     }
 
     /**
@@ -293,7 +293,7 @@ public class Job {
      * @return the timestamp
      */
     public Long getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     /**
@@ -302,7 +302,7 @@ public class Job {
      * @return true, if is parallel
      */
     public boolean isParallel() {
-        return parallel;
+        return this.parallel;
     }
 
     /**
@@ -311,7 +311,7 @@ public class Job {
      * @return true, if is dry run
      */
     public boolean isDryRun() {
-        return dryRun;
+        return this.dryRun;
     }
 
     /**
@@ -320,14 +320,14 @@ public class Job {
      * @return the branch
      */
     public String getBranch() {
-        if (branch != null && getGit() != null && getGit().getRemotes() != null) {
-            for (final Remote remote : getGit().getRemotes()) {
-                if (branch.startsWith(remote.getName() + "/")) {
-                    return branch.substring(remote.getName().length() + 1);
+        if (this.branch != null && this.getGit() != null && this.getGit().getRemotes() != null) {
+            for (final Remote remote : this.getGit().getRemotes()) {
+                if (this.branch.startsWith(remote.getName() + "/")) {
+                    return this.branch.substring(remote.getName().length() + 1);
                 }
             }
         }
-        return branch;
+        return this.branch;
     }
 
     /**
@@ -336,7 +336,7 @@ public class Job {
      * @return the pull request
      */
     public String getPullRequest() {
-        return pullRequest;
+        return this.pullRequest;
     }
 
     /**
@@ -345,7 +345,7 @@ public class Job {
      * @return the git
      */
     public Git getGit() {
-        return git;
+        return this.git;
     }
 
     /**

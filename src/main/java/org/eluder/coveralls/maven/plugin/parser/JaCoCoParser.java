@@ -63,7 +63,7 @@ public class JaCoCoParser extends AbstractXmlEventParser {
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback)
             throws XMLStreamException, ProcessingException, IOException {
-        if (isStartElement(xml, "package")) {
+        if (this.isStartElement(xml, "package")) {
             this.packageName = xml.getAttributeValue(null, "name");
         } else
 

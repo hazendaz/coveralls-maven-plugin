@@ -63,12 +63,12 @@ public class CoberturaParser extends AbstractXmlEventParser {
     @Override
     protected void onEvent(final XMLStreamReader xml, final SourceCallback callback)
             throws XMLStreamException, ProcessingException, IOException {
-        if (isStartElement(xml, "class")) {
-            source = loadSource(xml.getAttributeValue(null, "filename"));
-            var className = xml.getAttributeValue(null, "name");
-            var classifierPosition = className.indexOf('$');
+        if (this.isStartElement(xml, "class")) {
+            this.source = this.loadSource(xml.getAttributeValue(null, "filename"));
+            final var className = xml.getAttributeValue(null, "name");
+            final var classifierPosition = className.indexOf('$');
             if (classifierPosition > 0) {
-                source.setClassifier(className.substring(classifierPosition + 1));
+                this.source.setClassifier(className.substring(classifierPosition + 1));
             }
             this.branchId = 0;
         } else

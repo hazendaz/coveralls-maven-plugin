@@ -59,7 +59,7 @@ public class Wercker extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(Wercker.WERCKER));
+        return Boolean.parseBoolean(this.getProperty(Wercker.WERCKER));
     }
 
     @Override
@@ -69,16 +69,16 @@ public class Wercker extends AbstractServiceSetup {
 
     @Override
     public String getJobId() {
-        return getProperty(Wercker.WERCKER_BUILD_ID);
+        return this.getProperty(Wercker.WERCKER_BUILD_ID);
     }
 
     @Override
     public String getBuildUrl() {
-        return getProperty(Wercker.WERCKER_BUILD_URL);
+        return this.getProperty(Wercker.WERCKER_BUILD_URL);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(Wercker.WERCKER_BRANCH);
+        return this.getProperty(Wercker.WERCKER_BRANCH);
     }
 }

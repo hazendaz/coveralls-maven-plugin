@@ -235,40 +235,40 @@ public class CoverallsReportMojo extends AbstractMojo {
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
-        if (skip) {
-            getLog().info("Skip property set, skipping plugin execution");
+        if (this.skip) {
+            this.getLog().info("Skip property set, skipping plugin execution");
             return;
         }
 
         try {
-            createEnvironment().setup();
+            this.createEnvironment().setup();
 
-            final var job = createJob();
-            job.validate().throwOrInform(getLog());
+            final var job = this.createJob();
+            job.validate().throwOrInform(this.getLog());
 
-            final var sourceLoader = createSourceLoader(job);
+            final var sourceLoader = this.createSourceLoader(job);
 
-            final var parsers = createCoverageParsers(sourceLoader);
+            final var parsers = this.createCoverageParsers(sourceLoader);
 
-            final var client = createCoverallsClient();
+            final var client = this.createCoverallsClient();
 
             final List<Logger> reporters = new ArrayList<>();
             reporters.add(new JobLogger(job));
 
-            try (var writer = createJsonWriter(job)) {
+            try (var writer = this.createJsonWriter(job)) {
                 // For tests (its the same instance as in writer)
-                coverallsFile = writer.getCoverallsFile();
+                this.coverallsFile = writer.getCoverallsFile();
 
-                final var sourceCallback = createSourceCallbackChain(writer, reporters);
-                reporters.add(new DryRunLogger(job.isDryRun(), coverallsFile));
+                final var sourceCallback = this.createSourceCallbackChain(writer, reporters);
+                reporters.add(new DryRunLogger(job.isDryRun(), this.coverallsFile));
 
-                report(reporters, Position.BEFORE);
-                writeCoveralls(writer, sourceCallback, parsers);
-                report(reporters, Position.AFTER);
+                this.report(reporters, Position.BEFORE);
+                this.writeCoveralls(writer, sourceCallback, parsers);
+                this.report(reporters, Position.AFTER);
             }
 
             if (!job.isDryRun()) {
-                submitData(client, coverallsFile);
+                this.submitData(client, this.coverallsFile);
             }
         } catch (final ProcessingException ex) {
             throw new MojoFailureException("Processing of input or output data failed", ex);
@@ -291,9 +291,9 @@ public class CoverallsReportMojo extends AbstractMojo {
      *             if parsers cannot be created
      */
     protected List<CoverageParser> createCoverageParsers(final SourceLoader sourceLoader) throws IOException {
-        return new CoverageParsersFactory(project, sourceLoader).withJaCoCoReports(jacocoReports)
-                .withCoberturaReports(coberturaReports).withSagaReports(sagaReports).withCloverReports(cloverReports)
-                .withRelativeReportDirs(relativeReportDirs).createParsers();
+        return new CoverageParsersFactory(this.project, sourceLoader).withJaCoCoReports(this.jacocoReports)
+                .withCoberturaReports(this.coberturaReports).withSagaReports(this.sagaReports).withCloverReports(this.cloverReports)
+                .withRelativeReportDirs(this.relativeReportDirs).createParsers();
     }
 
     /**
@@ -305,8 +305,8 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return source loader that extracts source files
      */
     protected SourceLoader createSourceLoader(final Job job) {
-        return new SourceLoaderFactory(job.getGit().getBaseDir(), project, Charset.forName(sourceEncoding))
-                .withSourceDirectories(sourceDirectories).withScanForSources(scanForSources).createSourceLoader();
+        return new SourceLoaderFactory(job.getGit().getBaseDir(), this.project, Charset.forName(this.sourceEncoding))
+                .withSourceDirectories(this.sourceDirectories).withScanForSources(this.scanForSources).createSourceLoader();
     }
 
     /**
@@ -315,7 +315,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return environment to setup mojo and service specific properties
      */
     protected Environment createEnvironment() {
-        return new Environment(this, getServices());
+        return new Environment(this, this.getServices());
     }
 
     /**
@@ -349,13 +349,13 @@ public class CoverallsReportMojo extends AbstractMojo {
      *             if an I/O error occurs
      */
     protected Job createJob() throws ProcessingException, IOException {
-        final var git = new GitRepository(basedir).load();
-        final var time = timestamp == null ? null
-                : new TimestampParser(timestampFormat).parse(timestamp).toEpochMilli();
-        return new Job().withRepoToken(repoToken).withServiceName(serviceName).withServiceJobId(serviceJobId)
-                .withServiceBuildNumber(serviceBuildNumber).withServiceBuildUrl(serviceBuildUrl).withParallel(parallel)
-                .withServiceEnvironment(serviceEnvironment).withDryRun(dryRun).withBranch(branch)
-                .withPullRequest(pullRequest).withTimestamp(time).withGit(git);
+        final var git = new GitRepository(this.basedir).load();
+        final var time = this.timestamp == null ? null
+                : new TimestampParser(this.timestampFormat).parse(this.timestamp).toEpochMilli();
+        return new Job().withRepoToken(this.repoToken).withServiceName(this.serviceName).withServiceJobId(this.serviceJobId)
+                .withServiceBuildNumber(this.serviceBuildNumber).withServiceBuildUrl(this.serviceBuildUrl).withParallel(this.parallel)
+                .withServiceEnvironment(this.serviceEnvironment).withDryRun(this.dryRun).withBranch(this.branch)
+                .withPullRequest(this.pullRequest).withTimestamp(time).withGit(git);
     }
 
     /**
@@ -370,7 +370,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      *             if an I/O error occurs
      */
     protected JsonWriter createJsonWriter(final Job job) throws IOException {
-        return new JsonWriter(job, coverallsFile);
+        return new JsonWriter(job, this.coverallsFile);
     }
 
     /**
@@ -379,7 +379,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return http client that submits the coveralls data
      */
     protected CoverallsClient createCoverallsClient() {
-        return new CoverallsProxyClient(coverallsUrl, settings.getActiveProxy());
+        return new CoverallsProxyClient(this.coverallsUrl, this.settings.getActiveProxy());
     }
 
     /**
@@ -394,7 +394,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
         SourceCallback chain = writer;
-        if (getLog().isInfoEnabled()) {
+        if (this.getLog().isInfoEnabled()) {
             final var coverageTracingReporter = new CoverageTracingLogger(chain);
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
@@ -419,16 +419,16 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback,
             final List<CoverageParser> parsers) throws ProcessingException, IOException {
-        getLog().info("Writing Coveralls data to " + coverallsFile.getAbsolutePath() + "...");
+        this.getLog().info("Writing Coveralls data to " + this.coverallsFile.getAbsolutePath() + "...");
         final var now = System.currentTimeMillis();
         sourceCallback.onBegin();
         for (final CoverageParser parser : parsers) {
-            getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
+            this.getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
             parser.parse(sourceCallback);
         }
         sourceCallback.onComplete();
         final var duration = System.currentTimeMillis() - now;
-        getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
+        this.getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
     }
 
     /**
@@ -446,23 +446,23 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     private void submitData(final CoverallsClient client, final File coverallsFile)
             throws ProcessingException, IOException {
-        getLog().info("Submitting Coveralls data to API");
+        this.getLog().info("Submitting Coveralls data to API");
         final var now = System.currentTimeMillis();
         try {
             final var response = client.submit(coverallsFile);
             final var duration = System.currentTimeMillis() - now;
-            getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
-            getLog().info(response.getUrl());
-            getLog().info("*** Coverage results are usually available immediately on Coveralls.");
-            getLog().info("    If you see question marks or missing data, please allow some time for processing.");
+            this.getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
+            this.getLog().info(response.getUrl());
+            this.getLog().info("*** Coverage results are usually available immediately on Coveralls.");
+            this.getLog().info("    If you see question marks or missing data, please allow some time for processing.");
         } catch (final ProcessingException ex) {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms while processing data";
-            handleSubmissionError(ex, message, true);
+            this.handleSubmissionError(ex, message, true);
         } catch (final IOException ex) {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms while handling I/O operations";
-            handleSubmissionError(ex, message, failOnServiceError);
+            this.handleSubmissionError(ex, message, this.failOnServiceError);
         }
     }
 
@@ -484,10 +484,10 @@ public class CoverallsReportMojo extends AbstractMojo {
     private <T extends Exception> void handleSubmissionError(final T ex, final String message,
             final boolean failOnException) throws T {
         if (failOnException) {
-            getLog().error(message);
+            this.getLog().error(message);
             throw ex;
         }
-        getLog().warn(message);
+        this.getLog().warn(message);
     }
 
     /**
@@ -501,7 +501,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     private void report(final List<Logger> reporters, final Position position) {
         for (final Logger reporter : reporters) {
             if (position.equals(reporter.getPosition())) {
-                reporter.log(getLog());
+                reporter.log(this.getLog());
             }
         }
     }

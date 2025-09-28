@@ -68,7 +68,7 @@ public class Appveyor extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return Boolean.parseBoolean(getProperty(Appveyor.APPVEYOR));
+        return Boolean.parseBoolean(this.getProperty(Appveyor.APPVEYOR));
     }
 
     @Override
@@ -78,28 +78,28 @@ public class Appveyor extends AbstractServiceSetup {
 
     @Override
     public String getBuildNumber() {
-        return getProperty(Appveyor.APPVEYOR_BUILD_NUMBER);
+        return this.getProperty(Appveyor.APPVEYOR_BUILD_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return "https://ci.appveyor.com/project/" + getProperty(Appveyor.APPVEYOR_REPO_NAME) + "/build/"
-                + getProperty(Appveyor.APPVEYOR_BUILD_NUMBER);
+        return "https://ci.appveyor.com/project/" + this.getProperty(Appveyor.APPVEYOR_REPO_NAME) + "/build/"
+                + this.getProperty(Appveyor.APPVEYOR_BUILD_NUMBER);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(Appveyor.APPVEYOR_BRANCH);
+        return this.getProperty(Appveyor.APPVEYOR_BRANCH);
     }
 
     @Override
     public String getPullRequest() {
-        return getProperty(Appveyor.APPVEYOR_PULL_REQUEST);
+        return this.getProperty(Appveyor.APPVEYOR_PULL_REQUEST);
     }
 
     @Override
     public String getJobId() {
-        return getProperty(Appveyor.APPVEYOR_BUILD_ID);
+        return this.getProperty(Appveyor.APPVEYOR_BUILD_ID);
     }
 
 }

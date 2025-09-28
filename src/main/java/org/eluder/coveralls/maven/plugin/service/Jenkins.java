@@ -63,7 +63,7 @@ public class Jenkins extends AbstractServiceSetup {
 
     @Override
     public boolean isSelected() {
-        return getProperty(Jenkins.JENKINS_URL) != null;
+        return this.getProperty(Jenkins.JENKINS_URL) != null;
     }
 
     @Override
@@ -73,26 +73,26 @@ public class Jenkins extends AbstractServiceSetup {
 
     @Override
     public String getBuildNumber() {
-        return getProperty(Jenkins.JENKINS_BUILD_NUMBER);
+        return this.getProperty(Jenkins.JENKINS_BUILD_NUMBER);
     }
 
     @Override
     public String getBuildUrl() {
-        return getProperty(Jenkins.JENKINS_BUILD_URL);
+        return this.getProperty(Jenkins.JENKINS_BUILD_URL);
     }
 
     @Override
     public String getBranch() {
-        return getProperty(Jenkins.JENKINS_BRANCH);
+        return this.getProperty(Jenkins.JENKINS_BRANCH);
     }
 
     @Override
     public Properties getEnvironment() {
         final var environment = new Properties();
-        addProperty(environment, "jenkins_build_num", getProperty(Jenkins.JENKINS_BUILD_NUMBER));
-        addProperty(environment, "jenkins_build_url", getProperty(Jenkins.JENKINS_BUILD_URL));
-        addProperty(environment, "branch", getProperty(Jenkins.JENKINS_BRANCH));
-        addProperty(environment, "commit_sha", getProperty(Jenkins.JENKINS_COMMIT));
+        this.addProperty(environment, "jenkins_build_num", this.getProperty(Jenkins.JENKINS_BUILD_NUMBER));
+        this.addProperty(environment, "jenkins_build_url", this.getProperty(Jenkins.JENKINS_BUILD_URL));
+        this.addProperty(environment, "branch", this.getProperty(Jenkins.JENKINS_BRANCH));
+        this.addProperty(environment, "commit_sha", this.getProperty(Jenkins.JENKINS_COMMIT));
         return environment;
     }
 }

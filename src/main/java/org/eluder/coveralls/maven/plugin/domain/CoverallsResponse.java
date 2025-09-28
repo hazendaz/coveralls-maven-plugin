@@ -67,7 +67,7 @@ public final class CoverallsResponse implements JsonObject {
      * @return the message
      */
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     /**
@@ -76,7 +76,7 @@ public final class CoverallsResponse implements JsonObject {
      * @return true, if is error
      */
     public boolean isError() {
-        return error;
+        return this.error;
     }
 
     /**
@@ -85,6 +85,6 @@ public final class CoverallsResponse implements JsonObject {
      * @return the url
      */
     public String getUrl() {
-        return url;
+        return this.url;
     }
 }

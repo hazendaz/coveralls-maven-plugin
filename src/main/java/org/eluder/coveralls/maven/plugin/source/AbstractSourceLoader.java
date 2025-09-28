@@ -59,13 +59,13 @@ public abstract class AbstractSourceLoader implements SourceLoader {
 
     @Override
     public Source load(final String sourceFile) throws IOException {
-        final var stream = locate(sourceFile);
+        final var stream = this.locate(sourceFile);
         if (stream == null) {
             return null;
         }
         try (var ds = new Sha512DigestInputStream(stream)) {
-            final var source = new String(ds.readAllBytes(), getSourceEncoding());
-            return new Source(getFileName(sourceFile), source, ds.getDigestHex());
+            final var source = new String(ds.readAllBytes(), this.getSourceEncoding());
+            return new Source(this.getFileName(sourceFile), source, ds.getDigestHex());
         }
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractSourceLoader implements SourceLoader {
      * @return the source encoding
      */
     protected Charset getSourceEncoding() {
-        return sourceEncoding;
+        return this.sourceEncoding;
     }
 
     /**
@@ -87,7 +87,7 @@ public abstract class AbstractSourceLoader implements SourceLoader {
      * @return the file name
      */
     protected String getFileName(final String sourceFile) {
-        return directoryPrefix + sourceFile;
+        return this.directoryPrefix + sourceFile;
     }
 
     /**
