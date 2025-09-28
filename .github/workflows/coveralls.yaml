@@ -21,19 +21,19 @@ jobs:
           cache: maven
           distribution: temurin
           java-version: 21
+      - name: Run the build and install to m2
+        run: ./mvnw install --batch-mode --no-transfer-progress --quiet --show-version -Dlicense.skip=true
       - name: Report Coverage to Coveralls for Pull Requests
         if: github.event_name == 'pull_request'
-        run: ./mvnw test jacoco:report coveralls:report --batch-mode --no-transfer-progress --quiet --show-version -Dlicense.skip=true -DpullRequest=$PR_NUMBER -DrepoToken=$GITHUB_TOKEN -DserviceName=github
+        run: ./mvnw jacoco:report coveralls:report --batch-mode --no-transfer-progress -DpullRequest=$PR_NUMBER -DrepoToken=$GITHUB_TOKEN -DserviceName=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.number }}
       - name: Get Coveralls Maven Plugin Version
         id: get_version
         run: echo "PLUGIN_VERSION=$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-      - name: Report Coverage to Coveralls for General Push
+      - name: Report Coverage to Coveralls for General Push using current snapshot version
         if: github.event_name == 'push'
-        run: |
-          ./mvnw install --batch-mode --no-transfer-progress --quiet --show-version -Dlicense.skip=true && \
-          ./mvnw jacoco:report coveralls:report --batch-mode --no-transfer-progress -Dcoveralls.plugin=${{ env.PLUGIN_VERSION }} -DrepoToken=$GITHUB_TOKEN -DserviceName=github
+        run: ./mvnw jacoco:report coveralls:report --batch-mode --no-transfer-progress -Dcoveralls.plugin=${{ env.PLUGIN_VERSION }} -DrepoToken=$GITHUB_TOKEN -DserviceName=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
