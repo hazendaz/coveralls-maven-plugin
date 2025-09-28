@@ -244,24 +244,33 @@ public class CoverallsReportMojo extends AbstractMojo {
 
         try {
             createEnvironment().setup();
+
             Job job = createJob();
             job.validate().throwOrInform(getLog());
+
             SourceLoader sourceLoader = createSourceLoader(job);
+
             List<CoverageParser> parsers = createCoverageParsers(sourceLoader);
+
+            CoverallsClient client = createCoverallsClient();
+
+            List<Logger> reporters = new ArrayList<>();
+            reporters.add(new JobLogger(job));
+
             try (JsonWriter writer = createJsonWriter(job)) {
-                CoverallsClient client = createCoverallsClient();
-                List<Logger> reporters = new ArrayList<>();
-                reporters.add(new JobLogger(job));
+                // For tests (its the same instance as in writer)
+                coverallsFile = writer.getCoverallsFile();
+
                 SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);
-                reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));
+                reporters.add(new DryRunLogger(job.isDryRun(), coverallsFile));
 
                 report(reporters, Position.BEFORE);
                 writeCoveralls(writer, sourceCallback, parsers);
                 report(reporters, Position.AFTER);
+            }
 
-                if (!job.isDryRun()) {
-                    submitData(client, writer.getCoverallsFile());
-                }
+            if (!job.isDryRun()) {
+                submitData(client, coverallsFile);
             }
         } catch (ProcessingException ex) {
             throw new MojoFailureException("Processing of input or output data failed", ex);
@@ -411,7 +420,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback,
             final List<CoverageParser> parsers) throws ProcessingException, IOException {
-        getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + "...");
+        getLog().info("Writing Coveralls data to " + coverallsFile.getAbsolutePath() + "...");
         long now = System.currentTimeMillis();
         sourceCallback.onBegin();
         for (CoverageParser parser : parsers) {
