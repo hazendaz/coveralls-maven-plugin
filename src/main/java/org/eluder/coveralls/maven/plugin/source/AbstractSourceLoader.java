@@ -23,6 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -66,7 +67,8 @@ public abstract class AbstractSourceLoader implements SourceLoader {
             return null;
         }
         try (Sha512DigestInputStream ds = new Sha512DigestInputStream(stream);
-                InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {
+                InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding());
+                BufferedReader bufferedReader = new BufferedReader(reader)) {
             String source = IOUtils.toString(reader);
             return new Source(getFileName(sourceFile), source, ds.getDigestHex());
         }
