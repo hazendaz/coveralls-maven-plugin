@@ -113,8 +113,8 @@ public class JobLogger implements Logger {
         if (log.isDebugEnabled()) {
             try {
                 log.debug("Complete Job description:\n" + jsonMapper.writeValueAsString(job));
-            } catch (JsonProcessingException ex) {
-                throw new RuntimeException(ex);
+            } catch (JsonProcessingException e) {
+                throw new IllegalStateException("FAiled to serialize job to JSON", e);
             }
         }
     }
