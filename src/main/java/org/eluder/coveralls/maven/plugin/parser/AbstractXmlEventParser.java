@@ -23,10 +23,11 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
@@ -34,7 +35,6 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.io.input.XmlStreamReader;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
@@ -68,9 +68,9 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
     @Override
     public final void parse(final SourceCallback callback) throws ProcessingException, IOException {
         XMLStreamReader xml = null;
-        try (XmlStreamReader reader = XmlStreamReader.builder().setPath(coverageFile.getPath())
-                .setCharset(StandardCharsets.UTF_8).get()) {
-            xml = createEventReader(reader);
+        try (var is = Files.newInputStream(coverageFile.toPath());
+                var bis = new BufferedInputStream(is)) {
+            xml = createEventReader(bis);
             while (xml.hasNext()) {
                 xml.next();
                 onEvent(xml, callback);
@@ -90,22 +90,22 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
     /**
      * Creates the event reader.
      *
-     * @param reader
-     *            the reader
+     * @param inputStream
+     *            the input stream
      *
      * @return the XML stream reader
      *
      * @throws ProcessingException
      *             the processing exception
      */
-    protected XMLStreamReader createEventReader(final Reader reader) throws ProcessingException {
+    protected XMLStreamReader createEventReader(final InputStream inputStream) throws ProcessingException {
         try {
             XMLInputFactory xmlif = XMLInputFactory.newInstance();
             xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
             xmlif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
             xmlif.setProperty(XMLInputFactory.IS_VALIDATING, false);
             xmlif.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-            return xmlif.createXMLStreamReader(reader);
+            return xmlif.createXMLStreamReader(inputStream);
         } catch (FactoryConfigurationError ex) {
             throw new IllegalArgumentException(ex);
         } catch (XMLStreamException ex) {
