@@ -27,8 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.junit.jupiter.api.Test;
@@ -73,7 +73,7 @@ class TimestampParserTest {
     void parseSimpleFormat() throws ProcessingException {
         var format = "yyyy-MM-dd";
         var parsed = new TimestampParser(format).parse("2015-08-20");
-        var formatted = new SimpleDateFormat(format).format(Date.from(parsed));
+        var formatted = DateTimeFormatter.ofPattern(format).withZone(ZoneOffset.UTC).format(parsed);
 
         assertEquals("2015-08-20", formatted);
     }
@@ -88,7 +88,7 @@ class TimestampParserTest {
     void parseDefaultFormat() throws ProcessingException {
         var format = TimestampParser.DEFAULT_FORMAT;
         var parsed = new TimestampParser(null).parse("2015-08-20T20:10:00Z");
-        var formatted = new SimpleDateFormat(format).format(Date.from(parsed));
+        var formatted = DateTimeFormatter.ofPattern(format).withZone(ZoneOffset.UTC).format(parsed);
 
         assertEquals("2015-08-20T20:10:00Z", formatted);
     }

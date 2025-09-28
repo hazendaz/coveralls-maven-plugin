@@ -23,10 +23,14 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 
@@ -39,7 +43,7 @@ public class TimestampParser {
     public static final String EPOCH_MILLIS = "EpochMillis";
 
     /** The Constant DEFAULT_FORMAT. */
-    public static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final String DEFAULT_FORMAT = "yyyy-MM-dd'T'HH:mm:ssX";
 
     /** The parser. */
     private final Parser parser;
@@ -55,9 +59,9 @@ public class TimestampParser {
             if (EPOCH_MILLIS.equalsIgnoreCase(format)) {
                 this.parser = new EpochMillisParser();
             } else if (format != null && !format.isBlank()) {
-                this.parser = new DateFormatParser(format);
+                this.parser = new DateTimeFormatterParser(format);
             } else {
-                this.parser = new DateFormatParser(DEFAULT_FORMAT);
+                this.parser = new DateTimeFormatterParser(DEFAULT_FORMAT);
             }
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException("Invalid timestamp format \"" + format + "\"", ex);
@@ -99,33 +103,53 @@ public class TimestampParser {
          *
          * @return the instant
          *
-         * @throws ParseException
-         *             the exception
+         * @throws DateTimeParseException
+         *             the date time parse exception
          */
-        Instant parse(String timestamp) throws ParseException;
+        Instant parse(String timestamp) throws DateTimeParseException;
     }
 
     /**
-     * The Class DateFormatParser.
+     * The Class DateTimeFormatterParser.
      */
-    private static class DateFormatParser implements Parser {
+    private static class DateTimeFormatterParser implements Parser {
 
-        /** The format. */
-        final DateFormat format;
+        /** The formatter. */
+        final DateTimeFormatter formatter;
+
+        /** The has zone. */
+        final boolean hasZone;
+
+        /** The date only. */
+        final boolean dateOnly;
 
         /**
-         * Instantiates a new date format parser.
+         * Instantiates a new date time formatter parser.
          *
          * @param format
          *            the format
          */
-        DateFormatParser(final String format) {
-            this.format = new SimpleDateFormat(format);
+        DateTimeFormatterParser(final String format) {
+            this.formatter = DateTimeFormatter.ofPattern(format);
+            this.hasZone = format.contains("X") || format.contains("z") || format.contains("Z");
+            this.dateOnly = !format.contains("H") && !format.contains("m") && !format.contains("s");
         }
 
         @Override
-        public synchronized Instant parse(final String timestamp) throws ParseException {
-            return format.parse(timestamp).toInstant();
+        public Instant parse(final String timestamp) throws DateTimeParseException {
+            if (hasZone) {
+                try {
+                    return ZonedDateTime.parse(timestamp, formatter).toInstant();
+                } catch (DateTimeParseException ex) {
+                    return OffsetDateTime.parse(timestamp, formatter).toInstant();
+                }
+            } else if (dateOnly) {
+                // Parse as LocalDate and set time to midnight UTC
+                return LocalDate.parse(timestamp, formatter).atStartOfDay(ZoneOffset.UTC).toInstant();
+            } else {
+                // Parse as LocalDateTime and assume UTC
+                return LocalDateTime.parse(timestamp, formatter).toInstant(ZoneOffset.UTC);
+            }
         }
     }
 

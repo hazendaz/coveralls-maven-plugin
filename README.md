@@ -281,7 +281,7 @@ service environment will not override it.
 | `parallel` | `boolean` | **Default: false**<br> Coveralls API flag: If this is set, the build will not be considered done until a webhook has been sent to https://coveralls.io/webhook?repo_token=… |
 | `branch` | `String` | Git branch name. If not provided the supported service environments are used. |
 | `pullRequest` | `String` | GitHub pull request identifier. If not provided the supported service environments are used. |
-| `timestampFormat` | `String` | **Default: ${maven.build.timestamp}**<br>Build timestamp format. Must be in format supported by SimpleDateFormat. |
+| `timestampFormat` | `String` | **Default: ${maven.build.timestamp}**<br>Build timestamp format. Must be in format supported by DateTimeFormatter. |
 | `timestamp` | `String` | **Default: ${timestamp}**<br>Build timestamp. Must be in format defined by 'timestampFormat' if it's available or in default timestamp format yyyy-MM-dd'T'HH:mm:ss'Z'. |
 | `dryRun` | `boolean` | **Default: false**<br>Dry run Coveralls report without actually sending it. |
 | `failOnServiceError` | `boolean` | **Default: true**<br> Fail build if Coveralls service is not available or submission fails for internal errors. |

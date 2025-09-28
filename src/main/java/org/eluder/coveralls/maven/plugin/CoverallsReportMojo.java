@@ -182,7 +182,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     private boolean parallel;
 
     /**
-     * Build timestamp format. Must be in format supported by SimpleDateFormat.
+     * Build timestamp format. Must be in format supported by DateTimeFormatter.
      */
     @Parameter(property = "timestampFormat", defaultValue = "${maven.build.timestamp.format}")
     private String timestampFormat;
