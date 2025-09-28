@@ -91,8 +91,9 @@ class EnvironmentTest {
      */
     @Test
     void missingMojo() {
+        var mockList = Arrays.asList(serviceMock);
         assertThrows(IllegalArgumentException.class, () -> {
-            new Environment(null, Arrays.asList(serviceMock));
+            new Environment(null, mockList);
         });
     }
 
@@ -122,9 +123,8 @@ class EnvironmentTest {
     void setupWithoutSourceEncoding() {
         mojo.sourceEncoding = null;
         List<ServiceSetup> list = Arrays.asList(serviceMock);
-        assertThrows(IllegalArgumentException.class, () -> {
-            create(list).setup();
-        });
+        Environment environment = create(list);
+        assertThrows(IllegalArgumentException.class, environment::setup);
     }
 
     /**

@@ -62,8 +62,10 @@ class AbstractServiceSetupTest {
      */
     @Test
     void addPropertyWithoutName() {
+        AbstractServiceSetup setup = create(new HashMap<>());
+        Properties properties = new Properties();
         assertThrows(IllegalArgumentException.class, () -> {
-            create(new HashMap<>()).addProperty(new Properties(), null, "value");
+            setup.addProperty(properties, null, "value");
         });
     }
 

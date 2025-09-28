@@ -69,8 +69,9 @@ class ScanSourceLoaderTest {
     void invalidSourceFile() throws IOException {
         var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile();
         var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
+        var subFolderName = subFolder.getName();
         assertThrows(IllegalArgumentException.class, () -> {
-            sourceLoader.load(subFolder.getName());
+            sourceLoader.load(subFolderName);
         });
     }
 

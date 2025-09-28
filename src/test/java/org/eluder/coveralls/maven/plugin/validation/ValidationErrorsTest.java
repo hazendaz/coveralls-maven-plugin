@@ -52,8 +52,9 @@ class ValidationErrorsTest {
      */
     @Test
     void throwOrInformWithError() {
+        ValidationErrors errors = createValidationErrors(new ValidationError(Level.ERROR, "message"));
         assertThrows(ValidationException.class, () -> {
-            createValidationErrors(new ValidationError(Level.ERROR, "message")).throwOrInform(logMock);
+            errors.throwOrInform(logMock);
         });
     }
 

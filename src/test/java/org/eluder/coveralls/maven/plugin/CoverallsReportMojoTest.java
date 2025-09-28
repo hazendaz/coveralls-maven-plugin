@@ -23,6 +23,7 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -274,7 +275,9 @@ class CoverallsReportMojoTest {
         mojo.skip = false;
         mojo.basedir = TestIoUtil.getFile("/");
 
-        mojo.execute();
+        assertDoesNotThrow(() -> {
+            mojo.execute();
+        });
     }
 
     /**
