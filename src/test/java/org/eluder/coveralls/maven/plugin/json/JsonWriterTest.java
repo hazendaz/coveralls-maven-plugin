@@ -100,7 +100,9 @@ class JsonWriterTest {
     @SuppressWarnings("resource")
     void testGetJob() throws IOException {
         var job = job();
-        assertSame(job, new JsonWriter(job, file).getJob());
+        try (var writer = new JsonWriter(job, file)) {
+            assertSame(job, writer.getJob());
+        }
     }
 
     /**
@@ -113,7 +115,9 @@ class JsonWriterTest {
     @SuppressWarnings("resource")
     void testGetCoverallsFile() throws IOException {
         var job = job();
-        assertSame(file, new JsonWriter(job, file).getCoverallsFile());
+        try (var writer = new JsonWriter(job, file)) {
+            assertSame(file, writer.getCoverallsFile());
+        }
     }
 
     /**

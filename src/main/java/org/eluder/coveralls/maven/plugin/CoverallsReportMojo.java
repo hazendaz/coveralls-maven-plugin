@@ -248,21 +248,21 @@ public class CoverallsReportMojo extends AbstractMojo {
             job.validate().throwOrInform(getLog());
             SourceLoader sourceLoader = createSourceLoader(job);
             List<CoverageParser> parsers = createCoverageParsers(sourceLoader);
-            JsonWriter writer = createJsonWriter(job);
-            CoverallsClient client = createCoverallsClient();
-            List<Logger> reporters = new ArrayList<>();
-            reporters.add(new JobLogger(job));
-            SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);
-            reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));
+            try (JsonWriter writer = createJsonWriter(job)) {
+                CoverallsClient client = createCoverallsClient();
+                List<Logger> reporters = new ArrayList<>();
+                reporters.add(new JobLogger(job));
+                SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);
+                reporters.add(new DryRunLogger(job.isDryRun(), writer.getCoverallsFile()));
 
-            report(reporters, Position.BEFORE);
-            writeCoveralls(writer, sourceCallback, parsers);
-            report(reporters, Position.AFTER);
+                report(reporters, Position.BEFORE);
+                writeCoveralls(writer, sourceCallback, parsers);
+                report(reporters, Position.AFTER);
 
-            if (!job.isDryRun()) {
-                submitData(client, writer.getCoverallsFile());
+                if (!job.isDryRun()) {
+                    submitData(client, writer.getCoverallsFile());
+                }
             }
-            writer.close();
         } catch (ProcessingException ex) {
             throw new MojoFailureException("Processing of input or output data failed", ex);
         } catch (IOException ex) {
@@ -411,20 +411,16 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback,
             final List<CoverageParser> parsers) throws ProcessingException, IOException {
-        try {
-            getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + "...");
-            long now = System.currentTimeMillis();
-            sourceCallback.onBegin();
-            for (CoverageParser parser : parsers) {
-                getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
-                parser.parse(sourceCallback);
-            }
-            sourceCallback.onComplete();
-            long duration = System.currentTimeMillis() - now;
-            getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
-        } finally {
-            writer.close();
+        getLog().info("Writing Coveralls data to " + writer.getCoverallsFile().getAbsolutePath() + "...");
+        long now = System.currentTimeMillis();
+        sourceCallback.onBegin();
+        for (CoverageParser parser : parsers) {
+            getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
+            parser.parse(sourceCallback);
         }
+        sourceCallback.onComplete();
+        long duration = System.currentTimeMillis() - now;
+        getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
     }
 
     /**
