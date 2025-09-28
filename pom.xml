@@ -234,7 +234,7 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
         </dependency>
-        <!-- Somehow this is being blocked but is required by plexus-utils in maven 3.9.10, check if fixed in 3.9.11! -->
+        <!-- Somehow this is being blocked but is required by plexus-utils in maven 3.9.10+ -->
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-xml</artifactId>
