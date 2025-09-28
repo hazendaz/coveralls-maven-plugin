@@ -100,7 +100,7 @@ public class TimestampParser {
          *
          * @return the instant
          *
-         * @throws Exception
+         * @throws ParseException
          *             the exception
          */
         Instant parse(String timestamp) throws ParseException;
