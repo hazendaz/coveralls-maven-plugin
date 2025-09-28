@@ -25,7 +25,6 @@ package org.eluder.coveralls.maven.plugin.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -35,7 +34,6 @@ import java.nio.file.Path;
 import java.util.Locale;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
 
 /**
  * The Class TestIoUtil.
@@ -71,9 +69,7 @@ public final class TestIoUtil {
      *             Signals that an I/O exception has occurred.
      */
     public static String readFileContent(final File file) throws IOException {
-        try (var reader = new InputStreamReader(Files.newInputStream(file.toPath()), StandardCharsets.UTF_8)) {
-            return IOUtils.toString(reader);
-        }
+        return Files.readString(file.toPath(), StandardCharsets.UTF_8);
     }
 
     /**
