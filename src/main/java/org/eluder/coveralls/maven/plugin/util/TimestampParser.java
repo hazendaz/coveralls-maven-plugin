@@ -28,7 +28,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 
 /**
@@ -55,7 +54,7 @@ public class TimestampParser {
         try {
             if (EPOCH_MILLIS.equalsIgnoreCase(format)) {
                 this.parser = new EpochMillisParser();
-            } else if (StringUtils.isNotBlank(format)) {
+            } else if (format != null && !format.isBlank()) {
                 this.parser = new DateFormatParser(format);
             } else {
                 this.parser = new DateFormatParser(DEFAULT_FORMAT);
@@ -77,7 +76,7 @@ public class TimestampParser {
      *             the processing exception
      */
     public Instant parse(final String timestamp) throws ProcessingException {
-        if (StringUtils.isBlank(timestamp)) {
+        if (timestamp == null || timestamp.isBlank()) {
             return null;
         }
         try {

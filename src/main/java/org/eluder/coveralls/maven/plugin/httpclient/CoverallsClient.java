@@ -34,7 +34,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.Provider;
 import java.security.Security;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
@@ -162,10 +161,10 @@ public class CoverallsClient {
         String reason = response.getReasonPhrase();
         StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
                 .append(status).append(":");
-        if (StringUtils.isNotBlank(reason)) {
+        if (reason != null && !reason.isBlank()) {
             errorMessage.append(" ").append(reason);
         }
-        if (StringUtils.isNotBlank(message)) {
+        if (reason != null && !message.isBlank()) {
             errorMessage.append(" (").append(message).append(")");
         }
         return errorMessage.toString();

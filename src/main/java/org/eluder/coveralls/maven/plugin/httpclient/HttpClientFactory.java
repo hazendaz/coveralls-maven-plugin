@@ -112,7 +112,7 @@ class HttpClientFactory {
             String host = UrlUtils.create(url).getHost();
             String[] excludes = proxy.getNonProxyHosts().split("\\|", -1);
             for (String exclude : excludes) {
-                if (StringUtils.isNotBlank(exclude) && Wildcards.matches(host, exclude.trim())) {
+                if (exclude != null && !exclude.isBlank() && Wildcards.matches(host, exclude.trim())) {
                     return false;
                 }
             }

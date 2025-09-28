@@ -35,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.domain.Source;
@@ -154,7 +153,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      *             Signals that an I/O exception has occurred.
      */
     private void writeOptionalString(final String field, final String value) throws IOException {
-        if (StringUtils.isNotBlank(value)) {
+        if (value != null && !value.isBlank()) {
             generator.writeStringField(field, value);
         }
     }

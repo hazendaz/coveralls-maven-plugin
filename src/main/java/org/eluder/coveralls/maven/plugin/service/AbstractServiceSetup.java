@@ -26,8 +26,6 @@ package org.eluder.coveralls.maven.plugin.service;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Convenient base class for service setups.
  */
@@ -99,10 +97,10 @@ public abstract class AbstractServiceSetup implements ServiceSetup {
      *            the value
      */
     protected final void addProperty(final Properties properties, final String name, final String value) {
-        if (StringUtils.isBlank(name)) {
+        if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("name must be defined");
         }
-        if (StringUtils.isNotBlank(value)) {
+        if (value != null && !value.isBlank()) {
             properties.setProperty(name, value);
         }
     }

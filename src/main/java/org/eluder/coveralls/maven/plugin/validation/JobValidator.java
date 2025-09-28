@@ -26,7 +26,6 @@ package org.eluder.coveralls.maven.plugin.validation;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
@@ -98,6 +97,6 @@ public class JobValidator {
      * @return true, if successful
      */
     private boolean hasValue(final String value) {
-        return StringUtils.isNotBlank(value);
+        return value != null && !value.isBlank();
     }
 }
