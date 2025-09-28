@@ -438,7 +438,7 @@ class CoverallsReportMojoTest {
     static void verifySuccessfullSubmit(Log logMock, List<List<String>> fixture) {
         verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                 + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
-        verify(logMock).info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+        verify(logMock).info("*** Coverage results are usually available immediately on Coveralls.");
     }
 
     /**
@@ -454,7 +454,7 @@ class CoverallsReportMojoTest {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    String readFileContent(final String sourceFile) throws FileNotFoundException, IOException {
+    String readFileContent(final String sourceFile) throws IOException {
         return TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
     }
 }
