@@ -87,10 +87,10 @@
 
     <properties>
         <!-- Java Runtime Requirements -->
-        <java.version>17</java.version>
-        <java.release.version>17</java.release.version>
-        <java.test.version>17</java.test.version>
-        <java.test.release.version>17</java.test.release.version>
+        <java.version>11</java.version>
+        <java.release.version>11</java.release.version>
+        <java.test.version>11</java.test.version>
+        <java.test.release.version>11</java.test.release.version>
 
         <!-- Checkstyle -->
         <checkstyle.config>checkstyle-4space.xml</checkstyle.config>
@@ -106,7 +106,7 @@
         <httpclient.version>5.5.1</httpclient.version>
         <httpcore.version>5.3.6</httpcore.version>
         <jackson.version>2.20.0</jackson.version>
-        <jgit.version>7.3.0.202506031305-r</jgit.version>
+        <jgit.version note="Keep on 6.x for java 11 support">6.10.1.202505221210-r</jgit.version>
         <json-smart.version>2.6.0</json-smart.version>
         <junit.version>5.13.4</junit.version>
         <maven.version>3.9.11</maven.version>
@@ -399,32 +399,5 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <profiles>
-        <profile>
-            <id>jdk-pre-17</id>
-            <activation>
-                <jdk>[,16]</jdk>
-            </activation>
-            <properties>
-                <!-- Java Runtime Requirements -->
-                <java.version>11</java.version>
-                <java.release.version>11</java.release.version>
-                <java.test.version>11</java.test.version>
-                <java.test.release.version>11</java.test.release.version>
-                <jgit.version>6.10.1.202505221210-r</jgit.version>
-
-                <!-- Enforcer Jdks Allowed -->
-                <allowed.build.jdks note="Allow any java 11">[11,12)</allowed.build.jdks>
-
-                <!-- Java 11 plugins and enhancements -->
-                <error-prone.version>2.31.0</error-prone.version>
-                <hibernate-validator.version>8.0.3.Final</hibernate-validator.version>
-
-                <!-- Surefire Skip Tests as wiremock is a hard java 17 pertaining to source code. -->
-                <surefire.skip>true</surefire.skip>
-            </properties>
-        </profile>
-    </profiles>
 
 </project>
