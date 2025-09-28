@@ -30,8 +30,8 @@ To run
 * Supports
   [Cobertura](https://www.mojohaus.org/cobertura-maven-plugin/),
   [JaCoCo](https://www.eclemma.org/jacoco/trunk/doc/maven.html),
-  [Saga](https://timurstrekalov.github.io/saga/) coverage tools and
-  [Clover](https://openclover.org/)
+  [Saga](https://timurstrekalov.github.io/saga/), and
+  [Clover](https://openclover.org/) coverage tools
 * Multi-module report aggregation
 * Built-in support for [Travis CI](https://travis-ci.org/), [Circle](https://circleci.com/),
   [Codeship](https://www.codeship.io/), [Github](https://github.com/), [Jenkins](https://jenkins-ci.org/),
