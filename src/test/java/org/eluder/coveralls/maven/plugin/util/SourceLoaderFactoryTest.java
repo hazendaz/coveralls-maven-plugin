@@ -27,6 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.lenient;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -96,7 +98,7 @@ class SourceLoaderFactoryTest {
      */
     @Test
     void testCreateSourceLoader() {
-        var sourceLoader = createSourceLoaderFactory("UTF-8").createSourceLoader();
+        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8).createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
@@ -110,7 +112,7 @@ class SourceLoaderFactoryTest {
     void createSourceLoaderWithAdditionalSourceDirectories() throws IOException {
         var s1 = Files.createDirectory(folder.resolve("s1"));
         var s2 = Files.createDirectory(folder.resolve("s2"));
-        var sourceLoader = createSourceLoaderFactory("UTF-8")
+        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8)
                 .withSourceDirectories(Arrays.asList(s1.toFile(), s2.toFile())).createSourceLoader();
         assertNotNull(sourceLoader);
     }
@@ -120,7 +122,8 @@ class SourceLoaderFactoryTest {
      */
     @Test
     void createSourceLoaderWithScanForSources() {
-        var sourceLoader = createSourceLoaderFactory("UTF-8").withScanForSources(true).createSourceLoader();
+        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8).withScanForSources(true)
+                .createSourceLoader();
         assertNotNull(sourceLoader);
     }
 
@@ -133,7 +136,7 @@ class SourceLoaderFactoryTest {
     @Test
     void createSourceLoaderInvalidDirectory() throws IOException {
         var file = Files.createDirectory(folder.resolve("aFile")).toFile();
-        var sourceLoader = createSourceLoaderFactory("UTF-8").withSourceDirectories(Arrays.asList(file))
+        var sourceLoader = createSourceLoaderFactory(StandardCharsets.UTF_8).withSourceDirectories(Arrays.asList(file))
                 .withScanForSources(true).createSourceLoader();
         assertNotNull(sourceLoader);
     }
@@ -146,7 +149,7 @@ class SourceLoaderFactoryTest {
      *
      * @return the source loader factory
      */
-    private SourceLoaderFactory createSourceLoaderFactory(String sourceEncoding) {
+    private SourceLoaderFactory createSourceLoaderFactory(Charset sourceEncoding) {
         return new SourceLoaderFactory(folder.toFile(), root, sourceEncoding);
     }
 }

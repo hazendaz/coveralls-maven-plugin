@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -54,7 +55,7 @@ class UrlSourceLoaderTest {
     @Test
     void missingSourceFileFromUrl() throws IOException {
         var sourceLoader = new UrlSourceLoader(folder.toUri().toURL(),
-                new URL("https://domainthatreallydoesnotexistsdfsmshjsfsj.com"), "UTF-8");
+                new URL("https://domainthatreallydoesnotexistsdfsmshjsfsj.com"), StandardCharsets.UTF_8);
         assertNull(sourceLoader.load("Foo.java"));
     }
 
@@ -73,7 +74,7 @@ class UrlSourceLoaderTest {
 
         var fileName = "scripts/file.coffee";
         var sourceUrl = folder.toUri().toURL();
-        var sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), sourceUrl, "UTF-8");
+        var sourceLoader = new UrlSourceLoader(folder.toUri().toURL(), sourceUrl, StandardCharsets.UTF_8);
         var source = sourceLoader.load(fileName);
 
         assertEquals(fileName, source.getName());

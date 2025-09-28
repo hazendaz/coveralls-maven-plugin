@@ -24,6 +24,7 @@
 package org.eluder.coveralls.maven.plugin.util;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class SourceLoaderFactory {
     private final MavenProject project;
 
     /** The source encoding. */
-    private final String sourceEncoding;
+    private final Charset sourceEncoding;
 
     /** The source directories. */
     private List<File> sourceDirectories;
@@ -64,7 +65,7 @@ public class SourceLoaderFactory {
      * @param sourceEncoding
      *            the source encoding
      */
-    public SourceLoaderFactory(final File baseDir, final MavenProject project, final String sourceEncoding) {
+    public SourceLoaderFactory(final File baseDir, final MavenProject project, final Charset sourceEncoding) {
         this.baseDir = baseDir;
         this.project = project;
         this.sourceEncoding = sourceEncoding;

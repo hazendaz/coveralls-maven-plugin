@@ -27,6 +27,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -48,7 +49,7 @@ public class DirectorySourceLoader extends AbstractSourceLoader {
      * @param sourceEncoding
      *            the source encoding
      */
-    public DirectorySourceLoader(final File base, final File sourceDirectory, final String sourceEncoding) {
+    public DirectorySourceLoader(final File base, final File sourceDirectory, final Charset sourceEncoding) {
         super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);
         this.sourceDirectory = sourceDirectory;
     }

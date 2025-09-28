@@ -25,6 +25,7 @@ package org.eluder.coveralls.maven.plugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -307,7 +308,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return source loader that extracts source files
      */
     protected SourceLoader createSourceLoader(final Job job) {
-        return new SourceLoaderFactory(job.getGit().getBaseDir(), project, sourceEncoding)
+        return new SourceLoaderFactory(job.getGit().getBaseDir(), project, Charset.forName(sourceEncoding))
                 .withSourceDirectories(sourceDirectories).withScanForSources(scanForSources).createSourceLoader();
     }
 

@@ -27,6 +27,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
      * @param sourceEncoding
      *            the source encoding
      */
-    public ScanSourceLoader(final File base, final File sourceDirectory, final String sourceEncoding) {
+    public ScanSourceLoader(final File base, final File sourceDirectory, final Charset sourceEncoding) {
         super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);
         this.sourceDirectory = sourceDirectory;
     }

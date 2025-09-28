@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -53,7 +54,7 @@ class DirectorySourceLoaderTest {
      */
     @Test
     void missingSourceFileFromDirectory() throws IOException {
-        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
         assertNull(sourceLoader.load("Foo.java"));
     }
 
@@ -66,7 +67,7 @@ class DirectorySourceLoaderTest {
     @Test
     void invalidSourceFile() throws IOException {
         var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile().getName();
-        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
         assertThrows(IllegalArgumentException.class, () -> {
             sourceLoader.load(subFolder);
         });
@@ -82,7 +83,7 @@ class DirectorySourceLoaderTest {
     void loadSource() throws IOException {
         var file = Files.createFile(folder.resolve("newFile")).toFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", file);
-        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new DirectorySourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
         var source = sourceLoader.load(file.getName());
         assertEquals(file.getName(), source.getName());
         assertEquals(

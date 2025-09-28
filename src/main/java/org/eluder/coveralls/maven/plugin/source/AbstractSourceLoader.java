@@ -55,8 +55,8 @@ public abstract class AbstractSourceLoader implements SourceLoader {
      * @param sourceEncoding
      *            the source encoding
      */
-    protected AbstractSourceLoader(final URI base, final URI sourceBase, final String sourceEncoding) {
-        this.sourceEncoding = Charset.forName(sourceEncoding);
+    protected AbstractSourceLoader(final URI base, final URI sourceBase, final Charset sourceEncoding) {
+        this.sourceEncoding = sourceEncoding;
         this.directoryPrefix = base.relativize(sourceBase).toString();
     }
 

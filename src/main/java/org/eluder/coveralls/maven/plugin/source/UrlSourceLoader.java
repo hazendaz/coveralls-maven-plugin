@@ -26,6 +26,7 @@ package org.eluder.coveralls.maven.plugin.source;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import org.eluder.coveralls.maven.plugin.util.UrlUtils;
 
@@ -47,7 +48,7 @@ public class UrlSourceLoader extends AbstractSourceLoader {
      * @param sourceEncoding
      *            the source encoding
      */
-    public UrlSourceLoader(final URL base, final URL sourceUrl, final String sourceEncoding) {
+    public UrlSourceLoader(final URL base, final URL sourceUrl, final Charset sourceEncoding) {
         super(UrlUtils.toUri(base), UrlUtils.toUri(sourceUrl), sourceEncoding);
         this.sourceUrl = sourceUrl;
     }

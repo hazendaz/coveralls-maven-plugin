@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -54,7 +55,7 @@ class ScanSourceLoaderTest {
      */
     @Test
     void missingSourceFileFromDirectory() throws IOException {
-        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
         assertNull(sourceLoader.load("Foo.java"));
     }
 
@@ -67,7 +68,7 @@ class ScanSourceLoaderTest {
     @Test
     void invalidSourceFile() throws IOException {
         var subFolder = Files.createDirectory(folder.resolve("subFolder")).toFile();
-        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
         assertThrows(IllegalArgumentException.class, () -> {
             sourceLoader.load(subFolder.getName());
         });
@@ -88,7 +89,7 @@ class ScanSourceLoaderTest {
         var fileB = Files.createFile(level3.resolve("BFile.java")).toFile();
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileA);
         TestIoUtil.writeFileContent("public class Foo {\r\n    \n}\r", fileB);
-        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), "UTF-8");
+        var sourceLoader = new ScanSourceLoader(folder.toFile(), folder.toFile(), StandardCharsets.UTF_8);
         var sourceA = sourceLoader.load(fileA.getName());
         assertEquals("level1" + File.separator + "level2" + File.separator + "level3" + File.separator + "AFile.java",
                 sourceA.getName());
