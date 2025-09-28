@@ -23,7 +23,9 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static com.googlecode.catchexception.CatchException.catchException;
+import static com.googlecode.catchexception.CatchException.caughtException;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -52,10 +54,9 @@ class ValidationErrorsTest {
      */
     @Test
     void throwOrInformWithError() {
-        ValidationErrors errors = createValidationErrors(new ValidationError(Level.ERROR, "message"));
-        assertThrows(ValidationException.class, () -> {
-            errors.throwOrInform(logMock);
-        });
+        var errors = createValidationErrors(new ValidationError(Level.ERROR, "message"));
+        catchException(() -> errors.throwOrInform(logMock));
+        assertTrue(caughtException() instanceof ValidationException);
     }
 
     /**
