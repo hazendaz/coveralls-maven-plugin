@@ -306,6 +306,19 @@
         </dependency>
 
         <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock-jetty12</artifactId>
+            <version>3.13.1</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <scope>test</scope>
@@ -404,41 +417,6 @@
                 <!-- Surefire Skip Tests as wiremock is a hard java 17 pertaining to source code. -->
                 <surefire.skip>true</surefire.skip>
             </properties>
-            <dependencies>
-                <!-- Tests won't work with a lot more work here, going to ultimately delete this logic back off. -->
-                <dependency>
-                    <groupId>com.github.tomakehurst</groupId>
-                    <artifactId>wiremock</artifactId>
-                    <version>2.27.2</version>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.hamcrest</groupId>
-                            <artifactId>hamcrest-core</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>jdk17on</id>
-            <activation>
-                <jdk>[17,)</jdk>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wiremock</groupId>
-                    <artifactId>wiremock-jetty12</artifactId>
-                    <version>3.13.1</version>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>org.hamcrest</groupId>
-                            <artifactId>hamcrest-core</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
 
