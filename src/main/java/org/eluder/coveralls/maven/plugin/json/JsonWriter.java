@@ -71,7 +71,7 @@ public class JsonWriter implements SourceCallback, Closeable {
      *             Signals that an I/O exception has occurred.
      */
     public JsonWriter(final Job job, final File coverallsFile) throws IOException {
-        File directory = coverallsFile.getParentFile();
+        var directory = coverallsFile.getParentFile();
         if (!directory.exists()) {
             directory.mkdirs();
         }

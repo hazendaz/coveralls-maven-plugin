@@ -30,10 +30,8 @@ import java.util.List;
 
 import org.eclipse.jgit.lib.Config;
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
-import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 
 /**
@@ -63,10 +61,10 @@ public class GitRepository {
      *             Signals that an I/O exception has occurred.
      */
     public Git load() throws IOException {
-        try (Repository repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {
-            Git.Head head = getHead(repository);
-            String branch = getBranch(repository);
-            List<Git.Remote> remotes = getRemotes(repository);
+        try (var repository = new RepositoryBuilder().findGitDir(sourceDirectory).build()) {
+            var head = getHead(repository);
+            var branch = getBranch(repository);
+            var remotes = getRemotes(repository);
             return new Git(repository.getWorkTree(), head, branch, remotes);
         }
     }
@@ -85,8 +83,8 @@ public class GitRepository {
     // Resource is closed in load()
     @SuppressWarnings("resource")
     private Git.Head getHead(final Repository repository) throws IOException {
-        ObjectId revision = repository.resolve(Constants.HEAD);
-        RevCommit commit = new RevWalk(repository).parseCommit(revision);
+        var revision = repository.resolve(Constants.HEAD);
+        var commit = new RevWalk(repository).parseCommit(revision);
         return new Git.Head(revision.getName(), commit.getAuthorIdent().getName(),
                 commit.getAuthorIdent().getEmailAddress(), commit.getCommitterIdent().getName(),
                 commit.getCommitterIdent().getEmailAddress(), commit.getFullMessage());
@@ -119,7 +117,7 @@ public class GitRepository {
         Config config = repository.getConfig();
         List<Git.Remote> remotes = new ArrayList<>();
         for (String remote : config.getSubsections("remote")) {
-            String url = config.getString("remote", remote, "url");
+            var url = config.getString("remote", remote, "url");
             remotes.add(new Git.Remote(remote, url));
         }
         return remotes;

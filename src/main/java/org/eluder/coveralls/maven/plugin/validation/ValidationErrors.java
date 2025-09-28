@@ -44,7 +44,7 @@ public class ValidationErrors extends ArrayList<ValidationError> {
      *            the log
      */
     public void throwOrInform(final Log log) {
-        List<ValidationError> errors = filter(Level.ERROR);
+        var errors = filter(Level.ERROR);
         if (!errors.isEmpty()) {
             throw new ValidationException(errors.get(0).getMessage());
         }

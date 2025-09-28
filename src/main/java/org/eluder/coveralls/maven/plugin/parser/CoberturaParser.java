@@ -65,8 +65,8 @@ public class CoberturaParser extends AbstractXmlEventParser {
             throws XMLStreamException, ProcessingException, IOException {
         if (isStartElement(xml, "class")) {
             source = loadSource(xml.getAttributeValue(null, "filename"));
-            String className = xml.getAttributeValue(null, "name");
-            int classifierPosition = className.indexOf('$');
+            var className = xml.getAttributeValue(null, "name");
+            var classifierPosition = className.indexOf('$');
             if (classifierPosition > 0) {
                 source.setClassifier(className.substring(classifierPosition + 1));
             }

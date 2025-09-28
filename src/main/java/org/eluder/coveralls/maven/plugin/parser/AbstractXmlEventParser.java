@@ -100,7 +100,7 @@ public abstract class AbstractXmlEventParser implements CoverageParser {
      */
     protected XMLStreamReader createEventReader(final InputStream inputStream) throws ProcessingException {
         try {
-            XMLInputFactory xmlif = XMLInputFactory.newInstance();
+            var xmlif = XMLInputFactory.newInstance();
             xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
             xmlif.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, false);
             xmlif.setProperty(XMLInputFactory.IS_VALIDATING, false);

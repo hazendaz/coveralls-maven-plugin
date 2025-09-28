@@ -39,7 +39,7 @@ public final class Wildcards {
      * @return <code>true</code> if the given text matches the wildcard, otherwise <code>false</code>
      */
     public static boolean matches(final String text, final String wildcard) {
-        String pattern = wildcard.replace("?", "\\w").replace("*", "\\w*");
+        var pattern = wildcard.replace("?", "\\w").replace("*", "\\w*");
         return text != null && text.matches(pattern);
     }
 

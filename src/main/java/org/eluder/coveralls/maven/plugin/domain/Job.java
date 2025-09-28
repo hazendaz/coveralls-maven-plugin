@@ -354,7 +354,7 @@ public class Job {
      * @return the validation errors
      */
     public ValidationErrors validate() {
-        JobValidator validator = new JobValidator(this);
+        var validator = new JobValidator(this);
         return validator.validate();
     }
 }

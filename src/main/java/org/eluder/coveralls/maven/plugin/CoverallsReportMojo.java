@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -38,8 +37,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
-import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
-import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.GitRepository;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
@@ -246,23 +243,23 @@ public class CoverallsReportMojo extends AbstractMojo {
         try {
             createEnvironment().setup();
 
-            Job job = createJob();
+            var job = createJob();
             job.validate().throwOrInform(getLog());
 
-            SourceLoader sourceLoader = createSourceLoader(job);
+            var sourceLoader = createSourceLoader(job);
 
-            List<CoverageParser> parsers = createCoverageParsers(sourceLoader);
+            var parsers = createCoverageParsers(sourceLoader);
 
-            CoverallsClient client = createCoverallsClient();
+            var client = createCoverallsClient();
 
             List<Logger> reporters = new ArrayList<>();
             reporters.add(new JobLogger(job));
 
-            try (JsonWriter writer = createJsonWriter(job)) {
+            try (var writer = createJsonWriter(job)) {
                 // For tests (its the same instance as in writer)
                 coverallsFile = writer.getCoverallsFile();
 
-                SourceCallback sourceCallback = createSourceCallbackChain(writer, reporters);
+                var sourceCallback = createSourceCallbackChain(writer, reporters);
                 reporters.add(new DryRunLogger(job.isDryRun(), coverallsFile));
 
                 report(reporters, Position.BEFORE);
@@ -327,7 +324,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return list of available continuous integration services
      */
     protected List<ServiceSetup> getServices() {
-        Map<String, String> env = System.getenv();
+        var env = System.getenv();
         List<ServiceSetup> services = new ArrayList<>();
         services.add(new GitHub(env));
         services.add(new Shippable(env));
@@ -352,8 +349,8 @@ public class CoverallsReportMojo extends AbstractMojo {
      *             if an I/O error occurs
      */
     protected Job createJob() throws ProcessingException, IOException {
-        Git git = new GitRepository(basedir).load();
-        Long time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).toEpochMilli();
+        var git = new GitRepository(basedir).load();
+        var time = timestamp == null ? null : new TimestampParser(timestampFormat).parse(timestamp).toEpochMilli();
         return new Job().withRepoToken(repoToken).withServiceName(serviceName).withServiceJobId(serviceJobId)
                 .withServiceBuildNumber(serviceBuildNumber).withServiceBuildUrl(serviceBuildUrl).withParallel(parallel)
                 .withServiceEnvironment(serviceEnvironment).withDryRun(dryRun).withBranch(branch)
@@ -397,7 +394,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
         SourceCallback chain = writer;
         if (getLog().isInfoEnabled()) {
-            CoverageTracingLogger coverageTracingReporter = new CoverageTracingLogger(chain);
+            var coverageTracingReporter = new CoverageTracingLogger(chain);
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
         }
@@ -422,14 +419,14 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected void writeCoveralls(final JsonWriter writer, final SourceCallback sourceCallback,
             final List<CoverageParser> parsers) throws ProcessingException, IOException {
         getLog().info("Writing Coveralls data to " + coverallsFile.getAbsolutePath() + "...");
-        long now = System.currentTimeMillis();
+        var now = System.currentTimeMillis();
         sourceCallback.onBegin();
         for (CoverageParser parser : parsers) {
             getLog().info("Processing coverage report from " + parser.getCoverageFile().getAbsolutePath());
             parser.parse(sourceCallback);
         }
         sourceCallback.onComplete();
-        long duration = System.currentTimeMillis() - now;
+        var duration = System.currentTimeMillis() - now;
         getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
     }
 
@@ -449,21 +446,21 @@ public class CoverallsReportMojo extends AbstractMojo {
     private void submitData(final CoverallsClient client, final File coverallsFile)
             throws ProcessingException, IOException {
         getLog().info("Submitting Coveralls data to API");
-        long now = System.currentTimeMillis();
+        var now = System.currentTimeMillis();
         try {
-            CoverallsResponse response = client.submit(coverallsFile);
-            long duration = System.currentTimeMillis() - now;
+            var response = client.submit(coverallsFile);
+            var duration = System.currentTimeMillis() - now;
             getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             getLog().info(response.getUrl());
             getLog().info("*** Coverage results are usually available immediately on Coveralls.");
             getLog().info("    If you see question marks or missing data, please allow some time for processing.");
         } catch (ProcessingException ex) {
-            long duration = System.currentTimeMillis() - now;
-            String message = "Submission failed in " + duration + "ms while processing data";
+            var duration = System.currentTimeMillis() - now;
+            var message = "Submission failed in " + duration + "ms while processing data";
             handleSubmissionError(ex, message, true);
         } catch (IOException ex) {
-            long duration = System.currentTimeMillis() - now;
-            String message = "Submission failed in " + duration + "ms while handling I/O operations";
+            var duration = System.currentTimeMillis() - now;
+            var message = "Submission failed in " + duration + "ms while handling I/O operations";
             handleSubmissionError(ex, message, failOnServiceError);
         }
     }

@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -247,7 +246,7 @@ public final class Source implements JsonObject {
         int hitSum = hits;
         final ListIterator<Branch> it = this.branches.listIterator();
         while (it.hasNext()) {
-            final Branch b = it.next();
+            final var b = it.next();
             if (b.getLineNumber() == lineNumber && b.getBlockNumber() == blockNumber
                     && b.getBranchNumber() == branchNumber) {
                 it.remove();
@@ -272,9 +271,9 @@ public final class Source implements JsonObject {
         System.arraycopy(this.coverage, 0, copy.coverage, 0, this.coverage.length);
         copy.branches.addAll(this.branches);
         if (copy.equals(source)) {
-            for (int i = 0; i < copy.coverage.length; i++) {
+            for (var i = 0; i < copy.coverage.length; i++) {
                 if (source.coverage[i] != null) {
-                    int base = copy.coverage[i] != null ? copy.coverage[i] : 0;
+                    var base = copy.coverage[i] != null ? copy.coverage[i] : 0;
                     copy.coverage[i] = base + source.coverage[i];
                 }
             }
@@ -309,8 +308,8 @@ public final class Source implements JsonObject {
      * @return the lines
      */
     private static int getLines(final String source) {
-        int lines = 1;
-        Matcher matcher = NEWLINE.matcher(source);
+        var lines = 1;
+        var matcher = Source.NEWLINE.matcher(source);
         while (matcher.find()) {
             lines++;
         }

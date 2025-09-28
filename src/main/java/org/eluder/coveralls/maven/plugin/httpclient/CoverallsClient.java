@@ -118,7 +118,7 @@ public class CoverallsClient {
                 .addBinaryBody("json_file", file, MIME_TYPE, FILE_NAME).build();
         HttpPost post = new HttpPost(coverallsUrl);
         post.setEntity(entity);
-        SubmitResult result = httpClient.execute(post, response -> {
+        var result = httpClient.execute(post, response -> {
             HttpEntity responseEntity = response.getEntity();
             if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
                 return new SubmitResult(getResponseErrorMessage(response, "Coveralls API internal error"),
@@ -157,9 +157,9 @@ public class CoverallsClient {
      * @return the response error message
      */
     private String getResponseErrorMessage(final HttpResponse response, final String message) {
-        int status = response.getCode();
-        String reason = response.getReasonPhrase();
-        StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
+        var status = response.getCode();
+        var reason = response.getReasonPhrase();
+        var errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
                 .append(status).append(":");
         if (reason != null && !reason.isBlank()) {
             errorMessage.append(" ").append(reason);

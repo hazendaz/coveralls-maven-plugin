@@ -55,7 +55,7 @@ public class UrlSourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        URL url = new URL(sourceUrl, sourceFile);
+        var url = new URL(sourceUrl, sourceFile);
         // Checkstyle OFF: EmptyBlock
         try {
             return url.openStream();

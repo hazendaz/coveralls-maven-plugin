@@ -61,7 +61,7 @@ public class UniqueSourceCallback implements SourceCallback {
 
     @Override
     public void onSource(final Source source) throws ProcessingException, IOException {
-        Source merged = source.merge(cache.get(source));
+        var merged = source.merge(cache.get(source));
         cache.put(merged, merged);
     }
 

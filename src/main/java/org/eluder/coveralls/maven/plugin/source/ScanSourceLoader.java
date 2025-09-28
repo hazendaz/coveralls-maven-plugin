@@ -65,7 +65,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        Path path = Path.of(sourceDirectory.toString(), getFileName(sourceFile));
+        var path = Path.of(sourceDirectory.toString(), getFileName(sourceFile));
 
         if (Files.exists(path)) {
             if (!Files.isRegularFile(path)) {
@@ -86,7 +86,7 @@ public class ScanSourceLoader extends AbstractSourceLoader {
      */
     private String[] scanFor(final String extension) {
         return cache.computeIfAbsent(extension, ext -> {
-            DirectoryScanner scanner = new DirectoryScanner();
+            var scanner = new DirectoryScanner();
             scanner.setBasedir(sourceDirectory);
             scanner.addDefaultExcludes();
             scanner.setIncludes(new String[] { "**/*." + ext });
@@ -97,8 +97,8 @@ public class ScanSourceLoader extends AbstractSourceLoader {
 
     @Override
     protected String getFileName(final String sourceFile) {
-        String extension = FilenameUtils.getExtension(sourceFile);
-        String[] matchingExtensionFiles = scanFor(extension);
+        var extension = FilenameUtils.getExtension(sourceFile);
+        var matchingExtensionFiles = scanFor(extension);
 
         for (String matchingExtensionFile : matchingExtensionFiles) {
             if (SelectorUtils.matchPath("**/" + sourceFile, matchingExtensionFile, true)) {

@@ -89,7 +89,7 @@ public class ExistingFiles implements Iterable<File> {
      * @return the existing files
      */
     public static ExistingFiles create(final Iterable<File> files) {
-        ExistingFiles existingFiles = new ExistingFiles();
+        var existingFiles = new ExistingFiles();
         if (files != null) {
             existingFiles.addAll(files);
         }

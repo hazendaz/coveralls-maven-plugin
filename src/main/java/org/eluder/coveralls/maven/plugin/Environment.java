@@ -23,8 +23,6 @@
  */
 package org.eluder.coveralls.maven.plugin;
 
-import java.util.Properties;
-
 import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.service.ServiceSetup;
 
@@ -95,37 +93,37 @@ public final class Environment {
      *            the new up environment
      */
     private void setupEnvironment(final ServiceSetup service) {
-        String name = service.getName();
+        var name = service.getName();
         if (StringUtils.isBlank(mojo.serviceName) && StringUtils.isNotBlank(name)) {
             mojo.serviceName = name;
         }
 
-        String jobId = service.getJobId();
+        var jobId = service.getJobId();
         if (StringUtils.isBlank(mojo.serviceJobId) && StringUtils.isNotBlank(jobId)) {
             mojo.serviceJobId = jobId;
         }
 
-        String buildNumber = service.getBuildNumber();
+        var buildNumber = service.getBuildNumber();
         if (StringUtils.isBlank(mojo.serviceBuildNumber) && StringUtils.isNotBlank(buildNumber)) {
             mojo.serviceBuildNumber = buildNumber;
         }
 
-        String buildUrl = service.getBuildUrl();
+        var buildUrl = service.getBuildUrl();
         if (StringUtils.isBlank(mojo.serviceBuildUrl) && StringUtils.isNotBlank(buildUrl)) {
             mojo.serviceBuildUrl = buildUrl;
         }
 
-        String branch = service.getBranch();
+        var branch = service.getBranch();
         if (StringUtils.isBlank(mojo.branch) && StringUtils.isNotBlank(branch)) {
             mojo.branch = branch;
         }
 
-        String pullRequest = service.getPullRequest();
+        var pullRequest = service.getPullRequest();
         if (StringUtils.isBlank(mojo.pullRequest) && StringUtils.isNotBlank(pullRequest)) {
             mojo.pullRequest = pullRequest;
         }
 
-        Properties environment = service.getEnvironment();
+        var environment = service.getEnvironment();
         if ((mojo.serviceEnvironment == null || mojo.serviceEnvironment.isEmpty()) && environment != null
                 && !environment.isEmpty()) {
             mojo.serviceEnvironment = environment;

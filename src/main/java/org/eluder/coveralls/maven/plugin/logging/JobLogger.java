@@ -79,7 +79,7 @@ public class JobLogger implements Logger {
 
     @Override
     public void log(final Log log) {
-        StringBuilder starting = new StringBuilder("Starting Coveralls job");
+        var starting = new StringBuilder("Starting Coveralls job");
         if (job.getServiceName() != null) {
             starting.append(" for ").append(job.getServiceName());
             if (job.getServiceJobId() != null) {

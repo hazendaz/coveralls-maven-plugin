@@ -179,15 +179,15 @@ public class CoverageParsersFactory {
      */
     public List<CoverageParser> createParsers() throws IOException {
         List<CoverageParser> parsers = new ArrayList<>();
-        List<MavenProject> projects = new MavenProjectCollector(project).collect();
+        var projects = new MavenProjectCollector(project).collect();
 
-        ExistingFiles jacocoFiles = ExistingFiles.create(jacocoReports);
-        ExistingFiles coberturaFiles = ExistingFiles.create(coberturaReports);
-        ExistingFiles sagaFiles = ExistingFiles.create(sagaReports);
-        ExistingFiles cloverFiles = ExistingFiles.create(cloverReports);
+        var jacocoFiles = ExistingFiles.create(jacocoReports);
+        var coberturaFiles = ExistingFiles.create(coberturaReports);
+        var sagaFiles = ExistingFiles.create(sagaReports);
+        var cloverFiles = ExistingFiles.create(cloverReports);
         for (MavenProject p : projects) {
-            Path reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
-            Path buildDirectory = Path.of(p.getBuild().getDirectory());
+            var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
+            var buildDirectory = Path.of(p.getBuild().getDirectory());
 
             jacocoFiles.add(reportingDirectory.resolve(JACOCO_DIRECTORY).resolve(JACOCO_FILE).toFile());
             jacocoFiles.add(reportingDirectory.resolve(JACOCO_IT_DIRECTORY).resolve(JACOCO_FILE).toFile());
@@ -198,8 +198,8 @@ public class CoverageParsersFactory {
 
             if (relativeReportDirs != null) {
                 for (String relativeReportPath : relativeReportDirs) {
-                    Path relativeReportingDirectory = reportingDirectory;
-                    Path relativeBuildDirectory = buildDirectory;
+                    var relativeReportingDirectory = reportingDirectory;
+                    var relativeBuildDirectory = buildDirectory;
                     if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
                         relativeReportingDirectory = reportingDirectory.resolve(relativeReportPath);
                         relativeBuildDirectory = buildDirectory.resolve(relativeReportPath);

@@ -79,7 +79,7 @@ class HttpClientFactory {
         if (proxy != null && isProxied(targetUrl, proxy)) {
             hcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
             if (StringUtils.isNotBlank(proxy.getUsername())) {
-                BasicCredentialsProvider cp = new BasicCredentialsProvider();
+                var cp = new BasicCredentialsProvider();
                 cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
                         new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword().toCharArray()));
                 hcb.setDefaultCredentialsProvider(cp);
@@ -109,8 +109,8 @@ class HttpClientFactory {
      */
     private boolean isProxied(final String url, final Proxy proxy) {
         if (StringUtils.isNotBlank(proxy.getNonProxyHosts())) {
-            String host = UrlUtils.create(url).getHost();
-            String[] excludes = proxy.getNonProxyHosts().split("\\|", -1);
+            var host = UrlUtils.create(url).getHost();
+            var excludes = proxy.getNonProxyHosts().split("\\|", -1);
             for (String exclude : excludes) {
                 if (exclude != null && !exclude.isBlank() && Wildcards.matches(host, exclude.trim())) {
                     return false;
