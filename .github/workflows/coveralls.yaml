@@ -29,6 +29,8 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
       - name: Report Coverage to Coveralls for General Push
         if: github.event_name == 'push'
-        run: ./mvnw install --batch-mode --no-transfer-progress --quiet && ./mvnw jacoco:report coveralls:report --batch-mode --no-transfer-progress --show-version -Dcoveralls.plugin=4.7.1-SNAPSHOT -Dlicense.skip=true -DrepoToken=$GITHUB_TOKEN -DserviceName=github
+        run: |
+          ./mvnw install --batch-mode --no-transfer-progress --quiet --show-version -Dlicense.skip=true |
+          ./mvnw jacoco:report coveralls:report --batch-mode --no-transfer-progress -Dcoveralls.plugin=4.7.1-SNAPSHOT -DrepoToken=$GITHUB_TOKEN -DserviceName=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
