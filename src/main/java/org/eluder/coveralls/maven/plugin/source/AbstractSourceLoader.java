@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.security.NoSuchAlgorithmException;
 
 import org.apache.commons.io.IOUtils;
 import org.eluder.coveralls.maven.plugin.domain.Source;
@@ -70,8 +69,6 @@ public abstract class AbstractSourceLoader implements SourceLoader {
                 InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {
             String source = IOUtils.toString(reader);
             return new Source(getFileName(sourceFile), source, ds.getDigestHex());
-        } catch (NoSuchAlgorithmException ex) {
-            throw new IOException("Sha-512 algorithm not available", ex);
         }
     }
 

@@ -40,16 +40,25 @@ public class Sha512DigestInputStream extends DigestInputStream {
      *
      * @param stream
      *            the stream
-     *
-     * @throws NoSuchAlgorithmException
-     *             the no such algorithm exception
      */
-    public Sha512DigestInputStream(final InputStream stream) throws NoSuchAlgorithmException {
-        super(stream, MessageDigest.getInstance("SHA-512"));
+    public Sha512DigestInputStream(final InputStream stream) {
+        super(stream, getSha512Digest());
+    }
+
+    private static MessageDigest getSha512Digest() {
+        try {
+            return MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            // SHA-512 is guaranteed to be available in all Java SE implementations
+            throw new AssertionError("SHA-512 algorithm not available", e);
+        }
     }
 
     /**
      * Gets the digest hex.
+     * <p>
+     * <b>Note:</b> Calling this method will finalize and reset the digest. Subsequent calls will return the digest of
+     * an empty stream unless the stream is re-read. This is standard behavior for {@link MessageDigest#digest()}.
      *
      * @return the digest hex
      */
