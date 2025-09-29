@@ -60,4 +60,5 @@ class ValidationErrorTest {
         final var error = new ValidationError(Level.WARN, "message");
         Assertions.assertEquals("WARN: message", error.toString());
     }
+
 }

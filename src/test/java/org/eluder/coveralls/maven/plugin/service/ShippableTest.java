@@ -131,4 +131,5 @@ class ShippableTest {
         Assertions.assertEquals("master", properties.getProperty("branch"));
         Assertions.assertEquals("a3562fgcd2", properties.getProperty("commit_sha"));
     }
+
 }

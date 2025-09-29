@@ -97,4 +97,5 @@ class MultiSourceLoaderTest {
     MultiSourceLoader creaMultiSourceLoader() {
         return new MultiSourceLoader().add(this.sl1).add(this.sl2);
     }
+
 }

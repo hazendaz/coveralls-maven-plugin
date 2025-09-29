@@ -75,4 +75,5 @@ class ValidationExceptionTest {
         Assertions.assertEquals(ValidationExceptionTest.MESSAGE, exception.getMessage());
         Assertions.assertSame(cause, exception.getCause());
     }
+
 }

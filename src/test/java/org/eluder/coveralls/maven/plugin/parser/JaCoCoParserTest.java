@@ -50,4 +50,5 @@ class JaCoCoParserTest extends AbstractCoverageParserTest {
     protected List<List<String>> getCoverageFixture() {
         return CoverageFixture.JAVA_FILES_IT;
     }
+
 }

@@ -104,4 +104,5 @@ class GeneralTest {
     void testGetPullRequest() {
         Assertions.assertEquals("pull10", new General(this.env()).getPullRequest());
     }
+
 }

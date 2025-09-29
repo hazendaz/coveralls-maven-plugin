@@ -50,4 +50,5 @@ class SagaParserTest extends AbstractCoverageParserTest {
     protected List<List<String>> getCoverageFixture() {
         return CoverageFixture.JAVASCRIPT_FILES;
     }
+
 }

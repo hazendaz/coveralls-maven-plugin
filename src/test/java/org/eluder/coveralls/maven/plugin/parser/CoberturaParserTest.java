@@ -50,4 +50,5 @@ class CoberturaParserTest extends AbstractCoverageParserTest {
     protected List<List<String>> getCoverageFixture() {
         return CoverageFixture.JAVA_FILES;
     }
+
 }

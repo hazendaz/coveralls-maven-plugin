@@ -216,4 +216,5 @@ class JsonWriterTest {
         final var type = mapper.getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
         return mapper.readValue(content, type);
     }
+
 }

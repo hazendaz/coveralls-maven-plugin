@@ -50,4 +50,5 @@ class CloverParserTest extends AbstractCoverageParserTest {
     protected List<List<String>> getCoverageFixture() {
         return CoverageFixture.JAVA_FILES_CLOVER;
     }
+
 }

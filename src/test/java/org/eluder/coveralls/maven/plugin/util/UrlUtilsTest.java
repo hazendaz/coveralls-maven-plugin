@@ -108,4 +108,5 @@ class UrlUtilsTest {
         final var uri = UrlUtils.toUri(new URL("https://google.com"));
         Assertions.assertEquals(new URI("https://google.com"), uri);
     }
+
 }

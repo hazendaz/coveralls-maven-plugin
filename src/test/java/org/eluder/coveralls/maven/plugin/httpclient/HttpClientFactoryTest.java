@@ -173,4 +173,5 @@ class HttpClientFactoryTest {
 
         Assertions.assertEquals("Hello World!", body);
     }
+
 }

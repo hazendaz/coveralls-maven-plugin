@@ -115,4 +115,5 @@ class AppveyorTest {
     void testGetJobId() {
         Assertions.assertEquals("54de3316c44f", new Appveyor(this.env()).getJobId());
     }
+
 }

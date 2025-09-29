@@ -45,4 +45,5 @@ class GitRepositoryTest {
         final var git = new GitRepository(TestIoUtil.getFile("/")).load();
         Assertions.assertNotNull(git.getHead().getId());
     }
+
 }

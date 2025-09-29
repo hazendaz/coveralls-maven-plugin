@@ -95,4 +95,5 @@ class WerckerTest {
     void testGetBranch() {
         Assertions.assertEquals("master", new Wercker(this.env()).getBranch());
     }
+
 }

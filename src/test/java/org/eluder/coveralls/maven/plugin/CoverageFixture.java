@@ -90,4 +90,5 @@ public final class CoverageFixture {
     private CoverageFixture() {
         // hide constructor
     }
+
 }

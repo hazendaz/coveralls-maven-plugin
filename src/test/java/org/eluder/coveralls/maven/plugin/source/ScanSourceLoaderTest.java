@@ -108,4 +108,5 @@ class ScanSourceLoaderTest {
                 sourceB.getDigest());
         Assertions.assertEquals(4, sourceB.getCoverage().length);
     }
+
 }

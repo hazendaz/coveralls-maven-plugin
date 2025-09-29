@@ -454,4 +454,5 @@ class CoverallsReportMojoTest {
     String readFileContent(final String sourceFile) throws IOException {
         return TestIoUtil.readFileContent(TestIoUtil.getFile(sourceFile));
     }
+
 }

@@ -180,4 +180,5 @@ class JobLoggerTest {
             jobLogger.log(this.logMock);
         });
     }
+
 }

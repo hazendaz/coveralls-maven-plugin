@@ -89,4 +89,5 @@ class DryRunLoggerTest {
         Mockito.verify(this.logMock).info("Dry run enabled, Coveralls report will NOT be submitted to API");
         Mockito.verify(this.logMock).info("1024 bytes of data was recorded in /target/coveralls.json");
     }
+
 }

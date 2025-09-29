@@ -57,4 +57,5 @@ class JobTest {
         final var job = new Job().withBranch("master");
         Assertions.assertEquals("master", job.getBranch());
     }
+
 }

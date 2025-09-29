@@ -80,4 +80,5 @@ class ValidationErrorsTest {
         Collections.addAll(validationErrors, errors);
         return validationErrors;
     }
+
 }

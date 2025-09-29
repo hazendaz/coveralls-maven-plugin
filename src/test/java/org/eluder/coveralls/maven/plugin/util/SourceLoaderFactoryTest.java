@@ -154,4 +154,5 @@ class SourceLoaderFactoryTest {
     private SourceLoaderFactory createSourceLoaderFactory(Charset sourceEncoding) {
         return new SourceLoaderFactory(this.folder.toFile(), this.root, sourceEncoding);
     }
+
 }

@@ -278,4 +278,5 @@ class CoverageParsersFactoryTest {
     private CoverageParsersFactory createCoverageParsersFactory() {
         return new CoverageParsersFactory(this.projectMock, this.sourceLoaderMock);
     }
+
 }

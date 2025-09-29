@@ -112,4 +112,5 @@ class TimestampParserTest {
             new TimestampParser(null).parse("2015-08-20");
         });
     }
+
 }

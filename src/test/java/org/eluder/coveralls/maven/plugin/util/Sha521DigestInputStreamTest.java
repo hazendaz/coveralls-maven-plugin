@@ -81,4 +81,5 @@ class Sha521DigestInputStreamTest {
                     is.getDigestHex());
         }
     }
+
 }
