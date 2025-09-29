@@ -37,5 +37,3 @@ jobs:
         run: ./mvnw jacoco:report coveralls:report --batch-mode --no-transfer-progress -Dcoveralls.plugin=${{ env.PLUGIN_VERSION }} -DrepoToken=$GITHUB_TOKEN -DserviceName=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Show Coveralls JSON Output
-        run: cat target/coveralls.json
