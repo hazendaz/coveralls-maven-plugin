@@ -100,6 +100,11 @@ public class GitHub extends AbstractServiceSetup {
     }
 
     @Override
+    public String getBranch() {
+        return this.getProperty(GitHub.GITHUB_REF_NAME);
+    }
+
+    @Override
     public Properties getEnvironment() {
         final var environment = new Properties();
         this.addProperty(environment, "github_run_id", this.getProperty(GitHub.GITHUB_RUN_ID));
