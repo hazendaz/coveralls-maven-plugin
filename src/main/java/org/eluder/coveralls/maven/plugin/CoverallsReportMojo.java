@@ -354,6 +354,22 @@ public class CoverallsReportMojo extends AbstractMojo {
         final var git = new GitRepository(this.basedir).load();
         final var time = this.timestamp == null ? null
                 : new TimestampParser(this.timestampFormat).parse(this.timestamp).toEpochMilli();
+
+        // Log all non-secret items for debugging and transparency
+        this.getLog().info("Coveralls Job Configuration:");
+        this.getLog().info("  serviceName: " + this.serviceName);
+        this.getLog().info("  serviceJobId: " + this.serviceJobId);
+        this.getLog().info("  serviceBuildNumber: " + this.serviceBuildNumber);
+        this.getLog().info("  serviceBuildUrl: " + this.serviceBuildUrl);
+        this.getLog().info("  parallel: " + this.parallel);
+        this.getLog().info("  branch: " + this.branch);
+        this.getLog().info("  pullRequest: " + this.pullRequest);
+        this.getLog().info("  timestamp: " + time);
+        this.getLog().info("  basedir: " + (this.basedir != null ? this.basedir.getAbsolutePath() : "null"));
+        this.getLog().info("  sourceEncoding: " + this.sourceEncoding);
+        this.getLog().info("  coverallsFile: " + (this.coverallsFile != null ? this.coverallsFile.getAbsolutePath() : "null"));
+        this.getLog().info("  coverallsUrl: " + this.coverallsUrl);
+
         return new Job().withRepoToken(this.repoToken).withServiceName(this.serviceName)
                 .withServiceJobId(this.serviceJobId).withServiceBuildNumber(this.serviceBuildNumber)
                 .withServiceBuildUrl(this.serviceBuildUrl).withParallel(this.parallel)
