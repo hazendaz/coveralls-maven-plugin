@@ -25,6 +25,7 @@
 package org.eluder.coveralls.maven.plugin.service;
 
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 /**
@@ -97,4 +98,16 @@ public class GitHub extends AbstractServiceSetup {
         final var matcher = GitHub.GITHUB_PR.matcher(this.getProperty(GitHub.GITHUB_REF_NAME));
         return matcher.matches() ? matcher.group(1) : null;
     }
+
+    @Override
+    public Properties getEnvironment() {
+        final var environment = new Properties();
+        this.addProperty(environment, "github_run_id", this.getProperty(GitHub.GITHUB_RUN_ID));
+        this.addProperty(environment, "github_run_number", this.getProperty(GitHub.GITHUB_RUN_NUMBER));
+        this.addProperty(environment, "github_repository", this.getProperty(GitHub.GITHUB_REPOSITORY));
+        this.addProperty(environment, "github_ref_name", this.getProperty(GitHub.GITHUB_REF_NAME));
+        this.addProperty(environment, "github_server_url", this.getProperty(GitHub.GITHUB_SERVER_URL));
+        return environment;
+    }
+
 }
