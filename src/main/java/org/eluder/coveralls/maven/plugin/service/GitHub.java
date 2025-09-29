@@ -89,7 +89,7 @@ public class GitHub extends AbstractServiceSetup {
     @Override
     public String getBuildUrl() {
         return String.format("%s/%s/actions/runs/%s", this.getProperty(GitHub.GITHUB_SERVER_URL),
-                this.getProperty(GitHub.GITHUB_REPOSITORY), this.getProperty(GitHub.GITHUB_RUN_NUMBER));
+                this.getProperty(GitHub.GITHUB_REPOSITORY), this.getProperty(GitHub.GITHUB_RUN_ID));
     }
 
     @Override
