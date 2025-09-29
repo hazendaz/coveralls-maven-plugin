@@ -327,6 +327,14 @@ public class CoverallsReportMojo extends AbstractMojo {
      */
     protected List<ServiceSetup> getServices() {
         final var env = System.getenv();
+        this.getLog().info("System environment variables:");
+        env.forEach((key, value) -> {
+            if (key.toUpperCase().contains("TOKEN") || key.toUpperCase().contains("PASSWORD") || key.toUpperCase().contains("SECRET")) {
+                this.getLog().info(key + "=***MASKED***");
+            } else {
+                this.getLog().info(key + "=" + value);
+            }
+        });
         final List<ServiceSetup> services = new ArrayList<>();
         services.add(new GitHub(env));
         services.add(new Shippable(env));
