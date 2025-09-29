@@ -88,7 +88,7 @@ class GitHubTest {
      */
     @Test
     void testGetBuildUrl() {
-        Assertions.assertEquals("https://github.com/hazendaz/coveralls-maven-plugin/actions/runs/12345",
+        Assertions.assertEquals("https://github.com/hazendaz/coveralls-maven-plugin/actions/runs/1",
                 new GitHub(this.env()).getBuildUrl());
     }
 
