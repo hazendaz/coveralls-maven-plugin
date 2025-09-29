@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 public class GitHub extends AbstractServiceSetup {
 
     /** The Constant GITHUB_PR. */
-    private static final Pattern GITHUB_PR = Pattern.compile("(\\d+)/merge");
+    private static final Pattern GITHUB_PR = Pattern.compile("refs/pull/(\\d+)/merge");
 
     /** The Constant GITHUB. */
     public static final String GITHUB = "github";
@@ -56,6 +56,9 @@ public class GitHub extends AbstractServiceSetup {
 
     /** The Constant GITHUB_SERVER_URL. */
     public static final String GITHUB_SERVER_URL = "GITHUB_SERVER_URL";
+
+    /** The Constant GITHUB_REF. */
+    public static final String GITHUB_REF = "GITHUB_REF";
 
     /**
      * Instantiates a new git hub.
@@ -95,8 +98,14 @@ public class GitHub extends AbstractServiceSetup {
 
     @Override
     public String getPullRequest() {
-        final var matcher = GitHub.GITHUB_PR.matcher(this.getProperty(GitHub.GITHUB_REF_NAME));
-        return matcher.matches() ? matcher.group(1) : null;
+        String ref = this.getProperty(GitHub.GITHUB_REF);
+        if (ref != null) {
+            var matcher = GITHUB_PR.matcher(ref);
+            if (matcher.matches()) {
+                return matcher.group(1);
+            }
+        }
+        return null;
     }
 
     @Override
