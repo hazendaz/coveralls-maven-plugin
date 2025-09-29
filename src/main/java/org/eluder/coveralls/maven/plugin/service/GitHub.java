@@ -98,7 +98,7 @@ public class GitHub extends AbstractServiceSetup {
 
     @Override
     public String getPullRequest() {
-        String ref = this.getProperty(GitHub.GITHUB_REF);
+        var ref = this.getProperty(GitHub.GITHUB_REF);
         if (ref != null) {
             var matcher = GITHUB_PR.matcher(ref);
             if (matcher.matches()) {

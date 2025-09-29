@@ -367,7 +367,8 @@ public class CoverallsReportMojo extends AbstractMojo {
         this.getLog().info("  timestamp: " + time);
         this.getLog().info("  basedir: " + (this.basedir != null ? this.basedir.getAbsolutePath() : "null"));
         this.getLog().info("  sourceEncoding: " + this.sourceEncoding);
-        this.getLog().info("  coverallsFile: " + (this.coverallsFile != null ? this.coverallsFile.getAbsolutePath() : "null"));
+        this.getLog().info(
+                "  coverallsFile: " + (this.coverallsFile != null ? this.coverallsFile.getAbsolutePath() : "null"));
         this.getLog().info("  coverallsUrl: " + this.coverallsUrl);
 
         return new Job().withRepoToken(this.repoToken).withServiceName(this.serviceName)

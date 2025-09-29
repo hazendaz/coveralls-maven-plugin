@@ -44,7 +44,8 @@ class GitHubTest {
         final Map<String, String> env = new HashMap<>();
         env.put("GITHUB_ACTIONS", "true");
         env.put("GITHUB_REPOSITORY", "hazendaz/coveralls-maven-plugin");
-        env.put("GITHUB_REF_NAME", "1/merge");
+        env.put("GITHUB_REF", "refs/pull/1/merge");
+        env.put("GITHUB_REF_NAME", "main");
         env.put("GITHUB_RUN_ID", "12345");
         env.put("GITHUB_RUN_NUMBER", "1");
         env.put("GITHUB_SERVER_URL", "https://github.com");
