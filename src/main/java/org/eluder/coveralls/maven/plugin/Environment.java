@@ -61,8 +61,8 @@ public final class Environment {
      * Setup.
      */
     public void setup() {
-        this.setupService();
         this.verify();
+        this.setupService();
     }
 
     /**
