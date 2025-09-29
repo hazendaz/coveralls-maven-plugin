@@ -25,6 +25,7 @@
 package org.eluder.coveralls.maven.plugin.service;
 
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Service implementation for Appveyor.
@@ -101,6 +102,18 @@ public class Appveyor extends AbstractServiceSetup {
     @Override
     public String getJobId() {
         return this.getProperty(Appveyor.APPVEYOR_BUILD_ID);
+    }
+
+    @Override
+    public Properties getEnvironment() {
+        final var environment = new Properties();
+        this.addProperty(environment, "appveyor_build_id", this.getProperty(Appveyor.APPVEYOR_BUILD_ID));
+        this.addProperty(environment, "appveyor_build_number", this.getProperty(Appveyor.APPVEYOR_BUILD_NUMBER));
+        this.addProperty(environment, "appveyor_repo_name", this.getProperty(Appveyor.APPVEYOR_REPO_NAME));
+        this.addProperty(environment, "appveyor_branch", this.getProperty(Appveyor.APPVEYOR_BRANCH));
+        this.addProperty(environment, "appveyor_commit", this.getProperty(Appveyor.APPVEYOR_COMMIT));
+        this.addProperty(environment, "appveyor_pull_request", this.getProperty(Appveyor.APPVEYOR_PULL_REQUEST));
+        return environment;
     }
 
 }

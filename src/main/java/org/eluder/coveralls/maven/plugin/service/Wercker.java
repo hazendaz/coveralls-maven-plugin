@@ -25,6 +25,7 @@
 package org.eluder.coveralls.maven.plugin.service;
 
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Service implementation for Wercker CI.
@@ -47,6 +48,9 @@ public class Wercker extends AbstractServiceSetup {
 
     /** The Constant WERCKER_BRANCH. */
     public static final String WERCKER_BRANCH = "WERCKER_GIT_BRANCH";
+
+    /** The Constant WERCKER_PULL_REQUEST. */
+    public static final String WERCKER_PULL_REQUEST = "WERCKER_PULL_REQUEST";
 
     /**
      * Instantiates a new wercker.
@@ -82,4 +86,25 @@ public class Wercker extends AbstractServiceSetup {
     public String getBranch() {
         return this.getProperty(Wercker.WERCKER_BRANCH);
     }
+
+    @Override
+    public String getBuildNumber() {
+        return this.getProperty(Wercker.WERCKER_BUILD_ID);
+    }
+
+    @Override
+    public String getPullRequest() {
+        return this.getProperty(Wercker.WERCKER_PULL_REQUEST);
+    }
+
+    @Override
+    public Properties getEnvironment() {
+        final var environment = new Properties();
+        this.addProperty(environment, "wercker_build_id", this.getProperty(Wercker.WERCKER_BUILD_ID));
+        this.addProperty(environment, "wercker_build_url", this.getProperty(Wercker.WERCKER_BUILD_URL));
+        this.addProperty(environment, "wercker_branch", this.getProperty(Wercker.WERCKER_BRANCH));
+        this.addProperty(environment, "wercker_pull_request", this.getProperty(Wercker.WERCKER_PULL_REQUEST));
+        return environment;
+    }
+
 }

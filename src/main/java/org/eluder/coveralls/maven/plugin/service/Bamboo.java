@@ -25,6 +25,7 @@
 package org.eluder.coveralls.maven.plugin.service;
 
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Service implementation for Atlassian Bamboo.
@@ -79,4 +80,14 @@ public class Bamboo extends AbstractServiceSetup {
     public String getBranch() {
         return this.getProperty(Bamboo.BAMBOO_BRANCH);
     }
+
+    @Override
+    public Properties getEnvironment() {
+        final var environment = new Properties();
+        this.addProperty(environment, "bamboo_build_number", this.getProperty(Bamboo.BAMBOO_BUILD_NUMBER));
+        this.addProperty(environment, "bamboo_build_url", this.getProperty(Bamboo.BAMBOO_BUILD_URL));
+        this.addProperty(environment, "bamboo_branch", this.getProperty(Bamboo.BAMBOO_BRANCH));
+        return environment;
+    }
+
 }
