@@ -95,7 +95,6 @@ class JsonWriterTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    @SuppressWarnings("resource")
     void testGetJob() throws IOException {
         final var job = this.job();
         try (var writer = new JsonWriter(job, this.file)) {
@@ -110,7 +109,6 @@ class JsonWriterTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    @SuppressWarnings("resource")
     void testGetCoverallsFile() throws IOException {
         final var job = this.job();
         try (var writer = new JsonWriter(job, this.file)) {
