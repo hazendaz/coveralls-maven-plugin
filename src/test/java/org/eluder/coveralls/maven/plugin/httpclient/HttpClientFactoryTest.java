@@ -40,7 +40,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 import org.apache.maven.settings.Proxy;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 

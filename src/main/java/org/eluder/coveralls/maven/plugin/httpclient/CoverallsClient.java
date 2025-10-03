@@ -61,29 +61,26 @@ public class CoverallsClient {
     private static final String FILE_NAME = "coveralls.json";
     private static final String USER_AGENT_STRING = "coveralls-maven-plugin";
 
-    /** The Constant MIME_TYPE. */
-    private static final ContentType MIME_TYPE = ContentType.create("application/json", StandardCharsets.UTF_8);
-
     /** The coveralls url. */
     private final String coverallsUrl;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
     /**
-     * Instantiates a new coveralls client.
+     * Instantiates a new Coveralls Client.
      *
-     * @param coverallsUrl the coveralls url
+     * @param coverallsUrl The base url for the Coveralls API. This should generally be set to <pre>https://coveralls.io/api/v1/jobs</pre>
      */
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
     }
 
     /**
-     * Instantiates a new coveralls client.
+     * Instantiates a new Coveralls Client.
      *
-     * @param coverallsUrl the coveralls url
-     * @param httpClient the http client
-     * @param objectMapper the object mapper
+     * @param coverallsUrl The base url for the Coveralls API. This should generally be set to <pre>https://coveralls.io/api/v1/jobs</pre>
+     * @param httpClient An implementation of {@link HttpClient}
+     * @param objectMapper A Jackson {@link ObjectMapper}
      */
     public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
@@ -92,11 +89,11 @@ public class CoverallsClient {
     }
 
     /**
-     * Submit.
+     * Submit a coveralls json file to the API
      *
-     * @param file the file
+     * @param file A coveralls report that can be submitted to the jobs API
      *
-     * @return the coveralls response
+     * @return An API response body deserialized to a {@link CoverallsResponse}
      *
      * @throws ProcessingException the processing exception
      * @throws IOException Signals that an I/O exception has occurred.
@@ -105,15 +102,12 @@ public class CoverallsClient {
         final Path filePath = file.toPath();
 
         final Iterable<byte[]> multipartData = List.of("--boundary\r\n".getBytes(),
-                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(),
-                FILE_NAME.getBytes(),
+                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(), FILE_NAME.getBytes(),
                 "\"\r\nContent-Type: application/octet-stream;charset=UTF-8\r\n\r\n".getBytes(),
                 Files.readAllBytes(filePath), "\r\n--boundary--\r\n".getBytes());
 
         final HttpRequest request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(coverallsUrl))
-                .timeout(DEFAULT_SOCKET_TIMEOUT)
-                .header("User-Agent", USER_AGENT_STRING)
+                .uri(URI.create(coverallsUrl)).timeout(DEFAULT_SOCKET_TIMEOUT).header("User-Agent", USER_AGENT_STRING)
                 .POST(HttpRequest.BodyPublishers.ofByteArrays(multipartData)).build();
 
         final HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
@@ -136,95 +130,14 @@ public class CoverallsClient {
         } catch (final IOException ex) {
             throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);
         }
-        if (result.errorType == SubmitResult.ErrorType.IO) {
-            throw new IOException(result.errorMessage);
-        }
-        return result.response;
     }
 
     private String getResponseErrorMessage(final HttpResponse<InputStream> response, final String message) {
-        final StringBuilder errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
-                .append(response.statusCode());
+        final StringBuilder errorMessage = new StringBuilder(
+                "Report submission to Coveralls API failed with HTTP status ").append(response.statusCode());
         if (StringUtils.isNotBlank(message)) {
             errorMessage.append(": ").append(message);
         }
         return errorMessage.toString();
     }
-
-    /**
-     * The Class SubmitResult.
-     */
-    private static class SubmitResult {
-
-        /**
-         * The Enum ErrorType.
-         */
-        enum ErrorType {
-
-            /** The none. */
-            NONE,
-            /** The io. */
-            IO,
-            /** The processing. */
-            PROCESSING
-        }
-
-        /** The response. */
-        final CoverallsResponse response;
-
-        /** The error message. */
-        final String errorMessage;
-
-        /** The error cause. */
-        final Throwable errorCause;
-
-        /** The error type. */
-        final ErrorType errorType;
-
-        /**
-         * Instantiates a new submit result.
-         *
-         * @param response
-         *            the response
-         */
-        SubmitResult(CoverallsResponse response) {
-            this.response = response;
-            this.errorMessage = null;
-            this.errorCause = null;
-            this.errorType = ErrorType.NONE;
-        }
-
-        /**
-         * Instantiates a new submit result.
-         *
-         * @param errorMessage
-         *            the error message
-         * @param errorType
-         *            the error type
-         */
-        SubmitResult(String errorMessage, ErrorType errorType) {
-            this.response = null;
-            this.errorMessage = errorMessage;
-            this.errorCause = null;
-            this.errorType = errorType;
-        }
-
-        /**
-         * Instantiates a new submit result.
-         *
-         * @param errorMessage
-         *            the error message
-         * @param errorCause
-         *            the error cause
-         * @param errorType
-         *            the error type
-         */
-        SubmitResult(String errorMessage, Throwable errorCause, ErrorType errorType) {
-            this.response = null;
-            this.errorMessage = errorMessage;
-            this.errorCause = errorCause;
-            this.errorType = errorType;
-        }
-    }
-
 }

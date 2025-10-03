@@ -44,25 +44,16 @@ class HttpClientFactory {
     /** The Constant DEFAULT_CONNECTION_REQUEST_TIMEOUT. */
     private static final Duration DEFAULT_CONNECTION_TIMEOUT = Duration.ofSeconds(10);
 
-    /** The Constant DEFAULT_SOCKET_TIMEOUT. */
-    private static final Timeout DEFAULT_SOCKET_TIMEOUT = Timeout.ofSeconds(60);
-
     /** The target url. */
     private final String targetUrl;
 
     private final HttpClient.Builder hcb = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
             .followRedirects(HttpClient.Redirect.ALWAYS).connectTimeout(DEFAULT_CONNECTION_TIMEOUT);
 
-    /** The rcb. */
-    private final RequestConfig.Builder rcb = RequestConfig.custom()
-            .setConnectionRequestTimeout(HttpClientFactory.DEFAULT_CONNECTION_REQUEST_TIMEOUT)
-            .setResponseTimeout(HttpClientFactory.DEFAULT_SOCKET_TIMEOUT);
-
     /**
      * Instantiates a new http client factory.
      *
-     * @param targetUrl
-     *            the target url
+     * @param targetUrl the target url for the coveralls API
      */
     HttpClientFactory(final String targetUrl) {
         this.targetUrl = targetUrl;
@@ -114,8 +105,8 @@ class HttpClientFactory {
      */
     private boolean isProxied(final String url, final Proxy proxy) {
         if (StringUtils.isNotBlank(proxy.getNonProxyHosts())) {
-            final var host = UrlUtils.create(url).getHost();
-            final var excludes = proxy.getNonProxyHosts().split("\\|", -1);
+            final String host = UrlUtils.create(url).getHost();
+            final String[] excludes = proxy.getNonProxyHosts().split("\\|", -1);
             for (final String exclude : excludes) {
                 if (exclude != null && !exclude.isBlank() && Wildcards.matches(host, exclude.trim())) {
                     return false;

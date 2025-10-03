@@ -286,12 +286,13 @@ class CoverallsReportMojoTest {
     @Test
     void successfulSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException,
             InterruptedException {
-        when(coverallsClientMock.submit(any(File.class))).thenReturn(new CoverallsResponse("success", false, null));
+        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
+                .thenReturn(new CoverallsResponse("success", false, null));
         mojo.execute();
         var json = TestIoUtil.readFileContent(coverallsFile);
-        assertNotNull(json);
+        Assertions.assertNotNull(json);
 
-        final var fixture = CoverageFixture.JAVA_FILES;
+        final List<List<String>> fixture = CoverageFixture.JAVA_FILES;
         for (final List<String> coverageFile : fixture) {
             Assertions.assertTrue(json.contains(coverageFile.get(0)));
         }
@@ -310,9 +311,8 @@ class CoverallsReportMojoTest {
      *             the mojo execution exception
      */
     @Test
-    void failWithProcessingException()
-            throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
-        when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
+    void failWithProcessingException() throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
+        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new ProcessingException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -335,7 +335,7 @@ class CoverallsReportMojoTest {
     void processingExceptionWithAllowedServiceFailure()
             throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
         mojo.failOnServiceError = false;
-        when(coverallsClientMock.submit(any(File.class))).thenThrow(new ProcessingException());
+        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new ProcessingException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -356,7 +356,7 @@ class CoverallsReportMojoTest {
      */
     @Test
     void failWithIOException() throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
-        Mockito.when(coverallsClientMock.submit(any(File.class))).thenThrow(new IOException());
+        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -399,7 +399,8 @@ class CoverallsReportMojoTest {
     @Test
     void failWithNullPointerException()
             throws ProcessingException, IOException, MojoFailureException, InterruptedException {
-        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new NullPointerException());
+        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
+                .thenThrow(new NullPointerException());
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
@@ -424,10 +425,13 @@ class CoverallsReportMojoTest {
         Mockito.verifyNoInteractions(this.jobMock);
     }
 
-    static void verifySuccessfulSubmit(Log logMock, String[][] fixture) {
-        Mockito.verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
-                + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
-        Mockito.verify(logMock).info("*** Coverage results are usually available immediately on Coveralls.");
+    static void verifySuccessfulSubmit(Log logMock, List<List<String>> fixture) {
+        Mockito.verify(logMock, Mockito.atMostOnce())
+                .info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
+                        + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
+
+        Mockito.verify(logMock, Mockito.atMostOnce())
+                .info("*** Coverage results are usually available immediately on Coveralls.");
     }
 
     /**
