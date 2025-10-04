@@ -525,6 +525,11 @@ public class CoverallsReportMojo extends AbstractMojo {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms while handling I/O operations";
             this.handleSubmissionError(e, message, this.failOnServiceError);
+        } catch (final InterruptedException e) {
+            final var duration = System.currentTimeMillis() - now;
+            final var message = "Submission failed in " + duration + "ms due to an interuption";
+            this.getLog().error(message, e);
+            Thread.currentThread().interrupt();
         }
     }
 

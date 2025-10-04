@@ -24,15 +24,14 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
+import java.net.Authenticator;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.ProxySelector;
+import java.net.http.HttpClient;
+import java.time.Duration;
+
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hc.client5.http.auth.AuthScope;
-import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
-import org.apache.hc.client5.http.config.RequestConfig;
-import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
-import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.core5.util.Timeout;
 import org.apache.maven.settings.Proxy;
 import org.eluder.coveralls.maven.plugin.util.UrlUtils;
 import org.eluder.coveralls.maven.plugin.util.Wildcards;
@@ -42,28 +41,21 @@ import org.eluder.coveralls.maven.plugin.util.Wildcards;
  */
 class HttpClientFactory {
 
-    /** The Constant DEFAULT_CONNECTION_REQUEST_TIMEOUT. */
-    private static final Timeout DEFAULT_CONNECTION_REQUEST_TIMEOUT = Timeout.ofSeconds(10);
-
-    /** The Constant DEFAULT_SOCKET_TIMEOUT. */
-    private static final Timeout DEFAULT_SOCKET_TIMEOUT = Timeout.ofSeconds(60);
+    /** The Constant DEFAULT_CONNECTION_TIMEOUT. */
+    private static final Duration DEFAULT_CONNECTION_TIMEOUT = Duration.ofSeconds(10);
 
     /** The target url. */
     private final String targetUrl;
 
     /** The hcb. */
-    private final HttpClientBuilder hcb = HttpClientBuilder.create();
-
-    /** The rcb. */
-    private final RequestConfig.Builder rcb = RequestConfig.custom()
-            .setConnectionRequestTimeout(HttpClientFactory.DEFAULT_CONNECTION_REQUEST_TIMEOUT)
-            .setResponseTimeout(HttpClientFactory.DEFAULT_SOCKET_TIMEOUT);
+    private final HttpClient.Builder hcb = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
+            .followRedirects(HttpClient.Redirect.ALWAYS).connectTimeout(HttpClientFactory.DEFAULT_CONNECTION_TIMEOUT);
 
     /**
      * Instantiates a new http client factory.
      *
      * @param targetUrl
-     *            the target url
+     *            the target url for the coveralls API
      */
     HttpClientFactory(final String targetUrl) {
         this.targetUrl = targetUrl;
@@ -79,24 +71,28 @@ class HttpClientFactory {
      */
     public HttpClientFactory proxy(final Proxy proxy) {
         if (proxy != null && this.isProxied(this.targetUrl, proxy)) {
-            this.hcb.setProxy(new HttpHost(proxy.getProtocol(), proxy.getHost(), proxy.getPort()));
+            this.hcb.proxy(ProxySelector.of(new InetSocketAddress(proxy.getHost(), proxy.getPort())));
+
             if (StringUtils.isNotBlank(proxy.getUsername())) {
-                final var cp = new BasicCredentialsProvider();
-                cp.setCredentials(new AuthScope(proxy.getHost(), proxy.getPort()),
-                        new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword().toCharArray()));
-                this.hcb.setDefaultCredentialsProvider(cp);
+                final Authenticator authenticator = new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(proxy.getUsername(), proxy.getPassword().toCharArray());
+                    }
+                };
+                this.hcb.authenticator(authenticator);
             }
         }
         return this;
     }
 
     /**
-     * Creates the.
+     * Creates a new instance of HttpClient.
      *
-     * @return the closeable http client
+     * @return a new instance of HttpClient
      */
-    public CloseableHttpClient create() {
-        return this.hcb.setDefaultRequestConfig(this.rcb.build()).build();
+    public HttpClient create() {
+        return this.hcb.build();
     }
 
     /**

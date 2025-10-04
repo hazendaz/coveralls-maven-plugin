@@ -29,10 +29,10 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.maven.settings.Proxy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -52,6 +52,9 @@ class HttpClientFactoryTest {
     /** The Constant TARGET_URL. */
     static final String TARGET_URL = "http://localhost:" + HttpClientFactoryTest.TARGET_PORT;
 
+    /** The Constant STRING_RESPONSE_HANDLER. */
+    static final HttpResponse.BodyHandler<String> STRING_RESPONSE_HANDLER = HttpResponse.BodyHandlers.ofString();
+
     /** The target server. */
     @RegisterExtension
     static WireMockExtension targetServer = WireMockExtension.newInstance()
@@ -69,19 +72,20 @@ class HttpClientFactoryTest {
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
-     * @throws ParseException
-     *             the parse exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void simpleRequest() throws IOException, ParseException {
+    void simpleRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).create();
-        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
-                response -> EntityUtils.toString(response.getEntity()));
+        final var response = client.send(
+                HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
+                HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
 
-        Assertions.assertEquals("Hello World!", body);
+        Assertions.assertEquals("Hello World!", response.body());
     }
 
     /**
@@ -89,11 +93,11 @@ class HttpClientFactoryTest {
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
-     * @throws ParseException
-     *             the parse exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void unAuthorizedProxyRequest() throws IOException, ParseException {
+    void unAuthorizedProxyRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
@@ -106,22 +110,23 @@ class HttpClientFactoryTest {
         proxy.setProtocol("http");
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
-        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
-                response -> EntityUtils.toString(response.getEntity()));
+        final var response = client.send(
+                HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
+                HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
 
-        Assertions.assertEquals("Hello Proxy!", body);
+        Assertions.assertEquals("Hello Proxy!", response.body());
     }
 
     /**
-     * Authorixed proxy request.
+     * Authorized proxy request.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
-     * @throws ParseException
-     *             the parse exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void authorixedProxyRequest() throws IOException, ParseException {
+    void authorizedProxyRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
@@ -140,10 +145,11 @@ class HttpClientFactoryTest {
         proxy.setPassword("bar");
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
-        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
-                response -> EntityUtils.toString(response.getEntity()));
+        final var response = client.send(
+                HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
+                HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
 
-        Assertions.assertEquals("Hello Proxy!", body);
+        Assertions.assertEquals("Hello Proxy!", response.body());
     }
 
     /**
@@ -151,11 +157,11 @@ class HttpClientFactoryTest {
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
-     * @throws ParseException
-     *             the parse exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void nonProxiedHostRequest() throws IOException, ParseException {
+    void nonProxiedHostRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
@@ -169,10 +175,11 @@ class HttpClientFactoryTest {
         proxy.setNonProxyHosts("localhost|example.com");
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
-        final var body = client.execute(new HttpGet(HttpClientFactoryTest.TARGET_URL),
-                response -> EntityUtils.toString(response.getEntity()));
+        final var response = client.send(
+                HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
+                HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
 
-        Assertions.assertEquals("Hello World!", body);
+        Assertions.assertEquals("Hello World!", response.body());
     }
 
 }

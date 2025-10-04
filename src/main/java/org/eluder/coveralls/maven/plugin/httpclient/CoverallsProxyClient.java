@@ -37,7 +37,7 @@ public class CoverallsProxyClient extends CoverallsClient {
      * Instantiates a new coveralls proxy client.
      *
      * @param coverallsUrl
-     *            the coveralls url
+     *            the coveralls url. Eg: <a href="https://coveralls.io/api/v1/jobs">https://coveralls.io/api/v1/jobs</a>
      * @param proxy
      *            the proxy
      */

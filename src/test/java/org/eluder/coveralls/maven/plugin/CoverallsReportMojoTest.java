@@ -277,9 +277,12 @@ class CoverallsReportMojoTest {
      *             the mojo execution exception
      * @throws MojoFailureException
      *             the mojo failure exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void successfulSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void successfulSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException,
+            InterruptedException {
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
                 .thenReturn(new CoverallsResponse("success", false, null));
         this.mojo.execute();
@@ -303,9 +306,12 @@ class CoverallsReportMojoTest {
      *             Signals that an I/O exception has occurred.
      * @throws MojoExecutionException
      *             the mojo execution exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void failWithProcessingException() throws ProcessingException, IOException, MojoExecutionException {
+    void failWithProcessingException()
+            throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
                 .thenThrow(new ProcessingException());
         try {
@@ -325,10 +331,12 @@ class CoverallsReportMojoTest {
      *             Signals that an I/O exception has occurred.
      * @throws MojoExecutionException
      *             the mojo execution exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
     void processingExceptionWithAllowedServiceFailure()
-            throws ProcessingException, IOException, MojoExecutionException {
+            throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
         this.mojo.failOnServiceError = false;
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
                 .thenThrow(new ProcessingException());
@@ -349,9 +357,11 @@ class CoverallsReportMojoTest {
      *             Signals that an I/O exception has occurred.
      * @throws MojoExecutionException
      *             the mojo execution exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void failWithIOException() throws ProcessingException, IOException, MojoExecutionException {
+    void failWithIOException() throws ProcessingException, IOException, MojoExecutionException, InterruptedException {
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
         try {
             this.mojo.execute();
@@ -372,10 +382,12 @@ class CoverallsReportMojoTest {
      *             the mojo execution exception
      * @throws MojoFailureException
      *             the mojo failure exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void ioExceptionWithAllowedServiceFailure()
-            throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void ioExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException,
+            MojoFailureException, InterruptedException {
         this.mojo.failOnServiceError = false;
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
         this.mojo.execute();
@@ -391,9 +403,12 @@ class CoverallsReportMojoTest {
      *             Signals that an I/O exception has occurred.
      * @throws MojoFailureException
      *             the mojo failure exception
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void failWithNullPointerException() throws ProcessingException, IOException, MojoFailureException {
+    void failWithNullPointerException()
+            throws ProcessingException, IOException, MojoFailureException, InterruptedException {
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
                 .thenThrow(new NullPointerException());
         try {

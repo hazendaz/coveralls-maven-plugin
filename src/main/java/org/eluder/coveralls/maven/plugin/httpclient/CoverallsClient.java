@@ -24,24 +24,24 @@
  */
 package org.eluder.coveralls.maven.plugin.httpclient;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.Provider;
 import java.security.Security;
+import java.time.Duration;
+import java.util.List;
 
-import org.apache.hc.client5.http.classic.methods.HttpPost;
-import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
-import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.HttpResponse;
-import org.apache.hc.core5.http.HttpStatus;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
@@ -58,53 +58,98 @@ public class CoverallsClient {
         }
     }
 
+    /** The Constant DEFAULT_SOCKET_TIMEOUT. */
+    private static final Duration DEFAULT_SOCKET_TIMEOUT = Duration.ofSeconds(60);
+
     /** The Constant FILE_NAME. */
     private static final String FILE_NAME = "coveralls.json";
 
-    /** The Constant MIME_TYPE. */
-    private static final ContentType MIME_TYPE = ContentType.create("application/json", StandardCharsets.UTF_8);
+    /** The Constant USER_AGENT_STRING. */
+    private static final String USER_AGENT_STRING = "coveralls-maven-plugin";
 
     /** The coveralls url. */
     private final String coverallsUrl;
 
     /** The http client. */
-    private final CloseableHttpClient httpClient;
+    private final HttpClient httpClient;
 
     /** The object mapper. */
     private final ObjectMapper objectMapper;
 
     /**
-     * Instantiates a new coveralls client.
+     * Instantiates a new Coveralls Client.
      *
      * @param coverallsUrl
-     *            the coveralls url
+     *            The base url for the Coveralls API. This should generally be set to
+     *
+     *            <pre>
+     * https://coveralls.io/api/v1/jobs
+     *            </pre>
      */
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
     }
 
     /**
-     * Instantiates a new coveralls client.
+     * Instantiates a new Coveralls Client.
      *
      * @param coverallsUrl
-     *            the coveralls url
+     *            The base url for the Coveralls API. This should generally be set to
+     *
+     *            <pre>
+     * https://coveralls.io/api/v1/jobs
+     *            </pre>
+     *
      * @param httpClient
-     *            the http client
+     *            An implementation of {@link HttpClient}
      * @param objectMapper
-     *            the object mapper
+     *            A Jackson {@link ObjectMapper}
      */
-    public CoverallsClient(final String coverallsUrl, final CloseableHttpClient httpClient,
-            final ObjectMapper objectMapper) {
+    public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
     }
 
     /**
-     * Submit.
+     * Submit a coveralls json file to the API.
      *
      * @param file
-     *            the file
+     *            A coveralls report that can be submitted to the jobs API
+     *
+     * @return An API response body deserialized to a {@link CoverallsResponse}
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
+     */
+    public CoverallsResponse submit(final File file) throws ProcessingException, IOException, InterruptedException {
+        final var filePath = file.toPath();
+
+        final Iterable<byte[]> multipartData = List.of("--boundary\r\n".getBytes(),
+                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(),
+                CoverallsClient.FILE_NAME.getBytes(),
+                "\"\r\nContent-Type: application/json;charset=UTF-8\r\n\r\n".getBytes(),
+                Files.readAllBytes(filePath), "\r\n--boundary--\r\n".getBytes());
+
+        final var request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(this.coverallsUrl)).timeout(CoverallsClient.DEFAULT_SOCKET_TIMEOUT)
+                .header("User-Agent", CoverallsClient.USER_AGENT_STRING)
+                .POST(HttpRequest.BodyPublishers.ofByteArrays(multipartData)).build();
+
+        final HttpResponse<InputStream> response = this.httpClient.send(request,
+                HttpResponse.BodyHandlers.ofInputStream());
+        return this.parseResponse(response);
+    }
+
+    /**
+     * Parses the response.
+     *
+     * @param response
+     *            the response
      *
      * @return the coveralls response
      *
@@ -113,38 +158,21 @@ public class CoverallsClient {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    public CoverallsResponse submit(final File file) throws ProcessingException, IOException {
-        final var entity = MultipartEntityBuilder.create().setMode(HttpMultipartMode.STRICT)
-                .addBinaryBody("json_file", file, CoverallsClient.MIME_TYPE, CoverallsClient.FILE_NAME).build();
-        final var post = new HttpPost(this.coverallsUrl);
-        post.setEntity(entity);
-        final var result = this.httpClient.execute(post, response -> {
-            final var responseEntity = response.getEntity();
-            if (response.getCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
-                return new SubmitResult(this.getResponseErrorMessage(response, "Coveralls API internal error"),
-                        SubmitResult.ErrorType.IO);
-            }
+    private CoverallsResponse parseResponse(final HttpResponse<InputStream> response)
+            throws ProcessingException, IOException {
+        if (response.statusCode() >= 500) {
+            throw new IOException(this.getResponseErrorMessage(response, "Coveralls API internal error"));
+        }
 
-            try (var reader = new BufferedReader(
-                    new InputStreamReader(responseEntity.getContent(), StandardCharsets.UTF_8))) {
-                final var cr = this.objectMapper.readValue(reader, CoverallsResponse.class);
-                if (cr.isError()) {
-                    return new SubmitResult(this.getResponseErrorMessage(response, cr.getMessage()),
-                            SubmitResult.ErrorType.PROCESSING);
-                }
-                return new SubmitResult(cr);
-            } catch (final JsonProcessingException e) {
-                return new SubmitResult(this.getResponseErrorMessage(response, e.getMessage()), e,
-                        SubmitResult.ErrorType.PROCESSING);
+        try (var reader = new BufferedReader(new InputStreamReader(response.body(), StandardCharsets.UTF_8))) {
+            final var cr = this.objectMapper.readValue(reader, CoverallsResponse.class);
+            if (cr.isError()) {
+                throw new ProcessingException(this.getResponseErrorMessage(response, cr.getMessage()));
             }
-        });
-        if (result.errorType == SubmitResult.ErrorType.PROCESSING) {
-            throw new ProcessingException(result.errorMessage, result.errorCause);
+            return cr;
+        } catch (final IOException e) {
+            throw new ProcessingException(this.getResponseErrorMessage(response, e.getMessage()), e);
         }
-        if (result.errorType == SubmitResult.ErrorType.IO) {
-            throw new IOException(result.errorMessage);
-        }
-        return result.response;
     }
 
     /**
@@ -157,94 +185,12 @@ public class CoverallsClient {
      *
      * @return the response error message
      */
-    private String getResponseErrorMessage(final HttpResponse response, final String message) {
-        final var status = response.getCode();
-        final var reason = response.getReasonPhrase();
+    private String getResponseErrorMessage(final HttpResponse<InputStream> response, final String message) {
         final var errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
-                .append(status).append(":");
-        if (reason != null && !reason.isBlank()) {
-            errorMessage.append(" ").append(reason);
-        }
-        if (reason != null && !message.isBlank()) {
-            errorMessage.append(" (").append(message).append(")");
+                .append(response.statusCode());
+        if (message != null && !message.isBlank()) {
+            errorMessage.append(": ").append(message);
         }
         return errorMessage.toString();
     }
-
-    /**
-     * The Class SubmitResult.
-     */
-    private static class SubmitResult {
-
-        /**
-         * The Enum ErrorType.
-         */
-        enum ErrorType {
-
-            /** The none. */
-            NONE,
-            /** The io. */
-            IO,
-            /** The processing. */
-            PROCESSING
-        }
-
-        /** The response. */
-        final CoverallsResponse response;
-
-        /** The error message. */
-        final String errorMessage;
-
-        /** The error cause. */
-        final Throwable errorCause;
-
-        /** The error type. */
-        final ErrorType errorType;
-
-        /**
-         * Instantiates a new submit result.
-         *
-         * @param response
-         *            the response
-         */
-        SubmitResult(CoverallsResponse response) {
-            this.response = response;
-            this.errorMessage = null;
-            this.errorCause = null;
-            this.errorType = ErrorType.NONE;
-        }
-
-        /**
-         * Instantiates a new submit result.
-         *
-         * @param errorMessage
-         *            the error message
-         * @param errorType
-         *            the error type
-         */
-        SubmitResult(String errorMessage, ErrorType errorType) {
-            this.response = null;
-            this.errorMessage = errorMessage;
-            this.errorCause = null;
-            this.errorType = errorType;
-        }
-
-        /**
-         * Instantiates a new submit result.
-         *
-         * @param errorMessage
-         *            the error message
-         * @param errorCause
-         *            the error cause
-         * @param errorType
-         *            the error type
-         */
-        SubmitResult(String errorMessage, Throwable errorCause, ErrorType errorType) {
-            this.response = null;
-            this.errorMessage = errorMessage;
-            this.errorCause = errorCause;
-            this.errorType = errorType;
-        }
-    }
-
 }
