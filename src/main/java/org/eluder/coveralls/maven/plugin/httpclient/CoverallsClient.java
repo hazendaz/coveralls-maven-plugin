@@ -132,7 +132,7 @@ public class CoverallsClient {
         final Iterable<byte[]> multipartData = List.of("--boundary\r\n".getBytes(),
                 "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(),
                 CoverallsClient.FILE_NAME.getBytes(),
-                "\"\r\nContent-Type: application/octet-stream;charset=UTF-8\r\n\r\n".getBytes(),
+                "\"\r\nContent-Type: application/json;charset=UTF-8\r\n\r\n".getBytes(),
                 Files.readAllBytes(filePath), "\r\n--boundary--\r\n".getBytes());
 
         final var request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
