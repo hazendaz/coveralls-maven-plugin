@@ -89,9 +89,7 @@ class SourceTest {
     void addCoverageForSourceOutOfBounds() {
         final var source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
                 "E8BD88CF0BDB77A6408234FD91FD22C3");
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            source.addCoverage(5, 1);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> source.addCoverage(5, 1));
     }
 
     /**
@@ -101,9 +99,7 @@ class SourceTest {
     void addBranchCoverageForSourceOutOfBounds() {
         final var source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
                 "609BD24390ADB11D11536CA2ADD18BD0");
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            source.addBranchCoverage(6, 0, 0, 2);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> source.addBranchCoverage(6, 0, 0, 2));
     }
 
     /**

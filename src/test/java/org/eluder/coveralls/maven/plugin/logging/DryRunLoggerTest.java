@@ -54,9 +54,7 @@ class DryRunLoggerTest {
      */
     @Test
     void missingCoverallsFile() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new DryRunLogger(true, null);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new DryRunLogger(true, null));
     }
 
     /**

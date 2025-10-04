@@ -59,9 +59,7 @@ class CoverageTracingLoggerTest {
      */
     @Test
     void constructorWithNull() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new CoverageTracingLogger(null);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new CoverageTracingLogger(null));
     }
 
     /**

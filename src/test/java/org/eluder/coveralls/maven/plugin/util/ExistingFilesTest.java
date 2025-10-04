@@ -50,9 +50,7 @@ class ExistingFilesTest {
     @Test
     void addAllForNull() {
         final var existingFiles = new ExistingFiles();
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            existingFiles.addAll(null);
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> existingFiles.addAll(null));
     }
 
     /**
@@ -61,9 +59,7 @@ class ExistingFilesTest {
     @Test
     void addForNull() {
         final var existingFiles = new ExistingFiles();
-        Assertions.assertThrows(NullPointerException.class, () -> {
-            existingFiles.add(null);
-        });
+        Assertions.assertThrows(NullPointerException.class, () -> existingFiles.add(null));
     }
 
     /**

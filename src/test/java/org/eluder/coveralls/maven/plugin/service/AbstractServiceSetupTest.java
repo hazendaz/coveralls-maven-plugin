@@ -62,9 +62,7 @@ class AbstractServiceSetupTest {
     void addPropertyWithoutName() {
         final var setup = this.create(new HashMap<>());
         final var properties = new Properties();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            setup.addProperty(properties, null, "value");
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> setup.addProperty(properties, null, "value"));
     }
 
     /**

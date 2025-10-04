@@ -113,7 +113,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpResponseMock.body())
                 .thenReturn(this.coverallsResponse(new CoverallsResponse("success", false, "")));
         final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        client.submit(this.file);
+        Assertions.assertDoesNotThrow(() -> client.submit(this.file));
     }
 
     /**

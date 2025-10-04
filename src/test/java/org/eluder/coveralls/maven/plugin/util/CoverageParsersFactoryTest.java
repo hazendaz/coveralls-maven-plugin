@@ -112,9 +112,7 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createEmptyParsers() {
-        Assertions.assertThrows(IOException.class, () -> {
-            this.createCoverageParsersFactory().createParsers();
-        });
+        Assertions.assertThrows(IOException.class, () -> this.createCoverageParsersFactory().createParsers());
     }
 
     /**

@@ -63,9 +63,7 @@ class JobLoggerTest {
      */
     @Test
     void missingJob() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new JobLogger(null);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new JobLogger(null));
     }
 
     /**
@@ -177,9 +175,7 @@ class JobLoggerTest {
                 .thenThrow(JsonProcessingException.class);
 
         final var jobLogger = new JobLogger(this.jobMock, this.jsonMapperMock);
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            jobLogger.log(this.logMock);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> jobLogger.log(this.logMock));
     }
 
 }
