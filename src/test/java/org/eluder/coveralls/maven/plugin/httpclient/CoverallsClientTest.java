@@ -204,7 +204,7 @@ class CoverallsClientTest {
      * @throws JsonProcessingException
      *             the json processing exception
      */
-    private InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
+    InputStream coverallsResponse(final CoverallsResponse coverallsResponse) throws JsonProcessingException {
         final var content = new ObjectMapper().writeValueAsString(coverallsResponse);
         return new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
     }

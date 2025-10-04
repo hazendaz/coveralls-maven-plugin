@@ -84,6 +84,7 @@ class HttpClientFactoryTest {
         final var response = client.send(
                 HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
                 HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
+
         Assertions.assertEquals("Hello World!", response.body());
     }
 
