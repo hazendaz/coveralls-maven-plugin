@@ -24,10 +24,6 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import static org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY;
-import static org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY;
-import static org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory.DEFAULT_JACOCO_MERGED_DIRECTORY;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -129,7 +125,8 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createJaCoCoParserForUnitTestReport() throws IOException {
-        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        final var jacocoDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
         final var parsers = this.createCoverageParsersFactory().createParsers();
         Assertions.assertEquals(1, parsers.size());
@@ -144,7 +141,8 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createJaCoCoParserForIntegrationTestReport() throws IOException {
-        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        final var jacocoItDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY));
         Files.createFile(jacocoItDir.resolve("jacoco.xml"));
         final var parsers = this.createCoverageParsersFactory().createParsers();
         Assertions.assertEquals(1, parsers.size());
@@ -159,10 +157,12 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createJaCoCoParserForUnitTestAndIntegrationTestReports() throws IOException {
-        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        final var jacocoDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
 
-        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        final var jacocoItDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY));
         Files.createFile(jacocoItDir.resolve("jacoco.xml"));
 
         final var parsers = this.createCoverageParsersFactory().createParsers();
@@ -179,13 +179,16 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void createJaCoCoParserForMergedReport() throws IOException {
-        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        final var jacocoDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
 
-        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        final var jacocoItDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY));
         Files.createFile(jacocoItDir.resolve("jacoco.xml"));
 
-        final var jacocoMergedDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_MERGED_DIRECTORY));
+        final var jacocoMergedDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_MERGED_DIRECTORY));
         Files.createFile(jacocoMergedDir.resolve("jacoco.xml"));
 
         final var parsers = this.createCoverageParsersFactory().createParsers();
@@ -246,9 +249,11 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withJacocoAggregateReportParam() throws IOException {
-        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        final var jacocoDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
-        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        final var jacocoItDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY));
         Files.createFile(jacocoItDir.resolve("jacoco.xml"));
 
         final var jacocoAggregateDir = Files.createDirectory(this.reportingDir.resolve("my-aggregate-dir"));
@@ -272,7 +277,8 @@ class CoverageParsersFactoryTest {
      */
     @Test
     void withJacocoReportsParam() throws IOException {
-        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        final var jacocoDir = Files
+                .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
 
         final var customJacocoFile = Files.createFile(this.reportingDir.resolve("custom-jacoco-report.xml")).toFile();
