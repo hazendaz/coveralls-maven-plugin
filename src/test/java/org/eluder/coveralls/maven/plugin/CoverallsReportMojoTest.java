@@ -451,7 +451,6 @@ class CoverallsReportMojoTest {
         Mockito.verify(logMock, Mockito.times(1))
                 .info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                         + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
-
         Mockito.verify(logMock, Mockito.times(1))
                 .info("*** Coverage results are usually available immediately on Coveralls.");
     }
