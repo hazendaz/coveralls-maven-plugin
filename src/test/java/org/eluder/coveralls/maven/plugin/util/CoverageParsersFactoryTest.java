@@ -305,7 +305,6 @@ class CoverageParsersFactoryTest {
     @Test
     void withCoberturaReport() throws IOException {
         final var coberturaFile = Files.createFile(this.reportingDir.resolve("cobertura-report.xml")).toFile();
-        coberturaFile.createNewFile();
         final var factory = this.createCoverageParsersFactory().withCoberturaReports(Arrays.asList(coberturaFile));
         final var parsers = factory.createParsers();
         Assertions.assertEquals(1, parsers.size());
@@ -321,7 +320,6 @@ class CoverageParsersFactoryTest {
     @Test
     void withSagaReport() throws IOException {
         final var sagaFile = Files.createFile(this.reportingDir.resolve("saga-report.xml")).toFile();
-        sagaFile.createNewFile();
         final var factory = this.createCoverageParsersFactory().withSagaReports(Arrays.asList(sagaFile));
         final var parsers = factory.createParsers();
         Assertions.assertEquals(1, parsers.size());
@@ -337,7 +335,6 @@ class CoverageParsersFactoryTest {
     @Test
     void withCloverReport() throws IOException {
         final var cloverFile = Files.createFile(this.reportingDir.resolve("clover-report.xml")).toFile();
-        cloverFile.createNewFile();
         final var factory = this.createCoverageParsersFactory().withCloverReports(Arrays.asList(cloverFile));
         final var parsers = factory.createParsers();
         Assertions.assertEquals(1, parsers.size());
