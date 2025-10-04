@@ -81,14 +81,15 @@ public class CoverageParsersFactory {
     private final SourceLoader sourceLoader;
 
     /**
-     * This new property can be used in a Maven Multi-Module project that has a JaCoCo aggregate project
+     * This new property can be used in a Maven Multi-Module project that has a JaCoCo aggregate project.
      *
      * @since 5.0.0
      */
     private File jacocoAggregateReport;
 
     /**
-     * The jacoco reports option is used to add additional paths. By default the plugin already looks in standard locations
+     * The jacoco reports option is used to add additional paths. By default the plugin already looks in standard
+     * locations.
      */
     private List<File> jacocoReports;
 
@@ -118,10 +119,9 @@ public class CoverageParsersFactory {
     }
 
     /**
-     * With JaCoCo aggregate report
+     * With JaCoCo aggregate report.
      * <p>
      * This new property is for Maven multi-module projects
-     * </p>
      *
      * @param jacocoAggregateReport
      *            A single JaCoCo report file in an aggregated report
@@ -140,7 +140,6 @@ public class CoverageParsersFactory {
      * <p>
      * For Maven multi-module projects, configure an aggregate project and use
      * {@link CoverageParsersFactory#withJacocoAggregateReport}
-     * </p>
      *
      * @param jacocoReports
      *            the jacoco reports

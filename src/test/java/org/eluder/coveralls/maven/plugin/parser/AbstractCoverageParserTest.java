@@ -75,7 +75,7 @@ public abstract class AbstractCoverageParserTest {
     }
 
     /**
-     * Inits the.
+     * Inits the Abstract Coverage Parser.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.

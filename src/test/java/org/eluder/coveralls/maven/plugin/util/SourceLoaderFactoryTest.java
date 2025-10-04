@@ -75,7 +75,7 @@ class SourceLoaderFactoryTest {
     private Path m2Sources;
 
     /**
-     * Inits the.
+     * Inits the Source Loader Factory.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.

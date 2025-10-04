@@ -67,7 +67,7 @@ class JsonWriterTest {
     File file;
 
     /**
-     * Inits the.
+     * Inits the Json Writer.
      */
     @BeforeEach
     void init() {

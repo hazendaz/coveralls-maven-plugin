@@ -79,7 +79,7 @@ class CoverallsClientTest {
     File file;
 
     /**
-     * Inits the.
+     * Inits the Coveralls Client.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.

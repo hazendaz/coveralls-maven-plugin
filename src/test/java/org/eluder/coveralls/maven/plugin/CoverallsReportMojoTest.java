@@ -25,7 +25,6 @@
 package org.eluder.coveralls.maven.plugin;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -121,7 +120,7 @@ class CoverallsReportMojoTest {
     Settings settingsMock;
 
     /**
-     * Inits the.
+     * Inits the Coverage Report Mojo.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
@@ -447,8 +446,6 @@ class CoverallsReportMojoTest {
      *
      * @return the string
      *
-     * @throws FileNotFoundException
-     *             the file not found exception
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */

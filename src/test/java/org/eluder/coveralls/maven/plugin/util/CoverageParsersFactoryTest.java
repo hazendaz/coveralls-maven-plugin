@@ -92,7 +92,7 @@ class CoverageParsersFactoryTest {
     private Path targetDir;
 
     /**
-     * Inits the.
+     * Inits the covreage parsers factory test.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
@@ -121,8 +121,11 @@ class CoverageParsersFactoryTest {
         });
     }
 
-    /*
-     * In this test, only the unit test JaCoCo report exists, so it should be added to parsers
+    /**
+     * In this test, only the unit test JaCoCo report exists, so it should be added to parsers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     void createJaCoCoParserForUnitTestReport() throws IOException {
@@ -133,8 +136,11 @@ class CoverageParsersFactoryTest {
         Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
     }
 
-    /*
-     * In this test, only the integration test JaCoCo report exists, so it should be added to parsers
+    /**
+     * In this test, only the integration test JaCoCo report exists, so it should be added to parsers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     void createJaCoCoParserForIntegrationTestReport() throws IOException {
@@ -145,8 +151,11 @@ class CoverageParsersFactoryTest {
         Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
     }
 
-    /*
-     * In this test, both the unit test and integration test JaCoCo reports exist, so both should be added to parsers
+    /**
+     * In this test, both the unit test and integration test JaCoCo reports exist, so both should be added to parsers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     void createJaCoCoParserForUnitTestAndIntegrationTestReports() throws IOException {
@@ -162,8 +171,11 @@ class CoverageParsersFactoryTest {
         Assertions.assertEquals(JaCoCoParser.class, parsers.get(1).getClass());
     }
 
-    /*
-     * In this test, even though all JaCoCo reports exist, only the merged report should be added to parsers
+    /**
+     * In this test, even though all JaCoCo reports exist, only the merged report should be added to parsers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     void createJaCoCoParserForMergedReport() throws IOException {
@@ -226,8 +238,11 @@ class CoverageParsersFactoryTest {
         Assertions.assertEquals(CloverParser.class, parsers.get(0).getClass());
     }
 
-    /*
+    /**
      * Simulate the "jacocoAggregateReport" property being set on the mojo.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     void withJacocoAggregateReportParam() throws IOException {
@@ -248,9 +263,12 @@ class CoverageParsersFactoryTest {
         parsers.get(0).getCoverageFile().getPath().contains("my-aggregate-dir/jacoco.xml");
     }
 
-    /*
+    /**
      * Simulate the "jacocoReports" property being set on the mojo. This field adds reports to other that get detected,
-     * so by having the default "jacoco.xml" in place, there should be two parsers
+     * so by having the default "jacoco.xml" in place, there should be two parsers.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     @Test
     void withJacocoReportsParam() throws IOException {

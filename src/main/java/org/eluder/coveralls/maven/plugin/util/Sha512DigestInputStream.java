@@ -46,6 +46,11 @@ public class Sha512DigestInputStream extends DigestInputStream {
         super(stream, Sha512DigestInputStream.getSha512Digest());
     }
 
+    /**
+     * Gets the sha 512 digest.
+     *
+     * @return the sha 512 digest
+     */
     private static MessageDigest getSha512Digest() {
         try {
             return MessageDigest.getInstance("SHA-512");
