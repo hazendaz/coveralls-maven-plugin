@@ -112,7 +112,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      *
      * @deprecated Cobertura is deprecated and no longer maintained. Use JaCoCo instead.
      */
-    @Deprecated
+    @Deprecated(since = "5.0.0")
     @Parameter(property = "coberturaReports")
     private List<File> coberturaReports;
 

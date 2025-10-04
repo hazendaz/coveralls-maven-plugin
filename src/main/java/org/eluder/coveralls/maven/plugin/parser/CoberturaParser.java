@@ -40,7 +40,7 @@ import org.eluder.coveralls.maven.plugin.source.SourceLoader;
  *
  * @deprecated As Cobertura is no longer maintained, this parser may be dropped in a future release.
  */
-@Deprecated
+@Deprecated(since = "5.0.0")
 public class CoberturaParser extends AbstractXmlEventParser {
 
     /** The source. */
