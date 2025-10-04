@@ -271,7 +271,7 @@ class CoverallsReportMojoTest {
     }
 
     /**
-     * Successfull submission.
+     * Successful submission.
      *
      * @throws ProcessingException
      *             the processing exception
