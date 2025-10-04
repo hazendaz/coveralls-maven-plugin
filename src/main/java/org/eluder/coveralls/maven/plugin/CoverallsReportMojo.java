@@ -515,8 +515,8 @@ public class CoverallsReportMojo extends AbstractMojo {
             this.getLog()
                     .info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
             this.getLog().info(response.getUrl());
-            this.getLog().info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
-            this.getLog().info("    If you see question marks in the report, please be patient");
+            this.getLog().info("*** Coverage results are usually available immediately on Coveralls.");
+            this.getLog().info("    If you see question marks or missing data, please allow some time for processing.");
         } catch (final ProcessingException ex) {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms while processing data";
@@ -529,6 +529,7 @@ public class CoverallsReportMojo extends AbstractMojo {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms due to an interuption";
             this.getLog().error(message, ex);
+            Thread.currentThread().interrupt();
         }
     }
 

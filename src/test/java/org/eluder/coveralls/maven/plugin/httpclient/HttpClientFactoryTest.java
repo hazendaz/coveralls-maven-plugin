@@ -28,6 +28,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -69,11 +70,13 @@ class HttpClientFactoryTest {
     /**
      * Simple request.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void simpleRequest() throws Exception {
+    void simpleRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
@@ -87,11 +90,13 @@ class HttpClientFactoryTest {
     /**
      * Un authorized proxy request.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void unAuthorizedProxyRequest() throws Exception {
+    void unAuthorizedProxyRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
@@ -114,11 +119,13 @@ class HttpClientFactoryTest {
     /**
      * Authorized proxy request.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void authorizedProxyRequest() throws Exception {
+    void authorizedProxyRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
@@ -147,11 +154,13 @@ class HttpClientFactoryTest {
     /**
      * Non proxied host request.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void nonProxiedHostRequest() throws Exception {
+    void nonProxiedHostRequest() throws IOException, InterruptedException {
         HttpClientFactoryTest.targetServer.stubFor(
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 

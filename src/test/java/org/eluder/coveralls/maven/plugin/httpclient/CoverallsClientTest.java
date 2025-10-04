@@ -61,18 +61,18 @@ class CoverallsClientTest {
 
     /** The http client mock. */
     @Mock
-    private HttpClient httpClientMock;
+    HttpClient httpClientMock;
 
     /** The http response mock. */
     @Mock
-    private HttpResponse<InputStream> httpResponseMock;
+    HttpResponse<InputStream> httpResponseMock;
 
     /** The folder. */
     @TempDir(cleanup = CleanupMode.ON_SUCCESS)
-    private Path folder;
+    Path folder;
 
     /** The file. */
-    private File file;
+    File file;
 
     /**
      * Inits the Coveralls Client.
@@ -90,19 +90,23 @@ class CoverallsClientTest {
      */
     @Test
     void constructors() {
-        Assertions.assertNotNull(new CoverallsClient("http://test.com/coveralls"));
+        Assertions.assertNotNull(new CoverallsClient("https://test.com/coveralls"));
         Assertions.assertNotNull(
-                new CoverallsClient("http://test.com/coveralls", this.httpClientMock, new ObjectMapper()));
+                new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper()));
     }
 
     /**
-     * Submit.
+     * Test submit.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
+     * @throws ProcessingException
+     *             the processing exception
      */
     @Test
-    void submit() throws Exception {
+    void submit() throws IOException, InterruptedException, ProcessingException {
         Mockito.when(this.httpClientMock.send(ArgumentMatchers.any(HttpRequest.class),
                 ArgumentMatchers.any(HttpResponse.BodyHandler.class))).thenReturn(this.httpResponseMock);
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(200);
@@ -115,11 +119,13 @@ class CoverallsClientTest {
     /**
      * Fail on service error.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void failOnServiceError() throws Exception {
+    void failOnServiceError() throws IOException, InterruptedException {
         Mockito.when(this.httpClientMock.send(ArgumentMatchers.any(HttpRequest.class),
                 ArgumentMatchers.any(HttpResponse.BodyHandler.class))).thenReturn(this.httpResponseMock);
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(500);
@@ -130,11 +136,13 @@ class CoverallsClientTest {
     /**
      * Parses the invalid response.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void parseInvalidResponse() throws Exception {
+    void parseInvalidResponse() throws IOException, InterruptedException {
         Mockito.when(this.httpClientMock.send(ArgumentMatchers.any(HttpRequest.class),
                 ArgumentMatchers.any(HttpResponse.BodyHandler.class))).thenReturn(this.httpResponseMock);
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(200);
@@ -147,11 +155,13 @@ class CoverallsClientTest {
     /**
      * Parses the errorous response.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void parseErrorousResponse() throws Exception {
+    void parseErrorousResponse() throws IOException, InterruptedException {
         Mockito.when(this.httpClientMock.send(ArgumentMatchers.any(HttpRequest.class),
                 ArgumentMatchers.any(HttpResponse.BodyHandler.class))).thenReturn(this.httpResponseMock);
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(400);
@@ -164,11 +174,13 @@ class CoverallsClientTest {
     /**
      * Parses the failing entity.
      *
-     * @throws Exception
-     *             the exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     @Test
-    void parseFailingEntity() throws Exception {
+    void parseFailingEntity() throws IOException, InterruptedException {
         Mockito.when(this.httpClientMock.send(ArgumentMatchers.any(HttpRequest.class),
                 ArgumentMatchers.any(HttpResponse.BodyHandler.class))).thenReturn(this.httpResponseMock);
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(200);
