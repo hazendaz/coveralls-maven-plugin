@@ -109,10 +109,12 @@ public class CoverallsReportMojo extends AbstractMojo {
 
     /**
      * File paths to additional Cobertura coverage report files.
+     * <p>
+     * Coveralls Maven Plugin 4.5.0 is last to work with Cobertura as java 8 required.
      *
      * @deprecated Cobertura is deprecated and no longer maintained. Use JaCoCo instead.
      */
-    @Deprecated(since = "5.0.0")
+    @Deprecated(since = "5.0.0", forRemoval = true)
     @Parameter(property = "coberturaReports")
     private List<File> coberturaReports;
 
