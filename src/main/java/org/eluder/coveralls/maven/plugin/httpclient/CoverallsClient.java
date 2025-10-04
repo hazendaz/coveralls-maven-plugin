@@ -134,7 +134,7 @@ public class CoverallsClient {
         final String CRLF = "\r\n";
 
         // Build multipart body
-        var byteStream = new ByteArrayOutputStream();
+        final var byteStream = new ByteArrayOutputStream();
         byteStream.write(("--" + boundary + CRLF).getBytes(StandardCharsets.UTF_8));
         byteStream.write(("Content-Disposition: form-data; name=\"json_file\"; filename=\"" + FILE_NAME + "\"" + CRLF)
                 .getBytes(StandardCharsets.UTF_8));
@@ -142,7 +142,7 @@ public class CoverallsClient {
                 .write(("Content-Type: application/json;charset=UTF-8" + CRLF + CRLF).getBytes(StandardCharsets.UTF_8));
         byteStream.write(Files.readAllBytes(filePath));
         byteStream.write((CRLF + "--" + boundary + "--" + CRLF).getBytes(StandardCharsets.UTF_8));
-        byte[] multipartBody = byteStream.toByteArray();
+        final byte[] multipartBody = byteStream.toByteArray();
 
         final var request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
                 .uri(URI.create(this.coverallsUrl)).timeout(CoverallsClient.DEFAULT_SOCKET_TIMEOUT)
