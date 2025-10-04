@@ -41,6 +41,13 @@ public class ExistingFiles implements Iterable<File> {
     private final List<File> delegate = new ArrayList<>();
 
     /**
+     * Instantiates a new existing files.
+     */
+    public ExistingFiles() {
+        // do nothing
+    }
+
+    /**
      * Adds the all.
      *
      * @param files

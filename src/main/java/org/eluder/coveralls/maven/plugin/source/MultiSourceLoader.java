@@ -39,6 +39,13 @@ public class MultiSourceLoader implements SourceLoader {
     private final List<SourceLoader> sourceLoaders = new ArrayList<>();
 
     /**
+     * Instantiates a new multi source loader.
+     */
+    public MultiSourceLoader() {
+        // do nothing
+    }
+
+    /**
      * Adds the.
      *
      * @param sourceLoader

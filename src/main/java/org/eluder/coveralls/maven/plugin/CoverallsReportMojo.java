@@ -267,6 +267,13 @@ public class CoverallsReportMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", readonly = true)
     MavenProject project;
 
+    /**
+     * Instantiates a new coveralls report mojo.
+     */
+    public CoverallsReportMojo() {
+        // do nothing
+    }
+
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         if (this.skip) {

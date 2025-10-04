@@ -39,6 +39,13 @@ public class ValidationErrors extends ArrayList<ValidationError> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Instantiates a new validation errors.
+     */
+    public ValidationErrors() {
+        super();
+    }
+
+    /**
      * Throw or inform.
      *
      * @param log
