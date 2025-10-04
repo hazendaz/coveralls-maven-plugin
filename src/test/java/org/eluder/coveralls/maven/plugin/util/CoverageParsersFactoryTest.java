@@ -24,6 +24,10 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
+import static org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY;
+import static org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY;
+import static org.eluder.coveralls.maven.plugin.util.CoverageParsersFactory.DEFAULT_JACOCO_MERGED_DIRECTORY;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,6 +39,7 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
 import org.apache.maven.project.MavenProject;
+import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.parser.CloverParser;
 import org.eluder.coveralls.maven.plugin.parser.CoberturaParser;
 import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
@@ -116,16 +121,61 @@ class CoverageParsersFactoryTest {
         });
     }
 
-    /**
-     * Creates the jacoco parser.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+    /*
+     * In this test, only the unit test JaCoCo report exists, so it should be added to parsers
      */
     @Test
-    void createJaCoCoParser() throws IOException {
-        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve("jacoco"));
+    void createJaCoCoParserForUnitTestReport() throws IOException {
+        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
+        final var parsers = this.createCoverageParsersFactory().createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
+    }
+
+    /*
+     * In this test, only the integration test JaCoCo report exists, so it should be added to parsers
+     */
+    @Test
+    void createJaCoCoParserForIntegrationTestReport() throws IOException {
+        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        Files.createFile(jacocoItDir.resolve("jacoco.xml"));
+        final var parsers = this.createCoverageParsersFactory().createParsers();
+        Assertions.assertEquals(1, parsers.size());
+        Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
+    }
+
+    /*
+     * In this test, both the unit test and integration test JaCoCo reports exist, so both should be added to parsers
+     */
+    @Test
+    void createJaCoCoParserForUnitTestAndIntegrationTestReports() throws IOException {
+        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        Files.createFile(jacocoDir.resolve("jacoco.xml"));
+
+        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        Files.createFile(jacocoItDir.resolve("jacoco.xml"));
+
+        final var parsers = this.createCoverageParsersFactory().createParsers();
+        Assertions.assertEquals(2, parsers.size());
+        Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
+        Assertions.assertEquals(JaCoCoParser.class, parsers.get(1).getClass());
+    }
+
+    /*
+     * In this test, even though all JaCoCo reports exist, only the merged report should be added to parsers
+     */
+    @Test
+    void createJaCoCoParserForMergedReport() throws IOException {
+        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        Files.createFile(jacocoDir.resolve("jacoco.xml"));
+
+        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        Files.createFile(jacocoItDir.resolve("jacoco.xml"));
+
+        final var jacocoMergedDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_MERGED_DIRECTORY));
+        Files.createFile(jacocoMergedDir.resolve("jacoco.xml"));
+
         final var parsers = this.createCoverageParsersFactory().createParsers();
         Assertions.assertEquals(1, parsers.size());
         Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
@@ -176,20 +226,49 @@ class CoverageParsersFactoryTest {
         Assertions.assertEquals(CloverParser.class, parsers.get(0).getClass());
     }
 
-    /**
-     * With jacoco report.
-     *
-     * @throws IOException
-     *             Signals that an I/O exception has occurred.
+    /*
+     * Simulate the "jacocoAggregateReport" property being set on the mojo.
      */
     @Test
-    void withJaCoCoReport() throws IOException {
-        final var jacocoFile = Files.createFile(this.reportingDir.resolve("jacoco-report.xml")).toFile();
-        jacocoFile.createNewFile();
-        final var factory = this.createCoverageParsersFactory().withJaCoCoReports(Arrays.asList(jacocoFile));
+    void withJacocoAggregateReportParam() throws IOException {
+        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        Files.createFile(jacocoDir.resolve("jacoco.xml"));
+        final var jacocoItDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_IT_DIRECTORY));
+        Files.createFile(jacocoItDir.resolve("jacoco.xml"));
+
+        final var jacocoAggregateDir = Files.createDirectory(this.reportingDir.resolve("my-aggregate-dir"));
+        final var jacocoAggregateReport = Files.createFile(jacocoAggregateDir.resolve("jacoco.xml")).toFile();
+        jacocoAggregateReport.createNewFile();
+
+        final var factory = this.createCoverageParsersFactory().withJacocoAggregateReport(jacocoAggregateReport);
+
         final var parsers = factory.createParsers();
         Assertions.assertEquals(1, parsers.size());
         Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
+        parsers.get(0).getCoverageFile().getPath().contains("my-aggregate-dir/jacoco.xml");
+    }
+
+    /*
+     * Simulate the "jacocoReports" property being set on the mojo. This field adds reports to other that get detected,
+     * so by having the default "jacoco.xml" in place, there should be two parsers
+     */
+    @Test
+    void withJacocoReportsParam() throws IOException {
+        final var jacocoDir = Files.createDirectory(this.reportingDir.resolve(DEFAULT_JACOCO_DIRECTORY));
+        Files.createFile(jacocoDir.resolve("jacoco.xml"));
+
+        final var customJacocoFile = Files.createFile(this.reportingDir.resolve("custom-jacoco-report.xml")).toFile();
+        customJacocoFile.createNewFile();
+
+        final var factory = this.createCoverageParsersFactory().withJaCoCoReports(Arrays.asList(customJacocoFile));
+
+        final var parsers = factory.createParsers();
+        Assertions.assertEquals(2, parsers.size());
+        Assertions.assertTrue(parsers.stream().allMatch(p -> p.getClass() == JaCoCoParser.class));
+        Assertions.assertTrue(parsers.stream().map(CoverageParser::getCoverageFile).map(File::getPath)
+                .anyMatch(p -> p.contains("jacoco.xml")));
+        Assertions.assertTrue(parsers.stream().map(CoverageParser::getCoverageFile).map(File::getPath)
+                .anyMatch(p -> p.contains("custom-jacoco-report.xml")));
     }
 
     /**

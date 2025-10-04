@@ -72,7 +72,41 @@ import org.eluder.coveralls.maven.plugin.util.TimestampParser;
 public class CoverallsReportMojo extends AbstractMojo {
 
     /**
+     * <p>
+     * In a Maven Multi-Module project, it's common to configure JaCoCo with a Maven project that's used for aggregating
+     * all JaCoCo reports into a single location. In this circumstance use the "jacocoAggregateReport" property so that
+     * only this location is used for coverage rather than looking for JaCoCo reports in each Maven project.
+     * </p>
+     *
+     * @since 5.0.0
+     */
+    @Parameter(property = "jacocoAggregateReport")
+    private File jacocoAggregateReport;
+
+    /**
      * File paths to additional JaCoCo coverage report files.
+     * <p>
+     * By default, this plugin will look for a files in the standard JaCoCo locations. If a merged report is found in
+     *
+     * <pre>
+     * ${project.reporting.outputDirectory}/jacoco-merged-report/jacoco.xml
+     * </pre>
+     *
+     * then it will be used. Otherwise, the plugin will fallback to looking for files in both
+     *
+     * <pre>
+     * ${project.reporting.outputDirectory}/jacoco/jacoco.xml
+     * </pre>
+     *
+     * and
+     *
+     * <pre>
+     * ${project.reporting.outputDirectory}/jacoco-it/jacoco.xml
+     * </pre>
+     * </p>
+     * <p>
+     * If the "jacocoAggregateReport" property is set then this property will be ignored
+     * </p>
      */
     @Parameter(property = "jacocoReports")
     private List<File> jacocoReports;

@@ -47,11 +47,14 @@ public class CoverageParsersFactory {
     /** The Constant JACOCO_FILE. */
     private static final String JACOCO_FILE = "jacoco.xml";
 
-    /** The Constant JACOCO_DIRECTORY. */
-    private static final String JACOCO_DIRECTORY = "jacoco";
+    /** The Constant DEFAULT_JACOCO_DIRECTORY. */
+    static final String DEFAULT_JACOCO_DIRECTORY = "jacoco";
 
-    /** The Constant JACOCO_IT_DIRECTORY. */
-    private static final String JACOCO_IT_DIRECTORY = "jacoco-it";
+    /** The Constant DEFAULT_JACOCO_IT_DIRECTORY. */
+    static final String DEFAULT_JACOCO_IT_DIRECTORY = "jacoco-it";
+
+    /** The Constant DEFAULT_JACOCO_MERGED_DIRECTORY. */
+    static final String DEFAULT_JACOCO_MERGED_DIRECTORY = "jacoco-merged-report";
 
     /** The Constant COBERTURA_FILE. */
     private static final String COBERTURA_FILE = "coverage.xml";
@@ -77,7 +80,16 @@ public class CoverageParsersFactory {
     /** The source loader. */
     private final SourceLoader sourceLoader;
 
-    /** The jacoco reports. */
+    /**
+     * This new property can be used in a Maven Multi-Module project that has a JaCoCo aggregate project
+     *
+     * @since 5.0.0
+     */
+    private File jacocoAggregateReport;
+
+    /**
+     * The jacoco reports option is used to add additional paths. By default the plugin already looks in standard locations
+     */
     private List<File> jacocoReports;
 
     /** The cobertura reports. */
@@ -106,7 +118,29 @@ public class CoverageParsersFactory {
     }
 
     /**
+     * With JaCoCo aggregate report
+     * <p>
+     * This new property is for Maven multi-module projects
+     * </p>
+     *
+     * @param jacocoAggregateReport
+     *            A single JaCoCo report file in an aggregated report
+     *
+     * @return the coverage parsers factory
+     *
+     * @since 5.0.0
+     */
+    public CoverageParsersFactory withJacocoAggregateReport(final File jacocoAggregateReport) {
+        this.jacocoAggregateReport = jacocoAggregateReport;
+        return this;
+    }
+
+    /**
      * With jacoco reports.
+     * <p>
+     * For Maven multi-module projects, configure an aggregate project and use
+     * {@link CoverageParsersFactory#withJacocoAggregateReport}
+     * </p>
      *
      * @param jacocoReports
      *            the jacoco reports
@@ -182,7 +216,9 @@ public class CoverageParsersFactory {
         final List<CoverageParser> parsers = new ArrayList<>();
         final var projects = new MavenProjectCollector(this.project).collect();
 
-        final var jacocoFiles = ExistingFiles.create(this.jacocoReports);
+        final var jacocoFiles = this.jacocoAggregateReport != null
+                ? ExistingFiles.create(List.of(this.jacocoAggregateReport))
+                : ExistingFiles.create(this.jacocoReports);
         final var coberturaFiles = ExistingFiles.create(this.coberturaReports);
         final var sagaFiles = ExistingFiles.create(this.sagaReports);
         final var cloverFiles = ExistingFiles.create(this.cloverReports);
@@ -190,10 +226,25 @@ public class CoverageParsersFactory {
             final var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
             final var buildDirectory = Path.of(p.getBuild().getDirectory());
 
-            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_DIRECTORY)
-                    .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
-            jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.JACOCO_IT_DIRECTORY)
-                    .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+            final File jacocoMergedReport = reportingDirectory
+                    .resolve(CoverageParsersFactory.DEFAULT_JACOCO_MERGED_DIRECTORY)
+                    .resolve(CoverageParsersFactory.JACOCO_FILE).toFile();
+
+            // If a JaCoCo merged report exists there is no need to individually add reports for unit tests and IT.
+            // Note that in a Maven multi-module project JaCoCo can also be configured to aggregate all reports to a
+            // single module. In which case there is no need to gather reports from individual Maven projects
+            // as it's already done. Therefore, we only need to add to jacocoFiles if jacocoAggregateReport is null.
+            if (this.jacocoAggregateReport == null) {
+                if (jacocoMergedReport.exists() && jacocoMergedReport.canRead()) {
+                    jacocoFiles.add(jacocoMergedReport);
+                } else {
+                    jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY)
+                            .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+                    jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY)
+                            .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+                }
+            }
+
             coberturaFiles.add(reportingDirectory.resolve(CoverageParsersFactory.COBERTURA_DIRECTORY)
                     .resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
             sagaFiles.add(buildDirectory.resolve(CoverageParsersFactory.SAGA_DIRECTORY)
