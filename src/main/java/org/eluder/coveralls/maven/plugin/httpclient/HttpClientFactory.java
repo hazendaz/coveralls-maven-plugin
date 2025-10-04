@@ -47,13 +47,15 @@ class HttpClientFactory {
     /** The target url. */
     private final String targetUrl;
 
+    /** The hcb. */
     private final HttpClient.Builder hcb = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1)
-            .followRedirects(HttpClient.Redirect.ALWAYS).connectTimeout(DEFAULT_CONNECTION_TIMEOUT);
+            .followRedirects(HttpClient.Redirect.ALWAYS).connectTimeout(HttpClientFactory.DEFAULT_CONNECTION_TIMEOUT);
 
     /**
      * Instantiates a new http client factory.
      *
-     * @param targetUrl the target url for the coveralls API
+     * @param targetUrl
+     *            the target url for the coveralls API
      */
     HttpClientFactory(final String targetUrl) {
         this.targetUrl = targetUrl;
@@ -68,8 +70,8 @@ class HttpClientFactory {
      * @return the http client factory
      */
     public HttpClientFactory proxy(final Proxy proxy) {
-        if (proxy != null && isProxied(targetUrl, proxy)) {
-            hcb.proxy(ProxySelector.of(new InetSocketAddress(proxy.getHost(), proxy.getPort())));
+        if (proxy != null && this.isProxied(this.targetUrl, proxy)) {
+            this.hcb.proxy(ProxySelector.of(new InetSocketAddress(proxy.getHost(), proxy.getPort())));
 
             if (StringUtils.isNotBlank(proxy.getUsername())) {
                 final Authenticator authenticator = new Authenticator() {
@@ -78,19 +80,19 @@ class HttpClientFactory {
                         return new PasswordAuthentication(proxy.getUsername(), proxy.getPassword().toCharArray());
                     }
                 };
-                hcb.authenticator(authenticator);
+                this.hcb.authenticator(authenticator);
             }
         }
         return this;
     }
 
     /**
-     * Creates a new instance of HttpClient
+     * Creates a new instance of HttpClient.
      *
      * @return a new instance of HttpClient
      */
     public HttpClient create() {
-        return hcb.build();
+        return this.hcb.build();
     }
 
     /**
@@ -105,8 +107,8 @@ class HttpClientFactory {
      */
     private boolean isProxied(final String url, final Proxy proxy) {
         if (StringUtils.isNotBlank(proxy.getNonProxyHosts())) {
-            final String host = UrlUtils.create(url).getHost();
-            final String[] excludes = proxy.getNonProxyHosts().split("\\|", -1);
+            final var host = UrlUtils.create(url).getHost();
+            final var excludes = proxy.getNonProxyHosts().split("\\|", -1);
             for (final String exclude : excludes) {
                 if (exclude != null && !exclude.isBlank() && Wildcards.matches(host, exclude.trim())) {
                     return false;

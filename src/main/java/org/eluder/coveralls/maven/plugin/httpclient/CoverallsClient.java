@@ -26,14 +26,17 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.Provider;
 import java.security.Security;
 import java.time.Duration;
@@ -56,20 +59,32 @@ public class CoverallsClient {
         }
     }
 
+    /** The Constant DEFAULT_SOCKET_TIMEOUT. */
     private static final Duration DEFAULT_SOCKET_TIMEOUT = Duration.ofSeconds(60);
     /** The Constant FILE_NAME. */
     private static final String FILE_NAME = "coveralls.json";
+
+    /** The Constant USER_AGENT_STRING. */
     private static final String USER_AGENT_STRING = "coveralls-maven-plugin";
 
     /** The coveralls url. */
     private final String coverallsUrl;
+
+    /** The http client. */
     private final HttpClient httpClient;
+
+    /** The object mapper. */
     private final ObjectMapper objectMapper;
 
     /**
      * Instantiates a new Coveralls Client.
      *
-     * @param coverallsUrl The base url for the Coveralls API. This should generally be set to <pre>https://coveralls.io/api/v1/jobs</pre>
+     * @param coverallsUrl
+     *            The base url for the Coveralls API. This should generally be set to
+     *
+     *            <pre>
+     * https://coveralls.io/api/v1/jobs
+     *            </pre>
      */
     public CoverallsClient(final String coverallsUrl) {
         this(coverallsUrl, new HttpClientFactory(coverallsUrl).create(), new ObjectMapper());
@@ -78,9 +93,17 @@ public class CoverallsClient {
     /**
      * Instantiates a new Coveralls Client.
      *
-     * @param coverallsUrl The base url for the Coveralls API. This should generally be set to <pre>https://coveralls.io/api/v1/jobs</pre>
-     * @param httpClient An implementation of {@link HttpClient}
-     * @param objectMapper A Jackson {@link ObjectMapper}
+     * @param coverallsUrl
+     *            The base url for the Coveralls API. This should generally be set to
+     *
+     *            <pre>
+     * https://coveralls.io/api/v1/jobs
+     *            </pre>
+     *
+     * @param httpClient
+     *            An implementation of {@link HttpClient}
+     * @param objectMapper
+     *            A Jackson {@link ObjectMapper}
      */
     public CoverallsClient(final String coverallsUrl, final HttpClient httpClient, final ObjectMapper objectMapper) {
         this.coverallsUrl = coverallsUrl;
@@ -89,52 +112,82 @@ public class CoverallsClient {
     }
 
     /**
-     * Submit a coveralls json file to the API
+     * Submit a coveralls json file to the API.
      *
-     * @param file A coveralls report that can be submitted to the jobs API
+     * @param file
+     *            A coveralls report that can be submitted to the jobs API
      *
      * @return An API response body deserialized to a {@link CoverallsResponse}
      *
-     * @throws ProcessingException the processing exception
-     * @throws IOException Signals that an I/O exception has occurred.
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
      */
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException, InterruptedException {
-        final Path filePath = file.toPath();
+        final var filePath = file.toPath();
 
         final Iterable<byte[]> multipartData = List.of("--boundary\r\n".getBytes(),
-                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(), FILE_NAME.getBytes(),
+                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(),
+                CoverallsClient.FILE_NAME.getBytes(),
                 "\"\r\nContent-Type: application/octet-stream;charset=UTF-8\r\n\r\n".getBytes(),
                 Files.readAllBytes(filePath), "\r\n--boundary--\r\n".getBytes());
 
-        final HttpRequest request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
-                .uri(URI.create(coverallsUrl)).timeout(DEFAULT_SOCKET_TIMEOUT).header("User-Agent", USER_AGENT_STRING)
+        final var request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
+                .uri(URI.create(this.coverallsUrl)).timeout(CoverallsClient.DEFAULT_SOCKET_TIMEOUT)
+                .header("User-Agent", CoverallsClient.USER_AGENT_STRING)
                 .POST(HttpRequest.BodyPublishers.ofByteArrays(multipartData)).build();
 
-        final HttpResponse<InputStream> response = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
-        return parseResponse(response);
+        final HttpResponse<InputStream> response = this.httpClient.send(request,
+                HttpResponse.BodyHandlers.ofInputStream());
+        return this.parseResponse(response);
     }
 
+    /**
+     * Parses the response.
+     *
+     * @param response
+     *            the response
+     *
+     * @return the coveralls response
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private CoverallsResponse parseResponse(final HttpResponse<InputStream> response)
             throws ProcessingException, IOException {
         if (response.statusCode() >= 500) {
-            throw new IOException(getResponseErrorMessage(response, "Coveralls API internal error"));
+            throw new IOException(this.getResponseErrorMessage(response, "Coveralls API internal error"));
         }
 
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(response.body(), StandardCharsets.UTF_8))) {
-            CoverallsResponse cr = objectMapper.readValue(reader, CoverallsResponse.class);
+        try (var reader = new BufferedReader(new InputStreamReader(response.body(), StandardCharsets.UTF_8))) {
+            final var cr = this.objectMapper.readValue(reader, CoverallsResponse.class);
             if (cr.isError()) {
-                throw new ProcessingException(getResponseErrorMessage(response, cr.getMessage()));
+                throw new ProcessingException(this.getResponseErrorMessage(response, cr.getMessage()));
             }
             return cr;
         } catch (final IOException ex) {
-            throw new ProcessingException(getResponseErrorMessage(response, ex.getMessage()), ex);
+            throw new ProcessingException(this.getResponseErrorMessage(response, ex.getMessage()), ex);
         }
     }
 
+    /**
+     * Gets the response error message.
+     *
+     * @param response
+     *            the response
+     * @param message
+     *            the message
+     *
+     * @return the response error message
+     */
     private String getResponseErrorMessage(final HttpResponse<InputStream> response, final String message) {
-        final StringBuilder errorMessage = new StringBuilder(
-                "Report submission to Coveralls API failed with HTTP status ").append(response.statusCode());
+        final var errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
+                .append(response.statusCode());
         if (StringUtils.isNotBlank(message)) {
             errorMessage.append(": ").append(message);
         }

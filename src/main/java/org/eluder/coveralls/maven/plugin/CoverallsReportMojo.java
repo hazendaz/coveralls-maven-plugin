@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -39,8 +38,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
-import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
-import org.eluder.coveralls.maven.plugin.domain.Git;
 import org.eluder.coveralls.maven.plugin.domain.GitRepository;
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.httpclient.CoverallsClient;
@@ -370,7 +367,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * @return list of available continuous integration services
      */
     protected List<ServiceSetup> getServices() {
-        final Map<String, String> env = System.getenv();
+        final var env = System.getenv();
         final List<ServiceSetup> services = new ArrayList<>();
         services.add(new GitHub(env));
         services.add(new Shippable(env));
@@ -395,8 +392,8 @@ public class CoverallsReportMojo extends AbstractMojo {
      *             if an I/O error occurs
      */
     protected Job createJob() throws ProcessingException, IOException {
-        final Git git = new GitRepository(this.basedir).load();
-        final Long time = this.timestamp == null ? null
+        final var git = new GitRepository(this.basedir).load();
+        final var time = this.timestamp == null ? null
                 : new TimestampParser(this.timestampFormat).parse(this.timestamp).toEpochMilli();
 
         // Log all non-secret items for debugging and transparency
@@ -459,7 +456,7 @@ public class CoverallsReportMojo extends AbstractMojo {
     protected SourceCallback createSourceCallbackChain(final JsonWriter writer, final List<Logger> reporters) {
         SourceCallback chain = writer;
         if (this.getLog().isInfoEnabled()) {
-            final CoverageTracingLogger coverageTracingReporter = new CoverageTracingLogger(chain);
+            final var coverageTracingReporter = new CoverageTracingLogger(chain);
             chain = coverageTracingReporter;
             reporters.add(coverageTracingReporter);
         }
@@ -491,7 +488,7 @@ public class CoverallsReportMojo extends AbstractMojo {
             parser.parse(sourceCallback);
         }
         sourceCallback.onComplete();
-        final long duration = System.currentTimeMillis() - now;
+        final var duration = System.currentTimeMillis() - now;
         this.getLog().info("Successfully wrote Coveralls data in " + duration + "ms");
     }
 
@@ -511,26 +508,27 @@ public class CoverallsReportMojo extends AbstractMojo {
     private void submitData(final CoverallsClient client, final File coverallsFile)
             throws ProcessingException, IOException {
         this.getLog().info("Submitting Coveralls data to API");
-        final long now = System.currentTimeMillis();
+        final var now = System.currentTimeMillis();
         try {
-            final CoverallsResponse response = client.submit(coverallsFile);
-            final long duration = System.currentTimeMillis() - now;
-            getLog().info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
-            getLog().info(response.getUrl());
-            getLog().info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
-            getLog().info("    If you see question marks in the report, please be patient");
-        } catch (ProcessingException ex) {
-            final long duration = System.currentTimeMillis() - now;
-            final String message = "Submission failed in " + duration + "ms while processing data";
-            handleSubmissionError(ex, message, true);
-        } catch (IOException ex) {
-            final long duration = System.currentTimeMillis() - now;
-            final String message = "Submission failed in " + duration + "ms while handling I/O operations";
-            handleSubmissionError(ex, message, failOnServiceError);
-        } catch (InterruptedException ex) {
-            final long duration = System.currentTimeMillis() - now;
-            final String message = "Submission failed in " + duration + "ms due to an interuption";
-            getLog().error(message, ex);
+            final var response = client.submit(coverallsFile);
+            final var duration = System.currentTimeMillis() - now;
+            this.getLog()
+                    .info("Successfully submitted Coveralls data in " + duration + "ms for " + response.getMessage());
+            this.getLog().info(response.getUrl());
+            this.getLog().info("*** It might take hours for Coveralls to update the actual coverage numbers for a job");
+            this.getLog().info("    If you see question marks in the report, please be patient");
+        } catch (final ProcessingException ex) {
+            final var duration = System.currentTimeMillis() - now;
+            final var message = "Submission failed in " + duration + "ms while processing data";
+            this.handleSubmissionError(ex, message, true);
+        } catch (final IOException ex) {
+            final var duration = System.currentTimeMillis() - now;
+            final var message = "Submission failed in " + duration + "ms while handling I/O operations";
+            this.handleSubmissionError(ex, message, this.failOnServiceError);
+        } catch (final InterruptedException ex) {
+            final var duration = System.currentTimeMillis() - now;
+            final var message = "Submission failed in " + duration + "ms due to an interuption";
+            this.getLog().error(message, ex);
         }
     }
 
