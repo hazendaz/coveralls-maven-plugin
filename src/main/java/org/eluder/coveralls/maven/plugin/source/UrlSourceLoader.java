@@ -60,7 +60,7 @@ public class UrlSourceLoader extends AbstractSourceLoader {
         // Checkstyle OFF: EmptyBlock
         try {
             return url.openStream();
-        } catch (final IOException ex) {
+        } catch (final IOException e) {
             // not found from url
         }
         // Checkstyle ON: EmptyBlock

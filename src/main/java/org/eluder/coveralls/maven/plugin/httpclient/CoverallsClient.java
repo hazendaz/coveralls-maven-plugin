@@ -133,8 +133,8 @@ public class CoverallsClient {
                             SubmitResult.ErrorType.PROCESSING);
                 }
                 return new SubmitResult(cr);
-            } catch (final JsonProcessingException ex) {
-                return new SubmitResult(this.getResponseErrorMessage(response, ex.getMessage()), ex,
+            } catch (final JsonProcessingException e) {
+                return new SubmitResult(this.getResponseErrorMessage(response, e.getMessage()), e,
                         SubmitResult.ErrorType.PROCESSING);
             }
         });

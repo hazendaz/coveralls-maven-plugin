@@ -64,8 +64,8 @@ public class TimestampParser {
             } else {
                 this.parser = new DateTimeFormatterParser(TimestampParser.DEFAULT_FORMAT);
             }
-        } catch (final IllegalArgumentException ex) {
-            throw new IllegalArgumentException("Invalid timestamp format \"" + format + "\"", ex);
+        } catch (final IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid timestamp format \"" + format + "\"", e);
         }
     }
 
@@ -86,8 +86,8 @@ public class TimestampParser {
         }
         try {
             return this.parser.parse(timestamp);
-        } catch (final Exception ex) {
-            throw new ProcessingException("Unable to parse timestamp \"" + timestamp + "\"", ex);
+        } catch (final Exception e) {
+            throw new ProcessingException("Unable to parse timestamp \"" + timestamp + "\"", e);
         }
     }
 
