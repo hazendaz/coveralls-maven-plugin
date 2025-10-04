@@ -174,7 +174,7 @@ class HttpClientFactoryTest {
         proxy.setNonProxyHosts("localhost|example.com");
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
-        final HttpResponse<String> response = client.send(
+        final var response = client.send(
                 HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
                 HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
 
