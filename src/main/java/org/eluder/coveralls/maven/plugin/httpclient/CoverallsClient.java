@@ -27,6 +27,7 @@ package org.eluder.coveralls.maven.plugin.httpclient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +41,6 @@ import java.nio.file.Files;
 import java.security.Provider;
 import java.security.Security;
 import java.time.Duration;
-import java.util.List;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
@@ -129,16 +129,26 @@ public class CoverallsClient {
     public CoverallsResponse submit(final File file) throws ProcessingException, IOException, InterruptedException {
         final var filePath = file.toPath();
 
-        final Iterable<byte[]> multipartData = List.of("--boundary\r\n".getBytes(),
-                "Content-Disposition: form-data; name=\"json_file\"; filename=\"".getBytes(),
-                CoverallsClient.FILE_NAME.getBytes(),
-                "\"\r\nContent-Type: application/json;charset=UTF-8\r\n\r\n".getBytes(), Files.readAllBytes(filePath),
-                "\r\n--boundary--\r\n".getBytes());
+        // Generate a unique boundary
+        final String boundary = "----CoverallsBoundary" + System.currentTimeMillis();
+        final String CRLF = "\r\n";
+
+        // Build multipart body
+        var byteStream = new ByteArrayOutputStream();
+        byteStream.write(("--" + boundary + CRLF).getBytes(StandardCharsets.UTF_8));
+        byteStream.write(("Content-Disposition: form-data; name=\"json_file\"; filename=\"" + FILE_NAME + "\"" + CRLF)
+                .getBytes(StandardCharsets.UTF_8));
+        byteStream
+                .write(("Content-Type: application/json;charset=UTF-8" + CRLF + CRLF).getBytes(StandardCharsets.UTF_8));
+        byteStream.write(Files.readAllBytes(filePath));
+        byteStream.write((CRLF + "--" + boundary + "--" + CRLF).getBytes(StandardCharsets.UTF_8));
+        byte[] multipartBody = byteStream.toByteArray();
 
         final var request = HttpRequest.newBuilder().version(HttpClient.Version.HTTP_1_1)
                 .uri(URI.create(this.coverallsUrl)).timeout(CoverallsClient.DEFAULT_SOCKET_TIMEOUT)
                 .header("User-Agent", CoverallsClient.USER_AGENT_STRING)
-                .POST(HttpRequest.BodyPublishers.ofByteArrays(multipartData)).build();
+                .header("Content-Type", "multipart/form-data; boundary=" + boundary)
+                .POST(HttpRequest.BodyPublishers.ofByteArray(multipartBody)).build();
 
         final HttpResponse<InputStream> response = this.httpClient.send(request,
                 HttpResponse.BodyHandlers.ofInputStream());
