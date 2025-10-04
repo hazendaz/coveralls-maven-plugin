@@ -38,7 +38,14 @@ import org.eluder.coveralls.maven.plugin.CoverageParser;
 public class ExistingFiles implements Iterable<File> {
 
     /** The delegate. */
-    private final ArrayList<File> delegate = new ArrayList<>();
+    private final List<File> delegate = new ArrayList<>();
+
+    /**
+     * Instantiates a new existing files.
+     */
+    public ExistingFiles() {
+        // do nothing
+    }
 
     /**
      * Adds the all.

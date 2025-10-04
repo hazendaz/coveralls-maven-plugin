@@ -44,7 +44,7 @@ public abstract class ChainingSourceCallback implements SourceCallback {
      * @param chained
      *            the chained
      */
-    public ChainingSourceCallback(final SourceCallback chained) {
+    protected ChainingSourceCallback(final SourceCallback chained) {
         if (chained == null) {
             throw new IllegalArgumentException("chained must be defined");
         }

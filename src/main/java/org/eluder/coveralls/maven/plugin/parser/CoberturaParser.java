@@ -37,7 +37,10 @@ import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
 /**
  * The Class CoberturaParser.
+ *
+ * @deprecated As Cobertura is no longer maintained, this parser may be dropped in a future release.
  */
+@Deprecated(since = "5.0.0")
 public class CoberturaParser extends AbstractXmlEventParser {
 
     /** The source. */
@@ -72,17 +75,11 @@ public class CoberturaParser extends AbstractXmlEventParser {
                 this.source.setClassifier(className.substring(classifierPosition + 1));
             }
             this.branchId = 0;
-        } else
-
-        if (this.isStartElement(xml, "methods") && this.source != null) {
+        } else if (this.isStartElement(xml, "methods") && this.source != null) {
             this.inMethods = true;
-        } else
-
-        if (this.isEndElement(xml, "methods") && this.source != null) {
+        } else if (this.isEndElement(xml, "methods") && this.source != null) {
             this.inMethods = false;
-        } else
-
-        if (this.isStartElement(xml, "line") && !this.inMethods && this.source != null) {
+        } else if (this.isStartElement(xml, "line") && !this.inMethods && this.source != null) {
             final var nr = Integer.parseInt(xml.getAttributeValue(null, "number"));
             this.source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, "hits")));
             if (Boolean.parseBoolean(xml.getAttributeValue(null, "branch"))) {

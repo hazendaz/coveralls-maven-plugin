@@ -25,7 +25,6 @@
 package org.eluder.coveralls.maven.plugin;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -121,7 +120,7 @@ class CoverallsReportMojoTest {
     Settings settingsMock;
 
     /**
-     * Inits the.
+     * Inits the Coverage Report Mojo.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
@@ -218,7 +217,7 @@ class CoverallsReportMojoTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    void testCreateSourceLoader() throws IOException {
+    void createSourceLoader() throws IOException {
         final var gitMock = Mockito.mock(Git.class);
         final var git = Files.createDirectory(this.folder.resolve("git"));
         Mockito.when(gitMock.getBaseDir()).thenReturn(git.toFile());
@@ -378,12 +377,12 @@ class CoverallsReportMojoTest {
      *             the mojo failure exception
      */
     @Test
-    void iOExceptionWithAllowedServiceFailure() throws ProcessingException, IOException, MojoExecutionException,
-            MojoFailureException, InterruptedException {
-        mojo.failOnServiceError = false;
-        Mockito.when(coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
-        mojo.execute();
-        Mockito.verify(logMock).warn(ArgumentMatchers.anyString());
+    void ioExceptionWithAllowedServiceFailure()
+            throws ProcessingException, IOException, MojoExecutionException, MojoFailureException, InterruptedException {
+        this.mojo.failOnServiceError = false;
+        Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());
+        this.mojo.execute();
+        Mockito.verify(this.logMock).warn(ArgumentMatchers.anyString());
     }
 
     /**
@@ -442,8 +441,6 @@ class CoverallsReportMojoTest {
      *
      * @return the string
      *
-     * @throws FileNotFoundException
-     *             the file not found exception
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */

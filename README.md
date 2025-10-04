@@ -28,8 +28,8 @@ To run
 ### Features
 
 * Supports
-  [Cobertura](https://www.mojohaus.org/cobertura-maven-plugin/),
   [JaCoCo](https://www.eclemma.org/jacoco/trunk/doc/maven.html),
+  [Cobertura](https://www.mojohaus.org/cobertura-maven-plugin/)*, 
   [Saga](https://timurstrekalov.github.io/saga/), and
   [Clover](https://openclover.org/) coverage tools
 * Multi-module report aggregation
@@ -42,6 +42,7 @@ To run
 * Convention over configuration for almost zero configuration usage
 * Applies [semantic versioning](https://semver.org/)
 
+_*Note that Cobertura and the related Maven plugin have not had updates in 10 years and should be considered deprecated_
 
 ### Usage
 
@@ -108,6 +109,7 @@ after_success:
   - mvn clean cobertura:cobertura coveralls:report
 ```
 
+Cobertura use is not recommended as the project has not seen a new release since 2015
 
 #### JaCoCo
 

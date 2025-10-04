@@ -72,6 +72,8 @@ public class GitRepository {
 
     /**
      * Gets the head.
+     * <p>
+     * Resource is closed in load().
      *
      * @param repository
      *            the repository
@@ -81,11 +83,13 @@ public class GitRepository {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    // Resource is closed in load()
     @SuppressWarnings("resource")
     private Git.Head getHead(final Repository repository) throws IOException {
         final var revision = repository.resolve(Constants.HEAD);
         final var commit = new RevWalk(repository).parseCommit(revision);
+        if (revision == null) {
+            throw new IllegalStateException("Cannot resolve HEAD");
+        }
         return new Git.Head(revision.getName(), commit.getAuthorIdent().getName(),
                 commit.getAuthorIdent().getEmailAddress(), commit.getCommitterIdent().getName(),
                 commit.getCommitterIdent().getEmailAddress(), commit.getFullMessage());

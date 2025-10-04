@@ -66,6 +66,12 @@ class CoverallsClientTest {
 
     private File file;
 
+    /**
+     * Inits the Coveralls Client.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     @BeforeEach
     void init() throws IOException {
         this.file = Files.createFile(this.folder.resolve("coverallsClientTest.tmp")).toFile();
@@ -78,8 +84,8 @@ class CoverallsClientTest {
     }
 
     @Test
-    void testSubmit() throws Exception {
-        Mockito.when(httpClientMock.send(
+    void submit() throws Exception {
+        Mockito.when(this.httpClientMock.send(
                     ArgumentMatchers.any(HttpRequest.class),
                     ArgumentMatchers.any(HttpResponse.BodyHandler.class)
                 ))

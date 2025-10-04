@@ -57,7 +57,7 @@ class ValidationErrorTest {
      * Test to string.
      */
     @Test
-    void testToString() {
+    void toStringVerification() {
         final var error = new ValidationError(Level.WARN, "message");
         Assertions.assertEquals("WARN: message", error.toString());
     }

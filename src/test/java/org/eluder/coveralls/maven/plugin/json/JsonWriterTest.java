@@ -67,7 +67,7 @@ class JsonWriterTest {
     File file;
 
     /**
-     * Inits the.
+     * Inits the Json Writer.
      */
     @BeforeEach
     void init() {
@@ -96,7 +96,7 @@ class JsonWriterTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    void testGetJob() throws IOException {
+    void jobGet() throws IOException {
         final var job = this.job();
         try (var writer = new JsonWriter(job, this.file)) {
             Assertions.assertSame(job, writer.getJob());
@@ -110,7 +110,7 @@ class JsonWriterTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    void testGetCoverallsFile() throws IOException {
+    void coverallsFile() throws IOException {
         final var job = this.job();
         try (var writer = new JsonWriter(job, this.file)) {
             Assertions.assertSame(this.file, writer.getCoverallsFile());
@@ -160,7 +160,7 @@ class JsonWriterTest {
      *             the processing exception
      */
     @Test
-    void testOnSource() throws IOException, ProcessingException {
+    void onSource() throws IOException, ProcessingException {
         try (var writer = new JsonWriter(this.job(), this.file)) {
             writer.onBegin();
             writer.onSource(this.source());

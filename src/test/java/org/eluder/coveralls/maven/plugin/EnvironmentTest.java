@@ -62,7 +62,7 @@ class EnvironmentTest {
     ServiceSetup serviceMock;
 
     /**
-     * Inits the.
+     * Inits the Environment.
      */
     @BeforeEach
     void init() {

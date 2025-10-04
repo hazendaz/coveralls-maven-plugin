@@ -31,13 +31,23 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
 /**
  * The Class SagaParser.
  */
-public class SagaParser extends CoberturaParser {
+public class SagaParser extends AbstractXmlEventParser {
+
+    /** The source. */
+    protected Source source;
+
+    /** The in methods. */
+    protected boolean inMethods;
+
+    /** The branch id. */
+    private int branchId;
 
     /**
      * Instantiates a new saga parser.
@@ -57,8 +67,46 @@ public class SagaParser extends CoberturaParser {
         if (this.isStartElement(xml, "class")) {
             final var name = xml.getAttributeValue(null, "name");
             this.source = this.loadSource(name);
-        } else {
-            super.onEvent(xml, callback);
+        } else if (this.isStartElement(xml, "methods") && this.source != null) {
+            this.inMethods = true;
+        } else if (this.isEndElement(xml, "methods") && this.source != null) {
+            this.inMethods = false;
+        } else if (this.isStartElement(xml, "line") && !this.inMethods && this.source != null) {
+            final var nr = Integer.parseInt(xml.getAttributeValue(null, "number"));
+            this.source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, "hits")));
+            if (Boolean.parseBoolean(xml.getAttributeValue(null, "branch"))) {
+                final var value = xml.getAttributeValue(null, "condition-coverage");
+
+                // Is "condition-coverage" attribute always here?
+                if (value == null) {
+                    return;
+                }
+
+                // C'mon Saga, human readable format for XML ?
+                final var values = value // 50% (2/4)
+                        .replace(" ", "") // 50%(2/4)
+                        .replace("%", "/") // 50/(2/4)
+                        .replace("(", "") // 50/2/4)
+                        .replace(")", "") // 50/2/4
+                        .split("/", -1);
+
+                final var cb = Integer.parseInt(values[1]);
+                final var tb = Integer.parseInt(values[2]);
+                final var mb = tb - cb;
+
+                // add branches. unfortunately, there is NO block number and
+                // branch number will NOT be unique between coverage changes.
+                for (var b = 0; b < cb; b++) {
+                    this.source.addBranchCoverage(nr, 0, this.branchId++, 1);
+                }
+                for (var b = 0; b < mb; b++) {
+                    this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
+                }
+            }
+        } else if (this.isEndElement(xml, "class") && this.source != null) {
+            callback.onSource(this.source);
+            this.source = null;
         }
     }
+
 }

@@ -22,41 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.eluder.coveralls.maven.plugin.domain;
-
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
-
-import org.eluder.coveralls.maven.plugin.domain.Git.Head;
-import org.eluder.coveralls.maven.plugin.domain.Git.Remote;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 /**
- * The Class JobTest.
+ * Provides utilities for the plugin.
  */
-class JobTest {
-
-    /**
-     * Gets the branch with remote.
-     */
-    @Test
-    void branchWithRemote() {
-        final List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
-        final var git = new Git(Path.of(".").toFile(), new Head(null, null, null, null, null, null), "master", remotes);
-        final var job = new Job().withBranch("origin/master").withGit(git);
-        Assertions.assertEquals(".", git.getBaseDir().getPath());
-        Assertions.assertEquals("master", job.getBranch());
-    }
-
-    /**
-     * Test get branch.
-     */
-    @Test
-    void branch() {
-        final var job = new Job().withBranch("master");
-        Assertions.assertEquals("master", job.getBranch());
-    }
-
-}
+package org.eluder.coveralls.maven.plugin.util;

@@ -69,7 +69,7 @@ class WerckerTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("wercker", new Wercker(this.env()).getName());
     }
 
@@ -77,7 +77,7 @@ class WerckerTest {
      * Test get job id.
      */
     @Test
-    void testGetJobId() {
+    void jobId() {
         Assertions.assertEquals("123456789", new Wercker(this.env()).getJobId());
     }
 
@@ -85,7 +85,7 @@ class WerckerTest {
      * Test get build url.
      */
     @Test
-    void testGetBuildUrl() {
+    void buildUrl() {
         Assertions.assertEquals("https://app.wercker.com/build/123456789", new Wercker(this.env()).getBuildUrl());
     }
 
@@ -93,7 +93,7 @@ class WerckerTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new Wercker(this.env()).getBranch());
     }
 

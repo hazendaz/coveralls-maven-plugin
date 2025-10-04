@@ -75,7 +75,7 @@ class SourceLoaderFactoryTest {
     private Path m2Sources;
 
     /**
-     * Inits the.
+     * Inits the Source Loader Factory.
      *
      * @throws IOException
      *             Signals that an I/O exception has occurred.
@@ -100,7 +100,7 @@ class SourceLoaderFactoryTest {
      * Test create source loader.
      */
     @Test
-    void testCreateSourceLoader() {
+    void createSourceLoader() {
         final var sourceLoader = this.createSourceLoaderFactory(StandardCharsets.UTF_8).createSourceLoader();
         Assertions.assertNotNull(sourceLoader);
     }

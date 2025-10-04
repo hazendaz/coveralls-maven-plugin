@@ -68,7 +68,7 @@ class BambooTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("bamboo", new Bamboo(this.env()).getName());
     }
 
@@ -76,7 +76,7 @@ class BambooTest {
      * Test get build number.
      */
     @Test
-    void testGetBuildNumber() {
+    void buildNumber() {
         Assertions.assertEquals("build123", new Bamboo(this.env()).getBuildNumber());
     }
 
@@ -84,7 +84,7 @@ class BambooTest {
      * Test get build url.
      */
     @Test
-    void testGetBuildUrl() {
+    void buildUrl() {
         Assertions.assertEquals("https://company.com/bamboo/build123", new Bamboo(this.env()).getBuildUrl());
     }
 
@@ -92,7 +92,7 @@ class BambooTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new Bamboo(this.env()).getBranch());
     }
 

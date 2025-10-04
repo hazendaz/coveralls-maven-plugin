@@ -70,7 +70,7 @@ class GeneralTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("ci_service", new General(this.env()).getName());
     }
 
@@ -78,7 +78,7 @@ class GeneralTest {
      * Test get build number.
      */
     @Test
-    void testGetBuildNumber() {
+    void buildNumber() {
         Assertions.assertEquals("build123", new General(this.env()).getBuildNumber());
     }
 
@@ -86,7 +86,7 @@ class GeneralTest {
      * Test get build url.
      */
     @Test
-    void testGetBuildUrl() {
+    void buildUrl() {
         Assertions.assertEquals("https://ci.com/build123", new General(this.env()).getBuildUrl());
     }
 
@@ -94,7 +94,7 @@ class GeneralTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new General(this.env()).getBranch());
     }
 
@@ -102,7 +102,7 @@ class GeneralTest {
      * Test get pull request.
      */
     @Test
-    void testGetPullRequest() {
+    void pullRequest() {
         Assertions.assertEquals("pull10", new General(this.env()).getPullRequest());
     }
 

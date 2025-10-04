@@ -66,15 +66,11 @@ public class JaCoCoParser extends AbstractXmlEventParser {
             throws XMLStreamException, ProcessingException, IOException {
         if (this.isStartElement(xml, "package")) {
             this.packageName = xml.getAttributeValue(null, "name");
-        } else
-
-        if (this.isStartElement(xml, "sourcefile") && this.packageName != null) {
+        } else if (this.isStartElement(xml, "sourcefile") && this.packageName != null) {
             final var sourceFile = this.packageName + "/" + xml.getAttributeValue(null, "name");
             this.source = this.loadSource(sourceFile);
             this.branchId = 0;
-        } else
-
-        if (this.isStartElement(xml, "line") && this.source != null) {
+        } else if (this.isStartElement(xml, "line") && this.source != null) {
             final var ci = Integer.parseInt(xml.getAttributeValue(null, "ci"));
             final var cb = Integer.parseInt(xml.getAttributeValue(null, "cb"));
             final var mb = Integer.parseInt(xml.getAttributeValue(null, "mb"));
@@ -91,14 +87,10 @@ public class JaCoCoParser extends AbstractXmlEventParser {
             for (var b = 0; b < mb; b++) {
                 this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
             }
-        } else
-
-        if (this.isEndElement(xml, "sourcefile") && this.source != null) {
+        } else if (this.isEndElement(xml, "sourcefile") && this.source != null) {
             callback.onSource(this.source);
             this.source = null;
-        } else
-
-        if (this.isEndElement(xml, "package")) {
+        } else if (this.isEndElement(xml, "package")) {
             this.packageName = null;
         }
     }

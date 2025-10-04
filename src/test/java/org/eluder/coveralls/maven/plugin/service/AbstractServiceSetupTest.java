@@ -40,7 +40,7 @@ class AbstractServiceSetupTest {
      * Gets the missing property.
      */
     @Test
-    void getMissingProperty() {
+    void missingProperty() {
         final var serviceSetup = this.create(new HashMap<>());
         Assertions.assertNull(serviceSetup.getProperty("property"));
     }
@@ -49,7 +49,7 @@ class AbstractServiceSetupTest {
      * Test get property.
      */
     @Test
-    void testGetProperty() {
+    void property() {
         final Map<String, String> env = new HashMap<>();
         env.put("CI_NAME", "bamboo");
         Assertions.assertEquals("bamboo", this.create(env).getProperty("CI_NAME"));
@@ -91,7 +91,7 @@ class AbstractServiceSetupTest {
      * Gets the default values.
      */
     @Test
-    void getDefaultValues() {
+    void defaultValues() {
         final var serviceSetup = this.create(new HashMap<>());
         Assertions.assertNull(serviceSetup.getName());
         Assertions.assertNull(serviceSetup.getJobId());
@@ -107,6 +107,8 @@ class AbstractServiceSetupTest {
      *
      * @param env
      *            the env
+     *
+     * @return the abstract service setup
      */
     private AbstractServiceSetup create(final Map<String, String> env) {
         return new AbstractServiceSetup(env) {

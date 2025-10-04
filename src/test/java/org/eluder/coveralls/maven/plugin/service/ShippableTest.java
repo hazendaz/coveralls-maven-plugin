@@ -71,7 +71,7 @@ class ShippableTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("shippable", new Shippable(this.env()).getName());
     }
 
@@ -79,7 +79,7 @@ class ShippableTest {
      * Test get build number.
      */
     @Test
-    void testGetBuildNumber() {
+    void buildNumber() {
         Assertions.assertEquals("431.1", new Shippable(this.env()).getBuildNumber());
     }
 
@@ -87,7 +87,7 @@ class ShippableTest {
      * Test get build url.
      */
     @Test
-    void testGetBuildUrl() {
+    void buildUrl() {
         Assertions.assertEquals("https://app.shippable.com/builds/54de3316c44f",
                 new Shippable(this.env()).getBuildUrl());
     }
@@ -96,7 +96,7 @@ class ShippableTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new Shippable(this.env()).getBranch());
     }
 
@@ -122,7 +122,7 @@ class ShippableTest {
      * Test get environment.
      */
     @Test
-    void testGetEnvironment() {
+    void environment() {
         final var properties = new Shippable(this.env()).getEnvironment();
         Assertions.assertEquals(5, properties.size());
         Assertions.assertEquals("431.1", properties.getProperty("shippable_build_number"));

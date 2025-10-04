@@ -43,6 +43,9 @@ public final class Source implements JsonObject {
 
     /** The Constant NEWLINE. */
     private static final Pattern NEWLINE = Pattern.compile("\r\n|\r|\n");
+
+    // XXX #45: cannot use identifier due to unfetchable source files
+    // /** The Constant CLASSIFIER_SEPARATOR. */
     // private static final String CLASSIFIER_SEPARATOR = "#";
 
     /** The name. */
@@ -113,7 +116,7 @@ public final class Source implements JsonObject {
     public String getFullName() {
         return this.name;
 
-        // #45: cannot use identifier due to unfetchable source files
+        // XXX #45: cannot use identifier due to unfetchable source files
         // return (classifier == null ? name : name + CLASSIFIER_SEPARATOR + classifier);
     }
 
@@ -289,7 +292,7 @@ public final class Source implements JsonObject {
         if (!(obj instanceof Source)) {
             return false;
         }
-        Source other = (Source) obj;
+        final var other = (Source) obj;
         return Objects.equals(this.name, other.name) && Objects.equals(this.digest, other.digest)
                 && this.coverage.length == other.coverage.length;
     }

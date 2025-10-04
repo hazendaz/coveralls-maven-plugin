@@ -63,7 +63,7 @@ class DryRunLoggerTest {
      * Test get position.
      */
     @Test
-    void testGetPosition() {
+    void position() {
         Assertions.assertEquals(Position.AFTER, new DryRunLogger(true, this.coverallsFileMock).getPosition());
     }
 
