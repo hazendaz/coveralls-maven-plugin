@@ -42,7 +42,6 @@ import java.security.Security;
 import java.time.Duration;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.CoverallsResponse;
 
@@ -61,6 +60,7 @@ public class CoverallsClient {
 
     /** The Constant DEFAULT_SOCKET_TIMEOUT. */
     private static final Duration DEFAULT_SOCKET_TIMEOUT = Duration.ofSeconds(60);
+
     /** The Constant FILE_NAME. */
     private static final String FILE_NAME = "coveralls.json";
 
@@ -188,7 +188,7 @@ public class CoverallsClient {
     private String getResponseErrorMessage(final HttpResponse<InputStream> response, final String message) {
         final var errorMessage = new StringBuilder("Report submission to Coveralls API failed with HTTP status ")
                 .append(response.statusCode());
-        if (StringUtils.isNotBlank(message)) {
+        if (message != null && !message.isBlank()) {
             errorMessage.append(": ").append(message);
         }
         return errorMessage.toString();
