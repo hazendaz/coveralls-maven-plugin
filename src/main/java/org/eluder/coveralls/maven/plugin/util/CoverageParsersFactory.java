@@ -253,26 +253,8 @@ public class CoverageParsersFactory {
             cloverFiles.add(buildDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY)
                     .resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
 
-            if (this.relativeReportDirs != null) {
-                for (final String relativeReportPath : this.relativeReportDirs) {
-                    var relativeReportingDirectory = reportingDirectory;
-                    var relativeBuildDirectory = buildDirectory;
-                    if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
-                        relativeReportingDirectory = reportingDirectory.resolve(relativeReportPath);
-                        relativeBuildDirectory = buildDirectory.resolve(relativeReportPath);
-                    }
-
-                    jacocoFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
-                    jacocoFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
-                    coberturaFiles
-                            .add(relativeReportingDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
-                    coberturaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
-                    sagaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
-                    sagaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
-                    cloverFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
-                    cloverFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
-                }
-            }
+            this.setupRelativeReportDirs(jacocoFiles, coberturaFiles, sagaFiles, cloverFiles, reportingDirectory,
+                    buildDirectory);
         }
 
         // Use ExistingFiles.toParsers to create parser instances
@@ -286,6 +268,48 @@ public class CoverageParsersFactory {
         }
 
         return Collections.unmodifiableList(parsers);
+    }
+
+    /**
+     * Setup relative report dirs.
+     *
+     * @param jacocoFiles
+     *            the jacoco files
+     * @param coberturaFiles
+     *            the cobertura files
+     * @param sagaFiles
+     *            the saga files
+     * @param cloverFiles
+     *            the clover files
+     * @param reportingDirectory
+     *            the reporting directory
+     * @param buildDirectory
+     *            the build directory
+     */
+    private void setupRelativeReportDirs(final ExistingFiles jacocoFiles, final ExistingFiles coberturaFiles,
+            final ExistingFiles sagaFiles, final ExistingFiles cloverFiles, final Path reportingDirectory,
+            final Path buildDirectory) {
+        if (this.relativeReportDirs == null) {
+            return;
+        }
+
+        for (final String relativeReportPath : this.relativeReportDirs) {
+            var relativeReportingDirectory = reportingDirectory;
+            var relativeBuildDirectory = buildDirectory;
+            if (!relativeReportPath.isEmpty() && !File.separator.equals(relativeReportPath)) {
+                relativeReportingDirectory = reportingDirectory.resolve(relativeReportPath);
+                relativeBuildDirectory = buildDirectory.resolve(relativeReportPath);
+            }
+
+            jacocoFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+            jacocoFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());
+            coberturaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
+            coberturaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());
+            sagaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
+            sagaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());
+            cloverFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
+            cloverFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());
+        }
     }
 
 }
