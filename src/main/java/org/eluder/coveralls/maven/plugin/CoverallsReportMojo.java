@@ -81,6 +81,7 @@ public class CoverallsReportMojo extends AbstractMojo {
      * File paths to additional Cobertura coverage report files.
      */
     @Parameter(property = "coberturaReports")
+    @Deprecated
     private List<File> coberturaReports;
 
     /**
