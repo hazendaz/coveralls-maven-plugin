@@ -252,20 +252,22 @@ class CoverageParsersFactoryTest {
         final var jacocoDir = Files
                 .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY));
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
+
         final var jacocoItDir = Files
                 .createDirectory(this.reportingDir.resolve(CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY));
         Files.createFile(jacocoItDir.resolve("jacoco.xml"));
 
         final var jacocoAggregateDir = Files.createDirectory(this.reportingDir.resolve("my-aggregate-dir"));
-        final var jacocoAggregateReport = Files.createFile(jacocoAggregateDir.resolve("jacoco.xml")).toFile();
-        jacocoAggregateReport.createNewFile();
+        final var jacocoAggregateReport = Files.createFile(jacocoAggregateDir.resolve("jacoco.xml"));
 
-        final var factory = this.createCoverageParsersFactory().withJacocoAggregateReport(jacocoAggregateReport);
+        final var factory = this.createCoverageParsersFactory()
+                .withJacocoAggregateReport(jacocoAggregateReport.toFile());
 
         final var parsers = factory.createParsers();
         Assertions.assertEquals(1, parsers.size());
         Assertions.assertEquals(JaCoCoParser.class, parsers.get(0).getClass());
-        parsers.get(0).getCoverageFile().getPath().contains("my-aggregate-dir/jacoco.xml");
+        final var path = parsers.get(0).getCoverageFile().getPath().replace('\\', '/');
+        Assertions.assertTrue(path.contains("my-aggregate-dir/jacoco.xml"));
     }
 
     /**
@@ -282,7 +284,6 @@ class CoverageParsersFactoryTest {
         Files.createFile(jacocoDir.resolve("jacoco.xml"));
 
         final var customJacocoFile = Files.createFile(this.reportingDir.resolve("custom-jacoco-report.xml")).toFile();
-        customJacocoFile.createNewFile();
 
         final var factory = this.createCoverageParsersFactory().withJaCoCoReports(Arrays.asList(customJacocoFile));
 
