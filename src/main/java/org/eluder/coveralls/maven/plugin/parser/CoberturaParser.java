@@ -111,9 +111,7 @@ public class CoberturaParser extends AbstractXmlEventParser {
                     this.source.addBranchCoverage(nr, 0, this.branchId++, 0);
                 }
             }
-        } else
-
-        if (this.isEndElement(xml, "class") && this.source != null) {
+        } else if (this.isEndElement(xml, "class") && this.source != null) {
             callback.onSource(this.source);
             this.source = null;
         }
