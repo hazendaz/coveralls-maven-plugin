@@ -72,7 +72,7 @@ class JobLoggerTest {
      * Test get position.
      */
     @Test
-    void testGetPosition() {
+    void position() {
         Assertions.assertEquals(Position.BEFORE, new JobLogger(this.jobMock).getPosition());
     }
 

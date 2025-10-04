@@ -70,7 +70,7 @@ class JenkinsTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("jenkins", new Jenkins(this.env()).getName());
     }
 
@@ -78,7 +78,7 @@ class JenkinsTest {
      * Test get build number.
      */
     @Test
-    void testGetBuildNumber() {
+    void buildNumber() {
         Assertions.assertEquals("build123", new Jenkins(this.env()).getBuildNumber());
     }
 
@@ -86,7 +86,7 @@ class JenkinsTest {
      * Test get build url.
      */
     @Test
-    void testGetBuildUrl() {
+    void buildUrl() {
         Assertions.assertEquals("https://company.com/jenkins/build123", new Jenkins(this.env()).getBuildUrl());
     }
 
@@ -94,7 +94,7 @@ class JenkinsTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new Jenkins(this.env()).getBranch());
     }
 
@@ -102,7 +102,7 @@ class JenkinsTest {
      * Test get environment.
      */
     @Test
-    void testGetEnvironment() {
+    void environment() {
         final var properties = new Jenkins(this.env()).getEnvironment();
         Assertions.assertEquals(4, properties.size());
         Assertions.assertEquals("build123", properties.getProperty("jenkins_build_num"));

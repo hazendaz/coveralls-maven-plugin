@@ -45,7 +45,7 @@ class Sha521DigestInputStreamTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    void testRead() throws NoSuchAlgorithmException, IOException {
+    void read() throws NoSuchAlgorithmException, IOException {
         final byte[] data = { (byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD };
         try (var is = new Sha512DigestInputStream(new ByteArrayInputStream(data))) {
             Assertions.assertEquals(0xAA, is.read());

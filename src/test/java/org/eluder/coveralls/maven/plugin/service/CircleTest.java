@@ -69,7 +69,7 @@ class CircleTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("circleci", new Circle(this.env()).getName());
     }
 
@@ -77,7 +77,7 @@ class CircleTest {
      * Test get build number.
      */
     @Test
-    void testGetBuildNumber() {
+    void buildNumber() {
         Assertions.assertEquals("build123", new Circle(this.env()).getBuildNumber());
     }
 
@@ -85,7 +85,7 @@ class CircleTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new Circle(this.env()).getBranch());
     }
 
@@ -93,7 +93,7 @@ class CircleTest {
      * Test get environment.
      */
     @Test
-    void testGetEnvironment() {
+    void environment() {
         final var properties = new Circle(this.env()).getEnvironment();
         Assertions.assertEquals(3, properties.size());
         Assertions.assertEquals("build123", properties.getProperty("circleci_build_num"));

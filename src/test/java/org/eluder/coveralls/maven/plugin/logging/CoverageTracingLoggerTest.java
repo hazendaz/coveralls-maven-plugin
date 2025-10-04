@@ -68,7 +68,7 @@ class CoverageTracingLoggerTest {
      * Test get position.
      */
     @Test
-    void testGetPosition() {
+    void position() {
         Assertions.assertEquals(Position.AFTER, new CoverageTracingLogger(this.sourceCallbackMock).getPosition());
     }
 

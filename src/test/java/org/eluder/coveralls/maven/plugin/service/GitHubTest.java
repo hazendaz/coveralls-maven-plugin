@@ -72,7 +72,7 @@ class GitHubTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("github", new GitHub(this.env()).getName());
     }
 
@@ -80,7 +80,7 @@ class GitHubTest {
      * Test get build number.
      */
     @Test
-    void testGetBuildNumber() {
+    void buildNumber() {
         Assertions.assertEquals("1", new GitHub(this.env()).getBuildNumber());
     }
 
@@ -88,7 +88,7 @@ class GitHubTest {
      * Test get build url.
      */
     @Test
-    void testGetBuildUrl() {
+    void buildUrl() {
         Assertions.assertEquals("https://github.com/hazendaz/coveralls-maven-plugin/actions/runs/12345",
                 new GitHub(this.env()).getBuildUrl());
     }
@@ -97,7 +97,7 @@ class GitHubTest {
      * Test get pull request.
      */
     @Test
-    void testGetPullRequest() {
+    void pullRequest() {
         Assertions.assertEquals("1", new GitHub(this.env()).getPullRequest());
     }
 
@@ -105,7 +105,7 @@ class GitHubTest {
      * Test get job id.
      */
     @Test
-    void testGetJobId() {
+    void jobId() {
         Assertions.assertEquals("12345", new GitHub(this.env()).getJobId());
     }
 

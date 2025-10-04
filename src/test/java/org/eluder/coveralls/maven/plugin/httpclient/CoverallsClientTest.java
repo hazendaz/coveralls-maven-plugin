@@ -108,7 +108,7 @@ class CoverallsClientTest {
      *             the exception
      */
     @Test
-    void testSubmit() throws UnsupportedOperationException, Exception {
+    void submit() throws UnsupportedOperationException, Exception {
         Mockito.when(this.httpClientMock.execute(ArgumentMatchers.any(HttpUriRequest.class),
                 ArgumentMatchers.any(HttpClientResponseHandler.class))).thenAnswer(invocation -> {
                     final HttpClientResponseHandler<?> handler = invocation.getArgument(1);

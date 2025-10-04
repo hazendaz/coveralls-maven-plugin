@@ -100,7 +100,7 @@ class SourceLoaderFactoryTest {
      * Test create source loader.
      */
     @Test
-    void testCreateSourceLoader() {
+    void createSourceLoader() {
         final var sourceLoader = this.createSourceLoaderFactory(StandardCharsets.UTF_8).createSourceLoader();
         Assertions.assertNotNull(sourceLoader);
     }

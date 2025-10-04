@@ -42,7 +42,7 @@ class GitRepositoryTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    void testLoad() throws IOException {
+    void load() throws IOException {
         final var git = new GitRepository(TestIoUtil.getFile("/")).load();
         Assertions.assertNotNull(git.getHead().getId());
     }

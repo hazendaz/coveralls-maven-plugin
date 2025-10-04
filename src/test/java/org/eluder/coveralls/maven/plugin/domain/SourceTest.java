@@ -37,7 +37,7 @@ class SourceTest {
      * Test add coverage.
      */
     @Test
-    void testAddCoverage() {
+    void addCoverage() {
         final var source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
                 "E8BD88CF0BDB77A6408234FD91FD22C3");
         source.addCoverage(1, 3);
@@ -49,7 +49,7 @@ class SourceTest {
      * Test add branch coverage.
      */
     @Test
-    void testAddBranchCoverage() {
+    void addBranchCoverage() {
         final var source = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
                 "609BD24390ADB11D11536CA2ADD18BD0");
         source.addBranchCoverage(2, 0, 0, 2);
@@ -111,7 +111,7 @@ class SourceTest {
      */
     @Test
     @Disabled("#45: https://github.com/trautonen/coveralls-maven-plugin/issues/45")
-    void getNameWithClassifier() {
+    void nameWithClassifier() {
         final var source = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
                 "E8BD88CF0BDB77A6408234FD91FD22C3");
         source.setClassifier("Inner");
@@ -123,7 +123,7 @@ class SourceTest {
      * Test merge.
      */
     @Test
-    void testMerge() {
+    void merge() {
         final var source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  if(true) {\n  }\n}\n",
                 "609BD24390ADB11D11536CA2ADD18BD0");
         source1.addCoverage(1, 2);
@@ -199,7 +199,7 @@ class SourceTest {
      * Test hash code.
      */
     @Test
-    void testHashCode() {
+    void hashCodeVerification() {
         final var source1 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",
                 "E8BD88CF0BDB77A6408234FD91FD22C3");
         final var source2 = new Source("src/main/java/Hello.java", "public class Hello {\n  \n}\n",

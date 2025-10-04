@@ -218,7 +218,7 @@ class CoverallsReportMojoTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
-    void testCreateSourceLoader() throws IOException {
+    void createSourceLoader() throws IOException {
         final var gitMock = Mockito.mock(Git.class);
         final var git = Files.createDirectory(this.folder.resolve("git"));
         Mockito.when(gitMock.getBaseDir()).thenReturn(git.toFile());
@@ -379,7 +379,7 @@ class CoverallsReportMojoTest {
      *             the mojo failure exception
      */
     @Test
-    void iOExceptionWithAllowedServiceFailure()
+    void ioExceptionWithAllowedServiceFailure()
             throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         this.mojo.failOnServiceError = false;
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class))).thenThrow(new IOException());

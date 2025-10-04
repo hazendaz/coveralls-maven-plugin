@@ -69,7 +69,7 @@ class TravisTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("travis-ci", new Travis(this.env()).getName());
     }
 
@@ -77,7 +77,7 @@ class TravisTest {
      * Test get job id.
      */
     @Test
-    void testGetJobId() {
+    void jobId() {
         Assertions.assertEquals("job123", new Travis(this.env()).getJobId());
     }
 
@@ -85,7 +85,7 @@ class TravisTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new Travis(this.env()).getBranch());
     }
 
@@ -93,7 +93,7 @@ class TravisTest {
      * Test get pull request.
      */
     @Test
-    void testGetPullRequest() {
+    void pullRequest() {
         Assertions.assertEquals("pull10", new Travis(this.env()).getPullRequest());
     }
 
@@ -101,7 +101,7 @@ class TravisTest {
      * Test get environment.
      */
     @Test
-    void testGetEnvironment() {
+    void environment() {
         final var properties = new Travis(this.env()).getEnvironment();
         Assertions.assertEquals(2, properties.size());
         Assertions.assertEquals("job123", properties.getProperty("travis_job_id"));

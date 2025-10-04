@@ -72,7 +72,7 @@ class AppveyorTest {
      * Test get name.
      */
     @Test
-    void testGetName() {
+    void name() {
         Assertions.assertEquals("Appveyor", new Appveyor(this.env()).getName());
     }
 
@@ -80,7 +80,7 @@ class AppveyorTest {
      * Test get build number.
      */
     @Test
-    void testGetBuildNumber() {
+    void buildNumber() {
         Assertions.assertEquals("77", new Appveyor(this.env()).getBuildNumber());
     }
 
@@ -88,7 +88,7 @@ class AppveyorTest {
      * Test get build url.
      */
     @Test
-    void testGetBuildUrl() {
+    void buildUrl() {
         Assertions.assertEquals("https://ci.appveyor.com/project/owner/project/build/77",
                 new Appveyor(this.env()).getBuildUrl());
     }
@@ -97,7 +97,7 @@ class AppveyorTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         Assertions.assertEquals("master", new Appveyor(this.env()).getBranch());
     }
 
@@ -113,7 +113,7 @@ class AppveyorTest {
      * Test get job id.
      */
     @Test
-    void testGetJobId() {
+    void jobId() {
         Assertions.assertEquals("54de3316c44f", new Appveyor(this.env()).getJobId());
     }
 

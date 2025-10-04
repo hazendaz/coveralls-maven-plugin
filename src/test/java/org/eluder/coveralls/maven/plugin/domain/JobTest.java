@@ -42,7 +42,7 @@ class JobTest {
      * Gets the branch with remote.
      */
     @Test
-    void getBranchWithRemote() {
+    void branchWithRemote() {
         final List<Remote> remotes = Arrays.asList(new Remote("origin", "git@github.com"));
         final var git = new Git(Path.of(".").toFile(), new Head(null, null, null, null, null, null), "master", remotes);
         final var job = new Job().withBranch("origin/master").withGit(git);
@@ -54,7 +54,7 @@ class JobTest {
      * Test get branch.
      */
     @Test
-    void testGetBranch() {
+    void branch() {
         final var job = new Job().withBranch("master");
         Assertions.assertEquals("master", job.getBranch());
     }
