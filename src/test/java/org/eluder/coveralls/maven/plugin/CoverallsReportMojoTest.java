@@ -271,7 +271,7 @@ class CoverallsReportMojoTest {
     }
 
     /**
-     * Successfull submission.
+     * Successful submission.
      *
      * @throws ProcessingException
      *             the processing exception
@@ -283,7 +283,7 @@ class CoverallsReportMojoTest {
      *             the mojo failure exception
      */
     @Test
-    void successfullSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
+    void successfulSubmission() throws ProcessingException, IOException, MojoExecutionException, MojoFailureException {
         Mockito.when(this.coverallsClientMock.submit(ArgumentMatchers.any(File.class)))
                 .thenReturn(new CoverallsResponse("success", false, null));
         this.mojo.execute();
@@ -295,7 +295,7 @@ class CoverallsReportMojoTest {
             Assertions.assertTrue(json.contains(coverageFile.get(0)));
         }
 
-        CoverallsReportMojoTest.verifySuccessfullSubmit(this.logMock, fixture);
+        CoverallsReportMojoTest.verifySuccessfulSubmit(this.logMock, fixture);
     }
 
     /**
@@ -425,14 +425,14 @@ class CoverallsReportMojoTest {
     }
 
     /**
-     * Verify successfull submit.
+     * Verify successful submit.
      *
      * @param logMock
      *            the log mock
      * @param fixture
      *            the fixture
      */
-    static void verifySuccessfullSubmit(Log logMock, List<List<String>> fixture) {
+    static void verifySuccessfulSubmit(Log logMock, List<List<String>> fixture) {
         Mockito.verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
                 + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
         Mockito.verify(logMock).info("*** Coverage results are usually available immediately on Coveralls.");
