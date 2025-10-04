@@ -38,9 +38,7 @@ class ValidationErrorTest {
      */
     @Test
     void missingLevel() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new ValidationError(null, "message");
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new ValidationError(null, "message"));
     }
 
     /**
@@ -48,9 +46,7 @@ class ValidationErrorTest {
      */
     @Test
     void missingMessage() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new ValidationError(Level.ERROR, null);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new ValidationError(Level.ERROR, null));
     }
 
     /**

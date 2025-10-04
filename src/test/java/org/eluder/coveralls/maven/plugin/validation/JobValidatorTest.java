@@ -41,9 +41,7 @@ class JobValidatorTest {
      */
     @Test
     void missingJob() {
-        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new JobValidator(null);
-        });
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> new JobValidator(null));
     }
 
     /**

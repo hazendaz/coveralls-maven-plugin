@@ -59,9 +59,7 @@ class MultiSourceLoaderTest {
      */
     @Test
     void missingSource() {
-        Assertions.assertThrows(IOException.class, () -> {
-            this.creaMultiSourceLoader().load("source");
-        });
+        Assertions.assertThrows(IOException.class, () -> this.creaMultiSourceLoader().load("source"));
     }
 
     /**

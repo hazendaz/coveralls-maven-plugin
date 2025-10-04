@@ -88,9 +88,7 @@ class EnvironmentTest {
     @Test
     void missingMojo() {
         final var mockList = Arrays.asList(this.serviceMock);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new Environment(null, mockList);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Environment(null, mockList));
     }
 
     /**
@@ -98,9 +96,7 @@ class EnvironmentTest {
      */
     @Test
     void missingServices() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new Environment(this.mojo, null);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Environment(this.mojo, null));
     }
 
     /**

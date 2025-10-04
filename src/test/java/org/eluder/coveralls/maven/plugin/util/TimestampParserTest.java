@@ -41,9 +41,7 @@ class TimestampParserTest {
      */
     @Test
     void invalidFormat() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new TimestampParser("scsscdfsd");
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new TimestampParser("scsscdfsd"));
     }
 
     /**
@@ -109,9 +107,7 @@ class TimestampParserTest {
      */
     @Test
     void parseInvalidTimestamp() {
-        Assertions.assertThrows(ProcessingException.class, () -> {
-            new TimestampParser(null).parse("2015-08-20");
-        });
+        Assertions.assertThrows(ProcessingException.class, () -> new TimestampParser(null).parse("2015-08-20"));
     }
 
 }

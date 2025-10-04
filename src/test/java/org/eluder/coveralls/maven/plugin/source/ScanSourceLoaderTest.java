@@ -70,9 +70,7 @@ class ScanSourceLoaderTest {
         final var sourceLoader = new ScanSourceLoader(this.folder.toFile(), this.folder.toFile(),
                 StandardCharsets.UTF_8);
         final var subFolderName = subFolder.getName();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            sourceLoader.load(subFolderName);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sourceLoader.load(subFolderName));
     }
 
     /**

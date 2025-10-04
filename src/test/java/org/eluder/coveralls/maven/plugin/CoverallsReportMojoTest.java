@@ -205,9 +205,7 @@ class CoverallsReportMojoTest {
         this.mojo = new CoverallsReportMojo();
         this.mojo.settings = this.settingsMock;
         this.mojo.project = this.projectMock;
-        Assertions.assertThrows(IOException.class, () -> {
-            this.mojo.createCoverageParsers(this.sourceLoaderMock);
-        });
+        Assertions.assertThrows(IOException.class, () -> this.mojo.createCoverageParsers(this.sourceLoaderMock));
     }
 
     /**
@@ -265,9 +263,7 @@ class CoverallsReportMojoTest {
         this.mojo.skip = false;
         this.mojo.basedir = TestIoUtil.getFile("/");
 
-        Assertions.assertDoesNotThrow(() -> {
-            this.mojo.execute();
-        });
+        Assertions.assertDoesNotThrow(() -> this.mojo.execute());
     }
 
     /**

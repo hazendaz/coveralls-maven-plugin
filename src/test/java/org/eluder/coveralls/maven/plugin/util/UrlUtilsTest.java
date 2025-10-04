@@ -42,9 +42,7 @@ class UrlUtilsTest {
      */
     @Test
     void createIllegalArgumentException() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            UrlUtils.create("sdfds");
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> UrlUtils.create("sdfds"));
     }
 
     /**
@@ -52,9 +50,8 @@ class UrlUtilsTest {
      */
     @Test
     void createMalformedUrlException() {
-        final var thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            UrlUtils.create("abc://example.org");
-        });
+        final var thrown = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> UrlUtils.create("abc://example.org"));
         // Assert that the cause is MalformedURLException
         Assertions.assertEquals(MalformedURLException.class, thrown.getCause().getClass());
     }
@@ -64,9 +61,8 @@ class UrlUtilsTest {
      */
     @Test
     void createUriSynatxException() {
-        final var thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            UrlUtils.create("https://invalid|url");
-        });
+        final var thrown = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> UrlUtils.create("https://invalid|url"));
         // Assert that the cause is URISyntaxException
         Assertions.assertEquals(URISyntaxException.class, thrown.getCause().getClass());
     }
@@ -91,9 +87,7 @@ class UrlUtilsTest {
     @Test
     void invalidUrlToUri() throws MalformedURLException {
         final var url = new URL("https://google.com?q=s|r");
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            UrlUtils.toUri(url);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> UrlUtils.toUri(url));
     }
 
     /**

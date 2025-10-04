@@ -68,9 +68,7 @@ class DirectorySourceLoaderTest {
         final var subFolder = Files.createDirectory(this.folder.resolve("subFolder")).toFile().getName();
         final var sourceLoader = new DirectorySourceLoader(this.folder.toFile(), this.folder.toFile(),
                 StandardCharsets.UTF_8);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            sourceLoader.load(subFolder);
-        });
+        Assertions.assertThrows(IllegalArgumentException.class, () -> sourceLoader.load(subFolder));
     }
 
     /**

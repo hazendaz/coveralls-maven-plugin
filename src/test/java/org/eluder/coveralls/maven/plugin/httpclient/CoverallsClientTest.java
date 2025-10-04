@@ -119,9 +119,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpEntityMock.getContent())
                 .thenReturn(this.coverallsResponse(new CoverallsResponse("success", false, "")));
         final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertDoesNotThrow(() -> {
-            client.submit(this.file);
-        });
+        Assertions.assertDoesNotThrow(() -> client.submit(this.file));
     }
 
     /**
@@ -140,9 +138,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpResponseMock.getCode()).thenReturn(500);
         Mockito.when(this.httpResponseMock.getReasonPhrase()).thenReturn("Internal Error");
         final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(IOException.class, () -> {
-            client.submit(this.file);
-        });
+        Assertions.assertThrows(IOException.class, () -> client.submit(this.file));
     }
 
     /**
@@ -164,9 +160,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpEntityMock.getContent())
                 .thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
         final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(ProcessingException.class, () -> {
-            client.submit(this.file);
-        });
+        Assertions.assertThrows(ProcessingException.class, () -> client.submit(this.file));
     }
 
     /**
@@ -190,9 +184,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpEntityMock.getContent())
                 .thenReturn(this.coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
         final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(ProcessingException.class, () -> {
-            client.submit(this.file);
-        });
+        Assertions.assertThrows(ProcessingException.class, () -> client.submit(this.file));
     }
 
     /**
@@ -212,9 +204,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpResponseMock.getEntity()).thenReturn(this.httpEntityMock);
         Mockito.when(this.httpEntityMock.getContent()).thenThrow(IOException.class);
         final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
-        Assertions.assertThrows(IOException.class, () -> {
-            client.submit(this.file);
-        });
+        Assertions.assertThrows(IOException.class, () -> client.submit(this.file));
     }
 
     /**
