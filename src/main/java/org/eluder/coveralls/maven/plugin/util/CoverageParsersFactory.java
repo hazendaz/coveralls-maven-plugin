@@ -225,7 +225,7 @@ public class CoverageParsersFactory {
             final var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());
             final var buildDirectory = Path.of(p.getBuild().getDirectory());
 
-            final File jacocoMergedReport = reportingDirectory
+            final var jacocoMergedReport = reportingDirectory
                     .resolve(CoverageParsersFactory.DEFAULT_JACOCO_MERGED_DIRECTORY)
                     .resolve(CoverageParsersFactory.JACOCO_FILE).toFile();
 

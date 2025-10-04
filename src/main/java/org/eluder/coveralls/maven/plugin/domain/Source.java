@@ -289,7 +289,7 @@ public final class Source implements JsonObject {
         if (!(obj instanceof Source)) {
             return false;
         }
-        Source other = (Source) obj;
+        final var other = (Source) obj;
         return Objects.equals(this.name, other.name) && Objects.equals(this.digest, other.digest)
                 && this.coverage.length == other.coverage.length;
     }
