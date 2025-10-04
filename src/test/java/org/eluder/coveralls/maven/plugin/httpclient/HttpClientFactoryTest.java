@@ -81,7 +81,7 @@ class HttpClientFactoryTest {
                 WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).create();
-        final HttpResponse<String> response = client.send(
+        final var response = client.send(
                 HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
                 HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
         Assertions.assertEquals("Hello World!", response.body());
@@ -109,7 +109,7 @@ class HttpClientFactoryTest {
         proxy.setProtocol("http");
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
-        final HttpResponse<String> response = client.send(
+        final var response = client.send(
                 HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
                 HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
 
@@ -144,7 +144,7 @@ class HttpClientFactoryTest {
         proxy.setPassword("bar");
 
         final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(proxy).create();
-        final HttpResponse<String> response = client.send(
+        final var response = client.send(
                 HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
                 HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
 
