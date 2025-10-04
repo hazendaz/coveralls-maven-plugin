@@ -48,7 +48,7 @@
     <maven.saga.version>1.5.5</maven.saga.version>
     <maven.clover.version>4.5.2</maven.clover.version>
 
-    <!-- Skip Javadocs for samples -->
+    <!-- Skip Javadocs for samples. -->
     <maven.javadoc.skip>true</maven.javadoc.skip>
   </properties>
 
@@ -97,13 +97,15 @@
       <id>cobertura</id>
       <properties>
         <!-- Allow jdk 8 as cobertura won't work otherwise -->
-        <allowed.build.jdks>[8,9),[11,12),[17,18),[21,22),[22,23)</allowed.build.jdks>
+        <allowed.build.jdks>[8,9),[11,12),[17,18),[21,22),[25,26)</allowed.build.jdks>
         <!-- Disable release flags for java 8 -->
         <maven.compiler.release />
         <maven.compiler.testRelease />
         <!-- Force error prone to java 8 copy -->
         <error-prone.version>2.10.0</error-prone.version>
         <javac.version>9+181-r4173-1</javac.version>
+        <!-- Downgrade coveralls to 4.5.0 for java 8. -->
+        <coveralls.plugin>4.5.0</coveralls.plugin>
       </properties>
       <build>
         <plugins>
