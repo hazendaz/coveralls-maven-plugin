@@ -61,8 +61,8 @@ public final class UrlUtils {
     public static URI toUri(final URL url) {
         try {
             return url.toURI();
-        } catch (final URISyntaxException ex) {
-            throw new IllegalArgumentException(ex);
+        } catch (final URISyntaxException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 

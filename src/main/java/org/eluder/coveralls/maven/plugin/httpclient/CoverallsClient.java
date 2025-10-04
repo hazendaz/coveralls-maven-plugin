@@ -170,8 +170,8 @@ public class CoverallsClient {
                 throw new ProcessingException(this.getResponseErrorMessage(response, cr.getMessage()));
             }
             return cr;
-        } catch (final IOException ex) {
-            throw new ProcessingException(this.getResponseErrorMessage(response, ex.getMessage()), ex);
+        } catch (final IOException e) {
+            throw new ProcessingException(this.getResponseErrorMessage(response, e.getMessage()), e);
         }
     }
 

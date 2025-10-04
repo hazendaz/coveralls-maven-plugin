@@ -321,8 +321,8 @@ class CoverallsReportMojoTest {
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
-        } catch (final MojoFailureException ex) {
-            Assertions.assertEquals(ProcessingException.class, ex.getCause().getClass());
+        } catch (final MojoFailureException e) {
+            Assertions.assertEquals(ProcessingException.class, e.getCause().getClass());
         }
     }
 
@@ -347,8 +347,8 @@ class CoverallsReportMojoTest {
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
-        } catch (final MojoFailureException ex) {
-            Assertions.assertEquals(ProcessingException.class, ex.getCause().getClass());
+        } catch (final MojoFailureException e) {
+            Assertions.assertEquals(ProcessingException.class, e.getCause().getClass());
         }
     }
 
@@ -418,8 +418,8 @@ class CoverallsReportMojoTest {
         try {
             this.mojo.execute();
             Assertions.fail("Should have failed with MojoFailureException");
-        } catch (final MojoExecutionException ex) {
-            Assertions.assertEquals(NullPointerException.class, ex.getCause().getClass());
+        } catch (final MojoExecutionException e) {
+            Assertions.assertEquals(NullPointerException.class, e.getCause().getClass());
         }
     }
 

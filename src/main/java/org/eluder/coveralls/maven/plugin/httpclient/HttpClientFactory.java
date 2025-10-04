@@ -41,7 +41,7 @@ import org.eluder.coveralls.maven.plugin.util.Wildcards;
  */
 class HttpClientFactory {
 
-    /** The Constant DEFAULT_CONNECTION_REQUEST_TIMEOUT. */
+    /** The Constant DEFAULT_CONNECTION_TIMEOUT. */
     private static final Duration DEFAULT_CONNECTION_TIMEOUT = Duration.ofSeconds(10);
 
     /** The target url. */

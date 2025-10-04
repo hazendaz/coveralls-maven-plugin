@@ -115,8 +115,8 @@ public class JsonWriter implements SourceCallback, Closeable {
             this.writeOptionalEnvironment("environment", this.job.getServiceEnvironment());
             this.writeOptionalObject("git", this.job.getGit());
             this.generator.writeArrayFieldStart("source_files");
-        } catch (final JsonProcessingException ex) {
-            throw new ProcessingException(ex);
+        } catch (final JsonProcessingException e) {
+            throw new ProcessingException(e);
         }
     }
 
@@ -124,8 +124,8 @@ public class JsonWriter implements SourceCallback, Closeable {
     public void onSource(final Source source) throws ProcessingException, IOException {
         try {
             this.generator.writeObject(source);
-        } catch (final JsonProcessingException ex) {
-            throw new ProcessingException(ex);
+        } catch (final JsonProcessingException e) {
+            throw new ProcessingException(e);
         }
     }
 
@@ -134,8 +134,8 @@ public class JsonWriter implements SourceCallback, Closeable {
         try {
             this.generator.writeEndArray();
             this.generator.writeEndObject();
-        } catch (final JsonProcessingException ex) {
-            throw new ProcessingException(ex);
+        } catch (final JsonProcessingException e) {
+            throw new ProcessingException(e);
         }
     }
 

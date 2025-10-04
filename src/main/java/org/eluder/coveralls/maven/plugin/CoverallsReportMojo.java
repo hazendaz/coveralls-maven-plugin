@@ -311,12 +311,12 @@ public class CoverallsReportMojo extends AbstractMojo {
             if (!job.isDryRun()) {
                 this.submitData(client, this.coverallsFile);
             }
-        } catch (final ProcessingException ex) {
-            throw new MojoFailureException("Processing of input or output data failed", ex);
-        } catch (final IOException ex) {
-            throw new MojoFailureException("I/O operation failed", ex);
-        } catch (final Exception ex) {
-            throw new MojoExecutionException("Build error", ex);
+        } catch (final ProcessingException e) {
+            throw new MojoFailureException("Processing of input or output data failed", e);
+        } catch (final IOException e) {
+            throw new MojoFailureException("I/O operation failed", e);
+        } catch (final Exception e) {
+            throw new MojoExecutionException("Build error", e);
         }
     }
 
@@ -517,18 +517,18 @@ public class CoverallsReportMojo extends AbstractMojo {
             this.getLog().info(response.getUrl());
             this.getLog().info("*** Coverage results are usually available immediately on Coveralls.");
             this.getLog().info("    If you see question marks or missing data, please allow some time for processing.");
-        } catch (final ProcessingException ex) {
+        } catch (final ProcessingException e) {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms while processing data";
-            this.handleSubmissionError(ex, message, true);
-        } catch (final IOException ex) {
+            this.handleSubmissionError(e, message, true);
+        } catch (final IOException e) {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms while handling I/O operations";
-            this.handleSubmissionError(ex, message, this.failOnServiceError);
-        } catch (final InterruptedException ex) {
+            this.handleSubmissionError(e, message, this.failOnServiceError);
+        } catch (final InterruptedException e) {
             final var duration = System.currentTimeMillis() - now;
             final var message = "Submission failed in " + duration + "ms due to an interuption";
-            this.getLog().error(message, ex);
+            this.getLog().error(message, e);
             Thread.currentThread().interrupt();
         }
     }

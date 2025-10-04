@@ -91,8 +91,8 @@ public final class TestIoUtil {
                 local = "/" + local;
             }
             return Path.of(TestIoUtil.getResourceUrl(local).toURI()).toFile();
-        } catch (final URISyntaxException ex) {
-            throw new IllegalArgumentException(ex);
+        } catch (final URISyntaxException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
