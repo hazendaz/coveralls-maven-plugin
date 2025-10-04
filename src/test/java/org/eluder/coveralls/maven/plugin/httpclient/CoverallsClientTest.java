@@ -112,7 +112,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(200);
         Mockito.when(this.httpResponseMock.body())
                 .thenReturn(this.coverallsResponse(new CoverallsResponse("success", false, "")));
-        final var client = new CoverallsClient("http://test.com/coveralls", this.httpClientMock, new ObjectMapper());
+        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
         client.submit(this.file);
     }
 
@@ -129,7 +129,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpClientMock.send(ArgumentMatchers.any(HttpRequest.class),
                 ArgumentMatchers.any(HttpResponse.BodyHandler.class))).thenReturn(this.httpResponseMock);
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(500);
-        final var client = new CoverallsClient("http://test.com/coveralls", this.httpClientMock, new ObjectMapper());
+        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
         Assertions.assertThrows(IOException.class, () -> client.submit(this.file));
     }
 
@@ -148,7 +148,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(200);
         Mockito.when(this.httpResponseMock.body())
                 .thenReturn(new ByteArrayInputStream("{bogus}".getBytes(StandardCharsets.UTF_8)));
-        final var client = new CoverallsClient("http://test.com/coveralls", this.httpClientMock, new ObjectMapper());
+        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
         Assertions.assertThrows(ProcessingException.class, () -> client.submit(this.file));
     }
 
@@ -167,7 +167,7 @@ class CoverallsClientTest {
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(400);
         Mockito.when(this.httpResponseMock.body())
                 .thenReturn(this.coverallsResponse(new CoverallsResponse("failure", true, "submission failed")));
-        final var client = new CoverallsClient("http://test.com/coveralls", this.httpClientMock, new ObjectMapper());
+        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, new ObjectMapper());
         Assertions.assertThrows(ProcessingException.class, () -> client.submit(this.file));
     }
 
@@ -185,11 +185,11 @@ class CoverallsClientTest {
                 ArgumentMatchers.any(HttpResponse.BodyHandler.class))).thenReturn(this.httpResponseMock);
         Mockito.when(this.httpResponseMock.statusCode()).thenReturn(200);
         Mockito.when(this.httpResponseMock.body()).thenReturn(IOUtils.toInputStream("{}", StandardCharsets.UTF_8));
-        final var mockMapper = Mockito.mock(ObjectMapper.class); // Jackson's object mapper can potentially throw
-        // exception
+        // Jackson's object mapper can potentially throw exception
+        final var mockMapper = Mockito.mock(ObjectMapper.class);
         Mockito.when(mockMapper.readValue(ArgumentMatchers.any(BufferedReader.class),
                 ArgumentMatchers.eq(CoverallsResponse.class))).thenThrow(IOException.class);
-        final var client = new CoverallsClient("http://test.com/coveralls", this.httpClientMock, mockMapper);
+        final var client = new CoverallsClient("https://test.com/coveralls", this.httpClientMock, mockMapper);
         Assertions.assertThrows(ProcessingException.class, () -> client.submit(this.file));
     }
 
