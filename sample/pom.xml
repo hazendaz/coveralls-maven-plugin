@@ -48,6 +48,12 @@
     <maven.saga.version>1.5.5</maven.saga.version>
     <maven.clover.version>4.5.2</maven.clover.version>
 
+    <!-- Set version here to test with. -->
+    <coveralls.plugin>4.7.0</coveralls.plugin>
+
+    <!-- Skip Enforcer for samples.-->
+    <enforcer.skip>true</enforcer.skip>
+
     <!-- Skip Javadocs for samples. -->
     <maven.javadoc.skip>true</maven.javadoc.skip>
   </properties>
