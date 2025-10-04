@@ -432,10 +432,12 @@ class CoverallsReportMojoTest {
      * @param fixture
      *            the fixture
      */
-    static void verifySuccessfulSubmit(Log logMock, List<List<String>> fixture) {
-        Mockito.verify(logMock).info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
-                + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
-        Mockito.verify(logMock).info("*** Coverage results are usually available immediately on Coveralls.");
+    static void verifySuccessfulSubmit(final Log logMock, final List<List<String>> fixture) {
+        Mockito.verify(logMock, Mockito.times(1))
+                .info("Gathered code coverage metrics for " + CoverageFixture.getTotalFiles(fixture)
+                        + " source files with " + CoverageFixture.getTotalLines(fixture) + " lines of code:");
+        Mockito.verify(logMock, Mockito.times(1))
+                .info("*** Coverage results are usually available immediately on Coveralls.");
     }
 
     /**
