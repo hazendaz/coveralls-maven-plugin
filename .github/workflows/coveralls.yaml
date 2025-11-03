@@ -34,6 +34,6 @@ jobs:
         run: echo "PLUGIN_VERSION=$(./mvnw help:evaluate --quiet -Dexpression=project.version -DforceStdout)" >> $GITHUB_ENV
       - name: Report Coverage to Coveralls for General Push using current snapshot version
         if: github.event_name == 'push'
-        run: ./mvnw jacoco:report coveralls:report --batch-mode --no-transfer-progress -Dcoveralls.plugin=${{ env.PLUGIN_VERSION }} -DrepoToken=${GITHUB_TOKEN} -DserviceName=github
+        run: ./mvnw generate-sources jacoco:report coveralls:report --batch-mode --no-transfer-progress -Dcoveralls.plugin=${{ env.PLUGIN_VERSION }} -DrepoToken=${GITHUB_TOKEN} -DserviceName=github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
