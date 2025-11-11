@@ -106,7 +106,7 @@
         <project.build.outputTimestamp>1759615736</project.build.outputTimestamp>
 
         <!-- Artifacts -->
-        <byte-buddy.version>1.17.8</byte-buddy.version>
+        <byte-buddy.version>1.18.0</byte-buddy.version>
         <jackson.version>2.20.1</jackson.version>
         <jgit.version note="Keep on 6.x for java 11 support">6.10.1.202505221210-r</jgit.version>
         <json-smart.version>2.6.0</json-smart.version>
