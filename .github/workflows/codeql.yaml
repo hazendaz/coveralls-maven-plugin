@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: auto
+        language: [auto]
 
     steps:
       - name: Checkout
