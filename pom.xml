@@ -32,7 +32,7 @@
     <parent>
         <groupId>com.github.hazendaz</groupId>
         <artifactId>base-parent</artifactId>
-        <version>57</version>
+        <version>58</version>
         <relativePath />
     </parent>
 
@@ -107,6 +107,7 @@
 
         <!-- Artifacts -->
         <byte-buddy.version>1.18.8</byte-buddy.version>
+        <commons-codec.version>1.21.0</commons-codec.version>
         <jackson.version>2.21.2</jackson.version>
         <jgit.version note="Keep on 6.x for java 11 support">6.10.1.202505221210-r</jgit.version>
         <json-smart.version>2.6.0</json-smart.version>
@@ -130,6 +131,12 @@
                 <version>${jackson.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
             </dependency>
 
             <dependency>
