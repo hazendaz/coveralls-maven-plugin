@@ -24,7 +24,6 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.eluder.coveralls.maven.plugin.domain.Job;
@@ -71,11 +70,11 @@ public class JobValidator {
     private List<ValidationError> repoTokenOrTravis() {
         if (this.hasValue(this.job.getRepoToken())
                 || (this.hasValue(this.job.getServiceName()) && this.hasValue(this.job.getServiceJobId()))) {
-            return Collections.emptyList();
+            return List.of();
         }
         final var level = this.job.isDryRun() ? Level.WARN : Level.ERROR;
         final var message = "Either repository token or service with job id must be defined";
-        return Collections.singletonList(new ValidationError(level, message));
+        return List.of(new ValidationError(level, message));
     }
 
     /**
@@ -85,9 +84,9 @@ public class JobValidator {
      */
     private List<ValidationError> git() {
         if (this.job.getGit() == null || this.hasValue(this.job.getGit().getHead().getId())) {
-            return Collections.emptyList();
+            return List.of();
         }
-        return Collections.singletonList(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));
+        return List.of(new ValidationError(Level.ERROR, "Commit id for HEAD must be defined"));
     }
 
     /**

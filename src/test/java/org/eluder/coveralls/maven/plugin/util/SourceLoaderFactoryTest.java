@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 import org.apache.maven.project.MavenProject;
 import org.junit.jupiter.api.Assertions;
@@ -86,8 +86,8 @@ class SourceLoaderFactoryTest {
         this.m1Sources = Files.createDirectory(this.rootSources.resolve("m1"));
         this.m2Sources = Files.createDirectory(this.m1Sources.resolve("m2"));
         Mockito.lenient().when(this.root.getCollectedProjects()).thenReturn(Arrays.asList(this.m1, this.m2));
-        Mockito.lenient().when(this.m1.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
-        Mockito.lenient().when(this.m2.getCollectedProjects()).thenReturn(Collections.<MavenProject> emptyList());
+        Mockito.lenient().when(this.m1.getCollectedProjects()).thenReturn(List.of());
+        Mockito.lenient().when(this.m2.getCollectedProjects()).thenReturn(List.of());
         Mockito.lenient().when(this.root.getCompileSourceRoots())
                 .thenReturn(Arrays.asList(this.rootSources.toFile().getAbsolutePath()));
         Mockito.lenient().when(this.m1.getCompileSourceRoots())
