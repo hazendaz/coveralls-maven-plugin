@@ -25,7 +25,6 @@
 package org.eluder.coveralls.maven.plugin;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -104,7 +103,7 @@ class EnvironmentTest {
      */
     @Test
     void setupWithoutServices() {
-        this.create(Collections.<ServiceSetup> emptyList()).setup();
+        this.create(List.of()).setup();
         Assertions.assertEquals("service", this.mojo.serviceName);
     }
 

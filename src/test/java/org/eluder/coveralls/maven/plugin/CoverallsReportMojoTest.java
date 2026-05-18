@@ -30,7 +30,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.model.Build;
@@ -152,7 +151,7 @@ class CoverallsReportMojoTest {
 
             @Override
             protected Environment createEnvironment() {
-                return new Environment(this, Collections.<ServiceSetup> emptyList());
+                return new Environment(this, List.of());
             }
 
             @Override
@@ -250,7 +249,7 @@ class CoverallsReportMojoTest {
 
             @Override
             protected List<CoverageParser> createCoverageParsers(SourceLoader sourceLoader) throws IOException {
-                return Collections.emptyList();
+                return List.of();
             }
         };
         this.mojo.sourceDirectories = Arrays.asList(TestIoUtil.getFile("/"));

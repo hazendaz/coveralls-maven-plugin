@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -98,7 +98,7 @@ class CoverageParsersFactoryTest {
         this.reportingDir = Files.createDirectory(this.folder.resolve("reportingDir"));
         this.targetDir = Files.createDirectory(this.folder.resolve("targetDir"));
         Mockito.lenient().when(this.projectMock.getCollectedProjects())
-                .thenReturn(Collections.<MavenProject> emptyList());
+                .thenReturn(List.of());
         Mockito.lenient().when(this.projectMock.getModel()).thenReturn(this.modelMock);
         Mockito.lenient().when(this.projectMock.getBuild()).thenReturn(this.buildMock);
         Mockito.lenient().when(this.modelMock.getReporting()).thenReturn(this.reportingMock);

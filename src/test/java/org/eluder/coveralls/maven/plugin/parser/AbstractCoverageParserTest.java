@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -189,7 +188,7 @@ public abstract class AbstractCoverageParserTest {
      */
     Set<Integer> toIntegerSet(final String commaSeparated) {
         if (commaSeparated.isEmpty()) {
-            return Collections.emptySet();
+            return Set.of();
         }
         final var split = commaSeparated.split(",", -1);
         final Set<Integer> values = new HashSet<>();
