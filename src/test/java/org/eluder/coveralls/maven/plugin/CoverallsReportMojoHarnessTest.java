@@ -33,10 +33,10 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link CoverallsReportMojo} using the maven-plugin-testing-harness.
- *
- * <p>This provides more realistic testing by using actual Maven infrastructure to look up and configure the Mojo,
- * rather than relying solely on mocks. The harness reads the generated plugin descriptor and configures the Mojo
- * using Plexus dependency injection, closely simulating what Maven does at runtime.
+ * <p>
+ * This provides more realistic testing by using actual Maven infrastructure to look up and configure the Mojo, rather
+ * than relying solely on mocks. The harness reads the generated plugin descriptor and configures the Mojo using Plexus
+ * dependency injection, closely simulating what Maven does at runtime.
  */
 @MojoTest
 class CoverallsReportMojoHarnessTest {
@@ -46,8 +46,8 @@ class CoverallsReportMojoHarnessTest {
 
     /**
      * Verify the mojo can be looked up by goal name using the testing harness.
-     *
-     * <p>This confirms the plugin descriptor is correctly generated and the mojo is properly registered as a Plexus
+     * <p>
+     * This confirms the plugin descriptor is correctly generated and the mojo is properly registered as a Plexus
      * component.
      *
      * @param mojo
