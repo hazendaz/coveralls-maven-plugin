@@ -25,7 +25,23 @@
     THE SOFTWARE.
 
 -->
-<!DOCTYPE Format>
-<Format>
- <!-- Dummy format file -->
-</Format>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.test</groupId>
+    <artifactId>test-project</artifactId>
+    <version>1.0.0</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.hazendaz.maven</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <configuration>
+                    <repoToken>test-token</repoToken>
+                    <dryRun>true</dryRun>
+                    <sourceEncoding>UTF-8</sourceEncoding>
+                    <serviceName>test-ci-service</serviceName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
