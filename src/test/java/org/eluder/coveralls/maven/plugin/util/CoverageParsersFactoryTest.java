@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013-2025 The Coveralls Maven Plugin Project Contributors:
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
  *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -97,8 +97,7 @@ class CoverageParsersFactoryTest {
     void init() throws IOException {
         this.reportingDir = Files.createDirectory(this.folder.resolve("reportingDir"));
         this.targetDir = Files.createDirectory(this.folder.resolve("targetDir"));
-        Mockito.lenient().when(this.projectMock.getCollectedProjects())
-                .thenReturn(Collections.<MavenProject> emptyList());
+        Mockito.lenient().when(this.projectMock.getCollectedProjects()).thenReturn(List.of());
         Mockito.lenient().when(this.projectMock.getModel()).thenReturn(this.modelMock);
         Mockito.lenient().when(this.projectMock.getBuild()).thenReturn(this.buildMock);
         Mockito.lenient().when(this.modelMock.getReporting()).thenReturn(this.reportingMock);

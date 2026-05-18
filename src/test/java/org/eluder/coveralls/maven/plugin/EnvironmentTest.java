@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013-2025 The Coveralls Maven Plugin Project Contributors:
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
  *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +25,6 @@
 package org.eluder.coveralls.maven.plugin;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -104,7 +103,7 @@ class EnvironmentTest {
      */
     @Test
     void setupWithoutServices() {
-        this.create(Collections.<ServiceSetup> emptyList()).setup();
+        this.create(List.of()).setup();
         Assertions.assertEquals("service", this.mojo.serviceName);
     }
 

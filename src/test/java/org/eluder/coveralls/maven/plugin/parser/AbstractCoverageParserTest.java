@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013-2025 The Coveralls Maven Plugin Project Contributors:
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
  *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -189,7 +188,7 @@ public abstract class AbstractCoverageParserTest {
      */
     Set<Integer> toIntegerSet(final String commaSeparated) {
         if (commaSeparated.isEmpty()) {
-            return Collections.emptySet();
+            return Set.of();
         }
         final var split = commaSeparated.split(",", -1);
         final Set<Integer> values = new HashSet<>();
