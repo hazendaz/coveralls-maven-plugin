@@ -113,6 +113,7 @@
         <json-smart.version>2.6.0</json-smart.version>
         <junit.version>6.0.3</junit.version>
         <maven.version>3.9.16</maven.version>
+        <maven-plugin-testing.version>4.0.0-alpha-2</maven-plugin-testing.version>
         <mockito.version>5.23.0</mockito.version>
         <slf4j.version>2.0.18</slf4j.version>
 
@@ -279,6 +280,19 @@
             <artifactId>assertj-core</artifactId>
             <version>3.27.7</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugin-testing</groupId>
+            <artifactId>maven-plugin-testing-harness</artifactId>
+            <version>${maven-plugin-testing.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.mockito</groupId>
+                    <artifactId>mockito-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
