@@ -33,10 +33,10 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link CoverallsReportMojo} using the maven-plugin-testing-harness.
- *
- * <p>This provides more realistic testing by using actual Maven infrastructure to look up and configure the Mojo,
- * rather than relying solely on mocks. The harness reads the generated plugin descriptor and configures the Mojo
- * using Plexus dependency injection, closely simulating what Maven does at runtime.
+ * <p>
+ * This provides more realistic testing by using actual Maven infrastructure to look up and configure the Mojo, rather
+ * than relying solely on mocks. The harness reads the generated plugin descriptor and configures the Mojo using Plexus
+ * dependency injection, closely simulating what Maven does at runtime.
  */
 @MojoTest
 class CoverallsReportMojoHarnessTest {
@@ -46,8 +46,8 @@ class CoverallsReportMojoHarnessTest {
 
     /**
      * Verify the mojo can be looked up by goal name using the testing harness.
-     *
-     * <p>This confirms the plugin descriptor is correctly generated and the mojo is properly registered as a Plexus
+     * <p>
+     * This confirms the plugin descriptor is correctly generated and the mojo is properly registered as a Plexus
      * component.
      *
      * @param mojo
@@ -70,7 +70,8 @@ class CoverallsReportMojoHarnessTest {
     @Test
     void testRepoTokenConfigured(@InjectMojo(goal = "report", pom = TEST_POM) CoverallsReportMojo mojo)
             throws IllegalAccessException {
-        Assertions.assertThat(MojoExtension.getVariableValueFromObject(mojo, "repoToken")).isEqualTo("test-token");
+        Assertions.assertThat((String) MojoExtension.getVariableValueFromObject(mojo, "repoToken"))
+                .isEqualTo("test-token");
     }
 
     /**
@@ -85,7 +86,8 @@ class CoverallsReportMojoHarnessTest {
     @Test
     void testDryRunConfigured(@InjectMojo(goal = "report", pom = TEST_POM) CoverallsReportMojo mojo)
             throws IllegalAccessException {
-        Assertions.assertThat(MojoExtension.getVariableValueFromObject(mojo, "dryRun")).isEqualTo(Boolean.TRUE);
+        Assertions.assertThat((Boolean) MojoExtension.getVariableValueFromObject(mojo, "dryRun"))
+                .isEqualTo(Boolean.TRUE);
     }
 
     /**
@@ -100,7 +102,8 @@ class CoverallsReportMojoHarnessTest {
     @Test
     void testSourceEncodingConfigured(@InjectMojo(goal = "report", pom = TEST_POM) CoverallsReportMojo mojo)
             throws IllegalAccessException {
-        Assertions.assertThat(MojoExtension.getVariableValueFromObject(mojo, "sourceEncoding")).isEqualTo("UTF-8");
+        Assertions.assertThat((String) MojoExtension.getVariableValueFromObject(mojo, "sourceEncoding"))
+                .isEqualTo("UTF-8");
     }
 
     /**
@@ -115,7 +118,7 @@ class CoverallsReportMojoHarnessTest {
     @Test
     void testServiceNameConfigured(@InjectMojo(goal = "report", pom = TEST_POM) CoverallsReportMojo mojo)
             throws IllegalAccessException {
-        Assertions.assertThat(MojoExtension.getVariableValueFromObject(mojo, "serviceName"))
+        Assertions.assertThat((String) MojoExtension.getVariableValueFromObject(mojo, "serviceName"))
                 .isEqualTo("test-ci-service");
     }
 
@@ -132,7 +135,7 @@ class CoverallsReportMojoHarnessTest {
     @Test
     void testDefaultFailOnServiceError(@InjectMojo(goal = "report", pom = TEST_POM) CoverallsReportMojo mojo)
             throws IllegalAccessException {
-        Assertions.assertThat(MojoExtension.getVariableValueFromObject(mojo, "failOnServiceError"))
+        Assertions.assertThat((Boolean) MojoExtension.getVariableValueFromObject(mojo, "failOnServiceError"))
                 .isEqualTo(Boolean.TRUE);
     }
 
@@ -149,7 +152,8 @@ class CoverallsReportMojoHarnessTest {
     @Test
     void testDefaultSkipIsFalse(@InjectMojo(goal = "report", pom = TEST_POM) CoverallsReportMojo mojo)
             throws IllegalAccessException {
-        Assertions.assertThat(MojoExtension.getVariableValueFromObject(mojo, "skip")).isEqualTo(Boolean.FALSE);
+        Assertions.assertThat((Boolean) MojoExtension.getVariableValueFromObject(mojo, "skip"))
+                .isEqualTo(Boolean.FALSE);
     }
 
     /**
@@ -166,7 +170,8 @@ class CoverallsReportMojoHarnessTest {
     @MojoParameter(name = "serviceJobId", value = "build-42")
     void testMojoParameterAnnotationOverride(@InjectMojo(goal = "report", pom = TEST_POM) CoverallsReportMojo mojo)
             throws IllegalAccessException {
-        Assertions.assertThat(MojoExtension.getVariableValueFromObject(mojo, "serviceJobId")).isEqualTo("build-42");
+        Assertions.assertThat((String) MojoExtension.getVariableValueFromObject(mojo, "serviceJobId"))
+                .isEqualTo("build-42");
     }
 
 }
