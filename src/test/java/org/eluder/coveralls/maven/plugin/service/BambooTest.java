@@ -96,4 +96,15 @@ class BambooTest {
         Assertions.assertEquals("master", new Bamboo(this.env()).getBranch());
     }
 
+    /**
+     * Test get environment.
+     */
+    @Test
+    void environment() {
+        final var env = new Bamboo(this.env()).getEnvironment();
+        Assertions.assertEquals("build123", env.getProperty("bamboo_build_number"));
+        Assertions.assertEquals("https://company.com/bamboo/build123", env.getProperty("bamboo_build_url"));
+        Assertions.assertEquals("master", env.getProperty("bamboo_branch"));
+    }
+
 }

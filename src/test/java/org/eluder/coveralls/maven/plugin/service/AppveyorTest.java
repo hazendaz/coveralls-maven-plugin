@@ -117,4 +117,18 @@ class AppveyorTest {
         Assertions.assertEquals("54de3316c44f", new Appveyor(this.env()).getJobId());
     }
 
+    /**
+     * Test get environment.
+     */
+    @Test
+    void environment() {
+        final var env = new Appveyor(this.env()).getEnvironment();
+        Assertions.assertEquals("54de3316c44f", env.getProperty("appveyor_build_id"));
+        Assertions.assertEquals("77", env.getProperty("appveyor_build_number"));
+        Assertions.assertEquals("owner/project", env.getProperty("appveyor_repo_name"));
+        Assertions.assertEquals("master", env.getProperty("appveyor_branch"));
+        Assertions.assertEquals("a3562fgcd2", env.getProperty("appveyor_commit"));
+        Assertions.assertEquals("10", env.getProperty("appveyor_pull_request"));
+    }
+
 }

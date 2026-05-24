@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<!--
+
+    The MIT License (MIT)
+
+    Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+        https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+
+-->
+<!-- Test fixture for SagaParser branch coverage -->
+<coverage branch-rate="0.5" branches-covered="3" branches-valid="6" complexity="0" line-rate="0.75" lines-valid="4" lines-covered="3" timestamp="1376875707" version="1.9">
+    <sources>
+        <source>test</source>
+    </sources>
+    <packages>
+        <package name="default" line-rate="0.75" branch-rate="0.5" complexity="0">
+            <classes>
+                <class name="BranchScript.js" filename="src/BranchScript.js" line-rate="0.75" branch-rate="0.5" complexity="0">
+                    <methods>
+                        <line number="1" hits="1" branch="false"/>
+                    </methods>
+                    <lines>
+                        <line number="1" hits="1" branch="false"/>
+                        <line number="2" hits="1" branch="true" condition-coverage="75% (3/4)"/>
+                        <line number="3" hits="0" branch="true" condition-coverage="0% (0/2)"/>
+                        <line number="4" hits="1" branch="true"/>
+                    </lines>
+                </class>
+            </classes>
+        </package>
+    </packages>
+</coverage>

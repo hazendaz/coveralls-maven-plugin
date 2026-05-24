@@ -110,4 +110,66 @@ class TimestampParserTest {
         Assertions.assertThrows(ProcessingException.class, () -> new TimestampParser(null).parse("2015-08-20"));
     }
 
+    /**
+     * Parses a blank string (returns null).
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
+    @Test
+    void parseBlankString() throws ProcessingException {
+        final var parsed = new TimestampParser(null).parse("   ");
+
+        Assertions.assertNull(parsed);
+    }
+
+    /**
+     * Parses with a custom format without timezone (LocalDateTime path).
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
+    @Test
+    void parseLocalDateTimeFormat() throws ProcessingException {
+        final var format = "yyyy-MM-dd HH:mm:ss";
+        final var parsed = new TimestampParser(format).parse("2015-08-20 20:10:00");
+
+        Assertions.assertNotNull(parsed);
+        Assertions.assertEquals(2015, parsed.atZone(java.time.ZoneOffset.UTC).getYear());
+        Assertions.assertEquals(8, parsed.atZone(java.time.ZoneOffset.UTC).getMonthValue());
+        Assertions.assertEquals(20, parsed.atZone(java.time.ZoneOffset.UTC).getDayOfMonth());
+    }
+
+    /**
+     * Parses with a format that uses lowercase 'z' (timezone name) triggering the z-path in hasZone.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
+    @Test
+    void parseTimezoneNameFormat() throws ProcessingException {
+        final var format = "yyyy-MM-dd'T'HH:mm:ss z";
+        final var parsed = new TimestampParser(format).parse("2015-08-20T20:10:00 UTC");
+
+        Assertions.assertNotNull(parsed);
+        Assertions.assertEquals(2015, parsed.atZone(ZoneOffset.UTC).getYear());
+        Assertions.assertEquals(20, parsed.atZone(ZoneOffset.UTC).getDayOfMonth());
+    }
+
+    /**
+     * Parses with a format that uses capital 'Z' (basic offset) triggering the Z-path in hasZone.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
+    @Test
+    void parseBasicOffsetFormat() throws ProcessingException {
+        final var format = "yyyy-MM-dd'T'HH:mm:ssZ";
+        final var parsed = new TimestampParser(format).parse("2015-08-20T20:10:00+0000");
+
+        Assertions.assertNotNull(parsed);
+        Assertions.assertEquals(2015, parsed.atZone(ZoneOffset.UTC).getYear());
+        Assertions.assertEquals(20, parsed.atZone(ZoneOffset.UTC).getHour());
+    }
+
 }
