@@ -97,4 +97,41 @@ class WerckerTest {
         Assertions.assertEquals("master", new Wercker(this.env()).getBranch());
     }
 
+    /**
+     * Test get build number.
+     */
+    @Test
+    void buildNumber() {
+        Assertions.assertEquals("123456789", new Wercker(this.env()).getBuildNumber());
+    }
+
+    /**
+     * Test get pull request (null when not set).
+     */
+    @Test
+    void pullRequest() {
+        Assertions.assertNull(new Wercker(this.env()).getPullRequest());
+    }
+
+    /**
+     * Test get pull request when set.
+     */
+    @Test
+    void pullRequestSet() {
+        final Map<String, String> env = new HashMap<>(this.env());
+        env.put("WERCKER_PULL_REQUEST", "42");
+        Assertions.assertEquals("42", new Wercker(env).getPullRequest());
+    }
+
+    /**
+     * Test get environment.
+     */
+    @Test
+    void environment() {
+        final var env = new Wercker(this.env()).getEnvironment();
+        Assertions.assertEquals("123456789", env.getProperty("wercker_build_id"));
+        Assertions.assertEquals("https://app.wercker.com/build/123456789", env.getProperty("wercker_build_url"));
+        Assertions.assertEquals("master", env.getProperty("wercker_branch"));
+    }
+
 }

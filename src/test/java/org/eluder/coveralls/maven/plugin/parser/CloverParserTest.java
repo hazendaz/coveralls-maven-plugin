@@ -25,12 +25,21 @@
 package org.eluder.coveralls.maven.plugin.parser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 /**
  * The Class CloverParserTest.
@@ -50,6 +59,37 @@ class CloverParserTest extends AbstractCoverageParserTest {
     @Override
     protected List<List<String>> getCoverageFixture() {
         return CoverageFixture.JAVA_FILES_CLOVER;
+    }
+
+    /**
+     * Tests parsing a clover XML where a "cond" line has falsecount=0 (coverage = 0), covering the trueCount==0 ||
+     * falseCount==0 branch of the cond handling.
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    void parseCondLineWithZeroFalseCount() throws ProcessingException, IOException {
+        final var content = TestIoUtil.readFileContent(TestIoUtil.getFile("PartialCoverage.java"));
+        final var sourceLoader = Mockito.mock(SourceLoader.class);
+        Mockito.when(sourceLoader.load("org/eluder/coverage/sample/PartialCoverage.java"))
+                .thenAnswer(invocation -> new Source("org/eluder/coverage/sample/PartialCoverage.java", content,
+                        TestIoUtil.getSha512DigestHex(content)));
+
+        final SourceCallback callback = Mockito.mock(SourceCallback.class);
+
+        final var parser = new CloverParser(TestIoUtil.getFile("clover-extra.xml"), sourceLoader);
+        parser.parse(callback);
+
+        final ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
+        Mockito.verify(callback).onSource(captor.capture());
+
+        final var source = captor.getValue();
+        // cond with falsecount=0, truecount=1 → coverage=0 for line 6
+        final var condCoverage = source.getCoverage()[5]; // line 6 (0-indexed: 5)
+        Assertions.assertThat(condCoverage).isEqualTo(0);
     }
 
 }

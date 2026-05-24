@@ -112,6 +112,21 @@ class JobLoggerTest {
     }
 
     /**
+     * Log with build number but no url.
+     */
+    @Test
+    void logWithBuildNumberOnly() {
+        Mockito.when(this.jobMock.getServiceName()).thenReturn("service");
+        Mockito.when(this.jobMock.getServiceBuildNumber()).thenReturn("10");
+
+        new JobLogger(this.jobMock).log(this.logMock);
+
+        Mockito.verify(this.logMock).info("Starting Coveralls job for service (10)");
+        Mockito.verify(this.logMock).isDebugEnabled();
+        Mockito.verifyNoMoreInteractions(this.logMock);
+    }
+
+    /**
      * Log dry run.
      */
     @Test

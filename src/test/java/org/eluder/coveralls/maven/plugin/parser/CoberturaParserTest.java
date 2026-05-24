@@ -25,12 +25,21 @@
 package org.eluder.coveralls.maven.plugin.parser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
 import org.eluder.coveralls.maven.plugin.CoverageFixture;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
+import org.eluder.coveralls.maven.plugin.ProcessingException;
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
+import org.eluder.coveralls.maven.plugin.util.TestIoUtil;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 /**
  * The Class CoberturaParserTest.
@@ -50,6 +59,36 @@ class CoberturaParserTest extends AbstractCoverageParserTest {
     @Override
     protected List<List<String>> getCoverageFixture() {
         return CoverageFixture.JAVA_FILES;
+    }
+
+    /**
+     * Tests that a branch="true" line without a condition-coverage attribute causes an early return with no branches
+     * added to the source (covers the null condition-coverage guard).
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @Test
+    void parseBranchLineWithNullConditionCoverage() throws ProcessingException, IOException {
+        final var content = TestIoUtil.readFileContent(TestIoUtil.getFile("SimpleCoverage.java"));
+        final var sourceLoader = Mockito.mock(SourceLoader.class);
+        Mockito.when(sourceLoader.load("org/eluder/coverage/sample/SimpleCoverage.java"))
+                .thenAnswer(invocation -> new Source("org/eluder/coverage/sample/SimpleCoverage.java", content,
+                        TestIoUtil.getSha512DigestHex(content)));
+
+        final SourceCallback callback = Mockito.mock(SourceCallback.class);
+
+        final var parser = new CoberturaParser(TestIoUtil.getFile("cobertura-branch-null.xml"), sourceLoader);
+        parser.parse(callback);
+
+        final ArgumentCaptor<Source> captor = ArgumentCaptor.forClass(Source.class);
+        Mockito.verify(callback).onSource(captor.capture());
+
+        final var source = captor.getValue();
+        // The branch=true line with no condition-coverage should NOT add any branches
+        Assertions.assertThat(source.getBranchesList()).isEmpty();
     }
 
 }

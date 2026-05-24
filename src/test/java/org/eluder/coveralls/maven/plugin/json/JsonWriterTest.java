@@ -177,6 +177,52 @@ class JsonWriterTest {
     }
 
     /**
+     * Write start and end with parallel enabled.
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ProcessingException
+     *             the processing exception
+     */
+    @SuppressWarnings("rawtypes")
+    @Test
+    void writeStartAndEndWithParallel() throws IOException, ProcessingException {
+        final var job = new Job().withServiceName("service").withParallel(true);
+        try (var writer = new JsonWriter(job, this.file)) {
+            writer.onBegin();
+            writer.onComplete();
+        }
+        final var content = TestIoUtil.readFileContent(this.file);
+        final var jsonMap = this.stringToJsonMap(content);
+        Assertions.assertEquals(Boolean.TRUE, jsonMap.get("parallel"));
+    }
+
+    /**
+     * Write start and end with minimal job (no optional fields).
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws ProcessingException
+     *             the processing exception
+     */
+    @Test
+    void writeStartAndEndMinimalJob() throws IOException, ProcessingException {
+        final var job = new Job();
+        try (var writer = new JsonWriter(job, this.file)) {
+            writer.onBegin();
+            writer.onComplete();
+        }
+        final var content = TestIoUtil.readFileContent(this.file);
+        final var jsonMap = this.stringToJsonMap(content);
+        Assertions.assertNull(jsonMap.get("service_name"));
+        Assertions.assertNull(jsonMap.get("repo_token"));
+        Assertions.assertNull(jsonMap.get("git"));
+        Assertions.assertNull(jsonMap.get("run_at"));
+        Assertions.assertNull(jsonMap.get("environment"));
+        Assertions.assertNull(jsonMap.get("parallel"));
+    }
+
+    /**
      * Job.
      *
      * @return the job

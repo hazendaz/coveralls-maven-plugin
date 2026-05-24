@@ -182,4 +182,25 @@ class HttpClientFactoryTest {
         Assertions.assertEquals("Hello World!", response.body());
     }
 
+    /**
+     * Null proxy request (proxy method with null should be a no-op).
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     * @throws InterruptedException
+     *             the interrupted exception
+     */
+    @Test
+    void nullProxyRequest() throws IOException, InterruptedException {
+        HttpClientFactoryTest.targetServer.stubFor(
+                WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.aResponse().withBody("Hello World!")));
+
+        final var client = new HttpClientFactory(HttpClientFactoryTest.TARGET_URL).proxy(null).create();
+        final var response = client.send(
+                HttpRequest.newBuilder().uri(URI.create(HttpClientFactoryTest.TARGET_URL)).GET().build(),
+                HttpClientFactoryTest.STRING_RESPONSE_HANDLER);
+
+        Assertions.assertEquals("Hello World!", response.body());
+    }
+
 }
