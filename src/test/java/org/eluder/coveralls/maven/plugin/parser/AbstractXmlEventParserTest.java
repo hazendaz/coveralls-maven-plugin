@@ -24,8 +24,8 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -86,7 +86,7 @@ class AbstractXmlEventParserTest {
         final var sourceLoader = Mockito.mock(SourceLoader.class);
         final var callback = Mockito.mock(SourceCallback.class);
 
-        final var nonExistentFile = new File("/non/existent/path/coverage.xml");
+        final var nonExistentFile = Path.of("/non/existent/path/coverage.xml").toFile();
         final var parser = new AbstractXmlEventParser(nonExistentFile, sourceLoader) {
             @Override
             protected void onEvent(final XMLStreamReader xml, final SourceCallback cb)
