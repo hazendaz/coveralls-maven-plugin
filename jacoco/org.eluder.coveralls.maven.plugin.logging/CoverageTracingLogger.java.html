@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverageTracingLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.logging</a> &gt; <span class="el_source">CoverageTracingLogger.java</span></div><h1>CoverageTracingLogger.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,6 +24,8 @@
  */
 package org.eluder.coveralls.maven.plugin.logging;
 
+import java.io.IOException;
+
 import org.apache.maven.plugin.logging.Log;
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Branch;
@@ -30,88 +33,147 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.ChainingSourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 
-import java.io.IOException;
-
+/**
+ * The Class CoverageTracingLogger.
+ */
 public class CoverageTracingLogger extends ChainingSourceCallback implements Logger {
 
-<span class="fc" id="L37">    private long files = 0;</span>
-<span class="fc" id="L38">    private long lines = 0;</span>
-<span class="fc" id="L39">    private long relevant = 0;</span>
-<span class="fc" id="L40">    private long covered = 0;</span>
-<span class="fc" id="L41">    private long branches = 0;</span>
-<span class="fc" id="L42">    private long coveredBranches = 0;</span>
+    /** The files. */
+    private long files;
 
+    /** The lines. */
+    private long lines;
+
+    /** The relevant. */
+    private long relevant;
+
+    /** The covered. */
+    private long covered;
+
+    /** The branches. */
+    private long branches;
+
+    /** The covered branches. */
+    private long coveredBranches;
+
+    /**
+     * Instantiates a new coverage tracing logger.
+     *
+     * @param chained
+     *            the chained
+     */
     public CoverageTracingLogger(final SourceCallback chained) {
-<span class="fc" id="L45">        super(chained);</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L66">        super(chained);</span>
+<span class="fc" id="L67">    }</span>
 
+    /**
+     * Gets the files.
+     *
+     * @return the files
+     */
     public long getFiles() {
-<span class="fc" id="L49">        return files;</span>
+<span class="fc" id="L75">        return this.files;</span>
     }
 
+    /**
+     * Gets the lines.
+     *
+     * @return the lines
+     */
     public final long getLines() {
-<span class="fc" id="L53">        return lines;</span>
+<span class="fc" id="L84">        return this.lines;</span>
     }
 
+    /**
+     * Gets the relevant.
+     *
+     * @return the relevant
+     */
     public final long getRelevant() {
-<span class="fc" id="L57">        return relevant;</span>
+<span class="fc" id="L93">        return this.relevant;</span>
     }
 
+    /**
+     * Gets the covered.
+     *
+     * @return the covered
+     */
     public final long getCovered() {
-<span class="fc" id="L61">        return covered;</span>
+<span class="fc" id="L102">        return this.covered;</span>
     }
 
+    /**
+     * Gets the missed.
+     *
+     * @return the missed
+     */
     public final long getMissed() {
-<span class="fc" id="L65">        return relevant - covered;</span>
+<span class="fc" id="L111">        return this.relevant - this.covered;</span>
     }
 
+    /**
+     * Gets the branches.
+     *
+     * @return the branches
+     */
     public final long getBranches() {
-<span class="fc" id="L69">        return branches;</span>
+<span class="fc" id="L120">        return this.branches;</span>
     }
 
+    /**
+     * Gets the covered branches.
+     *
+     * @return the covered branches
+     */
     public final long getCoveredBranches() {
-<span class="fc" id="L73">        return coveredBranches;</span>
+<span class="fc" id="L129">        return this.coveredBranches;</span>
     }
 
+    /**
+     * Gets the missed branches.
+     *
+     * @return the missed branches
+     */
     public final long getMissedBranches() {
-<span class="fc" id="L77">        return branches - coveredBranches;</span>
+<span class="fc" id="L138">        return this.branches - this.coveredBranches;</span>
     }
 
     @Override
     public Position getPosition() {
-<span class="fc" id="L82">        return Position.AFTER;</span>
+<span class="fc" id="L143">        return Position.AFTER;</span>
     }
 
     @Override
     public void log(final Log log) {
-<span class="fc" id="L87">        log.info(&quot;Gathered code coverage metrics for &quot; + getFiles() + &quot; source files with &quot; + getLines() + &quot; lines of code:&quot;);</span>
-<span class="fc" id="L88">        log.info(&quot;- &quot; + getRelevant() + &quot; relevant lines&quot;);</span>
-<span class="fc" id="L89">        log.info(&quot;- &quot; + getCovered() + &quot; covered lines&quot;);</span>
-<span class="fc" id="L90">        log.info(&quot;- &quot; + getMissed() + &quot; missed lines&quot;);</span>
-<span class="fc" id="L91">        log.info(&quot;- &quot; + getBranches() + &quot; branches&quot;);</span>
-<span class="fc" id="L92">        log.info(&quot;- &quot; + getCoveredBranches() + &quot; covered branches&quot;);</span>
-<span class="fc" id="L93">        log.info(&quot;- &quot; + getMissedBranches() + &quot; missed branches&quot;);</span>
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L148">        log.info(&quot;Gathered code coverage metrics for &quot; + this.getFiles() + &quot; source files with &quot; + this.getLines()</span>
+                + &quot; lines of code:&quot;);
+<span class="fc" id="L150">        log.info(&quot;- &quot; + this.getRelevant() + &quot; relevant lines&quot;);</span>
+<span class="fc" id="L151">        log.info(&quot;- &quot; + this.getCovered() + &quot; covered lines&quot;);</span>
+<span class="fc" id="L152">        log.info(&quot;- &quot; + this.getMissed() + &quot; missed lines&quot;);</span>
+<span class="fc" id="L153">        log.info(&quot;- &quot; + this.getBranches() + &quot; branches&quot;);</span>
+<span class="fc" id="L154">        log.info(&quot;- &quot; + this.getCoveredBranches() + &quot; covered branches&quot;);</span>
+<span class="fc" id="L155">        log.info(&quot;- &quot; + this.getMissedBranches() + &quot; missed branches&quot;);</span>
+<span class="fc" id="L156">    }</span>
 
     @Override
     protected void onSourceInternal(final Source source) throws ProcessingException, IOException {
-<span class="fc" id="L98">        files++;</span>
-<span class="fc" id="L99">        lines += source.getCoverage().length;</span>
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (Integer coverage : source.getCoverage()) {</span>
-<span class="fc bfc" id="L101" title="All 2 branches covered.">            if (coverage != null) {</span>
-<span class="fc" id="L102">                relevant++;</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">                if (coverage &gt; 0) {</span>
-<span class="fc" id="L104">                    covered++;</span>
+<span class="fc" id="L160">        this.files++;</span>
+<span class="fc" id="L161">        this.lines += source.getCoverage().length;</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        for (final Integer coverage : source.getCoverage()) {</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">            if (coverage != null) {</span>
+<span class="fc" id="L164">                this.relevant++;</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">                if (coverage &gt; 0) {</span>
+<span class="fc" id="L166">                    this.covered++;</span>
                 }
             }
         }
 
-<span class="fc" id="L109">        this.branches += source.getBranchesList().size();</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (final Branch b : source.getBranchesList()) {</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (b.getHits() &gt; 0) {</span>
-<span class="fc" id="L112">                coveredBranches++;</span>
+<span class="fc" id="L171">        this.branches += source.getBranchesList().size();</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (final Branch b : source.getBranchesList()) {</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">            if (b.getHits() &gt; 0) {</span>
+<span class="fc" id="L174">                this.coveredBranches++;</span>
             }
-<span class="fc" id="L114">        }</span>
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L176">        }</span>
+<span class="fc" id="L177">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

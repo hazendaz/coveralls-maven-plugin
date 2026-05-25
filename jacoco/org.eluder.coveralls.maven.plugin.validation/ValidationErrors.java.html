@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ValidationErrors.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.validation</a> &gt; <span class="el_source">ValidationErrors.java</span></div><h1>ValidationErrors.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,32 +24,59 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import org.apache.maven.plugin.logging.Log;
-import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
-
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="fc" id="L32">public class ValidationErrors extends ArrayList&lt;ValidationError&gt; {</span>
+import org.apache.maven.plugin.logging.Log;
+import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
+/**
+ * The Class ValidationErrors.
+ */
+public class ValidationErrors extends ArrayList&lt;ValidationError&gt; {
+
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Instantiates a new validation errors.
+     */
+    public ValidationErrors() {
+<span class="fc" id="L45">        super();</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Throw or inform.
+     *
+     * @param log
+     *            the log
+     */
     public void throwOrInform(final Log log) {
-<span class="fc" id="L35">        List&lt;ValidationError&gt; errors = filter(Level.ERROR);</span>
-<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (!errors.isEmpty()) {</span>
-<span class="fc" id="L37">            throw new ValidationException(errors.get(0).getMessage());</span>
+<span class="fc" id="L55">        final var errors = this.filter(Level.ERROR);</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (!errors.isEmpty()) {</span>
+<span class="fc" id="L57">            throw new ValidationException(errors.get(0).getMessage());</span>
         }
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (ValidationError error : filter(Level.WARN)) {</span>
-<span class="fc" id="L40">            log.warn(error.getMessage());</span>
-<span class="fc" id="L41">        }</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (final ValidationError error : this.filter(Level.WARN)) {</span>
+<span class="fc" id="L60">            log.warn(error.getMessage());</span>
+<span class="fc" id="L61">        }</span>
+<span class="fc" id="L62">    }</span>
 
+    /**
+     * Filter.
+     *
+     * @param level
+     *            the level
+     *
+     * @return the list
+     */
     private List&lt;ValidationError&gt; filter(final Level level) {
-<span class="fc" id="L45">        List&lt;ValidationError&gt; filtered = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        for (ValidationError error : this) {</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (level.equals(error.getLevel())) {</span>
-<span class="fc" id="L48">                filtered.add(error);</span>
+<span class="fc" id="L73">        final List&lt;ValidationError&gt; filtered = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (final ValidationError error : this) {</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            if (level.equals(error.getLevel())) {</span>
+<span class="fc" id="L76">                filtered.add(error);</span>
             }
-<span class="fc" id="L50">        }</span>
-<span class="fc" id="L51">        return filtered;</span>
+<span class="fc" id="L78">        }</span>
+<span class="fc" id="L79">        return filtered;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

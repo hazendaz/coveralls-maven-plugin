@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Appveyor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">Appveyor.java</span></div><h1>Appveyor.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -24,62 +25,96 @@
 package org.eluder.coveralls.maven.plugin.service;
 
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Service implementation for Appveyor.
  * &lt;p&gt;
- * http://appveyor.com/
+ * https://appveyor.com/
  */
 public class Appveyor extends AbstractServiceSetup {
 
+    /** The Constant APPVEYOR_NAME. */
     public static final String APPVEYOR_NAME = &quot;Appveyor&quot;;
+
+    /** The Constant APPVEYOR. */
     public static final String APPVEYOR = &quot;APPVEYOR&quot;;
+
+    /** The Constant APPVEYOR_BUILD_NUMBER. */
     public static final String APPVEYOR_BUILD_NUMBER = &quot;APPVEYOR_BUILD_NUMBER&quot;;
+
+    /** The Constant APPVEYOR_BUILD_ID. */
     public static final String APPVEYOR_BUILD_ID = &quot;APPVEYOR_BUILD_ID&quot;;
+
+    /** The Constant APPVEYOR_BRANCH. */
     public static final String APPVEYOR_BRANCH = &quot;APPVEYOR_REPO_BRANCH&quot;;
+
+    /** The Constant APPVEYOR_COMMIT. */
     public static final String APPVEYOR_COMMIT = &quot;APPVEYOR_REPO_COMMIT&quot;;
+
+    /** The Constant APPVEYOR_PULL_REQUEST. */
     public static final String APPVEYOR_PULL_REQUEST = &quot;APPVEYOR_PULL_REQUEST_NUMBER&quot;;
+
+    /** The Constant APPVEYOR_REPO_NAME. */
     public static final String APPVEYOR_REPO_NAME = &quot;APPVEYOR_REPO_NAME&quot;;
 
+    /**
+     * Instantiates a new appveyor.
+     *
+     * @param env
+     *            the env
+     */
     public Appveyor(final Map&lt;String, String&gt; env) {
-<span class="fc" id="L45">        super(env);</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L68">        super(env);</span>
+<span class="fc" id="L69">    }</span>
 
     @Override
     public boolean isSelected() {
-<span class="fc" id="L50">        return Boolean.parseBoolean(getProperty(APPVEYOR));</span>
+<span class="fc" id="L73">        return Boolean.parseBoolean(this.getProperty(Appveyor.APPVEYOR));</span>
     }
 
     @Override
     public String getName() {
-<span class="fc" id="L55">        return APPVEYOR_NAME;</span>
+<span class="fc" id="L78">        return Appveyor.APPVEYOR_NAME;</span>
     }
 
     @Override
     public String getBuildNumber() {
-<span class="fc" id="L60">        return getProperty(APPVEYOR_BUILD_NUMBER);</span>
+<span class="fc" id="L83">        return this.getProperty(Appveyor.APPVEYOR_BUILD_NUMBER);</span>
     }
 
     @Override
     public String getBuildUrl() {
-<span class="fc" id="L65">        return &quot;https://ci.appveyor.com/project/&quot; + getProperty(APPVEYOR_REPO_NAME) + &quot;/build/&quot; + getProperty(APPVEYOR_BUILD_NUMBER);</span>
+<span class="fc" id="L88">        return &quot;https://ci.appveyor.com/project/&quot; + this.getProperty(Appveyor.APPVEYOR_REPO_NAME) + &quot;/build/&quot;</span>
+<span class="fc" id="L89">                + this.getProperty(Appveyor.APPVEYOR_BUILD_NUMBER);</span>
     }
 
     @Override
     public String getBranch() {
-<span class="fc" id="L70">        return getProperty(APPVEYOR_BRANCH);</span>
+<span class="fc" id="L94">        return this.getProperty(Appveyor.APPVEYOR_BRANCH);</span>
     }
 
     @Override
     public String getPullRequest() {
-<span class="fc" id="L75">        return getProperty(APPVEYOR_PULL_REQUEST);</span>
+<span class="fc" id="L99">        return this.getProperty(Appveyor.APPVEYOR_PULL_REQUEST);</span>
     }
-
 
     @Override
     public String getJobId() {
-<span class="fc" id="L81">        return getProperty(APPVEYOR_BUILD_ID);</span>
+<span class="fc" id="L104">        return this.getProperty(Appveyor.APPVEYOR_BUILD_ID);</span>
+    }
+
+    @Override
+    public Properties getEnvironment() {
+<span class="fc" id="L109">        final var environment = new Properties();</span>
+<span class="fc" id="L110">        this.addProperty(environment, &quot;appveyor_build_id&quot;, this.getProperty(Appveyor.APPVEYOR_BUILD_ID));</span>
+<span class="fc" id="L111">        this.addProperty(environment, &quot;appveyor_build_number&quot;, this.getProperty(Appveyor.APPVEYOR_BUILD_NUMBER));</span>
+<span class="fc" id="L112">        this.addProperty(environment, &quot;appveyor_repo_name&quot;, this.getProperty(Appveyor.APPVEYOR_REPO_NAME));</span>
+<span class="fc" id="L113">        this.addProperty(environment, &quot;appveyor_branch&quot;, this.getProperty(Appveyor.APPVEYOR_BRANCH));</span>
+<span class="fc" id="L114">        this.addProperty(environment, &quot;appveyor_commit&quot;, this.getProperty(Appveyor.APPVEYOR_COMMIT));</span>
+<span class="fc" id="L115">        this.addProperty(environment, &quot;appveyor_pull_request&quot;, this.getProperty(Appveyor.APPVEYOR_PULL_REQUEST));</span>
+<span class="fc" id="L116">        return environment;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Git.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">Git.java</span></div><h1>Git.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,128 +24,251 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+/**
+ * The Class Git.
+ */
 public class Git implements JsonObject {
 
+    /** The Constant serialVersionUID. */
     private static final long serialVersionUID = 1L;
 
+    /** The base dir. */
     @JsonIgnore
     private final File baseDir;
 
+    /** The head. */
     @JsonProperty(&quot;head&quot;)
     private final Head head;
 
+    /** The branch. */
     @JsonProperty(&quot;branch&quot;)
     private final String branch;
 
+    /** The remotes. */
     @JsonProperty(&quot;remotes&quot;)
     private final List&lt;Remote&gt; remotes;
 
-<span class="fc" id="L49">    public Git(final File baseDir, final Head head, final String branch, final List&lt;Remote&gt; remotes) {</span>
-<span class="fc" id="L50">        this.baseDir = baseDir;</span>
-<span class="fc" id="L51">        this.head = head;</span>
-<span class="fc" id="L52">        this.branch = branch;</span>
-<span class="fc" id="L53">        this.remotes = remotes;</span>
-<span class="fc" id="L54">    }</span>
+    /**
+     * Instantiates a new git.
+     *
+     * @param baseDir
+     *            the base dir
+     * @param head
+     *            the head
+     * @param branch
+     *            the branch
+     * @param remotes
+     *            the remotes
+     */
+<span class="fc" id="L70">    public Git(final File baseDir, final Head head, final String branch, final List&lt;Remote&gt; remotes) {</span>
+<span class="fc" id="L71">        this.baseDir = baseDir;</span>
+<span class="fc" id="L72">        this.head = head;</span>
+<span class="fc" id="L73">        this.branch = branch;</span>
+<span class="fc" id="L74">        this.remotes = remotes;</span>
+<span class="fc" id="L75">    }</span>
 
+    /**
+     * Gets the base dir.
+     *
+     * @return the base dir
+     */
     public File getBaseDir() {
-<span class="fc" id="L57">        return baseDir;</span>
+<span class="fc" id="L83">        return this.baseDir;</span>
     }
 
+    /**
+     * Gets the head.
+     *
+     * @return the head
+     */
     public Head getHead() {
-<span class="fc" id="L61">        return head;</span>
+<span class="fc" id="L92">        return this.head;</span>
     }
 
+    /**
+     * Gets the branch.
+     *
+     * @return the branch
+     */
     public String getBranch() {
-<span class="fc" id="L65">        return branch;</span>
+<span class="fc" id="L101">        return this.branch;</span>
     }
 
+    /**
+     * Gets the remotes.
+     *
+     * @return the remotes
+     */
     public List&lt;Remote&gt; getRemotes() {
-<span class="fc" id="L69">        return remotes;</span>
+<span class="fc" id="L110">        return this.remotes;</span>
     }
 
+    /**
+     * The Class Head.
+     */
     public static class Head implements Serializable {
+
+        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = 1L;
 
+        /** The id. */
         @JsonProperty(&quot;id&quot;)
         private final String id;
 
+        /** The author name. */
         @JsonProperty(&quot;author_name&quot;)
         private final String authorName;
 
+        /** The author email. */
         @JsonProperty(&quot;author_email&quot;)
         private final String authorEmail;
 
+        /** The committer name. */
         @JsonProperty(&quot;committer_name&quot;)
         private final String committerName;
 
+        /** The committer email. */
         @JsonProperty(&quot;committer_email&quot;)
         private final String committerEmail;
 
+        /** The message. */
         @JsonProperty(&quot;message&quot;)
         private final String message;
 
-<span class="fc" id="L93">        public Head(final String id, final String authorName, final String authorEmail, final String committerName, final String committerEmail, final String message) {</span>
-<span class="fc" id="L94">            this.id = id;</span>
-<span class="fc" id="L95">            this.authorName = authorName;</span>
-<span class="fc" id="L96">            this.authorEmail = authorEmail;</span>
-<span class="fc" id="L97">            this.committerName = committerName;</span>
-<span class="fc" id="L98">            this.committerEmail = committerEmail;</span>
-<span class="fc" id="L99">            this.message = message;</span>
-<span class="fc" id="L100">        }</span>
+        /**
+         * Instantiates a new head.
+         *
+         * @param id
+         *            the id
+         * @param authorName
+         *            the author name
+         * @param authorEmail
+         *            the author email
+         * @param committerName
+         *            the committer name
+         * @param committerEmail
+         *            the committer email
+         * @param message
+         *            the message
+         */
+        public Head(final String id, final String authorName, final String authorEmail, final String committerName,
+<span class="fc" id="L162">                final String committerEmail, final String message) {</span>
+<span class="fc" id="L163">            this.id = id;</span>
+<span class="fc" id="L164">            this.authorName = authorName;</span>
+<span class="fc" id="L165">            this.authorEmail = authorEmail;</span>
+<span class="fc" id="L166">            this.committerName = committerName;</span>
+<span class="fc" id="L167">            this.committerEmail = committerEmail;</span>
+<span class="fc" id="L168">            this.message = message;</span>
+<span class="fc" id="L169">        }</span>
 
+        /**
+         * Gets the id.
+         *
+         * @return the id
+         */
         public String getId() {
-<span class="fc" id="L103">            return id;</span>
+<span class="fc" id="L177">            return this.id;</span>
         }
 
+        /**
+         * Gets the author name.
+         *
+         * @return the author name
+         */
         public String getAuthorName() {
-<span class="fc" id="L107">            return authorName;</span>
+<span class="fc" id="L186">            return this.authorName;</span>
         }
 
+        /**
+         * Gets the author email.
+         *
+         * @return the author email
+         */
         public String getAuthorEmail() {
-<span class="fc" id="L111">            return authorEmail;</span>
+<span class="fc" id="L195">            return this.authorEmail;</span>
         }
 
+        /**
+         * Gets the committer name.
+         *
+         * @return the committer name
+         */
         public String getCommitterName() {
-<span class="fc" id="L115">            return committerName;</span>
+<span class="fc" id="L204">            return this.committerName;</span>
         }
 
+        /**
+         * Gets the committer email.
+         *
+         * @return the committer email
+         */
         public String getCommitterEmail() {
-<span class="fc" id="L119">            return committerEmail;</span>
+<span class="fc" id="L213">            return this.committerEmail;</span>
         }
 
+        /**
+         * Gets the message.
+         *
+         * @return the message
+         */
         public String getMessage() {
-<span class="fc" id="L123">            return message;</span>
+<span class="fc" id="L222">            return this.message;</span>
         }
     }
 
+    /**
+     * The Class Remote.
+     */
     public static class Remote implements Serializable {
+
+        /** The Constant serialVersionUID. */
         private static final long serialVersionUID = 1L;
 
+        /** The name. */
         @JsonProperty(&quot;name&quot;)
         private final String name;
 
+        /** The url. */
         @JsonProperty(&quot;url&quot;)
         private final String url;
 
-<span class="fc" id="L136">        public Remote(final String name, final String url) {</span>
-<span class="fc" id="L137">            this.name = name;</span>
-<span class="fc" id="L138">            this.url = url;</span>
-<span class="fc" id="L139">        }</span>
+        /**
+         * Instantiates a new remote.
+         *
+         * @param name
+         *            the name
+         * @param url
+         *            the url
+         */
+<span class="fc" id="L250">        public Remote(final String name, final String url) {</span>
+<span class="fc" id="L251">            this.name = name;</span>
+<span class="fc" id="L252">            this.url = url;</span>
+<span class="fc" id="L253">        }</span>
 
+        /**
+         * Gets the name.
+         *
+         * @return the name
+         */
         public String getName() {
-<span class="fc" id="L142">            return name;</span>
+<span class="fc" id="L261">            return this.name;</span>
         }
 
+        /**
+         * Gets the url.
+         *
+         * @return the url
+         */
         public String getUrl() {
-<span class="fc" id="L146">            return url;</span>
+<span class="fc" id="L270">            return this.url;</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

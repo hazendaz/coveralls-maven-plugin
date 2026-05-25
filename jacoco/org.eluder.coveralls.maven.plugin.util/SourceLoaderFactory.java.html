@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SourceLoaderFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">SourceLoaderFactory.java</span></div><h1>SourceLoaderFactory.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,69 +24,114 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
+import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.source.DirectorySourceLoader;
 import org.eluder.coveralls.maven.plugin.source.MultiSourceLoader;
 import org.eluder.coveralls.maven.plugin.source.ScanSourceLoader;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * A factory for creating SourceLoader objects.
+ */
 public class SourceLoaderFactory {
 
+    /** The base dir. */
     private final File baseDir;
+
+    /** The project. */
     private final MavenProject project;
-    private final String sourceEncoding;
+
+    /** The source encoding. */
+    private final Charset sourceEncoding;
+
+    /** The source directories. */
     private List&lt;File&gt; sourceDirectories;
+
+    /** The scan for sources. */
     private boolean scanForSources;
 
-<span class="fc" id="L44">    public SourceLoaderFactory(final File baseDir, final MavenProject project, final String sourceEncoding) {</span>
-<span class="fc" id="L45">        this.baseDir = baseDir;</span>
-<span class="fc" id="L46">        this.project = project;</span>
-<span class="fc" id="L47">        this.sourceEncoding = sourceEncoding;</span>
-<span class="fc" id="L48">    }</span>
+    /**
+     * Instantiates a new source loader factory.
+     *
+     * @param baseDir
+     *            the base dir
+     * @param project
+     *            the project
+     * @param sourceEncoding
+     *            the source encoding
+     */
+<span class="fc" id="L69">    public SourceLoaderFactory(final File baseDir, final MavenProject project, final Charset sourceEncoding) {</span>
+<span class="fc" id="L70">        this.baseDir = baseDir;</span>
+<span class="fc" id="L71">        this.project = project;</span>
+<span class="fc" id="L72">        this.sourceEncoding = sourceEncoding;</span>
+<span class="fc" id="L73">    }</span>
 
+    /**
+     * With source directories.
+     *
+     * @param sourceDirectories
+     *            the source directories
+     *
+     * @return the source loader factory
+     */
     public SourceLoaderFactory withSourceDirectories(final List&lt;File&gt; sourceDirectories) {
-<span class="fc" id="L51">        this.sourceDirectories = sourceDirectories;</span>
-<span class="fc" id="L52">        return this;</span>
+<span class="fc" id="L84">        this.sourceDirectories = sourceDirectories;</span>
+<span class="fc" id="L85">        return this;</span>
     }
 
+    /**
+     * With scan for sources.
+     *
+     * @param scanForSources
+     *            the scan for sources
+     *
+     * @return the source loader factory
+     */
     public SourceLoaderFactory withScanForSources(final boolean scanForSources) {
-<span class="fc" id="L56">        this.scanForSources = scanForSources;</span>
-<span class="fc" id="L57">        return this;</span>
+<span class="fc" id="L97">        this.scanForSources = scanForSources;</span>
+<span class="fc" id="L98">        return this;</span>
     }
 
+    /**
+     * Creates a new SourceLoader object.
+     *
+     * @return the source loader
+     */
     public SourceLoader createSourceLoader() {
-<span class="fc" id="L61">        MultiSourceLoader multiSourceLoader = new MultiSourceLoader();</span>
-<span class="fc" id="L62">        List&lt;File&gt; directories = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L63">        List&lt;MavenProject&gt; modules = new MavenProjectCollector(project).collect();</span>
-<span class="fc bfc" id="L64" title="All 2 branches covered.">        for (MavenProject module : modules) {</span>
-<span class="fc bfc" id="L65" title="All 2 branches covered.">            for (String sourceRoot : module.getCompileSourceRoots()) {</span>
-<span class="fc" id="L66">                File sourceDirectory = new File(sourceRoot);</span>
-<span class="fc" id="L67">                directories.add(sourceDirectory);</span>
-<span class="fc" id="L68">            }</span>
-<span class="fc" id="L69">        }</span>
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (sourceDirectories != null) {</span>
-<span class="fc" id="L71">            directories.addAll(sourceDirectories);</span>
+<span class="fc" id="L107">        final var multiSourceLoader = new MultiSourceLoader();</span>
+<span class="fc" id="L108">        final List&lt;File&gt; directories = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L109">        final var modules = new MavenProjectCollector(this.project).collect();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (final MavenProject module : modules) {</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            for (final String sourceRoot : module.getCompileSourceRoots()) {</span>
+<span class="fc" id="L112">                final var sourceDirectory = Path.of(sourceRoot);</span>
+<span class="fc" id="L113">                directories.add(sourceDirectory.toFile());</span>
+<span class="fc" id="L114">            }</span>
+<span class="fc" id="L115">        }</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (this.sourceDirectories != null) {</span>
+<span class="fc" id="L117">            directories.addAll(this.sourceDirectories);</span>
         }
-<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (File directory: directories) {</span>
-<span class="pc bpc" id="L74" title="2 of 4 branches missed.">            if (directory.exists() &amp;&amp; directory.isDirectory()) {</span>
-<span class="fc" id="L75">                DirectorySourceLoader moduleSourceLoader = new DirectorySourceLoader(baseDir, directory, sourceEncoding);</span>
-<span class="fc" id="L76">                multiSourceLoader.add(moduleSourceLoader);</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        for (final File directory : directories) {</span>
+<span class="pc bpc" id="L120" title="2 of 4 branches missed.">            if (directory.exists() &amp;&amp; directory.isDirectory()) {</span>
+<span class="fc" id="L121">                final var moduleSourceLoader = new DirectorySourceLoader(this.baseDir, directory, this.sourceEncoding);</span>
+<span class="fc" id="L122">                multiSourceLoader.add(moduleSourceLoader);</span>
             }
-<span class="fc" id="L78">        }</span>
+<span class="fc" id="L124">        }</span>
 
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (scanForSources) {</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">            for (File directory: directories) {</span>
-<span class="pc bpc" id="L82" title="2 of 4 branches missed.">                if (directory.exists() &amp;&amp; directory.isDirectory()) {</span>
-<span class="fc" id="L83">                    ScanSourceLoader scanSourceLoader = new ScanSourceLoader(baseDir, directory, sourceEncoding);</span>
-<span class="fc" id="L84">                    multiSourceLoader.add(scanSourceLoader);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (this.scanForSources) {</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">            for (final File directory : directories) {</span>
+<span class="pc bpc" id="L128" title="2 of 4 branches missed.">                if (directory.exists() &amp;&amp; directory.isDirectory()) {</span>
+<span class="fc" id="L129">                    final var scanSourceLoader = new ScanSourceLoader(this.baseDir, directory, this.sourceEncoding);</span>
+<span class="fc" id="L130">                    multiSourceLoader.add(scanSourceLoader);</span>
                 }
-<span class="fc" id="L86">            }</span>
+<span class="fc" id="L132">            }</span>
         }
-<span class="fc" id="L88">        return multiSourceLoader;</span>
+<span class="fc" id="L134">        return multiSourceLoader;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

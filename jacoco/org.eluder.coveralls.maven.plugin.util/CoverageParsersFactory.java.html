@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoverageParsersFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">CoverageParsersFactory.java</span></div><h1>CoverageParsersFactory.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,6 +24,13 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.maven.project.MavenProject;
 import org.eluder.coveralls.maven.plugin.CoverageParser;
 import org.eluder.coveralls.maven.plugin.parser.CloverParser;
@@ -31,117 +39,278 @@ import org.eluder.coveralls.maven.plugin.parser.JaCoCoParser;
 import org.eluder.coveralls.maven.plugin.parser.SagaParser;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+/**
+ * A factory for creating CoverageParsers objects.
+ */
 public class CoverageParsersFactory {
 
-    private static final String JACOCO_FILE = &quot;/jacoco.xml&quot;;
-    private static final String JACOCO_PREFIX = &quot;/jacoco&quot;;
-    private static final String JACOCO_IT_PREFIX = &quot;/jacoco-it&quot;;
+    /** The Constant JACOCO_FILE. */
+    private static final String JACOCO_FILE = &quot;jacoco.xml&quot;;
 
-    private static final String COBERTURA_FILE = &quot;/coverage.xml&quot;;
-    private static final String COBERTURA_PREFIX = &quot;/cobertura&quot;;
+    /** The Constant DEFAULT_JACOCO_DIRECTORY. */
+    static final String DEFAULT_JACOCO_DIRECTORY = &quot;jacoco&quot;;
 
-    private static final String CLOVER_FILE = &quot;/clover.xml&quot;;
-    private static final String CLOVER_PREFIX = &quot;/clover&quot;;
+    /** The Constant DEFAULT_JACOCO_IT_DIRECTORY. */
+    static final String DEFAULT_JACOCO_IT_DIRECTORY = &quot;jacoco-it&quot;;
 
-    private static final String SAGA_FILE = &quot;/total-coverage.xml&quot;;
-    private static final String SAGA_PREFIX = &quot;/saga-coverage&quot;;
+    /** The Constant DEFAULT_JACOCO_MERGED_DIRECTORY. */
+    static final String DEFAULT_JACOCO_MERGED_DIRECTORY = &quot;jacoco-merged-report&quot;;
 
+    /** The Constant COBERTURA_FILE. */
+    private static final String COBERTURA_FILE = &quot;coverage.xml&quot;;
+
+    /** The Constant COBERTURA_DIRECTORY. */
+    private static final String COBERTURA_DIRECTORY = &quot;cobertura&quot;;
+
+    /** The Constant CLOVER_FILE. */
+    private static final String CLOVER_FILE = &quot;clover.xml&quot;;
+
+    /** The Constant CLOVER_DIRECTORY. */
+    private static final String CLOVER_DIRECTORY = &quot;clover&quot;;
+
+    /** The Constant SAGA_FILE. */
+    private static final String SAGA_FILE = &quot;total-coverage.xml&quot;;
+
+    /** The Constant SAGA_DIRECTORY. */
+    private static final String SAGA_DIRECTORY = &quot;saga-coverage&quot;;
+
+    /** The project. */
     private final MavenProject project;
+
+    /** The source loader. */
     private final SourceLoader sourceLoader;
+
+    /**
+     * This new property can be used in a Maven Multi-Module project that has a JaCoCo aggregate project.
+     *
+     * @since 5.0.0
+     */
+    private File jacocoAggregateReport;
+
+    /**
+     * The jacoco reports option is used to add additional paths. By default the plugin already looks in standard
+     * locations.
+     */
     private List&lt;File&gt; jacocoReports;
+
+    /** The cobertura reports. */
     private List&lt;File&gt; coberturaReports;
+
+    /** The saga reports. */
     private List&lt;File&gt; sagaReports;
+
+    /** The clover reports. */
     private List&lt;File&gt; cloverReports;
+
+    /** The relative report dirs. */
     private List&lt;String&gt; relativeReportDirs;
 
-<span class="fc" id="L63">    public CoverageParsersFactory(final MavenProject project, final SourceLoader sourceLoader) {</span>
-<span class="fc" id="L64">        this.project = project;</span>
-<span class="fc" id="L65">        this.sourceLoader = sourceLoader;</span>
-<span class="fc" id="L66">    }</span>
+    /**
+     * Instantiates a new coverage parsers factory.
+     *
+     * @param project
+     *            the project
+     * @param sourceLoader
+     *            the source loader
+     */
+<span class="fc" id="L116">    public CoverageParsersFactory(final MavenProject project, final SourceLoader sourceLoader) {</span>
+<span class="fc" id="L117">        this.project = project;</span>
+<span class="fc" id="L118">        this.sourceLoader = sourceLoader;</span>
+<span class="fc" id="L119">    }</span>
 
+    /**
+     * With JaCoCo aggregate report.
+     * &lt;p&gt;
+     * This new property is for Maven multi-module projects
+     *
+     * @param jacocoAggregateReport
+     *            A single JaCoCo report file in an aggregated report
+     *
+     * @return the coverage parsers factory
+     *
+     * @since 5.0.0
+     */
+    public CoverageParsersFactory withJacocoAggregateReport(final File jacocoAggregateReport) {
+<span class="fc" id="L134">        this.jacocoAggregateReport = jacocoAggregateReport;</span>
+<span class="fc" id="L135">        return this;</span>
+    }
+
+    /**
+     * With jacoco reports.
+     * &lt;p&gt;
+     * For Maven multi-module projects, configure an aggregate project and use
+     * {@link CoverageParsersFactory#withJacocoAggregateReport}
+     *
+     * @param jacocoReports
+     *            the jacoco reports
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withJaCoCoReports(final List&lt;File&gt; jacocoReports) {
-<span class="fc" id="L69">        this.jacocoReports = jacocoReports;</span>
-<span class="fc" id="L70">        return this;</span>
+<span class="fc" id="L150">        this.jacocoReports = jacocoReports;</span>
+<span class="fc" id="L151">        return this;</span>
     }
 
+    /**
+     * With cobertura reports.
+     *
+     * @param coberturaReports
+     *            the cobertura reports
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withCoberturaReports(final List&lt;File&gt; coberturaReports) {
-<span class="fc" id="L74">        this.coberturaReports = coberturaReports;</span>
-<span class="fc" id="L75">        return this;</span>
+<span class="fc" id="L163">        this.coberturaReports = coberturaReports;</span>
+<span class="fc" id="L164">        return this;</span>
     }
 
+    /**
+     * With saga reports.
+     *
+     * @param sagaReports
+     *            the saga reports
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withSagaReports(final List&lt;File&gt; sagaReports) {
-<span class="fc" id="L79">        this.sagaReports = sagaReports;</span>
-<span class="fc" id="L80">        return this;</span>
+<span class="fc" id="L176">        this.sagaReports = sagaReports;</span>
+<span class="fc" id="L177">        return this;</span>
     }
 
+    /**
+     * With clover reports.
+     *
+     * @param cloverReports
+     *            the clover reports
+     *
+     * @return the coverage parsers factory
+     */
+    public CoverageParsersFactory withCloverReports(final List&lt;File&gt; cloverReports) {
+<span class="fc" id="L189">        this.cloverReports = cloverReports;</span>
+<span class="fc" id="L190">        return this;</span>
+    }
+
+    /**
+     * With relative report dirs.
+     *
+     * @param relativeReportDirs
+     *            the relative report dirs
+     *
+     * @return the coverage parsers factory
+     */
     public CoverageParsersFactory withRelativeReportDirs(final List&lt;String&gt; relativeReportDirs) {
-<span class="fc" id="L84">        this.relativeReportDirs = relativeReportDirs;</span>
-<span class="fc" id="L85">        return this;</span>
+<span class="fc" id="L202">        this.relativeReportDirs = relativeReportDirs;</span>
+<span class="fc" id="L203">        return this;</span>
     }
 
+    /**
+     * Creates a new CoverageParsers object.
+     *
+     * @return the list of coverage parsers
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public List&lt;CoverageParser&gt; createParsers() throws IOException {
-<span class="fc" id="L89">        List&lt;CoverageParser&gt; parsers = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L90">        List&lt;MavenProject&gt; projects = new MavenProjectCollector(project).collect();</span>
+<span class="fc" id="L215">        final List&lt;CoverageParser&gt; parsers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L216">        final var projects = new MavenProjectCollector(this.project).collect();</span>
 
-<span class="fc" id="L92">        ExistingFiles jacocoFiles = ExistingFiles.create(jacocoReports);</span>
-<span class="fc" id="L93">        ExistingFiles coberturaFiles = ExistingFiles.create(coberturaReports);</span>
-<span class="fc" id="L94">        ExistingFiles sagaFiles = ExistingFiles.create(sagaReports);</span>
-<span class="fc" id="L95">        ExistingFiles cloverFiles = ExistingFiles.create(cloverReports);</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        for (MavenProject p : projects) {</span>
-<span class="fc" id="L97">            File reportingDirectory = new File(p.getModel().getReporting().getOutputDirectory());</span>
-<span class="fc" id="L98">            File buildDirectory = new File(p.getBuild().getDirectory());</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">        final var jacocoFiles = this.jacocoAggregateReport != null</span>
+<span class="fc" id="L219">                ? ExistingFiles.create(List.of(this.jacocoAggregateReport))</span>
+<span class="fc" id="L220">                : ExistingFiles.create(this.jacocoReports);</span>
+<span class="fc" id="L221">        final var coberturaFiles = ExistingFiles.create(this.coberturaReports);</span>
+<span class="fc" id="L222">        final var sagaFiles = ExistingFiles.create(this.sagaReports);</span>
+<span class="fc" id="L223">        final var cloverFiles = ExistingFiles.create(this.cloverReports);</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        for (final MavenProject p : projects) {</span>
+<span class="fc" id="L225">            final var reportingDirectory = Path.of(p.getModel().getReporting().getOutputDirectory());</span>
+<span class="fc" id="L226">            final var buildDirectory = Path.of(p.getBuild().getDirectory());</span>
 
-<span class="fc" id="L100">            jacocoFiles.add(new File(reportingDirectory, JACOCO_PREFIX + JACOCO_FILE));</span>
-<span class="fc" id="L101">            jacocoFiles.add(new File(reportingDirectory, JACOCO_IT_PREFIX + JACOCO_FILE));</span>
-<span class="fc" id="L102">            coberturaFiles.add(new File(reportingDirectory, COBERTURA_PREFIX + COBERTURA_FILE));</span>
-<span class="fc" id="L103">            sagaFiles.add(new File(buildDirectory, SAGA_PREFIX + SAGA_FILE));</span>
-<span class="fc" id="L104">            cloverFiles.add(new File(reportingDirectory, CLOVER_PREFIX + CLOVER_FILE));</span>
+<span class="fc" id="L228">            final var jacocoMergedReport = reportingDirectory</span>
+<span class="fc" id="L229">                    .resolve(CoverageParsersFactory.DEFAULT_JACOCO_MERGED_DIRECTORY)</span>
+<span class="fc" id="L230">                    .resolve(CoverageParsersFactory.JACOCO_FILE).toFile();</span>
 
-<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (relativeReportDirs != null) {</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">                for (String relativeReportPath : relativeReportDirs) {</span>
-<span class="fc" id="L108">                    File relativeReportingDirectory = reportingDirectory;</span>
-<span class="fc" id="L109">                    File relativeBuildDirectory = buildDirectory;</span>
-<span class="pc bpc" id="L110" title="1 of 4 branches missed.">                    if (!relativeReportPath.isEmpty() &amp;&amp; !File.separator.equals(relativeReportPath)) {</span>
-<span class="fc" id="L111">                        relativeReportingDirectory = new File(reportingDirectory, relativeReportPath);</span>
-<span class="fc" id="L112">                        relativeBuildDirectory = new File(buildDirectory, relativeReportPath);</span>
-                    }
-
-<span class="fc" id="L115">                    jacocoFiles.add(new File(relativeReportingDirectory, JACOCO_FILE));</span>
-<span class="fc" id="L116">                    jacocoFiles.add(new File(relativeBuildDirectory, JACOCO_FILE));</span>
-<span class="fc" id="L117">                    coberturaFiles.add(new File(relativeReportingDirectory, COBERTURA_FILE));</span>
-<span class="fc" id="L118">                    coberturaFiles.add(new File(relativeBuildDirectory, COBERTURA_FILE));</span>
-<span class="fc" id="L119">                    sagaFiles.add(new File(relativeReportingDirectory, SAGA_FILE));</span>
-<span class="fc" id="L120">                    sagaFiles.add(new File(relativeBuildDirectory, SAGA_FILE));</span>
-<span class="fc" id="L121">                    cloverFiles.add(new File(relativeReportingDirectory, CLOVER_FILE));</span>
-<span class="fc" id="L122">                    cloverFiles.add(new File(relativeBuildDirectory, CLOVER_FILE));</span>
-<span class="fc" id="L123">                }</span>
+            // If a JaCoCo merged report exists there is no need to individually add reports for unit tests and IT.
+            // Note that in a Maven multi-module project JaCoCo can also be configured to aggregate all reports to a
+            // single module. In which case there is no need to gather reports from individual Maven projects
+            // as it's already done. Therefore, we only need to add to jacocoFiles if jacocoAggregateReport is null.
+<span class="fc bfc" id="L236" title="All 2 branches covered.">            if (this.jacocoAggregateReport == null) {</span>
+<span class="pc bpc" id="L237" title="1 of 4 branches missed.">                if (jacocoMergedReport.exists() &amp;&amp; jacocoMergedReport.canRead()) {</span>
+<span class="fc" id="L238">                    jacocoFiles.add(jacocoMergedReport);</span>
+                } else {
+<span class="fc" id="L240">                    jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.DEFAULT_JACOCO_DIRECTORY)</span>
+<span class="fc" id="L241">                            .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());</span>
+<span class="fc" id="L242">                    jacocoFiles.add(reportingDirectory.resolve(CoverageParsersFactory.DEFAULT_JACOCO_IT_DIRECTORY)</span>
+<span class="fc" id="L243">                            .resolve(CoverageParsersFactory.JACOCO_FILE).toFile());</span>
+                }
             }
-<span class="fc" id="L125">        }</span>
 
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        for (File jacocoFile : jacocoFiles) {</span>
-<span class="fc" id="L128">            parsers.add(new JaCoCoParser(jacocoFile, sourceLoader));</span>
-<span class="fc" id="L129">        }</span>
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        for (File coberturaFile : coberturaFiles) {</span>
-<span class="fc" id="L131">            parsers.add(new CoberturaParser(coberturaFile, sourceLoader));</span>
-<span class="fc" id="L132">        }</span>
-<span class="fc bfc" id="L133" title="All 2 branches covered.">        for (File sagaFile : sagaFiles) {</span>
-<span class="fc" id="L134">            parsers.add(new SagaParser(sagaFile, sourceLoader));</span>
-<span class="fc" id="L135">        }</span>
-<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        for (File cloverFile : cloverFiles) {</span>
-<span class="nc" id="L137">            parsers.add(new CloverParser(cloverFile, sourceLoader));</span>
-<span class="nc" id="L138">        }</span>
+<span class="fc" id="L247">            coberturaFiles.add(reportingDirectory.resolve(CoverageParsersFactory.COBERTURA_DIRECTORY)</span>
+<span class="fc" id="L248">                    .resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());</span>
+<span class="fc" id="L249">            sagaFiles.add(buildDirectory.resolve(CoverageParsersFactory.SAGA_DIRECTORY)</span>
+<span class="fc" id="L250">                    .resolve(CoverageParsersFactory.SAGA_FILE).toFile());</span>
+<span class="fc" id="L251">            cloverFiles.add(reportingDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY)</span>
+<span class="fc" id="L252">                    .resolve(CoverageParsersFactory.CLOVER_FILE).toFile());</span>
+<span class="fc" id="L253">            cloverFiles.add(buildDirectory.resolve(CoverageParsersFactory.CLOVER_DIRECTORY)</span>
+<span class="fc" id="L254">                    .resolve(CoverageParsersFactory.CLOVER_FILE).toFile());</span>
 
-<span class="fc bfc" id="L140" title="All 2 branches covered.">        if (parsers.isEmpty()) {</span>
-<span class="fc" id="L141">            throw new IOException(&quot;No coverage report files found&quot;);</span>
+<span class="fc" id="L256">            this.setupRelativeReportDirs(jacocoFiles, coberturaFiles, sagaFiles, cloverFiles, reportingDirectory,</span>
+                    buildDirectory);
+<span class="fc" id="L258">        }</span>
+
+        // Use ExistingFiles.toParsers to create parser instances
+<span class="fc" id="L261">        parsers.addAll(jacocoFiles.toParsers(file -&gt; new JaCoCoParser(file, this.sourceLoader)));</span>
+<span class="fc" id="L262">        parsers.addAll(coberturaFiles.toParsers(file -&gt; new CoberturaParser(file, this.sourceLoader)));</span>
+<span class="fc" id="L263">        parsers.addAll(sagaFiles.toParsers(file -&gt; new SagaParser(file, this.sourceLoader)));</span>
+<span class="fc" id="L264">        parsers.addAll(cloverFiles.toParsers(file -&gt; new CloverParser(file, this.sourceLoader)));</span>
+
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        if (parsers.isEmpty()) {</span>
+<span class="fc" id="L267">            throw new IOException(&quot;No coverage report files found&quot;);</span>
         }
 
-<span class="fc" id="L144">        return Collections.unmodifiableList(parsers);</span>
+<span class="fc" id="L270">        return Collections.unmodifiableList(parsers);</span>
     }
+
+    /**
+     * Setup relative report dirs.
+     *
+     * @param jacocoFiles
+     *            the jacoco files
+     * @param coberturaFiles
+     *            the cobertura files
+     * @param sagaFiles
+     *            the saga files
+     * @param cloverFiles
+     *            the clover files
+     * @param reportingDirectory
+     *            the reporting directory
+     * @param buildDirectory
+     *            the build directory
+     */
+    private void setupRelativeReportDirs(final ExistingFiles jacocoFiles, final ExistingFiles coberturaFiles,
+            final ExistingFiles sagaFiles, final ExistingFiles cloverFiles, final Path reportingDirectory,
+            final Path buildDirectory) {
+<span class="fc bfc" id="L292" title="All 2 branches covered.">        if (this.relativeReportDirs == null) {</span>
+<span class="fc" id="L293">            return;</span>
+        }
+
+<span class="fc bfc" id="L296" title="All 2 branches covered.">        for (final String relativeReportPath : this.relativeReportDirs) {</span>
+<span class="fc" id="L297">            var relativeReportingDirectory = reportingDirectory;</span>
+<span class="fc" id="L298">            var relativeBuildDirectory = buildDirectory;</span>
+<span class="pc bpc" id="L299" title="1 of 4 branches missed.">            if (!relativeReportPath.isEmpty() &amp;&amp; !File.separator.equals(relativeReportPath)) {</span>
+<span class="fc" id="L300">                relativeReportingDirectory = reportingDirectory.resolve(relativeReportPath);</span>
+<span class="fc" id="L301">                relativeBuildDirectory = buildDirectory.resolve(relativeReportPath);</span>
+            }
+
+<span class="fc" id="L304">            jacocoFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());</span>
+<span class="fc" id="L305">            jacocoFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.JACOCO_FILE).toFile());</span>
+<span class="fc" id="L306">            coberturaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());</span>
+<span class="fc" id="L307">            coberturaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.COBERTURA_FILE).toFile());</span>
+<span class="fc" id="L308">            sagaFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());</span>
+<span class="fc" id="L309">            sagaFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.SAGA_FILE).toFile());</span>
+<span class="fc" id="L310">            cloverFiles.add(relativeReportingDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());</span>
+<span class="fc" id="L311">            cloverFiles.add(relativeBuildDirectory.resolve(CoverageParsersFactory.CLOVER_FILE).toFile());</span>
+<span class="fc" id="L312">        }</span>
+<span class="fc" id="L313">    }</span>
+
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Sha512DigestInputStream.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">Sha512DigestInputStream.java</span></div><h1>Sha512DigestInputStream.java</h1><pre class="source lang-java linenums">/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the &quot;Software&quot;), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package org.eluder.coveralls.maven.plugin.util;
+
+import java.io.InputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.commons.codec.binary.Hex;
+
+/**
+ * The Class Sha512DigestInputStream.
+ */
+public class Sha512DigestInputStream extends DigestInputStream {
+
+    /**
+     * Instantiates a new sha 512 digest input stream.
+     *
+     * @param stream
+     *            the stream
+     */
+    public Sha512DigestInputStream(final InputStream stream) {
+<span class="fc" id="L46">        super(stream, Sha512DigestInputStream.getSha512Digest());</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Gets the sha 512 digest.
+     *
+     * @return the sha 512 digest
+     */
+    private static MessageDigest getSha512Digest() {
+        try {
+<span class="fc" id="L56">            return MessageDigest.getInstance(&quot;SHA-512&quot;);</span>
+<span class="nc" id="L57">        } catch (final NoSuchAlgorithmException e) {</span>
+            // SHA-512 is guaranteed to be available in all Java SE implementations
+<span class="nc" id="L59">            throw new AssertionError(&quot;SHA-512 algorithm not available&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Gets the digest hex.
+     * &lt;p&gt;
+     * &lt;b&gt;Note:&lt;/b&gt; Calling this method will finalize and reset the digest. Subsequent calls will return the digest of
+     * an empty stream unless the stream is re-read. This is standard behavior for {@link MessageDigest#digest()}.
+     *
+     * @return the digest hex
+     */
+    public String getDigestHex() {
+<span class="fc" id="L72">        return Hex.encodeHexString(this.getMessageDigest().digest(), false);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JobValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.validation</a> &gt; <span class="el_source">JobValidator.java</span></div><h1>JobValidator.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,55 +24,81 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.List;
+
 import org.eluder.coveralls.maven.plugin.domain.Job;
 import org.eluder.coveralls.maven.plugin.validation.ValidationError.Level;
 
-import java.util.Collections;
-import java.util.List;
-
+/**
+ * The Class JobValidator.
+ */
 public class JobValidator {
 
+    /** The job. */
     private final Job job;
 
-<span class="fc" id="L37">    public JobValidator(final Job job) {</span>
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (job == null) {</span>
-<span class="fc" id="L39">            throw new IllegalArgumentException(&quot;job must be defined&quot;);</span>
+    /**
+     * Instantiates a new job validator.
+     *
+     * @param job
+     *            the job
+     */
+<span class="fc" id="L46">    public JobValidator(final Job job) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (job == null) {</span>
+<span class="fc" id="L48">            throw new IllegalArgumentException(&quot;job must be defined&quot;);</span>
         }
-<span class="fc" id="L41">        this.job = job;</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L50">        this.job = job;</span>
+<span class="fc" id="L51">    }</span>
 
+    /**
+     * Validate.
+     *
+     * @return the validation errors
+     */
     public ValidationErrors validate() {
-<span class="fc" id="L45">        ValidationErrors errors = new ValidationErrors();</span>
-<span class="fc" id="L46">        errors.addAll(repoTokenOrTravis());</span>
-<span class="fc" id="L47">        errors.addAll(git());</span>
-<span class="fc" id="L48">        return errors;</span>
+<span class="fc" id="L59">        final var errors = new ValidationErrors();</span>
+<span class="fc" id="L60">        errors.addAll(this.repoTokenOrTravis());</span>
+<span class="fc" id="L61">        errors.addAll(this.git());</span>
+<span class="fc" id="L62">        return errors;</span>
     }
 
+    /**
+     * Repo token or travis.
+     *
+     * @return the list
+     */
     private List&lt;ValidationError&gt; repoTokenOrTravis() {
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (hasValue(job.getRepoToken())) {</span>
-<span class="fc" id="L53">            return Collections.emptyList();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (this.hasValue(this.job.getRepoToken())</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">                || (this.hasValue(this.job.getServiceName()) &amp;&amp; this.hasValue(this.job.getServiceJobId()))) {</span>
+<span class="fc" id="L73">            return List.of();</span>
         }
-<span class="fc bfc" id="L55" title="All 4 branches covered.">        if (hasValue(job.getServiceName()) &amp;&amp; hasValue(job.getServiceJobId())) {</span>
-<span class="fc" id="L56">            return Collections.emptyList();</span>
-        }
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        Level level = (job.isDryRun() ? Level.WARN : Level.ERROR);</span>
-<span class="fc" id="L59">        String message = &quot;Either repository token or service with job id must be defined&quot;;</span>
-<span class="fc" id="L60">        return Collections.singletonList(new ValidationError(level, message));</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        final var level = this.job.isDryRun() ? Level.WARN : Level.ERROR;</span>
+<span class="fc" id="L76">        final var message = &quot;Either repository token or service with job id must be defined&quot;;</span>
+<span class="fc" id="L77">        return List.of(new ValidationError(level, message));</span>
     }
 
+    /**
+     * Git.
+     *
+     * @return the list
+     */
     private List&lt;ValidationError&gt; git() {
-<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (job.getGit() == null) {</span>
-<span class="fc" id="L65">            return Collections.emptyList();</span>
+<span class="fc bfc" id="L86" title="All 4 branches covered.">        if (this.job.getGit() == null || this.hasValue(this.job.getGit().getHead().getId())) {</span>
+<span class="fc" id="L87">            return List.of();</span>
         }
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (hasValue(job.getGit().getHead().getId())) {</span>
-<span class="fc" id="L68">            return Collections.emptyList();</span>
-        }
-<span class="fc" id="L70">        return Collections.singletonList(new ValidationError(Level.ERROR, &quot;Commit id for HEAD must be defined&quot;));</span>
+<span class="fc" id="L89">        return List.of(new ValidationError(Level.ERROR, &quot;Commit id for HEAD must be defined&quot;));</span>
     }
 
+    /**
+     * Checks for value.
+     *
+     * @param value
+     *            the value
+     *
+     * @return true, if successful
+     */
     private boolean hasValue(final String value) {
-<span class="fc" id="L74">        return StringUtils.isNotBlank(value);</span>
+<span class="pc bpc" id="L101" title="1 of 4 branches missed.">        return value != null &amp;&amp; !value.isBlank();</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

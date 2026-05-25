@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimestampParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">TimestampParser.java</span></div><h1>TimestampParser.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,71 +24,145 @@
  */
 package org.eluder.coveralls.maven.plugin.util;
 
-import org.apache.commons.lang3.StringUtils;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
+/**
+ * The Class TimestampParser.
+ */
 public class TimestampParser {
 
+    /** The Constant EPOCH_MILLIS. */
     public static final String EPOCH_MILLIS = &quot;EpochMillis&quot;;
 
-    public static final String DEFAULT_FORMAT = &quot;yyyy-MM-dd'T'HH:mm:ss'Z'&quot;;
+    /** The Constant DEFAULT_FORMAT. */
+    public static final String DEFAULT_FORMAT = &quot;yyyy-MM-dd'T'HH:mm:ssX&quot;;
 
+    /** The parser. */
     private final Parser parser;
 
-<span class="fc" id="L42">    public TimestampParser(final String format) {</span>
+    /**
+     * Instantiates a new timestamp parser.
+     *
+     * @param format
+     *            the format
+     */
+<span class="fc" id="L58">    public TimestampParser(final String format) {</span>
         try {
-<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (EPOCH_MILLIS.equalsIgnoreCase(format)) {</span>
-<span class="fc" id="L45">                this.parser = new EpochMillisParser();</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">            } else if (StringUtils.isNotBlank(format)) {</span>
-<span class="fc" id="L47">                this.parser = new DateFormatParser(format);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">            if (TimestampParser.EPOCH_MILLIS.equalsIgnoreCase(format)) {</span>
+<span class="fc" id="L61">                this.parser = new EpochMillisParser();</span>
+<span class="pc bpc" id="L62" title="1 of 4 branches missed.">            } else if (format != null &amp;&amp; !format.isBlank()) {</span>
+<span class="fc" id="L63">                this.parser = new DateTimeFormatterParser(format);</span>
             } else {
-<span class="fc" id="L49">                this.parser = new DateFormatParser(DEFAULT_FORMAT);</span>
+<span class="fc" id="L65">                this.parser = new DateTimeFormatterParser(TimestampParser.DEFAULT_FORMAT);</span>
             }
-<span class="fc" id="L51">        } catch (IllegalArgumentException ex) {</span>
-<span class="fc" id="L52">            throw new IllegalArgumentException(&quot;Invalid timestamp format \&quot;&quot; + format + &quot;\&quot;&quot;, ex);</span>
-<span class="fc" id="L53">        }</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L67">        } catch (final IllegalArgumentException e) {</span>
+<span class="fc" id="L68">            throw new IllegalArgumentException(&quot;Invalid timestamp format \&quot;&quot; + format + &quot;\&quot;&quot;, e);</span>
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">    }</span>
 
-    public Date parse(final String timestamp) throws ProcessingException {
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (StringUtils.isBlank(timestamp)) {</span>
-<span class="fc" id="L58">            return null;</span>
+    /**
+     * Parses the.
+     *
+     * @param timestamp
+     *            the timestamp
+     *
+     * @return the instant
+     *
+     * @throws ProcessingException
+     *             the processing exception
+     */
+    public Instant parse(final String timestamp) throws ProcessingException {
+<span class="fc bfc" id="L84" title="All 4 branches covered.">        if (timestamp == null || timestamp.isBlank()) {</span>
+<span class="fc" id="L85">            return null;</span>
         }
         try {
-<span class="fc" id="L61">            return parser.parse(timestamp);</span>
-<span class="fc" id="L62">        } catch (Exception ex) {</span>
-<span class="fc" id="L63">            throw new ProcessingException(&quot;Unable to parse timestamp \&quot;&quot; + timestamp + &quot;\&quot;&quot;, ex);</span>
+<span class="fc" id="L88">            return this.parser.parse(timestamp);</span>
+<span class="fc" id="L89">        } catch (final Exception e) {</span>
+<span class="fc" id="L90">            throw new ProcessingException(&quot;Unable to parse timestamp \&quot;&quot; + timestamp + &quot;\&quot;&quot;, e);</span>
         }
     }
 
+    /**
+     * The Interface Parser.
+     */
     private interface Parser {
-        Date parse(String timestamp) throws Exception;
+
+        /**
+         * Parses the.
+         *
+         * @param timestamp
+         *            the timestamp
+         *
+         * @return the instant
+         *
+         * @throws DateTimeParseException
+         *             the date time parse exception
+         */
+        Instant parse(String timestamp) throws DateTimeParseException;
     }
 
-    private static class DateFormatParser implements Parser {
+    /**
+     * The Class DateTimeFormatterParser.
+     */
+    private static class DateTimeFormatterParser implements Parser {
 
-        final DateFormat format;
+        /** The formatter. */
+        final DateTimeFormatter formatter;
 
-<span class="fc" id="L75">        DateFormatParser(final String format) {</span>
-<span class="fc" id="L76">            this.format = new SimpleDateFormat(format);</span>
-<span class="fc" id="L77">        }</span>
+        /** The has zone. */
+        final boolean hasZone;
+
+        /** The date only. */
+        final boolean dateOnly;
+
+        /**
+         * Instantiates a new date time formatter parser.
+         *
+         * @param format
+         *            the format
+         */
+<span class="fc" id="L133">        DateTimeFormatterParser(final String format) {</span>
+<span class="fc" id="L134">            this.formatter = DateTimeFormatter.ofPattern(format);</span>
+<span class="fc bfc" id="L135" title="All 6 branches covered.">            this.hasZone = format.contains(&quot;X&quot;) || format.contains(&quot;z&quot;) || format.contains(&quot;Z&quot;);</span>
+<span class="pc bpc" id="L136" title="2 of 6 branches missed.">            this.dateOnly = !format.contains(&quot;H&quot;) &amp;&amp; !format.contains(&quot;m&quot;) &amp;&amp; !format.contains(&quot;s&quot;);</span>
+<span class="fc" id="L137">        }</span>
 
         @Override
-        public synchronized Date parse(final String timestamp) throws ParseException {
-<span class="fc" id="L81">            return format.parse(timestamp);</span>
+        public Instant parse(final String timestamp) throws DateTimeParseException {
+<span class="fc bfc" id="L141" title="All 2 branches covered.">            if (this.hasZone) {</span>
+                try {
+<span class="fc" id="L143">                    return ZonedDateTime.parse(timestamp, this.formatter).toInstant();</span>
+<span class="fc" id="L144">                } catch (final DateTimeParseException ex) {</span>
+<span class="nc" id="L145">                    return OffsetDateTime.parse(timestamp, this.formatter).toInstant();</span>
+                }
+            }
+<span class="fc bfc" id="L148" title="All 2 branches covered.">            if (this.dateOnly) {</span>
+                // Parse as LocalDate and set time to midnight UTC
+<span class="fc" id="L150">                return LocalDate.parse(timestamp, this.formatter).atStartOfDay(ZoneOffset.UTC).toInstant();</span>
+            }
+            // Parse as LocalDateTime and assume UTC
+<span class="fc" id="L153">            return LocalDateTime.parse(timestamp, this.formatter).toInstant(ZoneOffset.UTC);</span>
         }
     }
 
+    /**
+     * The Class EpochMillisParser.
+     */
     private static class EpochMillisParser implements Parser {
 
         @Override
-        public Date parse(final String timestamp) {
-<span class="fc" id="L89">            return new Date(Long.valueOf(timestamp));</span>
+        public Instant parse(final String timestamp) {
+<span class="fc" id="L164">            return Instant.ofEpochMilli(Long.parseLong(timestamp));</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

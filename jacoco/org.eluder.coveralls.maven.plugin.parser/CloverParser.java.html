@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CloverParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">CloverParser.java</span></div><h1>CloverParser.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,55 +24,79 @@
  */
 package org.eluder.coveralls.maven.plugin.parser;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import java.io.File;
-import java.io.IOException;
-
+/**
+ * The Class CloverParser.
+ */
 public class CloverParser extends AbstractXmlEventParser {
 
+    /** The source. */
     private Source source;
+
+    /** The package name. */
     private String packageName;
 
+    /**
+     * Instantiates a new clover parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     */
     public CloverParser(final File coverageFile, final SourceLoader sourceLoader) {
-<span class="nc" id="L42">        super(coverageFile, sourceLoader);</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L58">        super(coverageFile, sourceLoader);</span>
+<span class="fc" id="L59">    }</span>
 
     @Override
-    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (isStartElement(xml, &quot;package&quot;)) {</span>
-<span class="nc" id="L48">            this.packageName = xml.getAttributeValue(null, &quot;name&quot;);</span>
-<span class="nc bnc" id="L49" title="All 4 branches missed.">        } else if (isStartElement(xml, &quot;file&quot;) &amp;&amp; packageName != null) {</span>
-<span class="nc" id="L50">            String sourceFile = getSourceFile(xml.getAttributeValue(null, &quot;name&quot;));</span>
-<span class="nc" id="L51">            this.source = loadSource(sourceFile);</span>
-<span class="nc bnc" id="L52" title="All 4 branches missed.">        } else if (isStartElement(xml, &quot;line&quot;) &amp;&amp; this.source != null) {</span>
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback)
+            throws XMLStreamException, ProcessingException, IOException {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (this.isStartElement(xml, &quot;package&quot;)) {</span>
+<span class="fc" id="L65">            this.packageName = xml.getAttributeValue(null, &quot;name&quot;);</span>
+<span class="pc bpc" id="L66" title="1 of 4 branches missed.">        } else if (this.isStartElement(xml, &quot;file&quot;) &amp;&amp; this.packageName != null) {</span>
+<span class="fc" id="L67">            final var sourceFile = this.getSourceFile(xml.getAttributeValue(null, &quot;name&quot;));</span>
+<span class="fc" id="L68">            this.source = this.loadSource(sourceFile);</span>
+<span class="fc bfc" id="L69" title="All 4 branches covered.">        } else if (this.isStartElement(xml, &quot;line&quot;) &amp;&amp; this.source != null) {</span>
             // lines can be &quot;method&quot;, &quot;stmt&quot;, or &quot;cond&quot;
-<span class="nc" id="L54">            String type = xml.getAttributeValue(null, &quot;type&quot;);</span>
-<span class="nc" id="L55">            int coverage = 0;</span>
-<span class="nc bnc" id="L56" title="All 4 branches missed.">            if (&quot;method&quot;.equals(type) || &quot;stmt&quot;.equals(type)) {</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">                coverage = (Integer.parseInt(xml.getAttributeValue(null, &quot;count&quot;)) == 0) ? 0 : 1;</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">            } else if (&quot;cond&quot;.equals(type)) {</span>
-<span class="nc" id="L59">                int falseCount = Integer.parseInt(xml.getAttributeValue(null, &quot;falsecount&quot;));</span>
-<span class="nc" id="L60">                int trueCount = Integer.parseInt(xml.getAttributeValue(null, &quot;truecount&quot;));</span>
-<span class="nc bnc" id="L61" title="All 4 branches missed.">                coverage = (trueCount == 0 || falseCount == 0) ? 0 : 1;</span>
+<span class="fc" id="L71">            final var type = xml.getAttributeValue(null, &quot;type&quot;);</span>
+<span class="fc" id="L72">            var coverage = 0;</span>
+<span class="fc bfc" id="L73" title="All 4 branches covered.">            if (&quot;method&quot;.equals(type) || &quot;stmt&quot;.equals(type)) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                coverage = Integer.parseInt(xml.getAttributeValue(null, &quot;count&quot;)) == 0 ? 0 : 1;</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            } else if (&quot;cond&quot;.equals(type)) {</span>
+<span class="fc" id="L76">                final var falseCount = Integer.parseInt(xml.getAttributeValue(null, &quot;falsecount&quot;));</span>
+<span class="fc" id="L77">                final var trueCount = Integer.parseInt(xml.getAttributeValue(null, &quot;truecount&quot;));</span>
+<span class="pc bpc" id="L78" title="1 of 4 branches missed.">                coverage = trueCount == 0 || falseCount == 0 ? 0 : 1;</span>
             }
-<span class="nc" id="L63">            int lineNumber = Integer.parseInt(xml.getAttributeValue(null, &quot;num&quot;));</span>
-<span class="nc" id="L64">            this.source.addCoverage(lineNumber, coverage);</span>
-<span class="nc bnc" id="L65" title="All 4 branches missed.">        } else if (isEndElement(xml, &quot;file&quot;) &amp;&amp; this.source != null) {</span>
-<span class="nc" id="L66">            callback.onSource(this.source);</span>
-<span class="nc" id="L67">            this.source = null;</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        } else if (isEndElement(xml, &quot;package&quot;)) {</span>
-<span class="nc" id="L69">            this.packageName = null;</span>
+<span class="fc" id="L80">            final var lineNumber = Integer.parseInt(xml.getAttributeValue(null, &quot;num&quot;));</span>
+<span class="fc" id="L81">            this.source.addCoverage(lineNumber, coverage);</span>
+<span class="fc bfc" id="L82" title="All 4 branches covered.">        } else if (this.isEndElement(xml, &quot;file&quot;) &amp;&amp; this.source != null) {</span>
+<span class="fc" id="L83">            callback.onSource(this.source);</span>
+<span class="fc" id="L84">            this.source = null;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        } else if (this.isEndElement(xml, &quot;package&quot;)) {</span>
+<span class="fc" id="L86">            this.packageName = null;</span>
         }
-<span class="nc" id="L71">    }</span>
+<span class="fc" id="L88">    }</span>
 
+    /**
+     * Gets the source file.
+     *
+     * @param fileName
+     *            the file name
+     *
+     * @return the source file
+     */
     private String getSourceFile(final String fileName) {
-<span class="nc" id="L74">        return this.packageName.replace('.', '/') + &quot;/&quot; + fileName;</span>
+<span class="fc" id="L99">        return this.packageName.replace('.', '/') + &quot;/&quot; + fileName;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

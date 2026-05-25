@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ScanSourceLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.source</a> &gt; <span class="el_source">ScanSourceLoader.java</span></div><h1>ScanSourceLoader.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,68 +24,91 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.SelectorUtils;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * The Class ScanSourceLoader.
+ */
 public class ScanSourceLoader extends AbstractSourceLoader {
 
-<span class="fc" id="L40">    private final Map&lt;String, String[]&gt; cache = new HashMap&lt;&gt;();</span>
+    /** The cache. */
+<span class="fc" id="L47">    private final Map&lt;String, String[]&gt; cache = new HashMap&lt;&gt;();</span>
 
+    /** The source directory. */
     private final File sourceDirectory;
 
-    public ScanSourceLoader(final File base, final File sourceDirectory, final String sourceEncoding) {
-<span class="fc" id="L45">        super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);</span>
-<span class="fc" id="L46">        this.sourceDirectory = sourceDirectory;</span>
-<span class="fc" id="L47">    }</span>
+    /**
+     * Instantiates a new scan source loader.
+     *
+     * @param base
+     *            the base
+     * @param sourceDirectory
+     *            the source directory
+     * @param sourceEncoding
+     *            the source encoding
+     */
+    public ScanSourceLoader(final File base, final File sourceDirectory, final Charset sourceEncoding) {
+<span class="fc" id="L63">        super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);</span>
+<span class="fc" id="L64">        this.sourceDirectory = sourceDirectory;</span>
+<span class="fc" id="L65">    }</span>
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-<span class="fc" id="L51">        File file = new File(sourceDirectory, getFileName(sourceFile));</span>
+<span class="fc" id="L69">        final var path = Path.of(this.sourceDirectory.toString(), this.getFileName(sourceFile));</span>
 
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (file.exists()) {</span>
-<span class="fc bfc" id="L54" title="All 2 branches covered.">            if (!file.isFile()) {</span>
-<span class="fc" id="L55">                throw new IllegalArgumentException(file.getAbsolutePath() + &quot; is not file&quot;);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (Files.exists(path)) {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (!Files.isRegularFile(path)) {</span>
+<span class="fc" id="L73">                throw new IllegalArgumentException(path.toAbsolutePath() + &quot; is not file&quot;);</span>
             }
-<span class="fc" id="L57">            return new BufferedInputStream(new FileInputStream(file));</span>
+<span class="fc" id="L75">            return new BufferedInputStream(Files.newInputStream(path));</span>
         }
-<span class="fc" id="L59">        return null;</span>
+<span class="fc" id="L77">        return null;</span>
     }
 
+    /**
+     * Scan for.
+     *
+     * @param extension
+     *            the extension
+     *
+     * @return the string[]
+     */
     private String[] scanFor(final String extension) {
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (!cache.containsKey(extension)) {</span>
-<span class="fc" id="L64">            DirectoryScanner scanner = new DirectoryScanner();</span>
-<span class="fc" id="L65">            scanner.setBasedir(sourceDirectory);</span>
-<span class="fc" id="L66">            scanner.addDefaultExcludes();</span>
-<span class="fc" id="L67">            scanner.setIncludes(new String[] {&quot;**/*.&quot; + extension});</span>
-<span class="fc" id="L68">            scanner.scan();</span>
-
-<span class="fc" id="L70">            cache.put(extension, scanner.getIncludedFiles());</span>
-        }
-<span class="fc" id="L72">        return cache.get(extension);</span>
+<span class="fc" id="L89">        return this.cache.computeIfAbsent(extension, ext -&gt; {</span>
+<span class="fc" id="L90">            final var scanner = new DirectoryScanner();</span>
+<span class="fc" id="L91">            scanner.setBasedir(this.sourceDirectory);</span>
+<span class="fc" id="L92">            scanner.addDefaultExcludes();</span>
+<span class="fc" id="L93">            scanner.setIncludes(new String[] { &quot;**/*.&quot; + ext });</span>
+<span class="fc" id="L94">            scanner.scan();</span>
+<span class="fc" id="L95">            return scanner.getIncludedFiles();</span>
+        });
     }
 
     @Override
     protected String getFileName(final String sourceFile) {
-<span class="fc" id="L77">        String extension = FilenameUtils.getExtension(sourceFile);</span>
-<span class="fc" id="L78">        String[] matchingExtensionFiles = scanFor(extension);</span>
+<span class="fc" id="L101">        final var extension = FilenameUtils.getExtension(sourceFile);</span>
+<span class="fc" id="L102">        final var matchingExtensionFiles = this.scanFor(extension);</span>
 
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        for (String matchingExtensionFile : matchingExtensionFiles) {</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (SelectorUtils.matchPath(&quot;**/&quot; + sourceFile, matchingExtensionFile, true)) {</span>
-<span class="fc" id="L82">                return matchingExtensionFile;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (final String matchingExtensionFile : matchingExtensionFiles) {</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">            if (SelectorUtils.matchPath(&quot;**/&quot; + sourceFile, matchingExtensionFile, true)) {</span>
+<span class="fc" id="L106">                return matchingExtensionFile;</span>
             }
         }
 
-<span class="fc" id="L86">        return sourceFile;</span>
+<span class="fc" id="L110">        return sourceFile;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>General.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">General.java</span></div><h1>General.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -26,49 +27,63 @@ package org.eluder.coveralls.maven.plugin.service;
 import java.util.Map;
 
 /**
- * General implementation for any continuous integration service that provides the required
- * environment properties.
+ * General implementation for any continuous integration service that provides the required environment properties.
  */
 public class General extends AbstractServiceSetup {
 
+    /** The Constant CI_NAME. */
     public static final String CI_NAME = &quot;CI_NAME&quot;;
+
+    /** The Constant CI_BUILD_NUMBER. */
     public static final String CI_BUILD_NUMBER = &quot;CI_BUILD_NUMBER&quot;;
+
+    /** The Constant CI_BUILD_URL. */
     public static final String CI_BUILD_URL = &quot;CI_BUILD_URL&quot;;
+
+    /** The Constant CI_BRANCH. */
     public static final String CI_BRANCH = &quot;CI_BRANCH&quot;;
+
+    /** The Constant CI_PULL_REQUEST. */
     public static final String CI_PULL_REQUEST = &quot;CI_PULL_REQUEST&quot;;
 
+    /**
+     * Instantiates a new general.
+     *
+     * @param env
+     *            the env
+     */
     public General(final Map&lt;String, String&gt; env) {
-<span class="fc" id="L41">        super(env);</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L56">        super(env);</span>
+<span class="fc" id="L57">    }</span>
 
     @Override
     public boolean isSelected() {
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        return getProperty(CI_NAME) != null;</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        return this.getProperty(General.CI_NAME) != null;</span>
     }
 
     @Override
     public String getName() {
-<span class="fc" id="L51">        return getProperty(CI_NAME);</span>
+<span class="fc" id="L66">        return this.getProperty(General.CI_NAME);</span>
     }
 
     @Override
     public String getBuildNumber() {
-<span class="fc" id="L56">        return getProperty(CI_BUILD_NUMBER);</span>
+<span class="fc" id="L71">        return this.getProperty(General.CI_BUILD_NUMBER);</span>
     }
 
     @Override
     public String getBuildUrl() {
-<span class="fc" id="L61">        return getProperty(CI_BUILD_URL);</span>
+<span class="fc" id="L76">        return this.getProperty(General.CI_BUILD_URL);</span>
     }
 
     @Override
     public String getBranch() {
-<span class="fc" id="L66">        return getProperty(CI_BRANCH);</span>
+<span class="fc" id="L81">        return this.getProperty(General.CI_BRANCH);</span>
     }
 
     @Override
     public String getPullRequest() {
-<span class="fc" id="L71">        return getProperty(CI_PULL_REQUEST);</span>
+<span class="fc" id="L86">        return this.getProperty(General.CI_PULL_REQUEST);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

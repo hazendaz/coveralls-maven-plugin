@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Jenkins.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">Jenkins.java</span></div><h1>Jenkins.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -29,54 +30,71 @@ import java.util.Properties;
 /**
  * Service implementation for Jenkins.
  * &lt;p&gt;
- * http://jenkins-ci.org/
+ * https://jenkins-ci.org/
  */
 public class Jenkins extends AbstractServiceSetup {
 
+    /** The Constant JENKINS_NAME. */
     public static final String JENKINS_NAME = &quot;jenkins&quot;;
+
+    /** The Constant JENKINS_URL. */
     public static final String JENKINS_URL = &quot;JENKINS_URL&quot;;
+
+    /** The Constant JENKINS_BUILD_NUMBER. */
     public static final String JENKINS_BUILD_NUMBER = &quot;BUILD_NUMBER&quot;;
+
+    /** The Constant JENKINS_BUILD_URL. */
     public static final String JENKINS_BUILD_URL = &quot;BUILD_URL&quot;;
+
+    /** The Constant JENKINS_BRANCH. */
     public static final String JENKINS_BRANCH = &quot;GIT_BRANCH&quot;;
+
+    /** The Constant JENKINS_COMMIT. */
     public static final String JENKINS_COMMIT = &quot;GIT_COMMIT&quot;;
 
+    /**
+     * Instantiates a new jenkins.
+     *
+     * @param env
+     *            the env
+     */
     public Jenkins(final Map&lt;String, String&gt; env) {
-<span class="fc" id="L44">        super(env);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L62">        super(env);</span>
+<span class="fc" id="L63">    }</span>
 
     @Override
     public boolean isSelected() {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        return getProperty(JENKINS_URL) != null;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        return this.getProperty(Jenkins.JENKINS_URL) != null;</span>
     }
 
     @Override
     public String getName() {
-<span class="fc" id="L54">        return JENKINS_NAME;</span>
+<span class="fc" id="L72">        return Jenkins.JENKINS_NAME;</span>
     }
 
     @Override
     public String getBuildNumber() {
-<span class="fc" id="L59">        return getProperty(JENKINS_BUILD_NUMBER);</span>
+<span class="fc" id="L77">        return this.getProperty(Jenkins.JENKINS_BUILD_NUMBER);</span>
     }
 
     @Override
     public String getBuildUrl() {
-<span class="fc" id="L64">        return getProperty(JENKINS_BUILD_URL);</span>
+<span class="fc" id="L82">        return this.getProperty(Jenkins.JENKINS_BUILD_URL);</span>
     }
 
     @Override
     public String getBranch() {
-<span class="fc" id="L69">        return getProperty(JENKINS_BRANCH);</span>
+<span class="fc" id="L87">        return this.getProperty(Jenkins.JENKINS_BRANCH);</span>
     }
 
     @Override
     public Properties getEnvironment() {
-<span class="fc" id="L74">        Properties environment = new Properties();</span>
-<span class="fc" id="L75">        addProperty(environment, &quot;jenkins_build_num&quot;, getProperty(JENKINS_BUILD_NUMBER));</span>
-<span class="fc" id="L76">        addProperty(environment, &quot;jenkins_build_url&quot;, getProperty(JENKINS_BUILD_URL));</span>
-<span class="fc" id="L77">        addProperty(environment, &quot;branch&quot;, getProperty(JENKINS_BRANCH));</span>
-<span class="fc" id="L78">        addProperty(environment, &quot;commit_sha&quot;, getProperty(JENKINS_COMMIT));</span>
-<span class="fc" id="L79">        return environment;</span>
+<span class="fc" id="L92">        final var environment = new Properties();</span>
+<span class="fc" id="L93">        this.addProperty(environment, &quot;jenkins_build_num&quot;, this.getProperty(Jenkins.JENKINS_BUILD_NUMBER));</span>
+<span class="fc" id="L94">        this.addProperty(environment, &quot;jenkins_build_url&quot;, this.getProperty(Jenkins.JENKINS_BUILD_URL));</span>
+<span class="fc" id="L95">        this.addProperty(environment, &quot;branch&quot;, this.getProperty(Jenkins.JENKINS_BRANCH));</span>
+<span class="fc" id="L96">        this.addProperty(environment, &quot;commit_sha&quot;, this.getProperty(Jenkins.JENKINS_COMMIT));</span>
+<span class="fc" id="L97">        return environment;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

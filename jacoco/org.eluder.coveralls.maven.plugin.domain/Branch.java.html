@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Branch.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">Branch.java</span></div><h1>Branch.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,41 +24,77 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
+/**
+ * The Class Branch.
+ */
 public class Branch {
 
+    /** The line number. */
     private final int lineNumber;
 
+    /** The block number. */
     private final int blockNumber;
 
+    /** The branch number. */
     private final int branchNumber;
 
+    /** The hits. */
     private final int hits;
 
-    public Branch(final int lineNumber,
-                  final int blockNumber,
-                  final int branchNumber,
-<span class="fc" id="L39">                  final int hits) {</span>
-<span class="fc" id="L40">        this.lineNumber = lineNumber;</span>
-<span class="fc" id="L41">        this.blockNumber = blockNumber;</span>
-<span class="fc" id="L42">        this.branchNumber = branchNumber;</span>
-<span class="fc" id="L43">        this.hits = hits;</span>
-<span class="fc" id="L44">    }</span>
+    /**
+     * Instantiates a new branch.
+     *
+     * @param lineNumber
+     *            the line number
+     * @param blockNumber
+     *            the block number
+     * @param branchNumber
+     *            the branch number
+     * @param hits
+     *            the hits
+     */
+<span class="fc" id="L56">    public Branch(final int lineNumber, final int blockNumber, final int branchNumber, final int hits) {</span>
+<span class="fc" id="L57">        this.lineNumber = lineNumber;</span>
+<span class="fc" id="L58">        this.blockNumber = blockNumber;</span>
+<span class="fc" id="L59">        this.branchNumber = branchNumber;</span>
+<span class="fc" id="L60">        this.hits = hits;</span>
+<span class="fc" id="L61">    }</span>
 
+    /**
+     * Gets the line number.
+     *
+     * @return the line number
+     */
     public int getLineNumber() {
-<span class="fc" id="L47">        return lineNumber;</span>
+<span class="fc" id="L69">        return this.lineNumber;</span>
     }
 
+    /**
+     * Gets the block number.
+     *
+     * @return the block number
+     */
     public int getBlockNumber() {
-<span class="fc" id="L51">        return blockNumber;</span>
+<span class="fc" id="L78">        return this.blockNumber;</span>
     }
 
+    /**
+     * Gets the branch number.
+     *
+     * @return the branch number
+     */
     public int getBranchNumber() {
-<span class="fc" id="L55">        return branchNumber;</span>
+<span class="fc" id="L87">        return this.branchNumber;</span>
     }
 
+    /**
+     * Gets the hits.
+     *
+     * @return the hits
+     */
     public int getHits() {
-<span class="fc" id="L59">        return hits;</span>
+<span class="fc" id="L96">        return this.hits;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

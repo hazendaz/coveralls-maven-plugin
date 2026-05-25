@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Travis.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">Travis.java</span></div><h1>Travis.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -33,47 +34,62 @@ import java.util.Properties;
  */
 public class Travis extends AbstractServiceSetup {
 
+    /** The Constant TRAVIS_NAME. */
     public static final String TRAVIS_NAME = &quot;travis-ci&quot;;
+
+    /** The Constant TRAVIS. */
     public static final String TRAVIS = &quot;TRAVIS&quot;;
+
+    /** The Constant TRAVIS_JOB_ID. */
     public static final String TRAVIS_JOB_ID = &quot;TRAVIS_JOB_ID&quot;;
+
+    /** The Constant TRAVIS_BRANCH. */
     public static final String TRAVIS_BRANCH = &quot;TRAVIS_BRANCH&quot;;
+
+    /** The Constant TRAVIS_PULL_REQUEST. */
     public static final String TRAVIS_PULL_REQUEST = &quot;TRAVIS_PULL_REQUEST&quot;;
 
+    /**
+     * Instantiates a new travis.
+     *
+     * @param env
+     *            the env
+     */
     public Travis(final Map&lt;String, String&gt; env) {
-<span class="fc" id="L43">        super(env);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L59">        super(env);</span>
+<span class="fc" id="L60">    }</span>
 
     @Override
     public boolean isSelected() {
-<span class="fc" id="L48">        return Boolean.parseBoolean(getProperty(TRAVIS));</span>
+<span class="fc" id="L64">        return Boolean.parseBoolean(this.getProperty(Travis.TRAVIS));</span>
     }
 
     @Override
     public String getName() {
-<span class="fc" id="L53">        return TRAVIS_NAME;</span>
+<span class="fc" id="L69">        return Travis.TRAVIS_NAME;</span>
     }
 
     @Override
     public String getJobId() {
-<span class="fc" id="L58">        return getProperty(TRAVIS_JOB_ID);</span>
+<span class="fc" id="L74">        return this.getProperty(Travis.TRAVIS_JOB_ID);</span>
     }
 
     @Override
     public String getBranch() {
-<span class="fc" id="L63">        return getProperty(TRAVIS_BRANCH);</span>
+<span class="fc" id="L79">        return this.getProperty(Travis.TRAVIS_BRANCH);</span>
     }
 
     @Override
     public String getPullRequest() {
-<span class="fc" id="L68">        return getProperty(TRAVIS_PULL_REQUEST);</span>
+<span class="fc" id="L84">        return this.getProperty(Travis.TRAVIS_PULL_REQUEST);</span>
     }
 
     @Override
     public Properties getEnvironment() {
-<span class="fc" id="L73">        Properties environment = new Properties();</span>
-<span class="fc" id="L74">        addProperty(environment, &quot;travis_job_id&quot;, getProperty(TRAVIS_JOB_ID));</span>
-<span class="fc" id="L75">        addProperty(environment, &quot;travis_pull_request&quot;, getProperty(TRAVIS_PULL_REQUEST));</span>
-<span class="fc" id="L76">        return environment;</span>
+<span class="fc" id="L89">        final var environment = new Properties();</span>
+<span class="fc" id="L90">        this.addProperty(environment, &quot;travis_job_id&quot;, this.getProperty(Travis.TRAVIS_JOB_ID));</span>
+<span class="fc" id="L91">        this.addProperty(environment, &quot;travis_pull_request&quot;, this.getProperty(Travis.TRAVIS_PULL_REQUEST));</span>
+<span class="fc" id="L92">        return environment;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

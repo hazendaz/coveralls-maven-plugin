@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DirectorySourceLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.source</a> &gt; <span class="el_source">DirectorySourceLoader.java</span></div><h1>DirectorySourceLoader.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -25,29 +26,45 @@ package org.eluder.coveralls.maven.plugin.source;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+/**
+ * The Class DirectorySourceLoader.
+ */
 public class DirectorySourceLoader extends AbstractSourceLoader {
 
+    /** The source directory. */
     private final File sourceDirectory;
 
-    public DirectorySourceLoader(final File base, final File sourceDirectory, final String sourceEncoding) {
-<span class="fc" id="L37">        super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);</span>
-<span class="fc" id="L38">        this.sourceDirectory = sourceDirectory;</span>
-<span class="fc" id="L39">    }</span>
+    /**
+     * Instantiates a new directory source loader.
+     *
+     * @param base
+     *            the base
+     * @param sourceDirectory
+     *            the source directory
+     * @param sourceEncoding
+     *            the source encoding
+     */
+    public DirectorySourceLoader(final File base, final File sourceDirectory, final Charset sourceEncoding) {
+<span class="fc" id="L54">        super(base.toURI(), sourceDirectory.toURI(), sourceEncoding);</span>
+<span class="fc" id="L55">        this.sourceDirectory = sourceDirectory;</span>
+<span class="fc" id="L56">    }</span>
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-<span class="fc" id="L43">        File file = new File(sourceDirectory, sourceFile);</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (file.exists()) {</span>
-<span class="fc bfc" id="L45" title="All 2 branches covered.">            if (!file.isFile()) {</span>
-<span class="fc" id="L46">                throw new IllegalArgumentException(file.getAbsolutePath() + &quot; is not file&quot;);</span>
+<span class="fc" id="L60">        final var path = Path.of(this.sourceDirectory.toString(), sourceFile);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (Files.exists(path)) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (!Files.isRegularFile(path)) {</span>
+<span class="fc" id="L63">                throw new IllegalArgumentException(path.toAbsolutePath() + &quot; is not file&quot;);</span>
             }
-<span class="fc" id="L48">            return new BufferedInputStream(new FileInputStream(file));</span>
+<span class="fc" id="L65">            return new BufferedInputStream(Files.newInputStream(path));</span>
         }
-<span class="fc" id="L50">        return null;</span>
+<span class="fc" id="L67">        return null;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

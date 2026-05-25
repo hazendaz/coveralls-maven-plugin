@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractSourceLoader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.source</a> &gt; <span class="el_source">AbstractSourceLoader.java</span></div><h1>AbstractSourceLoader.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,51 +24,84 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
-import org.apache.commons.io.IOUtils;
-import org.eluder.coveralls.maven.plugin.domain.Source;
-import org.eluder.coveralls.maven.plugin.util.Sha521DigestInputStream;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.Charset;
-import java.security.NoSuchAlgorithmException;
 
+import org.eluder.coveralls.maven.plugin.domain.Source;
+import org.eluder.coveralls.maven.plugin.util.Sha512DigestInputStream;
+
+/**
+ * The Class AbstractSourceLoader.
+ */
 public abstract class AbstractSourceLoader implements SourceLoader {
 
+    /** The source encoding. */
     private final Charset sourceEncoding;
+
+    /** The directory prefix. */
     private final String directoryPrefix;
 
-<span class="fc" id="L42">    protected AbstractSourceLoader(final URI base, final URI sourceBase, final String sourceEncoding) {</span>
-<span class="fc" id="L43">        this.sourceEncoding = Charset.forName(sourceEncoding);</span>
-<span class="fc" id="L44">        this.directoryPrefix = base.relativize(sourceBase).toString();</span>
-<span class="fc" id="L45">    }</span>
+    /**
+     * Instantiates a new abstract source loader.
+     *
+     * @param base
+     *            the base
+     * @param sourceBase
+     *            the source base
+     * @param sourceEncoding
+     *            the source encoding
+     */
+<span class="fc" id="L56">    protected AbstractSourceLoader(final URI base, final URI sourceBase, final Charset sourceEncoding) {</span>
+<span class="fc" id="L57">        this.sourceEncoding = sourceEncoding;</span>
+<span class="fc" id="L58">        this.directoryPrefix = base.relativize(sourceBase).toString();</span>
+<span class="fc" id="L59">    }</span>
 
     @Override
     public Source load(final String sourceFile) throws IOException {
-<span class="fc" id="L49">        InputStream stream = locate(sourceFile);</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (stream != null) {</span>
-<span class="fc" id="L51">            try (Sha521DigestInputStream ds = new Sha521DigestInputStream(stream);</span>
-<span class="fc" id="L52">                    InputStreamReader reader = new InputStreamReader(ds, getSourceEncoding())) {</span>
-<span class="fc" id="L53">                String source = IOUtils.toString(reader);</span>
-<span class="fc" id="L54">                return new Source(getFileName(sourceFile), source, ds.getDigestHex());</span>
-<span class="nc" id="L55">            } catch (NoSuchAlgorithmException ex) {</span>
-<span class="nc" id="L56">                throw new IOException(&quot;Sha-512 algorithm not available&quot;, ex);</span>
-            }
-        } else {
-<span class="fc" id="L59">            return null;</span>
+<span class="fc" id="L63">        final var stream = this.locate(sourceFile);</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (stream == null) {</span>
+<span class="fc" id="L65">            return null;</span>
+        }
+<span class="fc" id="L67">        try (var ds = new Sha512DigestInputStream(stream)) {</span>
+<span class="fc" id="L68">            final var source = new String(ds.readAllBytes(), this.getSourceEncoding());</span>
+<span class="fc" id="L69">            return new Source(this.getFileName(sourceFile), source, ds.getDigestHex());</span>
         }
     }
 
+    /**
+     * Gets the source encoding.
+     *
+     * @return the source encoding
+     */
     protected Charset getSourceEncoding() {
-<span class="fc" id="L64">        return sourceEncoding;</span>
+<span class="fc" id="L79">        return this.sourceEncoding;</span>
     }
 
+    /**
+     * Gets the file name.
+     *
+     * @param sourceFile
+     *            the source file
+     *
+     * @return the file name
+     */
     protected String getFileName(final String sourceFile) {
-<span class="fc" id="L68">        return directoryPrefix + sourceFile;</span>
+<span class="fc" id="L91">        return this.directoryPrefix + sourceFile;</span>
     }
 
+    /**
+     * Locate.
+     *
+     * @param sourceFile
+     *            the source file
+     *
+     * @return the input stream
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     protected abstract InputStream locate(String sourceFile) throws IOException;
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

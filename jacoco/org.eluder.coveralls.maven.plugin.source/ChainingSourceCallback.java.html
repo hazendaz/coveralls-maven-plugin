@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ChainingSourceCallback.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.source</a> &gt; <span class="el_source">ChainingSourceCallback.java</span></div><h1>ChainingSourceCallback.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,62 +24,76 @@
  */
 package org.eluder.coveralls.maven.plugin.source;
 
+import java.io.IOException;
+
 import org.eluder.coveralls.maven.plugin.ProcessingException;
 import org.eluder.coveralls.maven.plugin.domain.Source;
 
-import java.io.IOException;
-
 /**
- * Source callback handler that allows chaining multiple callback handlers. Chained callback
- * handler is executed after this callback.
+ * Source callback handler that allows chaining multiple callback handlers. Chained callback handler is executed after
+ * this callback.
  */
 public abstract class ChainingSourceCallback implements SourceCallback {
 
+    /** The chained. */
     private final SourceCallback chained;
 
-<span class="fc" id="L39">    public ChainingSourceCallback(final SourceCallback chained) {</span>
-<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (chained == null) {</span>
-<span class="fc" id="L41">            throw new IllegalArgumentException(&quot;chained must be defined&quot;);</span>
+    /**
+     * Instantiates a new chaining source callback.
+     *
+     * @param chained
+     *            the chained
+     */
+<span class="fc" id="L47">    protected ChainingSourceCallback(final SourceCallback chained) {</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (chained == null) {</span>
+<span class="fc" id="L49">            throw new IllegalArgumentException(&quot;chained must be defined&quot;);</span>
         }
-<span class="fc" id="L43">        this.chained = chained;</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L51">        this.chained = chained;</span>
+<span class="fc" id="L52">    }</span>
 
     @Override
     public final void onBegin() throws ProcessingException, IOException {
-<span class="fc" id="L48">        onBeginInternal();</span>
-<span class="fc" id="L49">        chained.onBegin();</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L56">        this.onBeginInternal();</span>
+<span class="fc" id="L57">        this.chained.onBegin();</span>
+<span class="fc" id="L58">    }</span>
 
     @Override
     public final void onSource(final Source source) throws ProcessingException, IOException {
-<span class="fc" id="L54">        onSourceInternal(source);</span>
-<span class="fc" id="L55">        chained.onSource(source);</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L62">        this.onSourceInternal(source);</span>
+<span class="fc" id="L63">        this.chained.onSource(source);</span>
+<span class="fc" id="L64">    }</span>
 
     @Override
     public final void onComplete() throws ProcessingException, IOException {
-<span class="fc" id="L60">        onCompleteInternal();</span>
-<span class="fc" id="L61">        chained.onComplete();</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L68">        this.onCompleteInternal();</span>
+<span class="fc" id="L69">        this.chained.onComplete();</span>
+<span class="fc" id="L70">    }</span>
 
     /**
      * Defaults to no-op implementation.
      *
-     * @see #onBegin()
+     * @throws ProcessingException
+     *             if processing fails
+     * @throws IOException
+     *             if an I/O error occurs
      *
-     * @throws ProcessingException if processing fails
-     * @throws IOException if an I/O error occurs
+     * @see #onBegin()
      */
     protected void onBeginInternal() throws ProcessingException, IOException {
 
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * On source internal.
      *
-     * @param source the source file
-     * @throws ProcessingException if further processing of the source fails
-     * @throws IOException if an I/O error occurs
+     * @param source
+     *            the source file
+     *
+     * @throws ProcessingException
+     *             if further processing of the source fails
+     * @throws IOException
+     *             if an I/O error occurs
+     *
      * @see #onSource(Source)
      */
     protected abstract void onSourceInternal(final Source source) throws ProcessingException, IOException;
@@ -86,13 +101,15 @@ public abstract class ChainingSourceCallback implements SourceCallback {
     /**
      * Defaults to no-op implementation.
      *
-     * @see #onComplete()
+     * @throws ProcessingException
+     *             if processing fails
+     * @throws IOException
+     *             if an I/O error occurs
      *
-     * @throws ProcessingException if processing fails
-     * @throws IOException if an I/O error occurs
+     * @see #onComplete()
      */
     protected void onCompleteInternal() throws ProcessingException, IOException {
 
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L113">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

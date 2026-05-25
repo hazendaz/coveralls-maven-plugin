@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ValidationError.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.validation</a> &gt; <span class="el_source">ValidationError.java</span></div><h1>ValidationError.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,37 +24,67 @@
  */
 package org.eluder.coveralls.maven.plugin.validation;
 
+/**
+ * The Class ValidationError.
+ */
 public final class ValidationError {
 
-<span class="fc" id="L28">    public enum Level {</span>
-<span class="fc" id="L29">        WARN, ERROR</span>
+    /**
+     * The Enum Level.
+     */
+<span class="fc" id="L35">    public enum Level {</span>
+        /** The warn. */
+<span class="fc" id="L37">        WARN,</span>
+        /** The error. */
+<span class="fc" id="L39">        ERROR</span>
     }
 
+    /** The level. */
     private final Level level;
+
+    /** The message. */
     private final String message;
 
-<span class="fc" id="L35">    public ValidationError(final Level level, final String message) {</span>
-<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (level == null) {</span>
-<span class="fc" id="L37">            throw new IllegalArgumentException(&quot;level must be defined&quot;);</span>
+    /**
+     * Instantiates a new validation error.
+     *
+     * @param level
+     *            the level
+     * @param message
+     *            the message
+     */
+<span class="fc" id="L56">    public ValidationError(final Level level, final String message) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (level == null) {</span>
+<span class="fc" id="L58">            throw new IllegalArgumentException(&quot;level must be defined&quot;);</span>
         }
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (message == null) {</span>
-<span class="fc" id="L40">            throw new IllegalArgumentException(&quot;message must be defined&quot;);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (message == null) {</span>
+<span class="fc" id="L61">            throw new IllegalArgumentException(&quot;message must be defined&quot;);</span>
         }
-<span class="fc" id="L42">        this.level = level;</span>
-<span class="fc" id="L43">        this.message = message;</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L63">        this.level = level;</span>
+<span class="fc" id="L64">        this.message = message;</span>
+<span class="fc" id="L65">    }</span>
 
+    /**
+     * Gets the level.
+     *
+     * @return the level
+     */
     public Level getLevel() {
-<span class="fc" id="L47">        return level;</span>
+<span class="fc" id="L73">        return this.level;</span>
     }
 
+    /**
+     * Gets the message.
+     *
+     * @return the message
+     */
     public String getMessage() {
-<span class="fc" id="L51">        return message;</span>
+<span class="fc" id="L82">        return this.message;</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L56">        return level + &quot;: &quot; + message;</span>
+<span class="fc" id="L87">        return this.level + &quot;: &quot; + this.message;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExistingFiles.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.util</a> &gt; <span class="el_source">ExistingFiles.java</span></div><h1>ExistingFiles.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -26,42 +27,97 @@ package org.eluder.coveralls.maven.plugin.util;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.function.Function;
 
-<span class="fc" id="L30">public class ExistingFiles implements Iterable&lt;File&gt; {</span>
+import org.eluder.coveralls.maven.plugin.CoverageParser;
 
-<span class="fc" id="L32">    private final ArrayList&lt;File&gt; delegate = new ArrayList&lt;&gt;();</span>
+/**
+ * The Class ExistingFiles.
+ */
+public class ExistingFiles implements Iterable&lt;File&gt; {
 
+    /** The delegate. */
+<span class="fc" id="L41">    private final List&lt;File&gt; delegate = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Instantiates a new existing files.
+     */
+<span class="fc" id="L46">    public ExistingFiles() {</span>
+        // do nothing
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Adds the all.
+     *
+     * @param files
+     *            the files
+     *
+     * @return the existing files
+     */
     public ExistingFiles addAll(final Iterable&lt;File&gt; files) {
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (files == null) {</span>
-<span class="fc" id="L36">            throw new NullPointerException(&quot;Files must be defined&quot;);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (files == null) {</span>
+<span class="fc" id="L60">            throw new NullPointerException(&quot;Files must be defined&quot;);</span>
         }
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (File file : files) {</span>
-<span class="fc" id="L39">            add(file);</span>
-<span class="fc" id="L40">        }</span>
-<span class="fc" id="L41">        return this;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        for (final File file : files) {</span>
+<span class="fc" id="L63">            this.add(file);</span>
+<span class="fc" id="L64">        }</span>
+<span class="fc" id="L65">        return this;</span>
     }
 
+    /**
+     * Adds the.
+     *
+     * @param file
+     *            the file
+     *
+     * @return the existing files
+     */
     public ExistingFiles add(final File file) {
-<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (file == null) {</span>
-<span class="fc" id="L46">            throw new NullPointerException(&quot;File must be defined&quot;);</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (file == null) {</span>
+<span class="fc" id="L78">            throw new NullPointerException(&quot;File must be defined&quot;);</span>
         }
-<span class="fc bfc" id="L48" title="All 6 branches covered.">        if (file.exists() &amp;&amp; file.isFile() &amp;&amp; !delegate.contains(file)) {</span>
-<span class="fc" id="L49">            delegate.add(file);</span>
+<span class="fc bfc" id="L80" title="All 6 branches covered.">        if (file.exists() &amp;&amp; file.isFile() &amp;&amp; !this.delegate.contains(file)) {</span>
+<span class="fc" id="L81">            this.delegate.add(file);</span>
         }
-<span class="fc" id="L51">        return this;</span>
+<span class="fc" id="L83">        return this;</span>
     }
 
     @Override
     public Iterator&lt;File&gt; iterator() {
-<span class="fc" id="L56">        return delegate.iterator();</span>
+<span class="fc" id="L88">        return this.delegate.iterator();</span>
     }
 
+    /**
+     * Creates the.
+     *
+     * @param files
+     *            the files
+     *
+     * @return the existing files
+     */
     public static ExistingFiles create(final Iterable&lt;File&gt; files) {
-<span class="fc" id="L60">        ExistingFiles existingFiles = new ExistingFiles();</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (files != null) {</span>
-<span class="fc" id="L62">            existingFiles.addAll(files);</span>
+<span class="fc" id="L100">        final var existingFiles = new ExistingFiles();</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (files != null) {</span>
+<span class="fc" id="L102">            existingFiles.addAll(files);</span>
         }
-<span class="fc" id="L64">        return existingFiles;</span>
+<span class="fc" id="L104">        return existingFiles;</span>
+    }
+
+    /**
+     * Converts existing files to a list of CoverageParser using the provided function.
+     *
+     * @param parserFunction
+     *            function to convert File to CoverageParser
+     *
+     * @return list of CoverageParser for valid files
+     */
+    public List&lt;CoverageParser&gt; toParsers(Function&lt;File, CoverageParser&gt; parserFunction) {
+<span class="fc" id="L116">        final List&lt;CoverageParser&gt; parsers = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        for (final File file : this.delegate) {</span>
+<span class="fc" id="L118">            parsers.add(parserFunction.apply(file));</span>
+<span class="fc" id="L119">        }</span>
+<span class="fc" id="L120">        return parsers;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

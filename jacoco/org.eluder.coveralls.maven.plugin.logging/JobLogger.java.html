@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JobLogger.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.logging</a> &gt; <span class="el_source">JobLogger.java</span></div><h1>JobLogger.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,86 +24,112 @@
  */
 package org.eluder.coveralls.maven.plugin.logging;
 
-import org.apache.maven.plugin.logging.Log;
-import org.eluder.coveralls.maven.plugin.domain.Job;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 
+import org.apache.maven.plugin.logging.Log;
+import org.eluder.coveralls.maven.plugin.domain.Job;
+
+/**
+ * The Class JobLogger.
+ */
 public class JobLogger implements Logger {
 
+    /** The Constant ABBREV. */
     private static final int ABBREV = 7;
 
+    /** The job. */
     private final Job job;
+
+    /** The json mapper. */
     private final ObjectMapper jsonMapper;
 
+    /**
+     * Instantiates a new job logger.
+     *
+     * @param job
+     *            the job
+     */
     public JobLogger(final Job job) {
-<span class="fc" id="L43">        this(job, null);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L57">        this(job, null);</span>
+<span class="fc" id="L58">    }</span>
 
-<span class="fc" id="L46">    public JobLogger(final Job job, final ObjectMapper jsonMapper) {</span>
-<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (job == null) {</span>
-<span class="fc" id="L48">            throw new IllegalArgumentException(&quot;job must be defined&quot;);</span>
+    /**
+     * Instantiates a new job logger.
+     *
+     * @param job
+     *            the job
+     * @param jsonMapper
+     *            the json mapper
+     */
+<span class="fc" id="L68">    public JobLogger(final Job job, final ObjectMapper jsonMapper) {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (job == null) {</span>
+<span class="fc" id="L70">            throw new IllegalArgumentException(&quot;job must be defined&quot;);</span>
         }
-<span class="fc" id="L50">        this.job = job;</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        this.jsonMapper = (jsonMapper != null ? jsonMapper : createDefaultJsonMapper());</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L72">        this.job = job;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        this.jsonMapper = jsonMapper != null ? jsonMapper : this.createDefaultJsonMapper();</span>
+<span class="fc" id="L74">    }</span>
 
     @Override
     public Position getPosition() {
-<span class="fc" id="L56">        return Position.BEFORE;</span>
+<span class="fc" id="L78">        return Position.BEFORE;</span>
     }
 
     @Override
     public void log(final Log log) {
-<span class="fc" id="L61">        StringBuilder starting = new StringBuilder(&quot;Starting Coveralls job&quot;);</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (job.getServiceName() != null) {</span>
-<span class="fc" id="L63">            starting.append(&quot; for &quot; + job.getServiceName());</span>
-<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (job.getServiceJobId() != null) {</span>
-<span class="fc" id="L65">                starting.append(&quot; (&quot; + job.getServiceJobId() + &quot;)&quot;);</span>
-<span class="fc bfc" id="L66" title="All 2 branches covered.">            } else if (job.getServiceBuildNumber() != null) {</span>
-<span class="fc" id="L67">                starting.append(&quot; (&quot; + job.getServiceBuildNumber());</span>
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">                if (job.getServiceBuildUrl() != null) {</span>
-<span class="fc" id="L69">                    starting.append(&quot; / &quot; + job.getServiceBuildUrl());</span>
+<span class="fc" id="L83">        final var starting = new StringBuilder(&quot;Starting Coveralls job&quot;);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">        if (this.job.getServiceName() != null) {</span>
+<span class="fc" id="L85">            starting.append(&quot; for &quot;).append(this.job.getServiceName());</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">            if (this.job.getServiceJobId() != null) {</span>
+<span class="fc" id="L87">                starting.append(&quot; (&quot;).append(this.job.getServiceJobId()).append(&quot;)&quot;);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            } else if (this.job.getServiceBuildNumber() != null) {</span>
+<span class="fc" id="L89">                starting.append(&quot; (&quot;).append(this.job.getServiceBuildNumber());</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">                if (this.job.getServiceBuildUrl() != null) {</span>
+<span class="fc" id="L91">                    starting.append(&quot; / &quot;).append(this.job.getServiceBuildUrl());</span>
                 }
-<span class="fc" id="L71">                starting.append(&quot;)&quot;);</span>
+<span class="fc" id="L93">                starting.append(&quot;)&quot;);</span>
             }
         }
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (job.isDryRun()) {</span>
-<span class="fc" id="L75">            starting.append(&quot; in dry run mode&quot;);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (this.job.isDryRun()) {</span>
+<span class="fc" id="L97">            starting.append(&quot; in dry run mode&quot;);</span>
         }
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (job.isParallel()) {</span>
-<span class="fc" id="L78">            starting.append(&quot; with parallel option enabled&quot;);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (this.job.isParallel()) {</span>
+<span class="fc" id="L100">            starting.append(&quot; with parallel option enabled&quot;);</span>
         }
-<span class="fc" id="L80">        log.info(starting.toString());</span>
+<span class="fc" id="L102">        log.info(starting.toString());</span>
 
-<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (job.getRepoToken() != null) {</span>
-<span class="fc" id="L83">            log.info(&quot;Using repository token &lt;secret&gt;&quot;);</span>
-        }
-
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (job.getGit() != null) {</span>
-<span class="fc" id="L87">            String commit = job.getGit().getHead().getId();</span>
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            String branch = (job.getBranch() != null ? job.getBranch() : job.getGit().getBranch());</span>
-<span class="fc" id="L89">            log.info(&quot;Git commit &quot; + commit.substring(0, ABBREV) + &quot; in &quot; + branch);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (this.job.getRepoToken() != null) {</span>
+<span class="fc" id="L105">            log.info(&quot;Using repository token &lt;secret&gt;&quot;);</span>
         }
 
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (this.job.getGit() != null) {</span>
+<span class="fc" id="L109">            final var commit = this.job.getGit().getHead().getId();</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            final var branch = this.job.getBranch() != null ? this.job.getBranch() : this.job.getGit().getBranch();</span>
+<span class="fc" id="L111">            log.info(&quot;Git commit &quot; + commit.substring(0, JobLogger.ABBREV) + &quot; in &quot; + branch);</span>
+        }
+
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (log.isDebugEnabled()) {</span>
             try {
-<span class="fc" id="L94">                log.debug(&quot;Complete Job description:\n&quot; + jsonMapper.writeValueAsString(job));</span>
-<span class="fc" id="L95">            } catch (JsonProcessingException ex) {</span>
-<span class="fc" id="L96">                throw new RuntimeException(ex);</span>
-<span class="fc" id="L97">            }</span>
+<span class="fc" id="L116">                log.debug(&quot;Complete Job description:\n&quot; + this.jsonMapper.writeValueAsString(this.job));</span>
+<span class="fc" id="L117">            } catch (final JsonProcessingException e) {</span>
+<span class="fc" id="L118">                throw new IllegalStateException(&quot;FAiled to serialize job to JSON&quot;, e);</span>
+<span class="fc" id="L119">            }</span>
         }
-<span class="fc" id="L99">    }</span>
+<span class="fc" id="L121">    }</span>
 
+    /**
+     * Creates the default json mapper.
+     *
+     * @return the object mapper
+     */
     private ObjectMapper createDefaultJsonMapper() {
-<span class="fc" id="L102">        return JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true).</span>
-<span class="fc" id="L103">        configure(SerializationFeature.INDENT_OUTPUT, true).</span>
-<span class="fc" id="L104">        configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).build();</span>
+<span class="fc" id="L129">        return JsonMapper.builder().configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true)</span>
+<span class="fc" id="L130">                .configure(SerializationFeature.INDENT_OUTPUT, true)</span>
+<span class="fc" id="L131">                .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).build();</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CoberturaParser.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.parser</a> &gt; <span class="el_source">CoberturaParser.java</span></div><h1>CoberturaParser.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -25,6 +26,7 @@ package org.eluder.coveralls.maven.plugin.parser;
 
 import java.io.File;
 import java.io.IOException;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -33,75 +35,87 @@ import org.eluder.coveralls.maven.plugin.domain.Source;
 import org.eluder.coveralls.maven.plugin.source.SourceCallback;
 import org.eluder.coveralls.maven.plugin.source.SourceLoader;
 
+/**
+ * The Class CoberturaParser.
+ *
+ * @deprecated As Cobertura is no longer maintained, this parser may be dropped in a future release.
+ */
+@Deprecated(since = &quot;5.0.0&quot;, forRemoval = true)
 public class CoberturaParser extends AbstractXmlEventParser {
 
+    /** The source. */
     protected Source source;
+
+    /** The in methods. */
     protected boolean inMethods;
+
+    /** The branch id. */
     private int branchId;
 
+    /**
+     * Instantiates a new cobertura parser.
+     *
+     * @param coverageFile
+     *            the coverage file
+     * @param sourceLoader
+     *            the source loader
+     */
     public CoberturaParser(final File coverageFile, final SourceLoader sourceLoader) {
-<span class="fc" id="L43">        super(coverageFile, sourceLoader);</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L64">        super(coverageFile, sourceLoader);</span>
+<span class="fc" id="L65">    }</span>
 
     @Override
-    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback) throws XMLStreamException, ProcessingException, IOException {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (isStartElement(xml, &quot;class&quot;)) {</span>
-<span class="fc" id="L49">            source = loadSource(xml.getAttributeValue(null, &quot;filename&quot;));</span>
-<span class="fc" id="L50">            String className = xml.getAttributeValue(null, &quot;name&quot;);</span>
-<span class="fc" id="L51">            int classifierPosition = className.indexOf('$');</span>
-<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (classifierPosition &gt; 0) {</span>
-<span class="fc" id="L53">                source.setClassifier(className.substring(classifierPosition + 1));</span>
+    protected void onEvent(final XMLStreamReader xml, final SourceCallback callback)
+            throws XMLStreamException, ProcessingException, IOException {
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (this.isStartElement(xml, &quot;class&quot;)) {</span>
+<span class="fc" id="L71">            this.source = this.loadSource(xml.getAttributeValue(null, &quot;filename&quot;));</span>
+<span class="fc" id="L72">            final var className = xml.getAttributeValue(null, &quot;name&quot;);</span>
+<span class="fc" id="L73">            final var classifierPosition = className.indexOf('$');</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if (classifierPosition &gt; 0) {</span>
+<span class="fc" id="L75">                this.source.setClassifier(className.substring(classifierPosition + 1));</span>
             }
-<span class="fc" id="L55">            this.branchId = 0;</span>
-<span class="fc" id="L56">        } else</span>
-
-<span class="pc bpc" id="L58" title="1 of 4 branches missed.">        if (isStartElement(xml, &quot;methods&quot;) &amp;&amp; source != null) {</span>
-<span class="fc" id="L59">            inMethods = true;</span>
-        } else
-
-<span class="pc bpc" id="L62" title="1 of 4 branches missed.">        if (isEndElement(xml, &quot;methods&quot;) &amp;&amp; source != null) {</span>
-<span class="fc" id="L63">            inMethods = false;</span>
-        } else
-
-<span class="pc bpc" id="L66" title="1 of 6 branches missed.">        if (isStartElement(xml, &quot;line&quot;) &amp;&amp; !inMethods &amp;&amp; source != null) {</span>
-<span class="fc" id="L67">            final int nr = Integer.parseInt(xml.getAttributeValue(null, &quot;number&quot;));</span>
-<span class="fc" id="L68">            source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, &quot;hits&quot;)));</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">            if (Boolean.parseBoolean(xml.getAttributeValue(null, &quot;branch&quot;))) {</span>
-<span class="fc" id="L70">                final String value = xml.getAttributeValue(null, &quot;condition-coverage&quot;);</span>
+<span class="fc" id="L77">            this.branchId = 0;</span>
+<span class="pc bpc" id="L78" title="1 of 4 branches missed.">        } else if (this.isStartElement(xml, &quot;methods&quot;) &amp;&amp; this.source != null) {</span>
+<span class="fc" id="L79">            this.inMethods = true;</span>
+<span class="pc bpc" id="L80" title="1 of 4 branches missed.">        } else if (this.isEndElement(xml, &quot;methods&quot;) &amp;&amp; this.source != null) {</span>
+<span class="fc" id="L81">            this.inMethods = false;</span>
+<span class="pc bpc" id="L82" title="1 of 6 branches missed.">        } else if (this.isStartElement(xml, &quot;line&quot;) &amp;&amp; !this.inMethods &amp;&amp; this.source != null) {</span>
+<span class="fc" id="L83">            final var nr = Integer.parseInt(xml.getAttributeValue(null, &quot;number&quot;));</span>
+<span class="fc" id="L84">            this.source.addCoverage(nr, Integer.valueOf(xml.getAttributeValue(null, &quot;hits&quot;)));</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">            if (Boolean.parseBoolean(xml.getAttributeValue(null, &quot;branch&quot;))) {</span>
+<span class="fc" id="L86">                final var value = xml.getAttributeValue(null, &quot;condition-coverage&quot;);</span>
 
                 // Is &quot;condition-coverage&quot; attribute always here?
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">                if (value == null) {</span>
-<span class="nc" id="L74">                    return;</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">                if (value == null) {</span>
+<span class="fc" id="L90">                    return;</span>
                 }
 
                 // C'mon Cobertura, human readable format for XML ?
-<span class="fc" id="L78">                final String[] values = value // 50% (2/4)</span>
-<span class="fc" id="L79">                        .replace(&quot; &quot;, &quot;&quot;)     // 50%(2/4)</span>
-<span class="fc" id="L80">                        .replace(&quot;%&quot;, &quot;/&quot;)    // 50/(2/4)</span>
-<span class="fc" id="L81">                        .replace(&quot;(&quot;, &quot;&quot;)     // 50/2/4)</span>
-<span class="fc" id="L82">                        .replace(&quot;)&quot;, &quot;&quot;)     // 50/2/4</span>
-<span class="fc" id="L83">                        .split(&quot;/&quot;, -1);</span>
+<span class="fc" id="L94">                final var values = value // 50% (2/4)</span>
+<span class="fc" id="L95">                        .replace(&quot; &quot;, &quot;&quot;) // 50%(2/4)</span>
+<span class="fc" id="L96">                        .replace(&quot;%&quot;, &quot;/&quot;) // 50/(2/4)</span>
+<span class="fc" id="L97">                        .replace(&quot;(&quot;, &quot;&quot;) // 50/2/4)</span>
+<span class="fc" id="L98">                        .replace(&quot;)&quot;, &quot;&quot;) // 50/2/4</span>
+<span class="fc" id="L99">                        .split(&quot;/&quot;, -1);</span>
 
-<span class="fc" id="L85">                final int cb = Integer.parseInt(values[1]);</span>
-<span class="fc" id="L86">                final int tb = Integer.parseInt(values[2]);</span>
-<span class="fc" id="L87">                final int mb = tb - cb;</span>
+<span class="fc" id="L101">                final var cb = Integer.parseInt(values[1]);</span>
+<span class="fc" id="L102">                final var tb = Integer.parseInt(values[2]);</span>
+<span class="fc" id="L103">                final var mb = tb - cb;</span>
 
                 // add branches. unfortunately, there is NO block number and
                 // branch number will NOT be unique between coverage changes.
-<span class="fc bfc" id="L91" title="All 2 branches covered.">                for (int b = 0; b &lt; cb; b++) {</span>
-<span class="fc" id="L92">                  this.source.addBranchCoverage(nr, 0, this.branchId++, 1);</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                for (var b = 0; b &lt; cb; b++) {</span>
+<span class="fc" id="L108">                    this.source.addBranchCoverage(nr, 0, this.branchId++, 1);</span>
                 }
-<span class="fc bfc" id="L94" title="All 2 branches covered.">                for (int b = 0; b &lt; mb; b++) {</span>
-<span class="fc" id="L95">                  this.source.addBranchCoverage(nr, 0, this.branchId++, 0);</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">                for (var b = 0; b &lt; mb; b++) {</span>
+<span class="fc" id="L111">                    this.source.addBranchCoverage(nr, 0, this.branchId++, 0);</span>
                 }
             }
-<span class="fc" id="L98">        } else</span>
-
-<span class="pc bpc" id="L100" title="1 of 4 branches missed.">        if (isEndElement(xml, &quot;class&quot;) &amp;&amp; source != null) {</span>
-<span class="fc" id="L101">            callback.onSource(source);</span>
-<span class="fc" id="L102">            source = null;</span>
+<span class="pc bpc" id="L114" title="1 of 4 branches missed.">        } else if (this.isEndElement(xml, &quot;class&quot;) &amp;&amp; this.source != null) {</span>
+<span class="fc" id="L115">            callback.onSource(this.source);</span>
+<span class="fc" id="L116">            this.source = null;</span>
         }
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L118">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

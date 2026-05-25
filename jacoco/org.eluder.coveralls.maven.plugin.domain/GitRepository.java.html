@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GitRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.domain</a> &gt; <span class="el_source">GitRepository.java</span></div><h1>GitRepository.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -23,62 +24,108 @@
  */
 package org.eluder.coveralls.maven.plugin.domain;
 
-import org.eclipse.jgit.lib.Config;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.RepositoryBuilder;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.RepositoryBuilder;
+import org.eclipse.jgit.revwalk.RevWalk;
+
+/**
+ * The Class GitRepository.
+ */
 public class GitRepository {
 
+    /** The source directory. */
     private final File sourceDirectory;
 
-<span class="fc" id="L43">    public GitRepository(final File sourceDirectory) {</span>
-<span class="fc" id="L44">        this.sourceDirectory = sourceDirectory;</span>
-<span class="fc" id="L45">    }</span>
+    /**
+     * Instantiates a new git repository.
+     *
+     * @param sourceDirectory
+     *            the source directory
+     */
+<span class="fc" id="L52">    public GitRepository(final File sourceDirectory) {</span>
+<span class="fc" id="L53">        this.sourceDirectory = sourceDirectory;</span>
+<span class="fc" id="L54">    }</span>
 
+    /**
+     * Load.
+     *
+     * @return the git
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public Git load() throws IOException {
-<span class="fc" id="L48">        try (Repository repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {</span>
-<span class="fc" id="L49">            Git.Head head = getHead(repository);</span>
-<span class="fc" id="L50">            String branch = getBranch(repository);</span>
-<span class="fc" id="L51">            List&lt;Git.Remote&gt; remotes = getRemotes(repository);</span>
-<span class="fc" id="L52">            return new Git(repository.getWorkTree(), head, branch, remotes);</span>
+<span class="fc" id="L65">        try (var repository = new RepositoryBuilder().findGitDir(this.sourceDirectory).build()) {</span>
+<span class="fc" id="L66">            final var head = this.getHead(repository);</span>
+<span class="fc" id="L67">            final var branch = this.getBranch(repository);</span>
+<span class="fc" id="L68">            final var remotes = this.getRemotes(repository);</span>
+<span class="fc" id="L69">            return new Git(repository.getWorkTree(), head, branch, remotes);</span>
         }
     }
 
+    /**
+     * Gets the head.
+     * &lt;p&gt;
+     * Resource is closed in load().
+     *
+     * @param repository
+     *            the repository
+     *
+     * @return the head
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
+    @SuppressWarnings(&quot;resource&quot;)
     private Git.Head getHead(final Repository repository) throws IOException {
-<span class="fc" id="L57">        ObjectId revision = repository.resolve(Constants.HEAD);</span>
-<span class="fc" id="L58">        RevCommit commit = new RevWalk(repository).parseCommit(revision);</span>
-<span class="fc" id="L59">        Git.Head head = new Git.Head(</span>
-<span class="fc" id="L60">                revision.getName(),</span>
-<span class="fc" id="L61">                commit.getAuthorIdent().getName(),</span>
-<span class="fc" id="L62">                commit.getAuthorIdent().getEmailAddress(),</span>
-<span class="fc" id="L63">                commit.getCommitterIdent().getName(),</span>
-<span class="fc" id="L64">                commit.getCommitterIdent().getEmailAddress(),</span>
-<span class="fc" id="L65">                commit.getFullMessage()</span>
-        );
-<span class="fc" id="L67">        return head;</span>
+<span class="fc" id="L88">        final var revision = repository.resolve(Constants.HEAD);</span>
+<span class="fc" id="L89">        final var commit = new RevWalk(repository).parseCommit(revision);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (revision == null) {</span>
+<span class="nc" id="L91">            throw new IllegalStateException(&quot;Cannot resolve HEAD&quot;);</span>
+        }
+<span class="fc" id="L93">        return new Git.Head(revision.getName(), commit.getAuthorIdent().getName(),</span>
+<span class="fc" id="L94">                commit.getAuthorIdent().getEmailAddress(), commit.getCommitterIdent().getName(),</span>
+<span class="fc" id="L95">                commit.getCommitterIdent().getEmailAddress(), commit.getFullMessage());</span>
     }
 
+    /**
+     * Gets the branch.
+     *
+     * @param repository
+     *            the repository
+     *
+     * @return the branch
+     *
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     private String getBranch(final Repository repository) throws IOException {
-<span class="fc" id="L71">        return repository.getBranch();</span>
+<span class="fc" id="L110">        return repository.getBranch();</span>
     }
 
+    /**
+     * Gets the remotes.
+     *
+     * @param repository
+     *            the repository
+     *
+     * @return the remotes
+     */
     private List&lt;Git.Remote&gt; getRemotes(final Repository repository) {
-<span class="fc" id="L75">        Config config = repository.getConfig();</span>
-<span class="fc" id="L76">        List&lt;Git.Remote&gt; remotes = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (String remote : config.getSubsections(&quot;remote&quot;)) {</span>
-<span class="fc" id="L78">            String url = config.getString(&quot;remote&quot;, remote, &quot;url&quot;);</span>
-<span class="fc" id="L79">            remotes.add(new Git.Remote(remote, url));</span>
-<span class="fc" id="L80">        }</span>
-<span class="fc" id="L81">        return remotes;</span>
+<span class="fc" id="L122">        final Config config = repository.getConfig();</span>
+<span class="fc" id="L123">        final List&lt;Git.Remote&gt; remotes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        for (final String remote : config.getSubsections(&quot;remote&quot;)) {</span>
+<span class="fc" id="L125">            final var url = config.getString(&quot;remote&quot;, remote, &quot;url&quot;);</span>
+<span class="fc" id="L126">            remotes.add(new Git.Remote(remote, url));</span>
+<span class="fc" id="L127">        }</span>
+<span class="fc" id="L128">        return remotes;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AbstractServiceSetup.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">coveralls-maven-plugin</a> &gt; <a href="index.source.html" class="el_package">org.eluder.coveralls.maven.plugin.service</a> &gt; <span class="el_source">AbstractServiceSetup.java</span></div><h1>AbstractServiceSetup.java</h1><pre class="source lang-java linenums">/*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 - 2023, Tapio Rautonen
+ * Copyright (c) 2013-2026 The Coveralls Maven Plugin Project Contributors:
+ *     https://github.com/hazendaz/coveralls-maven-plugin/graphs/contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the &quot;Software&quot;), to deal
@@ -26,60 +27,83 @@ package org.eluder.coveralls.maven.plugin.service;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Convenient base class for service setups.
  */
 public abstract class AbstractServiceSetup implements ServiceSetup {
 
+    /** The env. */
     private final Map&lt;String, String&gt; env;
 
-<span class="fc" id="L38">    protected AbstractServiceSetup(final Map&lt;String, String&gt; env) {</span>
-<span class="fc" id="L39">        this.env = env;</span>
-<span class="fc" id="L40">    }</span>
+    /**
+     * Instantiates a new abstract service setup.
+     *
+     * @param env
+     *            the env
+     */
+<span class="fc" id="L44">    protected AbstractServiceSetup(final Map&lt;String, String&gt; env) {</span>
+<span class="fc" id="L45">        this.env = env;</span>
+<span class="fc" id="L46">    }</span>
 
     @Override
     public String getJobId() {
-<span class="fc" id="L44">        return null;</span>
+<span class="fc" id="L50">        return null;</span>
     }
 
     @Override
     public String getBuildNumber() {
-<span class="fc" id="L49">        return null;</span>
+<span class="fc" id="L55">        return null;</span>
     }
 
     @Override
     public String getBuildUrl() {
-<span class="fc" id="L54">        return null;</span>
+<span class="fc" id="L60">        return null;</span>
     }
 
     @Override
     public String getBranch() {
-<span class="fc" id="L59">        return null;</span>
+<span class="fc" id="L65">        return null;</span>
     }
 
     @Override
     public String getPullRequest() {
-<span class="fc" id="L64">        return null;</span>
+<span class="fc" id="L70">        return null;</span>
     }
 
     @Override
     public Properties getEnvironment() {
-<span class="fc" id="L69">        return null;</span>
+<span class="fc" id="L75">        return null;</span>
     }
 
+    /**
+     * Gets the property.
+     *
+     * @param name
+     *            the name
+     *
+     * @return the property
+     */
     protected final String getProperty(final String name) {
-<span class="fc" id="L73">        return env.get(name);</span>
+<span class="fc" id="L87">        return this.env.get(name);</span>
     }
 
+    /**
+     * Adds the property.
+     *
+     * @param properties
+     *            the properties
+     * @param name
+     *            the name
+     * @param value
+     *            the value
+     */
     protected final void addProperty(final Properties properties, final String name, final String value) {
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (StringUtils.isBlank(name)) {</span>
-<span class="fc" id="L78">            throw new IllegalArgumentException(&quot;name must be defined&quot;);</span>
+<span class="pc bpc" id="L101" title="1 of 4 branches missed.">        if (name == null || name.isBlank()) {</span>
+<span class="fc" id="L102">            throw new IllegalArgumentException(&quot;name must be defined&quot;);</span>
         }
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (StringUtils.isNotBlank(value)) {</span>
-<span class="fc" id="L81">            properties.setProperty(name, value);</span>
+<span class="fc bfc" id="L104" title="All 4 branches covered.">        if (value != null &amp;&amp; !value.isBlank()) {</span>
+<span class="fc" id="L105">            properties.setProperty(name, value);</span>
         }
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L107">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
