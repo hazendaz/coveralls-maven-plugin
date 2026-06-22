@@ -109,7 +109,7 @@
         <byte-buddy.version>1.18.10</byte-buddy.version>
         <commons-codec.version>1.22.0</commons-codec.version>
         <jackson.version>2.22.0</jackson.version>
-        <jgit.version note="Keep on 6.x for java 11 support">6.10.1.202505221210-r</jgit.version>
+        <jgit.version note="Keep on 6.x for java 11 support">7.7.0.202606012155-r</jgit.version>
         <json-smart.version>2.6.0</json-smart.version>
         <junit.version>6.1.0</junit.version>
         <maven.version>3.9.16</maven.version>
