@@ -46,7 +46,7 @@
     <maven.cobertura.version>2.7</maven.cobertura.version>
     <maven.jasmine.version>3.0-beta-02</maven.jasmine.version>
     <maven.saga.version>1.5.5</maven.saga.version>
-    <maven.clover.version>4.5.2</maven.clover.version>
+    <maven.clover.version>5.0.0</maven.clover.version>
 
     <!-- Set version here to test with. -->
     <coveralls.plugin>4.7.0</coveralls.plugin>
