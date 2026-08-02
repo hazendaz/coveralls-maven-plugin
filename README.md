@@ -118,7 +118,7 @@ Set up the JaCoCo Maven plugin in the build section of the project pom.xml:
 <plugin>
     <groupId>org.jacoco</groupId>
     <artifactId>jacoco-maven-plugin</artifactId>
-    <version>0.8.13</version>
+    <version>0.8.15</version>
     <executions>
         <execution>
             <id>prepare-agent</id>
@@ -200,7 +200,7 @@ Set up the Open Clover Maven plugin in the build section of the project pom.xml:
 <plugin>
   <groupId>org.openclover</groupId>
   <artifactId>clover-maven-plugin</artifactId>
-  <version>4.5.2</version>
+  <version>5.1.0.1</version>
   <configuration>
     <excludes>
       <exclude>**/*Test*</exclude>
