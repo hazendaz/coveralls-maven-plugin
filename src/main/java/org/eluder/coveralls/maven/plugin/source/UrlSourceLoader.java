@@ -27,6 +27,7 @@ package org.eluder.coveralls.maven.plugin.source;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
@@ -52,7 +53,7 @@ public class UrlSourceLoader extends AbstractSourceLoader {
      */
     public UrlSourceLoader(final URL base, final URL sourceUrl, final Charset sourceEncoding) {
         super(UrlUtils.toUri(base), UrlUtils.toUri(sourceUrl), sourceEncoding);
-        this.sourceUri = UrlUtils.toUri(sourceUrl);
+        this.sourceUri = toDirectoryUri(UrlUtils.toUri(sourceUrl));
     }
 
     @Override
@@ -66,5 +67,26 @@ public class UrlSourceLoader extends AbstractSourceLoader {
         }
         // Checkstyle ON: EmptyBlock
         return null;
+    }
+
+    /**
+     * To directory uri.
+     *
+     * @param sourceUri
+     *            the source uri
+     *
+     * @return the uri
+     */
+    private static URI toDirectoryUri(final URI sourceUri) {
+        final var path = sourceUri.getPath();
+        if (path == null || path.endsWith("/")) {
+            return sourceUri;
+        }
+        try {
+            return new URI(sourceUri.getScheme(), sourceUri.getAuthority(), path + '/', sourceUri.getQuery(),
+                    sourceUri.getFragment());
+        } catch (final URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }
