@@ -31,6 +31,7 @@ import java.net.URL;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 /**
  * The Class UrlUtilsTest.
@@ -85,8 +86,9 @@ class UrlUtilsTest {
      *             the malformed URL exception
      */
     @Test
-    void invalidUrlToUri() throws MalformedURLException {
-        final var url = new URL("https://google.com?q=s|r");
+    void invalidUrlToUri() throws MalformedURLException, URISyntaxException {
+        final var url = Mockito.mock(URL.class);
+        Mockito.when(url.toURI()).thenThrow(new URISyntaxException("https://google.com?q=s|r", "invalid uri"));
         Assertions.assertThrows(IllegalArgumentException.class, () -> UrlUtils.toUri(url));
     }
 
@@ -100,7 +102,7 @@ class UrlUtilsTest {
      */
     @Test
     void validUrlToUri() throws MalformedURLException, URISyntaxException {
-        final var uri = UrlUtils.toUri(new URL("https://google.com"));
+        final var uri = UrlUtils.toUri(URI.create("https://google.com").toURL());
         Assertions.assertEquals(new URI("https://google.com"), uri);
     }
 
