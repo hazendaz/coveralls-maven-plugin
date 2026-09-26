@@ -25,6 +25,7 @@
 package org.eluder.coveralls.maven.plugin.source;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -54,7 +55,7 @@ class UrlSourceLoaderTest {
     @Test
     void missingSourceFileFromUrl() throws IOException {
         final var sourceLoader = new UrlSourceLoader(this.folder.toUri().toURL(),
-                new URL("https://domainthatreallydoesnotexistsdfsmshjsfsj.com"), StandardCharsets.UTF_8);
+                URI.create("https://domainthatreallydoesnotexistsdfsmshjsfsj.com").toURL(), StandardCharsets.UTF_8);
         Assertions.assertNull(sourceLoader.load("Foo.java"));
     }
 

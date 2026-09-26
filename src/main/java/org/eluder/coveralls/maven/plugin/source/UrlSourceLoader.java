@@ -26,6 +26,7 @@ package org.eluder.coveralls.maven.plugin.source;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 
@@ -37,7 +38,7 @@ import org.eluder.coveralls.maven.plugin.util.UrlUtils;
 public class UrlSourceLoader extends AbstractSourceLoader {
 
     /** The source url. */
-    private final URL sourceUrl;
+    private final URI sourceUri;
 
     /**
      * Instantiates a new url source loader.
@@ -51,12 +52,12 @@ public class UrlSourceLoader extends AbstractSourceLoader {
      */
     public UrlSourceLoader(final URL base, final URL sourceUrl, final Charset sourceEncoding) {
         super(UrlUtils.toUri(base), UrlUtils.toUri(sourceUrl), sourceEncoding);
-        this.sourceUrl = sourceUrl;
+        this.sourceUri = UrlUtils.toUri(sourceUrl);
     }
 
     @Override
     protected InputStream locate(final String sourceFile) throws IOException {
-        final var url = new URL(this.sourceUrl, sourceFile);
+        final var url = this.sourceUri.resolve(sourceFile).toURL();
         // Checkstyle OFF: EmptyBlock
         try {
             return url.openStream();
