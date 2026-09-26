@@ -27,7 +27,6 @@ package org.eluder.coveralls.maven.plugin.source;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
@@ -78,15 +77,24 @@ public class UrlSourceLoader extends AbstractSourceLoader {
      * @return the uri
      */
     private static URI toDirectoryUri(final URI sourceUri) {
+        if (sourceUri.isOpaque()) {
+            return sourceUri;
+        }
         final var path = sourceUri.getPath();
         if (path == null || path.endsWith("/")) {
             return sourceUri;
         }
-        try {
-            return new URI(sourceUri.getScheme(), sourceUri.getAuthority(), path + '/', sourceUri.getQuery(),
-                    sourceUri.getFragment());
-        } catch (final URISyntaxException e) {
-            throw new IllegalArgumentException(e);
+        final var source = sourceUri.toString();
+        final var queryIndex = source.indexOf('?');
+        final var fragmentIndex = source.indexOf('#');
+        final int suffixIndex;
+        if (queryIndex >= 0 && fragmentIndex >= 0) {
+            suffixIndex = Math.min(queryIndex, fragmentIndex);
+        } else {
+            suffixIndex = Math.max(queryIndex, fragmentIndex);
         }
+        final var prefix = suffixIndex >= 0 ? source.substring(0, suffixIndex) : source;
+        final var suffix = suffixIndex >= 0 ? source.substring(suffixIndex) : "";
+        return URI.create(prefix + '/' + suffix);
     }
 }
