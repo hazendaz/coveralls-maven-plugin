@@ -52,7 +52,7 @@ public class UrlSourceLoader extends AbstractSourceLoader {
      */
     public UrlSourceLoader(final URL base, final URL sourceUrl, final Charset sourceEncoding) {
         super(UrlUtils.toUri(base), UrlUtils.toUri(sourceUrl), sourceEncoding);
-        this.sourceUri = toDirectoryUri(UrlUtils.toUri(sourceUrl));
+        this.sourceUri = UrlUtils.toUri(sourceUrl);
     }
 
     @Override
@@ -66,35 +66,5 @@ public class UrlSourceLoader extends AbstractSourceLoader {
         }
         // Checkstyle ON: EmptyBlock
         return null;
-    }
-
-    /**
-     * To directory uri.
-     *
-     * @param sourceUri
-     *            the source uri
-     *
-     * @return the uri
-     */
-    private static URI toDirectoryUri(final URI sourceUri) {
-        if (sourceUri.isOpaque()) {
-            return sourceUri;
-        }
-        final var path = sourceUri.getPath();
-        if (path == null || path.endsWith("/")) {
-            return sourceUri;
-        }
-        final var source = sourceUri.toString();
-        final var queryIndex = source.indexOf('?');
-        final var fragmentIndex = source.indexOf('#');
-        final int suffixIndex;
-        if (queryIndex >= 0 && fragmentIndex >= 0) {
-            suffixIndex = Math.min(queryIndex, fragmentIndex);
-        } else {
-            suffixIndex = Math.max(queryIndex, fragmentIndex);
-        }
-        final var prefix = suffixIndex >= 0 ? source.substring(0, suffixIndex) : source;
-        final var suffix = suffixIndex >= 0 ? source.substring(suffixIndex) : "";
-        return URI.create(prefix + '/' + suffix);
     }
 }
