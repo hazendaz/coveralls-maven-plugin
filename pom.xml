@@ -109,8 +109,13 @@
         <project.build.outputTimestamp>1779732370</project.build.outputTimestamp>
 
         <!-- Artifacts -->
+        <assertj.version>3.27.7</assertj.version>
         <byte-buddy.version>1.18.15</byte-buddy.version>
+        <catch-exception.version>2.4.0</catch-exception.version>
         <commons-codec.version>1.23.0</commons-codec.version>
+        <commons-io.version>2.22.0</commons-io.version>
+        <commons-lang.version>3.21.0</commons-lang.version>
+        <commons-logging.version>1.4.0</commons-logging.version>
         <jackson.version>2.22.3</jackson.version>
         <jgit.version note="Keep on 6.x for java 11 support">6.10.1.202505221210-r</jgit.version>
         <json-smart.version>2.6.0</json-smart.version>
@@ -118,7 +123,10 @@
         <maven.version>3.10.0</maven.version>
         <maven-plugin-testing.version>3.5.1</maven-plugin-testing.version>
         <mockito.version>5.24.0</mockito.version>
+        <plexus-utils.version>4.1.0</plexus-utils.version>
+        <plexus-xml.version>3.1.0</plexus-xml.version>
         <slf4j.version>2.0.20</slf4j.version>
+        <wiremock.version>3.13.2</wiremock.version>
 
         <!-- Maven Plugins -->
         <maven-plugin.version>3.16.0</maven-plugin.version>
@@ -187,12 +195,12 @@
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
-                <version>4.1.0</version>
+                <version>${plexus-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-xml</artifactId>
-                <version>3.1.0</version>
+                <version>${plexus-xml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -201,45 +209,61 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.22.0</version>
+            <version>${commons-io.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.21.0</version>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>${commons-logging.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
             <version>${jgit.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
+            <scope>compile</scope>
         </dependency>
         <!-- Somehow this is being blocked but is required by plexus-utils in maven 3.9.10+ -->
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-xml</artifactId>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -247,6 +271,12 @@
             <artifactId>maven-core</artifactId>
             <version>${maven.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
@@ -270,6 +300,7 @@
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
             <version>${maven-plugin.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -281,7 +312,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.7</version>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -306,7 +337,7 @@
         <dependency>
             <groupId>org.wiremock</groupId>
             <artifactId>wiremock-jetty12</artifactId>
-            <version>3.13.2</version>
+            <version>${wiremock.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -325,7 +356,7 @@
         <dependency>
             <groupId>com.github.hazendaz.catch-exception</groupId>
             <artifactId>catch-exception</artifactId>
-            <version>2.4.0</version>
+            <version>${catch-exception.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
