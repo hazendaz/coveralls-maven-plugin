@@ -110,7 +110,7 @@
 
         <!-- Artifacts -->
         <assertj.version>3.27.7</assertj.version>
-        <byte-buddy.version>1.18.15</byte-buddy.version>
+        <byte-buddy.version>1.18.17</byte-buddy.version>
         <catch-exception.version>2.4.0</catch-exception.version>
         <commons-codec.version>1.23.0</commons-codec.version>
         <commons-io.version>2.22.0</commons-io.version>
