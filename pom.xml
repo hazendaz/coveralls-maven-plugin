@@ -120,10 +120,10 @@
         <jgit.version note="Keep on 6.x for java 11 support">6.10.1.202505221210-r</jgit.version>
         <json-smart.version>2.6.1</json-smart.version>
         <junit.version>6.1.3</junit.version>
-        <maven.version>3.10.0</maven.version>
+        <maven.version>3.10.1</maven.version>
         <maven-plugin-testing.version>3.5.1</maven-plugin-testing.version>
         <mockito.version>5.24.0</mockito.version>
-        <plexus-utils.version>4.1.0</plexus-utils.version>
+        <plexus-utils.version>4.2.0</plexus-utils.version>
         <plexus-xml.version>3.1.1</plexus-xml.version>
         <slf4j.version>2.0.20</slf4j.version>
         <wiremock.version>3.13.2</wiremock.version>
